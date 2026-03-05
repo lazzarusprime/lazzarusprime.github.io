@@ -1,17 +1,17 @@
-body {
+body{
   background:#0b0b0b;
   color:#00ffcc;
   font-family:Arial;
   text-align:center;
 }
 
-h1 {
+h1{
   font-size:50px;
   margin-top:40px;
   text-shadow:0 0 20px #00ffc3;
 }
 
-input {
+input{
   padding:12px;
   font-size:16px;
   width:300px;
@@ -22,26 +22,26 @@ input {
   color:#00ffcc;
 }
 
-table {
+table{
   margin:auto;
   width:90%;
   border-collapse:collapse;
 }
 
-th, td {
+th, td{
   border:1px solid #00ffcc;
   padding:10px;
 }
 
-th {
+th{
   background:#111;
 }
 
-tr:hover {
+tr:hover{
   background:#001f1f;
 }
 
-button {
+button{
   background:#ff5500;
   border:none;
   padding:6px 10px;
@@ -50,6 +50,6 @@ button {
   border-radius:4px;
 }
 
-button:hover {
+button:hover{
   background:#ff7700;
 }
