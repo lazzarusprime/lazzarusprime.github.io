@@ -1,48 +1,29 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Lazzarus_Prime's Song Library</title>
-
+<meta charset="UTF-8">
+<title>Lazzarus_Prime's Rocksmith Library</title>
 <link rel="stylesheet" href="style.css">
 <script src="script.js"></script>
-
 </head>
-
 <body>
 
-<h1>🔥 LAZZARUS_PRIME'S SONG LIBRARY 🔥</h1>
+<h1>🔥 LAZZARUS_PRIME'S ROCKSMITH LIBRARY 🔥</h1>
 
-<p>Search songs available during stream</p>
-
-<input id="search" placeholder="Search artist or song..." />
+<input type="text" id="search" placeholder="Search artist or song..." />
 
 <table id="songTable">
 <thead>
 <tr>
 <th>Artist</th>
 <th>Song</th>
-<th>Tuning</th>
 <th>Request</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
 
-<div class="request">
-
-<h2>🎸 Request a Song</h2>
-
-<p>Use Twitch chat:</p>
-
-<p class="command">!songrequest SONG NAME</p>
-
-<p>Example:</p>
-
-<p class="example">!songrequest Everlong</p>
-
-</div>
+<p style="margin-top:30px;">Use <code>!request Artist - Song</code> in Twitch chat to request songs.</p>
 
 </body>
 </html>
