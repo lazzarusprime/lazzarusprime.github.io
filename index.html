@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lazzarus Song Library</title>
+
+<style>
+
+body{
+background:#0b0b0b;
+color:#00ffcc;
+font-family:Arial;
+text-align:center;
+}
+
+h1{
+font-size:48px;
+margin-top:40px;
+}
+
+table{
+margin:auto;
+border-collapse:collapse;
+width:80%;
+}
+
+th, td{
+border:1px solid #00ffcc;
+padding:10px;
+}
+
+th{
+background:#111;
+}
+
+input{
+padding:10px;
+margin:20px;
+width:300px;
+font-size:16px;
+}
+
+</style>
+
+<script>
+
+function searchSongs() {
+let input = document.getElementById("search").value.toLowerCase();
+let rows = document.querySelectorAll("tbody tr");
+
+rows.forEach(row => {
+let text = row.innerText.toLowerCase();
+row.style.display = text.includes(input) ? "" : "none";
+});
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<h1>🔥 Lazzarus Song Library 🔥</h1>
+
+<p>Search songs available during stream</p>
+
+<input id="search" onkeyup="searchSongs()" placeholder="Search artist or song">
+
+<table>
+
+<thead>
+<tr>
+<th>Artist</th>
+<th>Song</th>
+<th>Tuning</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr><td>Foo Fighters</td><td>Everlong</td><td>Drop D</td></tr>
+<tr><td>Rage Against The Machine</td><td>Killing In The Name</td><td>Drop D</td></tr>
+<tr><td>Audioslave</td><td>Cochise</td><td>E Standard</td></tr>
+<tr><td>Soundgarden</td><td>Black Hole Sun</td><td>E Standard</td></tr>
+
+</tbody>
+
+</table>
+
+</body>
+</html>
