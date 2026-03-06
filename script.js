@@ -1,73 +1,100 @@
 let songs = []
+let tableBody
+let searchBox
+let songCount
 
-const tableBody = document.querySelector("#songTable tbody")
-const searchBox = document.getElementById("search")
+window.onload = function(){
 
-// Load CSV from repo
-fetch("StreamSongList.csv", { cache: "no-store" })
+tableBody = document.querySelector("#songTable tbody")
+searchBox = document.getElementById("search")
+songCount = document.getElementById("songCount")
+
+// Load CSV
+fetch("StreamSongList.csv")
 .then(res => res.text())
 .then(csv => {
 
-  let rows = csv.trim().split("\n").slice(1)
+let rows = csv.trim().split("\n").slice(1)
 
-  rows.forEach(r => {
-    let cols = r.split(",")
+rows.forEach(r => {
 
-    if (cols.length >= 2) {
-      songs.push({
-        artist: cols[0].trim(),
-        song: cols[1].trim()
-      })
-    }
-  })
+let cols = r.split(",")
 
-  renderSongs(songs)
+if(cols.length >= 2){
+
+songs.push({
+artist: cols[0].replace(/"/g,"").trim(),
+song: cols[1].replace(/"/g,"").trim()
 })
+
+}
+
+})
+
+songCount.innerText = songs.length + " songs available"
+
+renderSongs(songs)
+
+})
+
+// Search
+searchBox.addEventListener("input", () => {
+
+let term = searchBox.value.toLowerCase()
+
+let filtered = songs.filter(s =>
+s.artist.toLowerCase().includes(term) ||
+s.song.toLowerCase().includes(term)
+)
+
+renderSongs(filtered)
+
+})
+
+}
+
 
 // Render table
 function renderSongs(list){
 
-  tableBody.innerHTML = ""
+tableBody.innerHTML = ""
 
-  let fragment = document.createDocumentFragment()
+let fragment = document.createDocumentFragment()
 
-  list.forEach(s => {
+list.forEach(s => {
 
-    let tr = document.createElement("tr")
+let tr = document.createElement("tr")
 
-    tr.innerHTML = `
-      <td>${s.artist}</td>
-      <td>${s.song}</td>
-      <td>
-        <button onclick="copyRequest('!request ${s.artist} - ${s.song}')">
-        Copy Request
-        </button>
-      </td>
-    `
+tr.innerHTML = `
+<td>${s.artist}</td>
+<td>${s.song}</td>
+<td><button onclick="copyRequest('!request ${s.artist} - ${s.song}')">Copy</button></td>
+`
 
-    fragment.appendChild(tr)
-
-  })
-
-  tableBody.appendChild(fragment)
-}
-
-// Copy to clipboard
-function copyRequest(text){
-  navigator.clipboard.writeText(text)
-  alert("Copied: " + text)
-}
-
-// Fast search
-searchBox.addEventListener("input", () => {
-
-  let term = searchBox.value.toLowerCase()
-
-  let filtered = songs.filter(s =>
-    s.artist.toLowerCase().includes(term) ||
-    s.song.toLowerCase().includes(term)
-  )
-
-  renderSongs(filtered)
+fragment.appendChild(tr)
 
 })
+
+tableBody.appendChild(fragment)
+
+}
+
+
+// Copy command
+function copyRequest(text){
+
+navigator.clipboard.writeText(text)
+
+alert("Copied: " + text)
+
+}
+
+
+// Random song
+function randomSong(){
+
+let r = songs[Math.floor(Math.random()*songs.length)]
+
+copyRequest(`!request ${r.artist} - ${r.song}`)
+
+}
