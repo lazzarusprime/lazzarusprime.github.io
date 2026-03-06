@@ -3,13 +3,14 @@ let tableBody
 let searchBox
 let songCount
 
+const INITIAL_RENDER = 200
+
 window.onload = function(){
 
 tableBody = document.querySelector("#songTable tbody")
 searchBox = document.getElementById("search")
 songCount = document.getElementById("songCount")
 
-// Load CSV
 fetch("StreamSongList.csv")
 .then(res => res.text())
 .then(csv => {
@@ -33,11 +34,10 @@ song: cols[1].replace(/"/g,"").trim()
 
 songCount.innerText = songs.length + " songs available"
 
-renderSongs(songs)
+renderSongs(songs.slice(0, INITIAL_RENDER))
 
 })
 
-// Search
 searchBox.addEventListener("input", () => {
 
 let term = searchBox.value.toLowerCase()
@@ -53,8 +53,6 @@ renderSongs(filtered)
 
 }
 
-
-// Render table
 function renderSongs(list){
 
 tableBody.innerHTML = ""
@@ -79,8 +77,6 @@ tableBody.appendChild(fragment)
 
 }
 
-
-// Copy command
 function copyRequest(text){
 
 navigator.clipboard.writeText(text)
@@ -89,8 +85,6 @@ alert("Copied: " + text)
 
 }
 
-
-// Random song
 function randomSong(){
 
 let r = songs[Math.floor(Math.random()*songs.length)]
