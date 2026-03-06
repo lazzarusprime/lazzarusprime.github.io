@@ -4,13 +4,17 @@
 <meta charset="UTF-8">
 <title>Lazzarus_Prime's Rocksmith Library</title>
 <link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
 </head>
+
 <body>
 
 <h1>🔥 LAZZARUS_PRIME'S ROCKSMITH LIBRARY 🔥</h1>
 
+<p id="songCount">Loading songs...</p>
+
 <input type="text" id="search" placeholder="Search artist or song..." />
+
+<button onclick="randomSong()">🎲 Random Song</button>
 
 <table id="songTable">
 <thead>
@@ -23,7 +27,11 @@
 <tbody></tbody>
 </table>
 
-<p style="margin-top:30px;">Use <code>!request Artist - Song</code> in Twitch chat to request songs.</p>
+<p style="margin-top:30px;">
+Use <code>!request Artist - Song</code> in Twitch chat to request songs.
+</p>
+
+<script src="script.js"></script>
 
 </body>
 </html>
