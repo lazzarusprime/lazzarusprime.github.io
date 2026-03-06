@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
-<title>Lazzarus_Prime's Rocksmith Library</title>
+<title>Lazzarus_Prime Rocksmith Library</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🔥 LAZZARUS_PRIME'S ROCKSMITH LIBRARY 🔥</h1>
+<h1>🔥 LAZZARUS_PRIME ROCKSMITH LIBRARY 🔥</h1>
 
 <p id="songCount">Loading songs...</p>
 
-<input type="text" id="search" placeholder="Search artist or song..." />
+<input type="text" id="search" placeholder="Search artist or song...">
 
 <button onclick="randomSong()">🎲 Random Song</button>
 
 <table id="songTable">
+
 <thead>
 <tr>
 <th>Artist</th>
@@ -24,11 +26,14 @@
 <th>Request</th>
 </tr>
 </thead>
-<tbody></tbody>
+
+<tbody>
+</tbody>
+
 </table>
 
-<p style="margin-top:30px;">
-Use <code>!request Artist - Song</code> in Twitch chat to request songs.
+<p class="instructions">
+Type <b>!request Artist - Song</b> in Twitch chat to request songs.
 </p>
 
 <script src="script.js"></script>
