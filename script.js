@@ -12,7 +12,9 @@ searchBox = document.getElementById("search")
 songCount = document.getElementById("songCount")
 
 fetch("songs.json")
-.then(res => res.json())
+
+.then(response => response.json())
+
 .then(data => {
 
 songs = data
@@ -23,13 +25,15 @@ renderSongs(songs.slice(0, INITIAL_RENDER))
 
 })
 
-searchBox.addEventListener("input", () => {
+searchBox.addEventListener("input", function(){
 
 let term = searchBox.value.toLowerCase()
 
-let filtered = songs.filter(s =>
-s.artist.toLowerCase().includes(term) ||
-s.song.toLowerCase().includes(term)
+let filtered = songs.filter(song =>
+
+song.artist.toLowerCase().includes(term) ||
+song.song.toLowerCase().includes(term)
+
 )
 
 renderSongs(filtered)
@@ -44,14 +48,18 @@ tableBody.innerHTML = ""
 
 let fragment = document.createDocumentFragment()
 
-list.forEach(s => {
+list.forEach(song => {
 
 let tr = document.createElement("tr")
 
 tr.innerHTML = `
-<td>${s.artist}</td>
-<td>${s.song}</td>
-<td><button onclick="copyRequest('!request ${s.artist} - ${s.song}')">Copy</button></td>
+<td>${song.artist}</td>
+<td>${song.song}</td>
+<td>
+<button onclick="copyRequest('!request ${song.artist} - ${song.song}')">
+Copy
+</button>
+</td>
 `
 
 fragment.appendChild(tr)
@@ -72,7 +80,7 @@ alert("Copied: " + text)
 
 function randomSong(){
 
-let r = songs[Math.floor(Math.random()*songs.length)]
+let r = songs[Math.floor(Math.random() * songs.length)]
 
 copyRequest(`!request ${r.artist} - ${r.song}`)
 
