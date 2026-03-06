@@ -1,80 +1,110 @@
 body{
-  background:#0b0b0b;
-  color:#00ffcc;
-  font-family:Arial, sans-serif;
-  text-align:center;
-  margin:0;
-  padding:0;
+
+background:#0b0b0b;
+color:#00ffcc;
+font-family:Arial, sans-serif;
+text-align:center;
+margin:0;
+padding:0;
+
 }
 
 h1{
-  font-size:50px;
-  margin-top:40px;
-  text-shadow:0 0 20px #00ffc3;
+
+font-size:50px;
+margin-top:40px;
+text-shadow:0 0 20px #00ffc3;
+
+}
+
+#songCount{
+
+margin-top:10px;
+font-size:18px;
+
 }
 
 input{
-  padding:12px;
-  font-size:16px;
-  width:320px;
-  max-width:90%;
-  margin:20px;
-  border-radius:5px;
-  border:2px solid #00ffcc;
-  background:#111;
-  color:#00ffcc;
-}
 
-table{
-  margin:auto;
-  width:95%;
-  border-collapse:collapse;
-  margin-bottom:40px;
-}
+padding:12px;
+font-size:16px;
+width:320px;
+max-width:90%;
+margin:20px;
+border-radius:5px;
+border:2px solid #00ffcc;
+background:#111;
+color:#00ffcc;
 
-th, td{
-  border:1px solid #00ffcc;
-  padding:10px;
-}
-
-th{
-  background:#111;
-  position:sticky;
-  top:0;
-}
-
-tr:hover{
-  background:#001f1f;
 }
 
 button{
-  background:#ff5500;
-  border:none;
-  padding:6px 10px;
-  color:white;
-  cursor:pointer;
-  border-radius:4px;
-  font-weight:bold;
+
+background:#ff5500;
+border:none;
+padding:8px 12px;
+color:white;
+cursor:pointer;
+border-radius:4px;
+font-weight:bold;
+
 }
 
 button:hover{
-  background:#ff7700;
+
+background:#ff7700;
+
 }
 
-/* Mobile friendly */
+table{
+
+margin:auto;
+width:95%;
+border-collapse:collapse;
+margin-top:20px;
+
+}
+
+th, td{
+
+border:1px solid #00ffcc;
+padding:10px;
+
+}
+
+th{
+
+background:#111;
+position:sticky;
+top:0;
+
+}
+
+tr:hover{
+
+background:#001f1f;
+
+}
+
+.instructions{
+
+margin-top:30px;
+font-size:18px;
+
+}
 
 @media (max-width:700px){
 
-  h1{
-    font-size:28px;
-  }
+h1{
+font-size:28px;
+}
 
-  table{
-    font-size:14px;
-  }
+table{
+font-size:14px;
+}
 
-  button{
-    padding:5px 8px;
-  }
+button{
+padding:6px 8px;
+}
 
 }
