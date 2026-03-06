@@ -11,26 +11,11 @@ tableBody = document.querySelector("#songTable tbody")
 searchBox = document.getElementById("search")
 songCount = document.getElementById("songCount")
 
-fetch("StreamSongList.csv")
-.then(res => res.text())
-.then(csv => {
+fetch("songs.json")
+.then(res => res.json())
+.then(data => {
 
-let rows = csv.trim().split("\n").slice(1)
-
-rows.forEach(r => {
-
-let cols = r.split(",")
-
-if(cols.length >= 2){
-
-songs.push({
-artist: cols[0].replace(/"/g,"").trim(),
-song: cols[1].replace(/"/g,"").trim()
-})
-
-}
-
-})
+songs = data
 
 songCount.innerText = songs.length + " songs available"
 
