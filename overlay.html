@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Rocksmith Overlay</title>
+
+<style>
+
+body{
+background:transparent;
+color:white;
+font-family:Arial;
+margin:0;
+}
+
+#container{
+padding:20px;
+background:rgba(0,0,0,0.6);
+}
+
+h1{
+font-size:36px;
+margin-bottom:10px;
+}
+
+.queueItem{
+font-size:24px;
+margin:6px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="container">
+
+<h1 id="nowPlaying">Loading...</h1>
+
+<div id="queue"></div>
+
+</div>
+
+<script>
+
+let queue=[]
+
+function loadQueue(){
+
+fetch("queue.json")
+
+.then(r=>r.json())
+
+.then(data=>{
+
+queue=data
+
+render()
+
+})
+
+}
+
+function render(){
+
+let q=document.getElementById("queue")
+
+q.innerHTML=""
+
+if(queue.length>0){
+
+document.getElementById("nowPlaying").innerText =
+"NOW PLAYING: " + queue[0].artist + " - " + queue[0].song
+
+}
+
+for(let i=1;i<Math.min(queue.length,5);i++){
+
+let div=document.createElement("div")
+
+div.className="queueItem"
+
+div.innerText=(i+1)+". "+queue[i].artist+" - "+queue[i].song
+
+q.appendChild(div)
+
+}
+
+}
+
+setInterval(loadQueue,5000)
+
+loadQueue()
+
+</script>
+
+</body>
+</html>
