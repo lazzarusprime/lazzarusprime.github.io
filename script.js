@@ -1,228 +1,211 @@
 let songs = []
 let filteredSongs = []
-
-let queue = []
-
-const PAGE_SIZE = 100
-
 let currentPage = 1
+let songsPerPage = 25
 
-let tableBody
-let queueBody
-let searchBox
-let songCount
-let nowPlayingBox
-let pageInfo
+async function loadSongs() {
 
-window.onload = function(){
+    const response = await fetch("songs.json")
+    songs = await response.json()
 
-tableBody = document.querySelector("#songTable tbody")
-queueBody = document.querySelector("#queueTable tbody")
+    console.log("Loaded songs:", songs.length)
 
-searchBox = document.getElementById("search")
-songCount = document.getElementById("songCount")
-nowPlayingBox = document.getElementById("nowPlaying")
-pageInfo = document.getElementById("pageInfo")
+    filteredSongs = songs
 
-loadSongs()
-loadQueue()
+    showArtistStats()
+    detectDuplicates()
 
-setInterval(loadQueue,10000)
-
-searchBox.addEventListener("input", searchSongs)
-
-buildAlphabet()
+    renderSongs()
+    buildAlphabet()
 
 }
 
-function loadSongs(){
+function renderSongs() {
 
-fetch("songs.json")
+    const list = document.getElementById("songList")
+    list.innerHTML = ""
 
-.then(res=>res.json())
+    let start = (currentPage - 1) * songsPerPage
+    let end = start + songsPerPage
 
-.then(data=>{
+    let pageSongs = filteredSongs.slice(start, end)
 
-songs = data
+    pageSongs.forEach(song => {
 
-filteredSongs = songs
+        const div = document.createElement("div")
+        div.className = "song"
 
-songCount.innerText = songs.length + " songs available"
+        div.innerHTML = `
+        <b>${song.artist}</b> - ${song.song}
+        <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
+        `
 
-renderPage()
+        list.appendChild(div)
 
-})
+    })
 
-}
-
-function renderPage(){
-
-tableBody.innerHTML=""
-
-let start = (currentPage-1)*PAGE_SIZE
-let end = start + PAGE_SIZE
-
-let pageSongs = filteredSongs.slice(start,end)
-
-let fragment = document.createDocumentFragment()
-
-pageSongs.forEach(song=>{
-
-let tr=document.createElement("tr")
-
-tr.innerHTML=`
-<td>${song.artist}</td>
-<td>${song.song}</td>
-<td><button onclick="copyRequest('${song.artist} - ${song.song}')">Copy</button></td>
-`
-
-fragment.appendChild(tr)
-
-})
-
-tableBody.appendChild(fragment)
-
-let totalPages = Math.ceil(filteredSongs.length / PAGE_SIZE)
-
-pageInfo.innerText = "Page " + currentPage + " / " + totalPages
+    renderPagination()
 
 }
 
-function nextPage(){
+function renderPagination() {
 
-let totalPages = Math.ceil(filteredSongs.length / PAGE_SIZE)
+    const pageDiv = document.getElementById("pagination")
+    pageDiv.innerHTML = ""
 
-if(currentPage < totalPages){
+    let totalPages = Math.ceil(filteredSongs.length / songsPerPage)
 
-currentPage++
+    if (currentPage > 1) {
 
-renderPage()
+        const prev = document.createElement("button")
+        prev.innerText = "Previous"
+        prev.onclick = () => {
+            currentPage--
+            renderSongs()
+        }
 
-}
+        pageDiv.appendChild(prev)
+    }
 
-}
+    const pageInfo = document.createElement("span")
+    pageInfo.innerText = ` Page ${currentPage} / ${totalPages} `
+    pageDiv.appendChild(pageInfo)
 
-function prevPage(){
+    if (currentPage < totalPages) {
 
-if(currentPage > 1){
+        const next = document.createElement("button")
+        next.innerText = "Next"
+        next.onclick = () => {
+            currentPage++
+            renderSongs()
+        }
 
-currentPage--
-
-renderPage()
-
-}
-
-}
-
-function searchSongs(){
-
-let term = searchBox.value.toLowerCase()
-
-filteredSongs = songs.filter(song=>
-
-song.artist.toLowerCase().includes(term) ||
-song.song.toLowerCase().includes(term)
-
-)
-
-currentPage=1
-
-renderPage()
+        pageDiv.appendChild(next)
+    }
 
 }
 
-function randomSong(){
+function searchSongs() {
 
-let r = songs[Math.floor(Math.random()*songs.length)]
+    const search = document.getElementById("searchBox").value.toLowerCase()
 
-copyRequest(`${r.artist} - ${r.song}`)
+    filteredSongs = songs.filter(song =>
+        song.artist.toLowerCase().includes(search) ||
+        song.song.toLowerCase().includes(search)
+    )
 
-}
-
-function copyRequest(text){
-
-navigator.clipboard.writeText("!request " + text)
-
-alert("Copied: !request " + text)
+    currentPage = 1
+    renderSongs()
 
 }
 
-function buildAlphabet(){
+function jumpToLetter(letter) {
 
-let container = document.getElementById("alphabet")
+    const index = filteredSongs.findIndex(song =>
+        song.artist.toLowerCase().startsWith(letter.toLowerCase())
+    )
 
-let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    if (index === -1) return
 
-for(let letter of letters){
+    currentPage = Math.floor(index / songsPerPage) + 1
 
-let btn=document.createElement("button")
-
-btn.innerText=letter
-
-btn.onclick=function(){
-
-jumpLetter(letter)
+    renderSongs()
 
 }
 
-container.appendChild(btn)
+function buildAlphabet() {
+
+    const bar = document.getElementById("alphabet")
+
+    if (!bar) return
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+
+    letters.forEach(letter => {
+
+        const btn = document.createElement("button")
+        btn.innerText = letter
+
+        btn.onclick = () => jumpToLetter(letter)
+
+        bar.appendChild(btn)
+
+    })
 
 }
 
-}
+function randomSong() {
 
-function jumpLetter(letter){
+    const random = songs[Math.floor(Math.random() * songs.length)]
 
-filteredSongs = songs.filter(song=>song.artist.toUpperCase().startsWith(letter))
-
-currentPage=1
-
-renderPage()
+    alert(`Random Song:\n${random.artist} - ${random.song}`)
 
 }
 
-function loadQueue(){
+function requestSong(artist, song) {
 
-fetch("queue.json")
+    const requestText = `${artist} - ${song}`
 
-.then(res=>res.json())
+    navigator.clipboard.writeText(
+        `@Lazzarus_Prime ${requestText}`
+    )
 
-.then(data=>{
-
-queue=data
-
-renderQueue()
-
-})
+    alert(`Copied to clipboard!\nPaste in Twitch chat:\n${requestText}`)
 
 }
 
-function renderQueue(){
+function showArtistStats() {
 
-queueBody.innerHTML=""
+    const stats = {}
 
-let fragment=document.createDocumentFragment()
+    songs.forEach(song => {
 
-queue.forEach((song,i)=>{
+        if (!stats[song.artist]) stats[song.artist] = 0
 
-let tr=document.createElement("tr")
+        stats[song.artist]++
 
-tr.innerHTML=`
-<td>${i+1}</td>
-<td>${song.artist}</td>
-<td>${song.song}</td>
-`
+    })
 
-fragment.appendChild(tr)
+    console.log("Artist Stats:")
 
-})
+    const sorted = Object.entries(stats)
+        .sort((a, b) => b[1] - a[1])
 
-queueBody.appendChild(fragment)
+    sorted.slice(0, 20).forEach(a => {
 
-if(queue.length>0){
+        console.log(`${a[0]} : ${a[1]} songs`)
 
-nowPlayingBox.innerText=queue[0].artist + " - " + queue[0].song
+    })
 
 }
 
+function detectDuplicates() {
+
+    const seen = {}
+    const duplicates = []
+
+    songs.forEach(song => {
+
+        const key = (song.artist + song.song).toLowerCase()
+
+        if (seen[key]) {
+
+            duplicates.push(song)
+
+        } else {
+
+            seen[key] = true
+
+        }
+
+    })
+
+    if (duplicates.length > 0) {
+
+        console.warn("Duplicate songs detected:", duplicates.length)
+
+    }
+
 }
+
+window.onload = loadSongs
