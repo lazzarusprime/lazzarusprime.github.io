@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<title>Rocksmith Stream Control</title>
+
+<style>
+
+body{
+background:#111;
+color:#00ffcc;
+font-family:Arial;
+text-align:center;
+}
+
+button{
+padding:10px;
+margin:5px;
+background:#ff5500;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+table{
+margin:auto;
+width:90%;
+border-collapse:collapse;
+}
+
+td,th{
+border:1px solid #00ffcc;
+padding:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🎸 Stream Queue Control</h1>
+
+<button onclick="nextSong()">Next Song</button>
+<button onclick="clearQueue()">Clear Queue</button>
+
+<table>
+
+<thead>
+<tr>
+<th>#</th>
+<th>Artist</th>
+<th>Song</th>
+<th>Remove</th>
+</tr>
+</thead>
+
+<tbody id="queueTable"></tbody>
+
+</table>
+
+<script>
+
+let queue=[]
+
+function loadQueue(){
+
+fetch("queue.json")
+
+.then(r=>r.json())
+
+.then(data=>{
+
+queue=data
+
+render()
+
+})
+
+}
+
+function render(){
+
+let table=document.getElementById("queueTable")
+
+table.innerHTML=""
+
+queue.forEach((song,i)=>{
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${i+1}</td>
+<td>${song.artist}</td>
+<td>${song.song}</td>
+<td><button onclick="removeSong(${i})">Remove</button></td>
+`
+
+table.appendChild(row)
+
+})
+
+}
+
+function removeSong(i){
+
+queue.splice(i,1)
+
+save()
+
+}
+
+function nextSong(){
+
+queue.shift()
+
+save()
+
+}
+
+function clearQueue(){
+
+queue=[]
+
+save()
+
+}
+
+function save(){
+
+fetch("queue.json",{
+method:"PUT",
+body:JSON.stringify(queue)
+})
+
+render()
+
+}
+
+loadQueue()
+
+</script>
+
+</body>
+
+</html>
