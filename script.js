@@ -179,6 +179,18 @@ alert("Copied to clipboard!\nPaste in Twitch chat:\n"+text)
 
 }
 
+function goHome(){
+
+document.getElementById("searchBox").value=""
+
+filteredSongs=songs
+
+currentPage=1
+
+renderSongs()
+
+}
+
 function showArtistStats(){
 
 let stats={}
