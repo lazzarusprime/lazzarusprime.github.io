@@ -13,9 +13,36 @@
 
 <p id="songCount">Loading songs...</p>
 
+<div class="controls">
+
 <input type="text" id="search" placeholder="Search artist or song...">
 
-<button onclick="randomSong()">🎲 Random Song</button>
+<button onclick="randomSong()">🎲 Random</button>
+
+</div>
+
+<div id="alphabet"></div>
+
+<h2>🎵 Now Playing</h2>
+<div id="nowPlaying">Nothing currently playing</div>
+
+<h2>📺 Viewer Request Queue</h2>
+
+<table id="queueTable">
+
+<thead>
+<tr>
+<th>#</th>
+<th>Artist</th>
+<th>Song</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+<h2>🎸 Song Library</h2>
 
 <table id="songTable">
 
@@ -27,13 +54,22 @@
 </tr>
 </thead>
 
-<tbody>
-</tbody>
+<tbody></tbody>
 
 </table>
 
+<div class="pagination">
+
+<button onclick="prevPage()">⬅ Prev</button>
+
+<span id="pageInfo"></span>
+
+<button onclick="nextPage()">Next ➡</button>
+
+</div>
+
 <p class="instructions">
-Type <b>!request Artist - Song</b> in Twitch chat to request songs.
+Copy button pastes: <b>!request Artist - Song</b>
 </p>
 
 <script src="script.js"></script>
