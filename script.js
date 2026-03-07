@@ -1,211 +1,241 @@
 let songs = []
 let filteredSongs = []
+
 let currentPage = 1
 let songsPerPage = 25
 
-async function loadSongs() {
+async function loadSongs(){
 
-    const response = await fetch("songs.json")
-    songs = await response.json()
+const response = await fetch("songs.json")
 
-    console.log("Loaded songs:", songs.length)
+songs = await response.json()
 
-    filteredSongs = songs
+console.log("Songs loaded:", songs.length)
 
-    showArtistStats()
-    detectDuplicates()
+filteredSongs = songs
 
-    renderSongs()
-    buildAlphabet()
+buildAlphabet()
 
-}
+showArtistStats()
 
-function renderSongs() {
+detectDuplicates()
 
-    const list = document.getElementById("songList")
-    list.innerHTML = ""
-
-    let start = (currentPage - 1) * songsPerPage
-    let end = start + songsPerPage
-
-    let pageSongs = filteredSongs.slice(start, end)
-
-    pageSongs.forEach(song => {
-
-        const div = document.createElement("div")
-        div.className = "song"
-
-        div.innerHTML = `
-        <b>${song.artist}</b> - ${song.song}
-        <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
-        `
-
-        list.appendChild(div)
-
-    })
-
-    renderPagination()
+renderSongs()
 
 }
 
-function renderPagination() {
+function renderSongs(){
 
-    const pageDiv = document.getElementById("pagination")
-    pageDiv.innerHTML = ""
+const list = document.getElementById("songList")
 
-    let totalPages = Math.ceil(filteredSongs.length / songsPerPage)
+list.innerHTML = ""
 
-    if (currentPage > 1) {
+let start = (currentPage-1)*songsPerPage
 
-        const prev = document.createElement("button")
-        prev.innerText = "Previous"
-        prev.onclick = () => {
-            currentPage--
-            renderSongs()
-        }
+let end = start + songsPerPage
 
-        pageDiv.appendChild(prev)
-    }
+let pageSongs = filteredSongs.slice(start,end)
 
-    const pageInfo = document.createElement("span")
-    pageInfo.innerText = ` Page ${currentPage} / ${totalPages} `
-    pageDiv.appendChild(pageInfo)
+pageSongs.forEach(song=>{
 
-    if (currentPage < totalPages) {
+const div = document.createElement("div")
 
-        const next = document.createElement("button")
-        next.innerText = "Next"
-        next.onclick = () => {
-            currentPage++
-            renderSongs()
-        }
+div.className="song"
 
-        pageDiv.appendChild(next)
-    }
+div.innerHTML = `
+<span><b>${song.artist}</b> - ${song.song}</span>
+<button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
+`
+
+list.appendChild(div)
+
+})
+
+renderPagination()
 
 }
 
-function searchSongs() {
+function renderPagination(){
 
-    const search = document.getElementById("searchBox").value.toLowerCase()
+const div = document.getElementById("pagination")
 
-    filteredSongs = songs.filter(song =>
-        song.artist.toLowerCase().includes(search) ||
-        song.song.toLowerCase().includes(search)
-    )
+div.innerHTML=""
 
-    currentPage = 1
-    renderSongs()
+let totalPages = Math.ceil(filteredSongs.length/songsPerPage)
 
-}
+if(currentPage>1){
 
-function jumpToLetter(letter) {
+const prev=document.createElement("button")
 
-    const index = filteredSongs.findIndex(song =>
-        song.artist.toLowerCase().startsWith(letter.toLowerCase())
-    )
+prev.innerText="Previous"
 
-    if (index === -1) return
+prev.onclick=()=>{
 
-    currentPage = Math.floor(index / songsPerPage) + 1
+currentPage--
 
-    renderSongs()
+renderSongs()
 
 }
 
-function buildAlphabet() {
-
-    const bar = document.getElementById("alphabet")
-
-    if (!bar) return
-
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-
-    letters.forEach(letter => {
-
-        const btn = document.createElement("button")
-        btn.innerText = letter
-
-        btn.onclick = () => jumpToLetter(letter)
-
-        bar.appendChild(btn)
-
-    })
+div.appendChild(prev)
 
 }
 
-function randomSong() {
+const pageInfo=document.createElement("span")
 
-    const random = songs[Math.floor(Math.random() * songs.length)]
+pageInfo.innerText=` Page ${currentPage} / ${totalPages} `
 
-    alert(`Random Song:\n${random.artist} - ${random.song}`)
+div.appendChild(pageInfo)
 
-}
+if(currentPage<totalPages){
 
-function requestSong(artist, song) {
+const next=document.createElement("button")
 
-    const requestText = `${artist} - ${song}`
+next.innerText="Next"
 
-    navigator.clipboard.writeText(
-        `@Lazzarus_Prime ${requestText}`
-    )
+next.onclick=()=>{
 
-    alert(`Copied to clipboard!\nPaste in Twitch chat:\n${requestText}`)
+currentPage++
 
-}
-
-function showArtistStats() {
-
-    const stats = {}
-
-    songs.forEach(song => {
-
-        if (!stats[song.artist]) stats[song.artist] = 0
-
-        stats[song.artist]++
-
-    })
-
-    console.log("Artist Stats:")
-
-    const sorted = Object.entries(stats)
-        .sort((a, b) => b[1] - a[1])
-
-    sorted.slice(0, 20).forEach(a => {
-
-        console.log(`${a[0]} : ${a[1]} songs`)
-
-    })
+renderSongs()
 
 }
 
-function detectDuplicates() {
-
-    const seen = {}
-    const duplicates = []
-
-    songs.forEach(song => {
-
-        const key = (song.artist + song.song).toLowerCase()
-
-        if (seen[key]) {
-
-            duplicates.push(song)
-
-        } else {
-
-            seen[key] = true
-
-        }
-
-    })
-
-    if (duplicates.length > 0) {
-
-        console.warn("Duplicate songs detected:", duplicates.length)
-
-    }
+div.appendChild(next)
 
 }
 
-window.onload = loadSongs
+}
+
+function searchSongs(){
+
+let q=document.getElementById("searchBox").value.toLowerCase()
+
+filteredSongs=songs.filter(song=>
+
+song.artist.toLowerCase().includes(q) ||
+
+song.song.toLowerCase().includes(q)
+
+)
+
+currentPage=1
+
+renderSongs()
+
+}
+
+function buildAlphabet(){
+
+const div=document.getElementById("alphabet")
+
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+
+letters.forEach(letter=>{
+
+let btn=document.createElement("button")
+
+btn.innerText=letter
+
+btn.onclick=()=>jumpToLetter(letter)
+
+div.appendChild(btn)
+
+})
+
+}
+
+function jumpToLetter(letter){
+
+const index=filteredSongs.findIndex(song=>
+
+song.artist.toLowerCase().startsWith(letter.toLowerCase())
+
+)
+
+if(index==-1)return
+
+currentPage=Math.floor(index/songsPerPage)+1
+
+renderSongs()
+
+}
+
+function randomSong(){
+
+let song=songs[Math.floor(Math.random()*songs.length)]
+
+alert("Random Song:\n"+song.artist+" - "+song.song)
+
+}
+
+function requestSong(artist,song){
+
+let text=`${artist} - ${song}`
+
+navigator.clipboard.writeText(`@Lazzarus_Prime ${text}`)
+
+alert("Copied to clipboard!\nPaste in Twitch chat:\n"+text)
+
+}
+
+function showArtistStats(){
+
+let stats={}
+
+songs.forEach(song=>{
+
+if(!stats[song.artist])stats[song.artist]=0
+
+stats[song.artist]++
+
+})
+
+let sorted=Object.entries(stats)
+
+.sort((a,b)=>b[1]-a[1])
+
+console.log("Top Artists:")
+
+sorted.slice(0,20).forEach(a=>{
+
+console.log(a[0]+" : "+a[1])
+
+})
+
+document.getElementById("stats").innerText =
+songs.length + " songs loaded"
+
+}
+
+function detectDuplicates(){
+
+let seen={}
+
+let duplicates=[]
+
+songs.forEach(song=>{
+
+let key=(song.artist+song.song).toLowerCase()
+
+if(seen[key]){
+
+duplicates.push(song)
+
+}else{
+
+seen[key]=true
+
+}
+
+})
+
+if(duplicates.length>0){
+
+console.warn("Duplicate songs detected:",duplicates.length)
+
+}
+
+}
+
+window.onload=loadSongs
