@@ -1,243 +1,509 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lazzarus Prime Rocksmith Library</title>
+<title>Lazzarus Prime Rocksmith Requests</title>
 
 <style>
 
 body{
-    font-family: Arial;
-    background:#111;
-    color:white;
-    margin:40px;
+font-family:Segoe UI, Arial;
+background:#0f0f0f;
+color:#fff;
+margin:0;
 }
 
-h1{
-    margin-bottom:10px;
+h1,h2,h3{margin:0}
+
+.titleBar{
+display:flex;
+align-items:center;
+gap:10px;
+background:#141414;
+padding:12px;
+border-bottom:2px solid #222;
 }
 
-.search-container{
-    position:relative;
-    width:320px;
-    margin-bottom:20px;
+.titleBar img{
+width:42px;
 }
 
-#search{
-    width:100%;
-    padding:10px 35px 10px 10px;
-    font-size:16px;
+.topBar{
+display:flex;
+gap:10px;
+padding:10px;
+background:#181818;
+position:sticky;
+top:0;
+z-index:100;
 }
 
-#clearSearch{
-    position:absolute;
-    right:8px;
-    top:50%;
-    transform:translateY(-50%);
-    border:none;
-    background:none;
-    font-size:18px;
-    cursor:pointer;
-    color:#888;
-    display:none;
+.topBar input{
+flex:1;
+padding:8px;
+border-radius:6px;
+border:none;
 }
 
-#clearSearch:hover{
-    color:white;
+button{
+background:#272727;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#444;
+}
+
+#alphabet{
+display:flex;
+flex-wrap:wrap;
+gap:5px;
+padding:10px;
+}
+
+#stats{
+padding:10px;
+color:#bbb;
+}
+
+#artistStats{
+padding:10px;
+background:#151515;
+border-top:1px solid #222;
+border-bottom:1px solid #222;
 }
 
 .song{
-    padding:6px;
-    border-bottom:1px solid #333;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:10px;
+border-bottom:1px solid #222;
 }
 
-.artist{
-    color:#6cf;
+.song:hover{
+background:#1c1c1c;
 }
 
-details{
-    margin-top:20px;
+.songInfo{
+display:flex;
+flex-direction:column;
 }
 
-summary{
-    cursor:pointer;
-    font-size:18px;
+.songTitle{
+font-weight:bold;
+font-size:15px;
 }
 
-.topArtist{
-    padding:4px;
+.songArtist{
+font-size:13px;
+color:#aaa;
+cursor:pointer;
+}
+
+.songArtist:hover{
+color:#0f0;
+}
+
+#paginationTop,#paginationBottom{
+text-align:center;
+padding:10px;
+}
+
+.queueItem{
+padding:6px;
+border-bottom:1px solid #222;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<h1>Lazzarus Prime Rocksmith Library</h1>
+<div class="titleBar">
+<img src="guitar.png">
+<h1>Lazzarus Prime Rocksmith Requests</h1>
+</div>
 
-<div id="songCount">Loading...</div>
+<div class="topBar">
 
-<br>
+<button onclick="goHome()">🏠 Home</button>
 
-<div class="search-container">
+<input id="searchBox" placeholder="Search artist or song..." oninput="searchSongs()">
 
-<input 
-type="text"
-id="search"
-placeholder="Search artist or song..."
-oninput="filterSongs()"
-/>
-
-<button id="clearSearch" onclick="clearSearch()">✕</button>
+<button onclick="randomSong()">🎲 Random</button>
 
 </div>
 
+<div id="alphabet"></div>
+
+<div id="stats"></div>
+
+<div id="artistStats"></div>
+
+<h2 style="padding:10px">Song Library</h2>
+
+<div id="paginationTop"></div>
+
 <div id="songList"></div>
 
-<details id="topArtistsSection">
-<summary>Top Artists in Library</summary>
-<div id="topArtists"></div>
-</details>
+<div id="paginationBottom"></div>
+
+<h2 style="padding:10px">Request Queue</h2>
+
+<div id="queue"></div>
 
 <script>
 
-let songs=[]
-let filteredSongs=[]
+const DB_URL="https://rocksmith-requests-default-rtdb.firebaseio.com";
+
+let songs=[];
+let filteredSongs=[];
+let currentPage=1;
+const songsPerPage=40;
+
+async function init(){
+
+await loadSongs();
+
+loadQueue();
+
+setInterval(loadQueue,8000);
+
+}
 
 async function loadSongs(){
 
-    const response = await fetch("songs.json")
-    songs = await response.json()
+try{
 
-    songs.sort((a,b)=>{
+const response=await fetch("songs.json");
 
-        if(a.artist==b.artist)
-            return a.song.localeCompare(b.song)
+songs=await response.json();
 
-        return a.artist.localeCompare(b.artist)
+filteredSongs=songs;
 
-    })
+buildAlphabet();
 
-    filteredSongs=songs
+buildArtistStats();
 
-    renderSongs()
-    renderTopArtists()
+renderSongs();
 
-    document.getElementById("songCount").innerText =
-        songs.length + " songs in library"
+document.getElementById("stats").innerText=songs.length+" songs loaded";
+
+}catch(e){
+
+document.getElementById("stats").innerText="Error loading songs";
+
+}
 
 }
 
 function renderSongs(){
 
-    const container=document.getElementById("songList")
+const list=document.getElementById("songList");
 
-    container.innerHTML=""
+list.innerHTML="";
 
-    filteredSongs.forEach(song=>{
+let start=(currentPage-1)*songsPerPage;
+let end=start+songsPerPage;
 
-        const div=document.createElement("div")
-        div.className="song"
+let pageSongs=filteredSongs.slice(start,end);
 
-        div.innerHTML =
-            "<span class='artist'>"+
-            song.artist+
-            "</span> - "+
-            song.song
+const fragment=document.createDocumentFragment();
 
-        container.appendChild(div)
+pageSongs.forEach(song=>{
 
-    })
+const div=document.createElement("div");
 
-}
+div.className="song";
 
-function filterSongs(){
+const sA=song.artist.replace(/'/g,"\\'");
+const sS=song.song.replace(/'/g,"\\'");
 
-    const search =
-        document.getElementById("search")
-        .value
-        .toLowerCase()
+div.innerHTML=
 
-    if(search===""){
+`<div class="songInfo">
 
-        filteredSongs=songs
+<div class="songTitle">${song.song}</div>
+<div class="songArtist" onclick="filterArtist('${sA}')">${song.artist}</div>
 
-    }else{
+</div>
 
-        filteredSongs=songs.filter(song=>
+<button onclick="requestSong('${sA}','${sS}')">Request</button>`;
 
-            song.artist.toLowerCase().includes(search) ||
-            song.song.toLowerCase().includes(search)
+fragment.appendChild(div);
 
-        )
+});
 
-    }
+list.appendChild(fragment);
 
-    renderSongs()
+renderPagination();
 
 }
 
-function clearSearch(){
+function renderPagination(){
 
-    const input=document.getElementById("search")
+const top=document.getElementById("paginationTop");
+const bottom=document.getElementById("paginationBottom");
 
-    input.value=""
-    filterSongs()
+top.innerHTML="";
+bottom.innerHTML="";
 
-    document.getElementById("clearSearch").style.display="none"
+let totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
 
-}
+function controls(container){
 
-document
-.getElementById("search")
-.addEventListener("input",function(){
+if(currentPage>1){
 
-    const clearBtn=document.getElementById("clearSearch")
+let prev=document.createElement("button");
+prev.innerText="◀ Prev";
+prev.onclick=()=>{currentPage--;renderSongs();};
 
-    clearBtn.style.display =
-        this.value.length ? "block" : "none"
-
-})
-
-function renderTopArtists(){
-
-    const counts={}
-
-    songs.forEach(song=>{
-
-        if(!counts[song.artist])
-            counts[song.artist]=0
-
-        counts[song.artist]++
-
-    })
-
-    const sorted =
-        Object.entries(counts)
-        .sort((a,b)=>b[1]-a[1])
-        .slice(0,25)
-
-    const container=document.getElementById("topArtists")
-
-    container.innerHTML=""
-
-    sorted.forEach(a=>{
-
-        const div=document.createElement("div")
-
-        div.className="topArtist"
-
-        div.innerText=
-            a[0]+" ("+a[1]+" songs)"
-
-        container.appendChild(div)
-
-    })
+container.appendChild(prev);
 
 }
 
-loadSongs()
+let label=document.createElement("span");
+label.innerText=` Page ${currentPage} / ${totalPages} `;
+container.appendChild(label);
+
+if(currentPage<totalPages){
+
+let next=document.createElement("button");
+next.innerText="Next ▶";
+next.onclick=()=>{currentPage++;renderSongs();};
+
+container.appendChild(next);
+
+}
+
+}
+
+controls(top);
+controls(bottom);
+
+}
+
+function searchSongs(){
+
+let q=document.getElementById("searchBox").value.toLowerCase();
+
+filteredSongs=songs.filter(s=>{
+
+return(
+
+s.artist.toLowerCase().includes(q) ||
+s.song.toLowerCase().includes(q)
+
+);
+
+});
+
+currentPage=1;
+
+renderSongs();
+
+}
+
+function filterArtist(artist){
+
+document.getElementById("searchBox").value=artist;
+
+filteredSongs=songs.filter(s=>s.artist===artist);
+
+currentPage=1;
+
+renderSongs();
+
+}
+
+function buildAlphabet(){
+
+const div=document.getElementById("alphabet");
+
+div.innerHTML="";
+
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l=>{
+
+let b=document.createElement("button");
+
+b.innerText=l;
+
+b.onclick=()=>jumpToLetter(l);
+
+div.appendChild(b);
+
+});
+
+}
+
+function jumpToLetter(letter){
+
+const idx=filteredSongs.findIndex(
+
+s=>s.artist.toLowerCase().startsWith(letter.toLowerCase())
+
+);
+
+if(idx===-1) return;
+
+currentPage=Math.floor(idx/songsPerPage)+1;
+
+renderSongs();
+
+}
+
+function buildArtistStats(){
+
+const map={};
+
+songs.forEach(s=>{
+
+if(!map[s.artist]) map[s.artist]=0;
+
+map[s.artist]++;
+
+});
+
+const sorted=Object.entries(map)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,10);
+
+const div=document.getElementById("artistStats");
+
+div.innerHTML=`
+<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3>
+<div id="artistList" style="display:none"></div>
+`;
+
+const list=document.getElementById("artistList");
+
+sorted.forEach(([artist,count])=>{
+
+let row=document.createElement("div");
+
+row.style.cursor="pointer";
+row.innerText=`${artist} (${count})`;
+
+row.onclick=()=>filterArtist(artist);
+
+list.appendChild(row);
+
+});
+
+document.getElementById("artistToggle").onclick=()=>{
+
+const list=document.getElementById("artistList");
+const toggle=document.getElementById("artistToggle");
+
+if(list.style.display==="none"){
+
+list.style.display="block";
+toggle.innerText="🎸 Top Artists In Library ▼";
+
+}else{
+
+list.style.display="none";
+toggle.innerText="🎸 Top Artists In Library ▶";
+
+}
+
+};
+
+}
+
+async function requestSong(artist,song){
+
+let text=artist+" - "+song;
+
+let command="!sr "+text;
+
+try{
+
+await navigator.clipboard.writeText(command);
+
+}catch{}
+
+try{
+
+await fetch(DB_URL,{
+method:'POST',
+mode:'no-cors',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({artist,song})
+});
+
+}catch{}
+
+alert("Copied to clipboard!\nPaste in chat: "+command);
+
+setTimeout(loadQueue,1000);
+
+}
+
+async function loadQueue(){
+
+try{
+
+const response=await fetch(DB_URL);
+
+if(!response.ok) return;
+
+const data=await response.json();
+
+const div=document.getElementById("queue");
+
+div.innerHTML="";
+
+if(!data) return;
+
+Object.values(data).forEach((song,i)=>{
+
+let item=document.createElement("div");
+
+item.className="queueItem";
+
+item.innerText=(i+1)+". "+song.artist+" - "+song.song;
+
+div.appendChild(item);
+
+});
+
+}catch{}
+
+}
+
+async function randomSong(){
+
+if(!songs.length) return;
+
+let s=songs[Math.floor(Math.random()*songs.length)];
+
+await requestSong(s.artist,s.song);
+
+}
+
+function goHome(){
+
+document.getElementById("searchBox").value="";
+
+filteredSongs=songs;
+
+currentPage=1;
+
+renderSongs();
+
+window.scrollTo({top:0,behavior:'smooth'});
+
+}
+
+init();
 
 </script>
 
