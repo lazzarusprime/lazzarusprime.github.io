@@ -1,48 +1,75 @@
-let songs = []
-let filteredSongs = []
+let songs=[]
+let filteredSongs=[]
 
-let currentPage = 1
-let songsPerPage = 25
+let queue=[]
+
+let currentPage=1
+let songsPerPage=25
 
 async function loadSongs(){
 
-const response = await fetch("songs.json")
+const r=await fetch("songs.json")
+songs=await r.json()
 
-songs = await response.json()
+filteredSongs=songs
 
-console.log("Songs loaded:", songs.length)
-
-filteredSongs = songs
+loadQueue()
 
 buildAlphabet()
 
 showArtistStats()
 
-detectDuplicates()
-
 renderSongs()
+
+}
+
+async function loadQueue(){
+
+const r=await fetch("queue.json")
+queue=await r.json()
+
+renderQueue()
+
+}
+
+function renderQueue(){
+
+const div=document.getElementById("queue")
+
+div.innerHTML=""
+
+queue.forEach((song,i)=>{
+
+const item=document.createElement("div")
+
+item.className="queueItem"
+
+item.innerText=(i+1)+". "+song.artist+" - "+song.song
+
+div.appendChild(item)
+
+})
 
 }
 
 function renderSongs(){
 
-const list = document.getElementById("songList")
+const list=document.getElementById("songList")
 
-list.innerHTML = ""
+list.innerHTML=""
 
-let start = (currentPage-1)*songsPerPage
+let start=(currentPage-1)*songsPerPage
+let end=start+songsPerPage
 
-let end = start + songsPerPage
-
-let pageSongs = filteredSongs.slice(start,end)
+let pageSongs=filteredSongs.slice(start,end)
 
 pageSongs.forEach(song=>{
 
-const div = document.createElement("div")
+const div=document.createElement("div")
 
 div.className="song"
 
-div.innerHTML = `
+div.innerHTML=`
 <span><b>${song.artist}</b> - ${song.song}</span>
 <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
 `
@@ -57,11 +84,11 @@ renderPagination()
 
 function renderPagination(){
 
-const div = document.getElementById("pagination")
+const div=document.getElementById("pagination")
 
 div.innerHTML=""
 
-let totalPages = Math.ceil(filteredSongs.length/songsPerPage)
+let totalPages=Math.ceil(filteredSongs.length/songsPerPage)
 
 if(currentPage>1){
 
@@ -72,7 +99,6 @@ prev.innerText="Previous"
 prev.onclick=()=>{
 
 currentPage--
-
 renderSongs()
 
 }
@@ -81,11 +107,11 @@ div.appendChild(prev)
 
 }
 
-const pageInfo=document.createElement("span")
+const page=document.createElement("span")
 
-pageInfo.innerText=` Page ${currentPage} / ${totalPages} `
+page.innerText=" Page "+currentPage+" / "+totalPages+" "
 
-div.appendChild(pageInfo)
+div.appendChild(page)
 
 if(currentPage<totalPages){
 
@@ -96,7 +122,6 @@ next.innerText="Next"
 next.onclick=()=>{
 
 currentPage++
-
 renderSongs()
 
 }
@@ -113,8 +138,7 @@ let q=document.getElementById("searchBox").value.toLowerCase()
 
 filteredSongs=songs.filter(song=>
 
-song.artist.toLowerCase().includes(q) ||
-
+song.artist.toLowerCase().includes(q)||
 song.song.toLowerCase().includes(q)
 
 )
@@ -129,7 +153,7 @@ function buildAlphabet(){
 
 const div=document.getElementById("alphabet")
 
-const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
 letters.forEach(letter=>{
 
@@ -171,11 +195,11 @@ alert("Random Song:\n"+song.artist+" - "+song.song)
 
 function requestSong(artist,song){
 
-let text=`${artist} - ${song}`
+let text=artist+" - "+song
 
-navigator.clipboard.writeText(`@Lazzarus_Prime ${text}`)
+navigator.clipboard.writeText("!sr "+text)
 
-alert("Copied to clipboard!\nPaste in Twitch chat:\n"+text)
+alert("Copied to clipboard!\nPaste in Twitch chat:\n!sr "+text)
 
 }
 
@@ -203,50 +227,14 @@ stats[song.artist]++
 
 })
 
-let sorted=Object.entries(stats)
-
-.sort((a,b)=>b[1]-a[1])
-
 console.log("Top Artists:")
 
-sorted.slice(0,20).forEach(a=>{
+Object.entries(stats)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,20)
+.forEach(a=>console.log(a[0]+" : "+a[1]))
 
-console.log(a[0]+" : "+a[1])
-
-})
-
-document.getElementById("stats").innerText =
-songs.length + " songs loaded"
-
-}
-
-function detectDuplicates(){
-
-let seen={}
-
-let duplicates=[]
-
-songs.forEach(song=>{
-
-let key=(song.artist+song.song).toLowerCase()
-
-if(seen[key]){
-
-duplicates.push(song)
-
-}else{
-
-seen[key]=true
-
-}
-
-})
-
-if(duplicates.length>0){
-
-console.warn("Duplicate songs detected:",duplicates.length)
-
-}
+document.getElementById("stats").innerText=songs.length+" songs loaded"
 
 }
 
