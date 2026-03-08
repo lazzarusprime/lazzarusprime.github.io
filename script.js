@@ -10,151 +10,23 @@ let filteredSongs = [];
 let currentPage = 1;
 let songsPerPage = 25;
 
-// 2. WAIT FOR FIREBASE (Safety Wrapper)
+// 2. UPDATED STARTUP LOGIC
 function startApp() {
-    if (typeof firebase !== 'undefined') {
-        console.log("Firebase detected, initializing...");
-        firebase.initializeApp(firebaseConfig);
+    // Check if both the core Firebase AND the Database library are loaded
+    if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
+        console.log("Firebase and Database ready!");
+        
+        // Initialize if not already done
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
         db = firebase.database();
-        loadSongs(); // Start loading your data
+        
+        // Start loading your data and queue
+        loadSongs(); 
     } else {
-        console.warn("Firebase not ready yet, retrying...");
-        setTimeout(startApp, 100); // Wait 100ms and try again
+        console.warn("Waiting for Firebase Database library...");
+        setTimeout(startApp, 100); // Retry every 100ms
     }
 }
-
-// 3. Load Songs from JSON
-async function loadSongs() {
-    const stats = document.getElementById("stats");
-    try {
-        const response = await fetch("songs.json");
-        if (!response.ok) throw new Error("songs.json not found");
-
-        songs = await response.json();
-        filteredSongs = songs;
-
-        listenQueue();
-        buildAlphabet();
-        renderSongs();
-        showArtistStats();
-    } catch (error) {
-        console.error("Load failed:", error);
-        if (stats) stats.innerText = "Error: " + error.message;
-    }
-}
-
-// --- ALL OTHER FUNCTIONS (listenQueue, renderSongs, etc.) REMAIN THE SAME ---
-
-function listenQueue() {
-    if(!db) return;
-    db.ref("queue").on("value", (snapshot) => {
-        const data = snapshot.val();
-        const div = document.getElementById("queue");
-        if (!div) return;
-        div.innerHTML = "";
-        if (!data) return;
-        Object.values(data).forEach((song, i) => {
-            let item = document.createElement("div");
-            item.className = "queueItem";
-            item.innerText = `${i + 1}. ${song.artist} - ${song.song}`;
-            div.appendChild(item);
-        });
-    });
-}
-
-function requestSong(artist, song) {
-    if(!db) return alert("Database not ready.");
-    let text = artist + " - " + song;
-    navigator.clipboard.writeText("!sr " + text);
-    db.ref("queue").push({ artist, song });
-    alert("Request added!\nPaste in chat:\n!sr " + text);
-}
-
-function renderSongs() {
-    const list = document.getElementById("songList");
-    if (!list) return;
-    list.innerHTML = "";
-    let start = (currentPage - 1) * songsPerPage;
-    let end = start + songsPerPage;
-    let pageSongs = filteredSongs.slice(start, end);
-    pageSongs.forEach(song => {
-        const div = document.createElement("div");
-        div.className = "song";
-        const sA = song.artist.replace(/'/g, "\\'");
-        const sS = song.song.replace(/'/g, "\\'");
-        div.innerHTML = `<span><b>${song.artist}</b> - ${song.song}</span>
-                        <button onclick="requestSong('${sA}', '${sS}')">Request</button>`;
-        list.appendChild(div);
-    });
-    renderPagination();
-}
-
-function renderPagination() {
-    const div = document.getElementById("pagination");
-    if (!div) return;
-    div.innerHTML = "";
-    let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
-    if (currentPage > 1) {
-        let btn = document.createElement("button");
-        btn.innerText = "Prev";
-        btn.onclick = () => { currentPage--; renderSongs(); };
-        div.appendChild(btn);
-    }
-    let s = document.createElement("span");
-    s.innerText = ` Page ${currentPage} / ${totalPages} `;
-    div.appendChild(s);
-    if (currentPage < totalPages) {
-        let btn = document.createElement("button");
-        btn.innerText = "Next";
-        btn.onclick = () => { currentPage++; renderSongs(); };
-        div.appendChild(btn);
-    }
-}
-
-function searchSongs() {
-    let q = document.getElementById("searchBox").value.toLowerCase();
-    filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
-    currentPage = 1;
-    renderSongs();
-}
-
-function buildAlphabet() {
-    const div = document.getElementById("alphabet");
-    if (!div) return;
-    div.innerHTML = "";
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
-        let b = document.createElement("button");
-        b.innerText = l;
-        b.onclick = () => jumpToLetter(l);
-        div.appendChild(b);
-    });
-}
-
-function jumpToLetter(l) {
-    const idx = filteredSongs.findIndex(s => s.artist.toLowerCase().startsWith(l.toLowerCase()));
-    if (idx === -1) return;
-    currentPage = Math.floor(idx / songsPerPage) + 1;
-    renderSongs();
-}
-
-function showArtistStats() {
-    const stats = document.getElementById("stats");
-    if (stats) stats.innerText = songs.length + " songs loaded";
-}
-
-function randomSong() {
-    if (!songs || songs.length === 0) return alert("Songs not loaded yet.");
-    let s = songs[Math.floor(Math.random() * songs.length)];
-    alert(s.artist + " - " + s.song);
-}
-
-function goHome() {
-    const box = document.getElementById("searchBox");
-    if (box) box.value = "";
-    filteredSongs = songs;
-    currentPage = 1;
-    renderSongs();
-}
-
-// RUN THE SAFETY WRAPPER ON LOAD
-window.onload = startApp;
