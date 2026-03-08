@@ -1,119 +1,121 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<meta charset="UTF-8">
-
-<title>Queue Control</title>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<style>
-
-body{
-
-background:#111;
-color:white;
-font-family:Arial;
-text-align:center;
-
-}
-
-.queueItem{
-
-background:#222;
-padding:10px;
-margin:10px auto;
-width:50%;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <title>Stream Queue Control</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: 'Inter', Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 { color: #f1c40f; }
+        #queue {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .queueItem {
+            background: #222;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        button:hover { opacity: 0.8; }
+        .next-btn { background: #2ecc71; }
+        .clear-btn { background: #34495e; }
+    </style>
 </head>
-
 <body>
 
-<h1>Stream Queue Control</h1>
+    <h1>Stream Queue Control</h1>
 
-<div id="queue"></div>
+    <div class="controls">
+        <button class="next-btn" onclick="nextSong()">⏭️ Next Song (Pop First)</button>
+        <button class="clear-btn" onclick="clearQueue()">🗑️ Clear Entire Queue</button>
+    </div>
 
-<button onclick="nextSong()">Next Song</button>
-<button onclick="clearQueue()">Clear Queue</button>
+    <div id="queue">Loading Queue...</div>
 
-<script>
+    <script>
+        // Use the same REST URL as your main page
+        const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
-const firebaseConfig={
-databaseURL:"YOUR_FIREBASE_DB_URL"
-}
+        async function listen() {
+            try {
+                const response = await fetch(`${DB_URL}.json`);
+                const data = await response.json();
+                const div = document.getElementById("queue");
+                div.innerHTML = "";
 
-firebase.initializeApp(firebaseConfig)
+                if (!data) {
+                    div.innerHTML = "<p>Queue is empty.</p>";
+                    return;
+                }
 
-const db=firebase.database()
+                // Convert Firebase object to array of [key, value]
+                const entries = Object.entries(data);
 
-function listen(){
+                entries.forEach(([key, s], i) => {
+                    let item = document.createElement("div");
+                    item.className = "queueItem";
+                    item.innerHTML = `
+                        <span><strong>${i + 1}.</strong> ${s.artist} - ${s.song}</span>
+                        <button onclick="removeItem('${key}')">Remove</button>
+                    `;
+                    div.appendChild(item);
+                });
+            } catch (e) {
+                console.error("Failed to load queue", e);
+            }
+        }
 
-db.ref("queue").on("value",(snap)=>{
+        // Remove a specific song by its Firebase Key
+        async function removeItem(key) {
+            if (!confirm("Remove this song?")) return;
+            await fetch(`${DB_URL}/${key}.json`, { method: 'DELETE' });
+            listen(); // Refresh
+        }
 
-let data=snap.val()
+        // Remove the very first song in the list
+        async function nextSong() {
+            const response = await fetch(`${DB_URL}.json?orderBy="$key"&limitToFirst=1`);
+            const data = await response.json();
+            
+            if (data) {
+                const firstKey = Object.keys(data)[0];
+                await fetch(`${DB_URL}/${firstKey}.json`, { method: 'DELETE' });
+                listen();
+            } else {
+                alert("Queue is already empty!");
+            }
+        }
 
-let div=document.getElementById("queue")
+        // Wipe the whole queue
+        async function clearQueue() {
+            if (!confirm("Are you sure you want to CLEAR the entire queue?")) return;
+            await fetch(`${DB_URL}.json`, { method: 'DELETE' });
+            listen();
+        }
 
-div.innerHTML=""
-
-if(!data)return
-
-Object.entries(data).forEach(([key,s],i)=>{
-
-let item=document.createElement("div")
-
-item.className="queueItem"
-
-item.innerHTML=`
-${i+1}. ${s.artist} - ${s.song}
-<button onclick="remove('${key}')">Remove</button>
-`
-
-div.appendChild(item)
-
-})
-
-})
-
-}
-
-function remove(key){
-
-db.ref("queue/"+key).remove()
-
-}
-
-function nextSong(){
-
-db.ref("queue").limitToFirst(1).once("value",(snap)=>{
-
-snap.forEach(child=>{
-
-child.ref.remove()
-
-})
-
-})
-
-}
-
-function clearQueue(){
-
-db.ref("queue").remove()
-
-}
-
-listen()
-
-</script>
-
+        // Initial load and auto-refresh every 5 seconds
+        listen();
+        setInterval(listen, 5000);
+    </script>
 </body>
-
 </html>
