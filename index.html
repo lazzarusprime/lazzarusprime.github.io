@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Lazzarus Prime Rocksmith Requests</title>
-    
-    <!-- 1. LOAD FIREBASE FIRST IN THE HEAD -->
-    <script src="https://www.gstatic.com"></script>
-    <script src="https://www.gstatic.com"></script>
+
+    <!-- 1. LOAD FIREBASE LIBRARIES FIRST WITH DEFER -->
+    <!-- This ensures the "firebase" object exists before script.js runs -->
+    <script defer src="https://www.gstatic.com"></script>
+    <script defer src="https://www.gstatic.com"></script>
+
+    <!-- 2. YOUR SCRIPT WITH DEFER -->
+    <script defer src="script.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
 </head>
+
 <body>
+
     <div class="titleBar">
         <img src="guitar.png" class="titleGuitar">
         <h1>Lazzarus Prime Rocksmith Requests</h1>
@@ -24,7 +31,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats"></div>
+    <div id="stats">Loading library...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -33,7 +40,6 @@
     <h2>Request Queue</h2>
     <div id="queue"></div>
 
-    <!-- 2. YOUR SCRIPT AT THE BOTTOM -->
-    <script src="script.js"></script>
 </body>
+
 </html>
