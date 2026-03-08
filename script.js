@@ -1,6 +1,6 @@
-const firebaseConfig = {
-databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com/"
-}
+const firebaseConfig = {databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com/"}
+
+const app = initializeApp(firebaseConfig);
 
 firebase.initializeApp(firebaseConfig)
 
