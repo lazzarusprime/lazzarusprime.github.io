@@ -31,7 +31,6 @@
     <div id="queue"></div>
 
     <script>
-        // CONFIGURATION (REST API)
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -41,8 +40,8 @@
 
         async function init() {
             await loadSongs();
-            loadQueue(); 
-            setInterval(loadQueue, 10000); 
+            loadQueue();
+            setInterval(loadQueue, 10000);
         }
 
         async function loadSongs() {
@@ -74,28 +73,25 @@
                     div.appendChild(item);
                 });
             } catch (e) {
-                console.error("Queue load failed - check AdBlockers or CORS", e);
+                console.warn("Queue update paused - check network/AdBlock.");
             }
         }
 
         async function requestSong(artist, song) {
-            let text = artist + " - " + song;
-            let command = "!sr " + text;
+            const command = "!sr " + artist + " - " + song;
 
             // 1. Copy to clipboard
             try {
                 await navigator.clipboard.writeText(command);
             } catch (err) {
-                console.warn("Clipboard copy failed.");
+                console.warn("Clipboard access denied.");
             }
 
-            // 2. Send to Firebase
+            // 2. Post to Firebase
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ artist, song })
                 });
                 
@@ -103,11 +99,13 @@
                     alert("Added to Queue!\nPaste in chat: " + command);
                     loadQueue();
                 } else {
-                    throw new Error("Server Error " + response.status);
+                    const errData = await response.json();
+                    alert("Server Error: " + (errData.error || response.statusText));
                 }
             } catch (e) {
-                console.error("Fetch error details:", e);
-                alert("Request failed: " + e.message + "\nTry disabling AdBlockers.");
+                // 'Failed to fetch' usually happens before reaching the server
+                alert("Request Failed: Check if an AdBlocker is blocking Firebase.");
+                console.error("Fetch Error:", e);
             }
         }
 
@@ -137,7 +135,7 @@
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
-                btn.onclick = () => { currentPage--; renderSongs(); scrollToLibrary(); };
+                btn.onclick = () => { currentPage--; renderSongs(); scrollToTop(); };
                 div.appendChild(btn);
             }
             let s = document.createElement("span");
@@ -146,16 +144,13 @@
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
-                btn.onclick = () => { currentPage++; renderSongs(); scrollToLibrary(); };
+                btn.onclick = () => { currentPage++; renderSongs(); scrollToTop(); };
                 div.appendChild(btn);
             }
         }
 
-        function scrollToLibrary() {
-            const header = document.getElementById("libraryHeader");
-            if (header) {
-                header.scrollIntoView({ behavior: 'smooth' });
-            }
+        function scrollToTop() {
+            document.getElementById("libraryHeader").scrollIntoView({ behavior: 'smooth' });
         }
 
         function searchSongs() {
@@ -163,7 +158,7 @@
             filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
             currentPage = 1;
             renderSongs();
-            scrollToLibrary();
+            scrollToTop();
         }
 
         function buildAlphabet() {
@@ -182,13 +177,13 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToLibrary(); // Jump to top of list
+            scrollToTop(); // Fixed: Scroll to top on letter jump
         }
 
         async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            await requestSong(s.artist, s.song);
+            await requestSong(s.artist, s.song); // Now includes pop-up and clipboard
         }
 
         function goHome() {
