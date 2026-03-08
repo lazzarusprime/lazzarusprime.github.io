@@ -12,6 +12,7 @@ body{
 background:transparent;
 color:white;
 font-family:Arial;
+font-size:28px;
 
 }
 
@@ -21,7 +22,7 @@ font-family:Arial;
 
 <body>
 
-<h2 id="now">Queue Loading...</h2>
+<div id="nowPlaying">Loading...</div>
 
 <script>
 
@@ -33,14 +34,14 @@ let q=await r.json()
 
 if(q.length>0){
 
-document.getElementById("now").innerText=
+document.getElementById("nowPlaying").innerText=
 "Now Playing: "+q[0].artist+" - "+q[0].song
 
 }
 
 }
 
-setInterval(load,5000)
+setInterval(load,3000)
 
 load()
 
