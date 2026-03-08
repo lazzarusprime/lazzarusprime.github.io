@@ -31,7 +31,7 @@
     <div id="queue"></div>
 
     <script>
-        // Use the absolute URL with .json for REST API
+        // CONFIGURATION (REST API)
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -41,8 +41,8 @@
 
         async function init() {
             await loadSongs();
-            loadQueue();
-            setInterval(loadQueue, 5000);
+            loadQueue(); 
+            setInterval(loadQueue, 10000); 
         }
 
         async function loadSongs() {
@@ -74,22 +74,22 @@
                     div.appendChild(item);
                 });
             } catch (e) {
-                console.error("Queue load failed", e);
+                console.error("Queue load failed - check AdBlockers or CORS", e);
             }
         }
 
         async function requestSong(artist, song) {
             let text = artist + " - " + song;
             let command = "!sr " + text;
-            
-            // Clipboard copy logic
+
+            // 1. Copy to clipboard
             try {
                 await navigator.clipboard.writeText(command);
             } catch (err) {
-                console.error('Clipboard failed');
+                console.warn("Clipboard copy failed.");
             }
 
-            // Database POST with REQUIRED headers
+            // 2. Send to Firebase
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
@@ -98,14 +98,16 @@
                     },
                     body: JSON.stringify({ artist, song })
                 });
+                
                 if (response.ok) {
                     alert("Added to Queue!\nPaste in chat: " + command);
                     loadQueue();
                 } else {
-                    throw new Error("Server rejected request. Check Firebase Rules.");
+                    throw new Error("Server Error " + response.status);
                 }
             } catch (e) {
-                alert("Request failed: " + e.message);
+                console.error("Fetch error details:", e);
+                alert("Request failed: " + e.message + "\nTry disabling AdBlockers.");
             }
         }
 
@@ -132,35 +134,23 @@
             const div = document.getElementById("pagination");
             div.innerHTML = "";
             let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
-            
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
-                btn.onclick = () => { 
-                    currentPage--; 
-                    renderSongs(); 
-                    scrollToLibrary(); 
-                };
+                btn.onclick = () => { currentPage--; renderSongs(); scrollToLibrary(); };
                 div.appendChild(btn);
             }
-            
             let s = document.createElement("span");
             s.innerText = ` Page ${currentPage} / ${totalPages} `;
             div.appendChild(s);
-            
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
-                btn.onclick = () => { 
-                    currentPage++; 
-                    renderSongs(); 
-                    scrollToLibrary(); 
-                };
+                btn.onclick = () => { currentPage++; renderSongs(); scrollToLibrary(); };
                 div.appendChild(btn);
             }
         }
 
-        // SCROLL FIX: Smoothly scrolls to the top of the library list
         function scrollToLibrary() {
             const header = document.getElementById("libraryHeader");
             if (header) {
@@ -192,13 +182,12 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToLibrary(); // Ensure list starts at the top
+            scrollToLibrary(); // Jump to top of list
         }
 
         async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            // Uses updated requestSong logic for clipboard + pop-up
             await requestSong(s.artist, s.song);
         }
 
