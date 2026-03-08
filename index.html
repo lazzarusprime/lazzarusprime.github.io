@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lazzarus Prime Rocksmith Requests</title>
-    
-    <!-- Using the standard Google APIs CDN (Highest trust level) -->
-    <script src="https://www.gstatic.com"></script>
-    <script src="https://www.gstatic.com"></script>
-
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
 </head>
@@ -26,7 +21,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats">Initializing...</div>
+    <div id="stats">Loading library...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -36,35 +31,24 @@
     <div id="queue"></div>
 
     <script>
-        const firebaseConfig = {
-            databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
-        };
+        // CONFIGURATION (Using REST API endpoint)
+        const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
-        let db;
         let songs = [];
         let filteredSongs = [];
         let currentPage = 1;
         const songsPerPage = 25;
 
-        // Use a simpler, faster check
-        function startApp() {
-            if (window.firebase && window.firebase.database) {
-                console.log("Firebase found!");
-                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-                loadSongs();
-                listenQueue();
-            } else {
-                console.warn("Firebase still loading...");
-                setTimeout(startApp, 500);
-            }
+        async function init() {
+            await loadSongs();
+            loadQueue(); // Initial queue load
+            setInterval(loadQueue, 5000); // Check for new requests every 5 seconds
         }
 
         async function loadSongs() {
             try {
-                // Added a cache-buster to bypass CORB/Cache issues
-                const response = await fetch("songs.json?v=" + Date.now());
-                if (!response.ok) throw new Error("songs.json 404");
+                const response = await fetch("songs.json");
+                if (!response.ok) throw new Error("songs.json not found");
                 songs = await response.json();
                 filteredSongs = songs;
                 buildAlphabet();
@@ -75,28 +59,43 @@
             }
         }
 
-        function listenQueue() {
-            db.ref("queue").on("value", (s) => {
-                const data = s.val();
+        // LOAD QUEUE using REST (No Firebase library needed)
+        async function loadQueue() {
+            try {
+                const response = await fetch(DB_URL);
+                const data = await response.json();
                 const div = document.getElementById("queue");
                 div.innerHTML = "";
                 if (!data) return;
+
                 Object.values(data).forEach((song, i) => {
                     let item = document.createElement("div");
                     item.className = "queueItem";
                     item.innerText = (i + 1) + ". " + song.artist + " - " + song.song;
                     div.appendChild(item);
                 });
-            });
+            } catch (e) {
+                console.error("Queue load failed", e);
+            }
         }
 
-        function requestSong(artist, song) {
-            if (!db) return alert("DB not ready");
+        // REQUEST SONG using REST POST
+        async function requestSong(artist, song) {
             let text = artist + " - " + song;
             navigator.clipboard.writeText("!sr " + text);
-            db.ref("queue").push({ artist, song })
-                .then(() => alert("Added: " + text))
-                .catch(e => alert("Error: " + e.message));
+
+            try {
+                const response = await fetch(DB_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ artist, song })
+                });
+                if (response.ok) {
+                    alert("Added to Queue!\nPaste in chat: !sr " + text);
+                    loadQueue();
+                }
+            } catch (e) {
+                alert("Request failed: " + e.message);
+            }
         }
 
         function renderSongs() {
@@ -105,6 +104,7 @@
             let start = (currentPage - 1) * songsPerPage;
             let end = start + songsPerPage;
             let pageSongs = filteredSongs.slice(start, end);
+
             pageSongs.forEach(song => {
                 const div = document.createElement("div");
                 div.className = "song";
@@ -176,8 +176,8 @@
             renderSongs();
         }
 
-        // Start checking
-        startApp();
+        // Start the manual init
+        init();
     </script>
 </body>
 </html>
