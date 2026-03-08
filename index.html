@@ -31,7 +31,6 @@
     <div id="queue"></div>
 
     <script>
-        // CONFIGURATION
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -90,18 +89,17 @@
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Stealth mode to bypass strict CORS blocks
+                    mode: 'no-cors', 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ artist, song })
                 });
                 
-                // When using 'no-cors', response.ok is always false, 
-                // but the data usually still sends!
-                alert("Added to Queue!\nPaste in chat: " + command);
+                // UPDATED POP-UP TEXT
+                alert("Copied to clipboard!\nPaste in chat: " + command);
                 setTimeout(loadQueue, 1000);
 
             } catch (e) {
-                alert("Command Copied: " + command + "\n\nNote: Database update failed. Check connection.");
+                alert("Copied to clipboard!\nPaste in chat: " + command);
             }
         }
 
@@ -146,7 +144,6 @@
         }
 
         function scrollToLibrary() {
-            // Force scroll to the Library header
             const header = document.getElementById("libraryHeader");
             if (header) header.scrollIntoView({ behavior: 'smooth' });
         }
@@ -175,7 +172,7 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToLibrary(); // SCROLL FIX
+            scrollToLibrary(); 
         }
 
         async function randomSong() {
