@@ -2,17 +2,35 @@ body{
 
 background:#0e0e0e;
 color:white;
-font-family:Arial;
+font-family:'Inter',sans-serif;
 text-align:center;
 margin:0;
 
 }
 
-h1{
+.titleBar{
 
-background:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:20px;
 padding:20px;
+background:#111;
+
+}
+
+.titleBar h1{
+
+font-family:'Bebas Neue',sans-serif;
+font-size:48px;
+letter-spacing:2px;
 margin:0;
+
+}
+
+.titleGuitar{
+
+height:70px;
 
 }
 
@@ -93,5 +111,12 @@ padding:8px;
 margin:5px auto;
 width:50%;
 border-radius:4px;
+
+}
+
+h2{
+
+font-family:'Bebas Neue',sans-serif;
+letter-spacing:1px;
 
 }
