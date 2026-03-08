@@ -31,7 +31,7 @@
     <div id="queue"></div>
 
     <script>
-        // CONFIGURATION (Using REST API endpoint)
+        // CONFIGURATION (REST API)
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -41,8 +41,9 @@
 
         async function init() {
             await loadSongs();
-            loadQueue(); // Initial queue load
-            setInterval(loadQueue, 5000); // Check for new requests every 5 seconds
+            loadQueue(); 
+            // Refresh queue every 10 seconds automatically
+            setInterval(loadQueue, 10000); 
         }
 
         async function loadSongs() {
@@ -59,7 +60,6 @@
             }
         }
 
-        // LOAD QUEUE using REST (No Firebase library needed)
         async function loadQueue() {
             try {
                 const response = await fetch(DB_URL);
@@ -79,19 +79,31 @@
             }
         }
 
-        // REQUEST SONG using REST POST
+        // REQUEST SONG: Handles Clipboard + Post + Pop-up
         async function requestSong(artist, song) {
             let text = artist + " - " + song;
-            navigator.clipboard.writeText("!sr " + text);
+            let command = "!sr " + text;
 
+            // 1. Attempt to copy to clipboard
+            try {
+                await navigator.clipboard.writeText(command);
+            } catch (err) {
+                console.warn("Clipboard copy failed, using fallback.");
+            }
+
+            // 2. Post to Firebase
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
                     body: JSON.stringify({ artist, song })
                 });
+                
                 if (response.ok) {
-                    alert("Added to Queue!\nPaste in chat: !sr " + text);
+                    // 3. Show the requested pop-up confirmation
+                    alert("Request added!\nPaste in chat:\n" + command);
                     loadQueue();
+                } else {
+                    throw new Error("Server rejected request");
                 }
             } catch (e) {
                 alert("Request failed: " + e.message);
@@ -108,6 +120,7 @@
             pageSongs.forEach(song => {
                 const div = document.createElement("div");
                 div.className = "song";
+                // Escape single quotes for HTML attributes
                 const sA = song.artist.replace(/'/g, "\\'");
                 const sS = song.song.replace(/'/g, "\\'");
                 div.innerHTML = `<span><b>${song.artist}</b> - ${song.song}</span>
@@ -166,7 +179,7 @@
         function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            alert(s.artist + " - " + s.song);
+            alert("Random Pick:\n" + s.artist + " - " + s.song);
         }
 
         function goHome() {
@@ -176,7 +189,7 @@
             renderSongs();
         }
 
-        // Start the manual init
+        // Initialize immediately
         init();
     </script>
 </body>
