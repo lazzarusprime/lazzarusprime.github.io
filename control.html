@@ -4,35 +4,34 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Rocksmith Stream Control</title>
+
+<title>Rocksmith Queue Control</title>
 
 <style>
 
 body{
+
 background:#111;
-color:#00ffcc;
+color:white;
 font-family:Arial;
 text-align:center;
+
+}
+
+.queueItem{
+
+background:#222;
+margin:10px auto;
+padding:10px;
+width:50%;
+
 }
 
 button{
-padding:10px;
-margin:5px;
-background:#ff5500;
-border:none;
-color:white;
-cursor:pointer;
-}
 
-table{
-margin:auto;
-width:90%;
-border-collapse:collapse;
-}
+padding:6px 10px;
+margin:4px;
 
-td,th{
-border:1px solid #00ffcc;
-padding:10px;
 }
 
 </style>
@@ -41,25 +40,12 @@ padding:10px;
 
 <body>
 
-<h1>🎸 Stream Queue Control</h1>
+<h1>Stream Queue Control</h1>
+
+<div id="queue"></div>
 
 <button onclick="nextSong()">Next Song</button>
 <button onclick="clearQueue()">Clear Queue</button>
-
-<table>
-
-<thead>
-<tr>
-<th>#</th>
-<th>Artist</th>
-<th>Song</th>
-<th>Remove</th>
-</tr>
-</thead>
-
-<tbody id="queueTable"></tbody>
-
-</table>
 
 <script>
 
@@ -67,44 +53,50 @@ let queue=[]
 
 function loadQueue(){
 
-fetch("queue.json")
+let stored=localStorage.getItem("rocksmithQueue")
 
-.then(r=>r.json())
+if(stored){
 
-.then(data=>{
+queue=JSON.parse(stored)
 
-queue=data
+}
 
 render()
 
-})
+}
+
+function save(){
+
+localStorage.setItem("rocksmithQueue",JSON.stringify(queue))
+
+render()
 
 }
 
 function render(){
 
-let table=document.getElementById("queueTable")
+let div=document.getElementById("queue")
 
-table.innerHTML=""
+div.innerHTML=""
 
-queue.forEach((song,i)=>{
+queue.forEach((s,i)=>{
 
-let row=document.createElement("tr")
+let item=document.createElement("div")
 
-row.innerHTML=`
-<td>${i+1}</td>
-<td>${song.artist}</td>
-<td>${song.song}</td>
-<td><button onclick="removeSong(${i})">Remove</button></td>
+item.className="queueItem"
+
+item.innerHTML=`
+${i+1}. ${s.artist} - ${s.song}
+<button onclick="remove(${i})">Remove</button>
 `
 
-table.appendChild(row)
+div.appendChild(item)
 
 })
 
 }
 
-function removeSong(i){
+function remove(i){
 
 queue.splice(i,1)
 
@@ -125,17 +117,6 @@ function clearQueue(){
 queue=[]
 
 save()
-
-}
-
-function save(){
-
-fetch("queue.json",{
-method:"PUT",
-body:JSON.stringify(queue)
-})
-
-render()
 
 }
 
