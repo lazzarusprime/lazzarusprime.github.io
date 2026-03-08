@@ -31,7 +31,6 @@
     <div id="queue"></div>
 
     <script>
-        // CONFIGURATION
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -82,12 +81,14 @@
             let text = artist + " - " + song;
             let command = "!sr " + text;
             
+            // Clipboard copy
             try {
                 await navigator.clipboard.writeText(command);
             } catch (err) {
                 console.error('Clipboard failed');
             }
 
+            // Database POST
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
@@ -127,6 +128,7 @@
             const div = document.getElementById("pagination");
             div.innerHTML = "";
             let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
+            
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
@@ -137,9 +139,11 @@
                 };
                 div.appendChild(btn);
             }
+            
             let s = document.createElement("span");
             s.innerText = ` Page ${currentPage} / ${totalPages} `;
             div.appendChild(s);
+            
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
@@ -186,28 +190,13 @@
             scrollToLibrary(); 
         }
 
-        // FIXED: Now copies to clipboard and sends to queue
+        // FIXED RANDOM SONG
         async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            let text = s.artist + " - " + s.song;
-            let command = "!sr " + text;
-
-            try {
-                await navigator.clipboard.writeText(command);
-                // Also add it to the database queue automatically
-                const response = await fetch(DB_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ artist: s.artist, song: s.song })
-                });
-                
-                if (response.ok) {
-                    alert("Random Pick Added to Queue!\nPaste in chat: " + command);
-                    loadQueue();
-                }
-            } catch (e) {
-                alert("Random pick failed: " + e.message);
-            }
+            
+            // This now uses the exact same logic as requestSong
+            await requestSong(s.artist, s.song);
         }
 
         function goHome() {
