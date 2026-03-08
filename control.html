@@ -5,7 +5,10 @@
 
 <meta charset="UTF-8">
 
-<title>Rocksmith Queue Control</title>
+<title>Queue Control</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <style>
 
@@ -21,16 +24,9 @@ text-align:center;
 .queueItem{
 
 background:#222;
-margin:10px auto;
 padding:10px;
+margin:10px auto;
 width:50%;
-
-}
-
-button{
-
-padding:6px 10px;
-margin:4px;
 
 }
 
@@ -49,37 +45,27 @@ margin:4px;
 
 <script>
 
-let queue=[]
-
-function loadQueue(){
-
-let stored=localStorage.getItem("rocksmithQueue")
-
-if(stored){
-
-queue=JSON.parse(stored)
-
+const firebaseConfig={
+databaseURL:"YOUR_FIREBASE_DB_URL"
 }
 
-render()
+firebase.initializeApp(firebaseConfig)
 
-}
+const db=firebase.database()
 
-function save(){
+function listen(){
 
-localStorage.setItem("rocksmithQueue",JSON.stringify(queue))
+db.ref("queue").on("value",(snap)=>{
 
-render()
-
-}
-
-function render(){
+let data=snap.val()
 
 let div=document.getElementById("queue")
 
 div.innerHTML=""
 
-queue.forEach((s,i)=>{
+if(!data)return
+
+Object.entries(data).forEach(([key,s],i)=>{
 
 let item=document.createElement("div")
 
@@ -87,40 +73,44 @@ item.className="queueItem"
 
 item.innerHTML=`
 ${i+1}. ${s.artist} - ${s.song}
-<button onclick="remove(${i})">Remove</button>
+<button onclick="remove('${key}')">Remove</button>
 `
 
 div.appendChild(item)
 
 })
 
+})
+
 }
 
-function remove(i){
+function remove(key){
 
-queue.splice(i,1)
-
-save()
+db.ref("queue/"+key).remove()
 
 }
 
 function nextSong(){
 
-queue.shift()
+db.ref("queue").limitToFirst(1).once("value",(snap)=>{
 
-save()
+snap.forEach(child=>{
+
+child.ref.remove()
+
+})
+
+})
 
 }
 
 function clearQueue(){
 
-queue=[]
-
-save()
+db.ref("queue").remove()
 
 }
 
-loadQueue()
+listen()
 
 </script>
 
