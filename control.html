@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<!-- Firebase compat CDN scripts -->
+<!-- Firebase Compat CDN (normal scripts, not modules) -->
 <script src="https://www.gstatic.com/firebasejs/10.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.22.1/firebase-database-compat.js"></script>
 
@@ -71,7 +71,7 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const queueRef = db.ref("/"); // adjust if your queue is nested like "/queue"
+    const queueRef = db.ref("/"); // use "/queue" if your queue is nested
 
     const queueDiv = document.getElementById("queue");
 
@@ -94,7 +94,7 @@
     }
 
     // Real-time listener
-    queueRef.on("value", (snapshot) => {
+    queueRef.on("value", snapshot => {
         const data = snapshot.val();
         renderQueue(data);
     });
@@ -106,8 +106,8 @@
 
     // Next song (remove first)
     function nextSong() {
-        queueRef.orderByKey().limitToFirst(1).once("value", (snap) => {
-            const firstKey = Object.keys(snap.val() || {})[0];
+        queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
+            const firstKey = Object.keys(snapshot.val() || {})[0];
             if (firstKey) db.ref(firstKey).remove();
         });
     }
