@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lazzarus Prime Rocksmith Requests</title>
-
-    <!-- FORCE LOAD LIBRARIES IMMEDIATELY -->
+    <!-- Force these to load first -->
     <script src="https://www.gstatic.com"></script>
     <script src="https://www.gstatic.com"></script>
-
-    <!-- YOUR SCRIPT (No defer, we will handle the timing inside the script) -->
-    <script src="script.js"></script>
-
+    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
 </head>
 <body>
     <div class="titleBar">
-        <img src="guitar.png" class="titleGuitar">
+        <img src="guitar.png" class="titleGuitar" alt="Guitar">
         <h1>Lazzarus Prime Rocksmith Requests</h1>
     </div>
 
@@ -35,5 +31,8 @@
 
     <h2>Request Queue</h2>
     <div id="queue"></div>
+
+    <!-- Your script MUST come after the body content -->
+    <script src="script.js"></script>
 </body>
 </html>
