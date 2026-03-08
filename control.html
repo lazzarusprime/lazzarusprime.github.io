@@ -12,65 +12,76 @@
             padding: 20px;
         }
         h1 { color: #f1c40f; }
-        #queue {
-            max-width: 600px;
-            margin: 20px auto;
-        }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .panel { flex: 1; min-width: 400px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
+        #queue { max-width: 100%; margin: 20px auto; }
         .queueItem {
             background: #222;
-            padding: 15px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 8px 0;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #333;
+            font-size: 14px;
         }
         button {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            margin: 5px;
         }
-        button:hover { opacity: 0.8; }
-        .next-btn { background: #2ecc71; }
-        .clear-btn { background: #34495e; }
-    </style>
+        .next-btn { background: #2ecc71; margin-bottom: 10px; padding: 12px 20px; }
+        .clear-btn { background: #555; margin-left: 10px; }
+        iframe { border-radius: 10px; background: white; }
+    </script>
 </head>
 <body>
 
     <h1>Stream Queue Control</h1>
 
-    <div class="controls">
-        <button class="next-btn" onclick="nextSong()">⏭️ Next Song (Pop First)</button>
-        <button class="clear-btn" onclick="clearQueue()">🗑️ Clear Entire Queue</button>
+    <div class="container">
+        <!-- LEFT PANEL: CUSTOM FIREBASE QUEUE -->
+        <div class="panel">
+            <h2>Website Requests</h2>
+            <button class="next-btn" onclick="nextSong()">⏭️ Next Song</button>
+            <button class="clear-btn" onclick="clearQueue()">🗑️ Clear List</button>
+            <div id="queue">Loading...</div>
+        </div>
+
+        <!-- RIGHT PANEL: RS PLAYLIST INTEGRATION -->
+        <div class="panel">
+            <h2>RS Playlist Live</h2>
+            <iframe 
+                src="https://rsplaylist.com" 
+                width="100%" 
+                height="600px" 
+                style="border:none;">
+            </iframe>
+        </div>
     </div>
 
-    <div id="queue">Loading Queue...</div>
-
     <script>
-        // Use the same REST URL as your main page
-        const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
+        // FIXED URL: Ensure no double dots or missing slashes
+        const DB_BASE = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         async function listen() {
             try {
-                const response = await fetch(`${DB_URL}.json`);
+                const response = await fetch(`${DB_BASE}.json`);
                 const data = await response.json();
                 const div = document.getElementById("queue");
                 div.innerHTML = "";
 
                 if (!data) {
-                    div.innerHTML = "<p>Queue is empty.</p>";
+                    div.innerHTML = "<p style='color: #888;'>No website requests yet.</p>";
                     return;
                 }
 
-                // Convert Firebase object to array of [key, value]
                 const entries = Object.entries(data);
-
                 entries.forEach(([key, s], i) => {
                     let item = document.createElement("div");
                     item.className = "queueItem";
@@ -81,39 +92,33 @@
                     div.appendChild(item);
                 });
             } catch (e) {
-                console.error("Failed to load queue", e);
+                console.error("Fetch Error:", e);
+                document.getElementById("queue").innerText = "Connection Error. Check URL.";
             }
         }
 
-        // Remove a specific song by its Firebase Key
         async function removeItem(key) {
-            if (!confirm("Remove this song?")) return;
-            await fetch(`${DB_URL}/${key}.json`, { method: 'DELETE' });
-            listen(); // Refresh
-        }
-
-        // Remove the very first song in the list
-        async function nextSong() {
-            const response = await fetch(`${DB_URL}.json?orderBy="$key"&limitToFirst=1`);
-            const data = await response.json();
-            
-            if (data) {
-                const firstKey = Object.keys(data)[0];
-                await fetch(`${DB_URL}/${firstKey}.json`, { method: 'DELETE' });
-                listen();
-            } else {
-                alert("Queue is already empty!");
-            }
-        }
-
-        // Wipe the whole queue
-        async function clearQueue() {
-            if (!confirm("Are you sure you want to CLEAR the entire queue?")) return;
-            await fetch(`${DB_URL}.json`, { method: 'DELETE' });
+            await fetch(`${DB_BASE}/${key}.json`, { method: 'DELETE' });
             listen();
         }
 
-        // Initial load and auto-refresh every 5 seconds
+        async function nextSong() {
+            // Get the first item based on Firebase keys
+            const response = await fetch(`${DB_BASE}.json?orderBy="$key"&limitToFirst=1`);
+            const data = await response.json();
+            if (data) {
+                const firstKey = Object.keys(data)[0];
+                await fetch(`${DB_BASE}/${firstKey}.json`, { method: 'DELETE' });
+                listen();
+            }
+        }
+
+        async function clearQueue() {
+            if (!confirm("Wipe the entire website request list?")) return;
+            await fetch(`${DB_BASE}.json`, { method: 'DELETE' });
+            listen();
+        }
+
         listen();
         setInterval(listen, 5000);
     </script>
