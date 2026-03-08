@@ -32,12 +32,13 @@ width:42px;
 
 .topBar{
 display:flex;
-gap:10px;
+gap:5px;
 padding:10px;
 background:#181818;
 position:sticky;
 top:0;
 z-index:100;
+align-items:center;
 }
 
 .topBar input{
@@ -45,6 +46,21 @@ flex:1;
 padding:8px;
 border-radius:6px;
 border:none;
+}
+
+.topBar .clearBtn{
+background:#272727;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+display:none; /* hidden by default */
+}
+
+.topBar .clearBtn:hover{
+background:#444;
 }
 
 button{
@@ -135,7 +151,8 @@ border-bottom:1px solid #222;
 
 <button onclick="goHome()">🏠 Home</button>
 
-<input id="searchBox" placeholder="Search artist or song..." oninput="searchSongs()">
+<input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
+<button class="clearBtn" id="clearBtn" onclick="clearSearch()">✖</button>
 
 <button onclick="randomSong()">🎲 Random</button>
 
@@ -290,6 +307,11 @@ controls(bottom);
 
 }
 
+function handleSearchInput(){
+searchSongs();
+toggleClearButton();
+}
+
 function searchSongs(){
 
 let q=document.getElementById("searchBox").value.toLowerCase();
@@ -311,6 +333,20 @@ renderSongs();
 
 }
 
+function toggleClearButton(){
+const btn=document.getElementById("clearBtn");
+const input=document.getElementById("searchBox");
+btn.style.display = input.value ? "inline-block" : "none";
+}
+
+function clearSearch(){
+document.getElementById("searchBox").value="";
+filteredSongs=songs;
+currentPage=1;
+renderSongs();
+toggleClearButton();
+}
+
 function filterArtist(artist){
 
 document.getElementById("searchBox").value=artist;
@@ -320,7 +356,7 @@ filteredSongs=songs.filter(s=>s.artist===artist);
 currentPage=1;
 
 renderSongs();
-
+toggleClearButton();
 }
 
 function buildAlphabet(){
@@ -498,6 +534,8 @@ filteredSongs=songs;
 currentPage=1;
 
 renderSongs();
+
+toggleClearButton();
 
 window.scrollTo({top:0,behavior:'smooth'});
 
