@@ -2,56 +2,41 @@
 <html>
 
 <head>
-
-<meta charset="UTF-8">
-
-<title>Lazzarus Prime Rocksmith Requests</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <title>Lazzarus Prime Rocksmith Requests</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="titleBar">
+    <div class="titleBar">
+        <img src="guitar.png" class="titleGuitar">
+        <h1>Lazzarus Prime Rocksmith Requests</h1>
+    </div>
 
-<img src="guitar.png" class="titleGuitar">
+    <div class="topBar">
+        <button onclick="goHome()">🏠 Home</button>
+        <input id="searchBox" placeholder="Search artist or song..." onkeyup="searchSongs()">
+        <button onclick="randomSong()">🎲 Random Song</button>
+    </div>
 
-<h1>Lazzarus Prime Rocksmith Requests</h1>
+    <div id="alphabet"></div>
+    <div id="stats"></div>
 
-</div>
+    <h2>Song Library</h2>
+    <div id="songList"></div>
+    <div id="pagination"></div>
 
-<div class="topBar">
+    <h2>Request Queue</h2>
+    <div id="queue"></div>
 
-<button onclick="goHome()">🏠 Home</button>
+    <!-- FIREBASE LIBRARIES (REQUIRED FOR SCRIPT.JS TO WORK) -->
+    <script src="https://www.gstatic.com"></script>
+    <script src="https://www.gstatic.com"></script>
 
-<input
-id="searchBox"
-placeholder="Search artist or song..."
-onkeyup="searchSongs()"
->
-
-<button onclick="randomSong()">🎲 Random Song</button>
-
-</div>
-
-<div id="alphabet"></div>
-
-<div id="stats"></div>
-
-<h2>Song Library</h2>
-
-<div id="songList"></div>
-
-<div id="pagination"></div>
-
-<h2>Request Queue</h2>
-
-<div id="queue"></div>
-
-<script src="script.js"></script>
+    <!-- YOUR SCRIPT -->
+    <script src="script.js"></script>
 
 </body>
 
