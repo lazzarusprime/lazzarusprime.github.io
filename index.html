@@ -31,7 +31,7 @@
     <div id="queue"></div>
 
     <script>
-        // FIXED URL for REST API
+        // CONFIGURATION
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -186,10 +186,28 @@
             scrollToLibrary(); 
         }
 
-        function randomSong() {
+        // FIXED: Now copies to clipboard and sends to queue
+        async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            alert(s.artist + " - " + s.song);
+            let text = s.artist + " - " + s.song;
+            let command = "!sr " + text;
+
+            try {
+                await navigator.clipboard.writeText(command);
+                // Also add it to the database queue automatically
+                const response = await fetch(DB_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ artist: s.artist, song: s.song })
+                });
+                
+                if (response.ok) {
+                    alert("Random Pick Added to Queue!\nPaste in chat: " + command);
+                    loadQueue();
+                }
+            } catch (e) {
+                alert("Random pick failed: " + e.message);
+            }
         }
 
         function goHome() {
