@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Lazzarus Prime Rocksmith Requests</title>
-    <!-- Force these to load first -->
-    <script src="https://www.gstatic.com"></script>
-    <script src="https://www.gstatic.com"></script>
-    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
+
+    <!-- 1. Load Firebase Libraries first -->
+    <script src="https://www.gstatic.com"></script>
+    <script src="https://www.gstatic.com"></script>
 </head>
 <body>
+
     <div class="titleBar">
         <img src="guitar.png" class="titleGuitar" alt="Guitar">
         <h1>Lazzarus Prime Rocksmith Requests</h1>
@@ -23,7 +24,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats">Checking connection...</div>
+    <div id="stats">Connecting to Database...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -32,7 +33,158 @@
     <h2>Request Queue</h2>
     <div id="queue"></div>
 
-    <!-- Your script MUST come after the body content -->
-    <script src="script.js"></script>
+    <script>
+        // 2. Configuration
+        const firebaseConfig = {
+            databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
+        };
+
+        let db;
+        let songs = [];
+        let filteredSongs = [];
+        let currentPage = 1;
+        const songsPerPage = 25;
+
+        // 3. Initialize App Logic
+        function startApp() {
+            if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
+                console.log("Firebase is ready!");
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                loadSongs();
+                listenQueue();
+            } else {
+                console.warn("Retrying connection...");
+                setTimeout(startApp, 200);
+            }
+        }
+
+        async function loadSongs() {
+            try {
+                const r = await fetch("songs.json");
+                if (!r.ok) throw new Error("songs.json not found");
+                songs = await r.json();
+                filteredSongs = songs;
+                
+                buildAlphabet();
+                renderSongs();
+                showArtistStats();
+            } catch (error) {
+                document.getElementById("stats").innerText = "Error: " + error.message;
+            }
+        }
+
+        function listenQueue() {
+            db.ref("queue").on("value", (snapshot) => {
+                const data = snapshot.val();
+                const div = document.getElementById("queue");
+                if (!div) return;
+                div.innerHTML = "";
+                if (!data) return;
+                Object.values(data).forEach((song, i) => {
+                    let item = document.createElement("div");
+                    item.className = "queueItem";
+                    item.innerText = (i + 1) + ". " + song.artist + " - " + song.song;
+                    div.appendChild(item);
+                });
+            });
+        }
+
+        function requestSong(artist, song) {
+            let text = artist + " - " + song;
+            navigator.clipboard.writeText("!sr " + text);
+            db.ref("queue").push({ artist, song })
+                .then(() => alert("Request added!\nPaste in chat: !sr " + text))
+                .catch(e => alert("Database Error: " + e.message));
+        }
+
+        function renderSongs() {
+            const list = document.getElementById("songList");
+            if (!list) return;
+            list.innerHTML = "";
+            let start = (currentPage - 1) * songsPerPage;
+            let end = start + songsPerPage;
+            let pageSongs = filteredSongs.slice(start, end);
+
+            pageSongs.forEach(song => {
+                const div = document.createElement("div");
+                div.className = "song";
+                const sA = song.artist.replace(/'/g, "\\'");
+                const sS = song.song.replace(/'/g, "\\'");
+                div.innerHTML = `<span><b>${song.artist}</b> - ${song.song}</span>
+                                <button onclick="requestSong('${sA}', '${sS}')">Request</button>`;
+                list.appendChild(div);
+            });
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const div = document.getElementById("pagination");
+            if (!div) return;
+            div.innerHTML = "";
+            let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
+            if (currentPage > 1) {
+                let btn = document.createElement("button");
+                btn.innerText = "Prev";
+                btn.onclick = () => { currentPage--; renderSongs(); };
+                div.appendChild(btn);
+            }
+            let s = document.createElement("span");
+            s.innerText = ` Page ${currentPage} / ${totalPages} `;
+            div.appendChild(s);
+            if (currentPage < totalPages) {
+                let btn = document.createElement("button");
+                btn.innerText = "Next";
+                btn.onclick = () => { currentPage++; renderSongs(); };
+                div.appendChild(btn);
+            }
+        }
+
+        function searchSongs() {
+            let q = document.getElementById("searchBox").value.toLowerCase();
+            filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
+            currentPage = 1;
+            renderSongs();
+        }
+
+        function buildAlphabet() {
+            const div = document.getElementById("alphabet");
+            if (!div) return;
+            div.innerHTML = "";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
+                let b = document.createElement("button");
+                b.innerText = l;
+                b.onclick = () => jumpToLetter(l);
+                div.appendChild(b);
+            });
+        }
+
+        function jumpToLetter(l) {
+            const idx = filteredSongs.findIndex(s => s.artist.toLowerCase().startsWith(l.toLowerCase()));
+            if (idx === -1) return;
+            currentPage = Math.floor(idx / songsPerPage) + 1;
+            renderSongs();
+        }
+
+        function showArtistStats() {
+            document.getElementById("stats").innerText = songs.length + " songs loaded";
+        }
+
+        function randomSong() {
+            if (!songs.length) return;
+            let s = songs[Math.floor(Math.random() * songs.length)];
+            alert(s.artist + " - " + s.song);
+        }
+
+        function goHome() {
+            document.getElementById("searchBox").value = "";
+            filteredSongs = songs;
+            currentPage = 1;
+            renderSongs();
+        }
+
+        // Start the engine
+        startApp();
+    </script>
 </body>
 </html>
