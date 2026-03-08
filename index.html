@@ -360,7 +360,12 @@ const sorted=Object.entries(map)
 
 const div=document.getElementById("artistStats");
 
-div.innerHTML="<h3>🎸 Top Artists In Library</h3>";
+div.innerHTML=`
+<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3>
+<div id="artistList" style="display:none"></div>
+`;
+
+const list=document.getElementById("artistList");
 
 sorted.forEach(([artist,count])=>{
 
@@ -368,9 +373,28 @@ let row=document.createElement("div");
 
 row.innerText=`${artist} (${count})`;
 
-div.appendChild(row);
+list.appendChild(row);
 
 });
+
+document.getElementById("artistToggle").onclick=()=>{
+
+const list=document.getElementById("artistList");
+const toggle=document.getElementById("artistToggle");
+
+if(list.style.display==="none"){
+
+list.style.display="block";
+toggle.innerText="🎸 Top Artists In Library ▼";
+
+}else{
+
+list.style.display="none";
+toggle.innerText="🎸 Top Artists In Library ▶";
+
+}
+
+};
 
 }
 
