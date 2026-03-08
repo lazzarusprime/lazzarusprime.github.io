@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Lazzarus Prime Rocksmith Requests</title>
+    
+    <!-- 1. LOAD FIREBASE FIRST IN THE HEAD -->
+    <script src="https://www.gstatic.com"></script>
+    <script src="https://www.gstatic.com"></script>
+
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
 </head>
-
 <body>
-
     <div class="titleBar">
         <img src="guitar.png" class="titleGuitar">
         <h1>Lazzarus Prime Rocksmith Requests</h1>
@@ -31,13 +33,7 @@
     <h2>Request Queue</h2>
     <div id="queue"></div>
 
-    <!-- FIREBASE LIBRARIES (REQUIRED FOR SCRIPT.JS TO WORK) -->
-    <script src="https://www.gstatic.com"></script>
-    <script src="https://www.gstatic.com"></script>
-
-    <!-- YOUR SCRIPT -->
+    <!-- 2. YOUR SCRIPT AT THE BOTTOM -->
     <script src="script.js"></script>
-
 </body>
-
 </html>
