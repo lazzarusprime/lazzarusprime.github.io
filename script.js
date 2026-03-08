@@ -8,37 +8,24 @@ let filteredSongs = [];
 let currentPage = 1;
 const songsPerPage = 25;
 
-// 1. SAFETY LOOP: Wait for Firebase to be defined
-function checkFirebase() {
-    if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
-        console.log("Firebase is ready!");
-        init();
-    } else {
-        console.log("Firebase not loaded yet, retrying in 100ms...");
-        setTimeout(checkFirebase, 100);
-    }
-}
-
-// 2. Initialize App
-function init() {
-    try {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+// Safety check for Firebase availability
+function initializeApp() {
+    if (typeof firebase !== 'undefined') {
+        console.log("Firebase loaded!");
+        firebase.initializeApp(firebaseConfig);
         db = firebase.database();
         loadSongs();
         listenQueue();
-    } catch (error) {
-        console.error("Init failed:", error);
-        document.getElementById("stats").innerText = "Init Error: " + error.message;
+    } else {
+        console.error("Firebase library missing or blocked.");
+        document.getElementById("stats").innerText = "Error: Firebase not loaded.";
     }
 }
 
-// 3. Load Songs
 async function loadSongs() {
     try {
         const r = await fetch("songs.json");
-        if (!r.ok) throw new Error("songs.json missing from server");
+        if (!r.ok) throw new Error("songs.json not found");
         songs = await r.json();
         filteredSongs = songs;
         
@@ -50,7 +37,6 @@ async function loadSongs() {
     }
 }
 
-// 4. Firebase Queue
 function listenQueue() {
     if (!db) return;
     db.ref("queue").on("value", (snapshot) => {
@@ -68,12 +54,8 @@ function listenQueue() {
     });
 }
 
-// 5. Request Logic
 function requestSong(artist, song) {
-    if (!db) {
-        alert("Database still connecting. Try again in 2 seconds.");
-        return;
-    }
+    if (!db) return alert("Database not ready.");
     let text = artist + " - " + song;
     navigator.clipboard.writeText("!sr " + text);
     db.ref("queue").push({ artist, song })
@@ -81,7 +63,6 @@ function requestSong(artist, song) {
         .catch(e => alert("Firebase Error: " + e.message));
 }
 
-// 6. UI Rendering
 function renderSongs() {
     const list = document.getElementById("songList");
     if (!list) return;
@@ -169,5 +150,5 @@ function goHome() {
     renderSongs();
 }
 
-// Start the check loop
-checkFirebase();
+// Start only when everything is loaded
+window.onload = initializeApp;
