@@ -23,6 +23,7 @@
     <div id="alphabet"></div>
     <div id="stats">Loading library...</div>
 
+    <!-- Added ID here for target scrolling -->
     <h2 id="libraryHeader">Song Library</h2>
     <div id="songList"></div>
     <div id="pagination"></div>
@@ -31,7 +32,7 @@
     <div id="queue"></div>
 
     <script>
-        // FIXED: Added /queue.json to fix "Server rejected request"
+        // CONFIGURATION
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -97,7 +98,8 @@
                     alert("Added to Queue!\nPaste in chat: " + command);
                     loadQueue();
                 } else {
-                    throw new Error("Server rejected request");
+                    // If you get this error now, double-check your Firebase Rules!
+                    throw new Error("Server rejected request. Check Firebase Rules.");
                 }
             } catch (e) {
                 alert("Request failed: " + e.message);
@@ -127,37 +129,37 @@
             const div = document.getElementById("pagination");
             div.innerHTML = "";
             let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
-            
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
                 btn.onclick = () => { 
                     currentPage--; 
                     renderSongs(); 
-                    scrollToLibrary(); // Scroll to top
+                    scrollToLibrary(); // Fixed: Added scroll logic
                 };
                 div.appendChild(btn);
             }
-            
             let s = document.createElement("span");
             s.innerText = ` Page ${currentPage} / ${totalPages} `;
             div.appendChild(s);
-            
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
                 btn.onclick = () => { 
                     currentPage++; 
                     renderSongs(); 
-                    scrollToLibrary(); // Scroll to top
+                    scrollToLibrary(); // Fixed: Added scroll logic
                 };
                 div.appendChild(btn);
             }
         }
 
-        // Helper function to scroll back to the library header
+        // SCROLL HELPER
         function scrollToLibrary() {
-            document.getElementById("libraryHeader").scrollIntoView({ behavior: 'smooth' });
+            const header = document.getElementById("libraryHeader");
+            if (header) {
+                header.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function searchSongs() {
@@ -165,6 +167,8 @@
             filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
             currentPage = 1;
             renderSongs();
+            // Scroll up when searching too
+            scrollToLibrary();
         }
 
         function buildAlphabet() {
@@ -183,7 +187,7 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToLibrary(); // FIXED: Now scrolls back up to the list
+            scrollToLibrary(); // Fixed: Now scrolls back to the top of the list
         }
 
         function randomSong() {
