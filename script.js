@@ -1,36 +1,16 @@
+const firebaseConfig = {
+databaseURL: "https://console.firebase.google.com/u/2/project/rocksmith-requests/database/rocksmith-requests-default-rtdb/data/~2F"
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db = firebase.database()
+
 let songs=[]
 let filteredSongs=[]
 
-let queue=[]
-
 let currentPage=1
 let songsPerPage=25
-
-function loadQueue(){
-
-let stored=localStorage.getItem("rocksmithQueue")
-
-if(stored){
-
-queue=JSON.parse(stored)
-
-}else{
-
-queue=[]
-
-}
-
-renderQueue()
-
-}
-
-function saveQueue(){
-
-localStorage.setItem("rocksmithQueue",JSON.stringify(queue))
-
-renderQueue()
-
-}
 
 async function loadSongs(){
 
@@ -40,27 +20,31 @@ songs=await r.json()
 
 filteredSongs=songs
 
-loadQueue()
+listenQueue()
 
 buildAlphabet()
 
-showArtistStats()
-
 renderSongs()
+
+showArtistStats()
 
 }
 
-function renderQueue(){
+function listenQueue(){
+
+db.ref("queue").on("value",(snapshot)=>{
+
+const data=snapshot.val()
 
 const div=document.getElementById("queue")
 
-if(!div) return
-
 div.innerHTML=""
 
-queue.forEach((song,i)=>{
+if(!data)return
 
-const item=document.createElement("div")
+Object.values(data).forEach((song,i)=>{
+
+let item=document.createElement("div")
 
 item.className="queueItem"
 
@@ -70,13 +54,7 @@ div.appendChild(item)
 
 })
 
-}
-
-function addToQueue(artist,song){
-
-queue.push({artist:artist,song:song})
-
-saveQueue()
+})
 
 }
 
@@ -86,9 +64,14 @@ let text=artist+" - "+song
 
 navigator.clipboard.writeText("!sr "+text)
 
-addToQueue(artist,song)
+db.ref("queue").push({
 
-alert("Added to queue!\nCopied to clipboard:\n!sr "+text)
+artist:artist,
+song:song
+
+})
+
+alert("Request added!\nPaste in chat:\n!sr "+text)
 
 }
 
@@ -134,7 +117,7 @@ if(currentPage>1){
 
 const prev=document.createElement("button")
 
-prev.innerText="Previous"
+prev.innerText="Prev"
 
 prev.onclick=()=>{
 
@@ -147,7 +130,7 @@ div.appendChild(prev)
 
 }
 
-const page=document.createElement("span")
+let page=document.createElement("span")
 
 page.innerText=" Page "+currentPage+" / "+totalPages+" "
 
@@ -193,8 +176,6 @@ function buildAlphabet(){
 
 const div=document.getElementById("alphabet")
 
-if(!div) return
-
 let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
 letters.forEach(letter=>{
@@ -231,7 +212,7 @@ function randomSong(){
 
 let song=songs[Math.floor(Math.random()*songs.length)]
 
-alert("Random Song:\n"+song.artist+" - "+song.song)
+alert(song.artist+" - "+song.song)
 
 }
 
@@ -249,30 +230,7 @@ renderSongs()
 
 function showArtistStats(){
 
-let stats={}
-
-songs.forEach(song=>{
-
-if(!stats[song.artist])stats[song.artist]=0
-
-stats[song.artist]++
-
-})
-
-console.log("Top Artists:")
-
-Object.entries(stats)
-.sort((a,b)=>b[1]-a[1])
-.slice(0,20)
-.forEach(a=>console.log(a[0]+" : "+a[1]))
-
-let statsDiv=document.getElementById("stats")
-
-if(statsDiv){
-
-statsDiv.innerText=songs.length+" songs loaded"
-
-}
+document.getElementById("stats").innerText=songs.length+" songs loaded"
 
 }
 
