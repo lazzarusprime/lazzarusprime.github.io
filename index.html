@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lazzarus Prime Rocksmith Requests</title>
+    
+    <!-- 1. RELIABLE CLOUDFLARE CDNs -->
+    <script src="https://cdnjs.cloudflare.com"></script>
+    <script src="https://cdnjs.cloudflare.com"></script>
+
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
-
-    <!-- 1. Load Firebase Libraries first -->
-    <script src="https://www.gstatic.com"></script>
-    <script src="https://www.gstatic.com"></script>
 </head>
 <body>
 
@@ -24,7 +26,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats">Connecting to Database...</div>
+    <div id="stats">Connecting to Firebase...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -34,7 +36,7 @@
     <div id="queue"></div>
 
     <script>
-        // 2. Configuration
+        // 2. CONFIGURATION
         const firebaseConfig = {
             databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
         };
@@ -45,63 +47,80 @@
         let currentPage = 1;
         const songsPerPage = 25;
 
-        // 3. Initialize App Logic
-        function startApp() {
+        // 3. STARTUP LOGIC
+        function initApp() {
+            console.log("Checking for Firebase...");
+            
+            // Wait for both libraries to be available
             if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
                 console.log("Firebase is ready!");
-                firebase.initializeApp(firebaseConfig);
+                
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
                 db = firebase.database();
                 loadSongs();
                 listenQueue();
             } else {
-                console.warn("Retrying connection...");
-                setTimeout(startApp, 200);
+                console.warn("Firebase libraries not found yet. Retrying...");
+                setTimeout(initApp, 500);
             }
         }
 
         async function loadSongs() {
+            const stats = document.getElementById("stats");
             try {
-                const r = await fetch("songs.json");
-                if (!r.ok) throw new Error("songs.json not found");
-                songs = await r.json();
-                filteredSongs = songs;
+                const response = await fetch("songs.json");
+                if (!response.ok) throw new Error("songs.json not found on server");
                 
+                songs = await response.json();
+                filteredSongs = songs;
+
                 buildAlphabet();
                 renderSongs();
                 showArtistStats();
             } catch (error) {
-                document.getElementById("stats").innerText = "Error: " + error.message;
+                console.error(error);
+                if (stats) stats.innerText = "Error: " + error.message;
             }
         }
 
         function listenQueue() {
+            if (!db) return;
             db.ref("queue").on("value", (snapshot) => {
                 const data = snapshot.val();
                 const div = document.getElementById("queue");
                 if (!div) return;
+                
                 div.innerHTML = "";
                 if (!data) return;
+
                 Object.values(data).forEach((song, i) => {
                     let item = document.createElement("div");
                     item.className = "queueItem";
-                    item.innerText = (i + 1) + ". " + song.artist + " - " + song.song;
+                    item.innerText = `${i + 1}. ${song.artist} - ${song.song}`;
                     div.appendChild(item);
                 });
             });
         }
 
         function requestSong(artist, song) {
+            if (!db) return alert("Database connection lost. Refresh page.");
+            
             let text = artist + " - " + song;
             navigator.clipboard.writeText("!sr " + text);
+
             db.ref("queue").push({ artist, song })
                 .then(() => alert("Request added!\nPaste in chat: !sr " + text))
-                .catch(e => alert("Database Error: " + e.message));
+                .catch(err => alert("Firebase Error: " + err.message));
         }
 
         function renderSongs() {
             const list = document.getElementById("songList");
             if (!list) return;
             list.innerHTML = "";
+
             let start = (currentPage - 1) * songsPerPage;
             let end = start + songsPerPage;
             let pageSongs = filteredSongs.slice(start, end);
@@ -123,15 +142,18 @@
             if (!div) return;
             div.innerHTML = "";
             let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
+            
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
                 btn.onclick = () => { currentPage--; renderSongs(); };
                 div.appendChild(btn);
             }
+            
             let s = document.createElement("span");
             s.innerText = ` Page ${currentPage} / ${totalPages} `;
             div.appendChild(s);
+            
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
@@ -142,7 +164,9 @@
 
         function searchSongs() {
             let q = document.getElementById("searchBox").value.toLowerCase();
-            filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
+            filteredSongs = songs.filter(s => 
+                s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q)
+            );
             currentPage = 1;
             renderSongs();
         }
@@ -167,7 +191,8 @@
         }
 
         function showArtistStats() {
-            document.getElementById("stats").innerText = songs.length + " songs loaded";
+            const stats = document.getElementById("stats");
+            if (stats) stats.innerText = songs.length + " songs loaded";
         }
 
         function randomSong() {
@@ -183,8 +208,8 @@
             renderSongs();
         }
 
-        // Start the engine
-        startApp();
+        // 4. RUN AFTER PAGE LOADS
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
