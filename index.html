@@ -9,138 +9,132 @@
 <style>
 
 body{
-    font-family: Segoe UI, Arial;
-    background: #0f0f0f;
-    color: #fff;
-    margin: 0;
+font-family:Segoe UI, Arial;
+background:#0f0f0f;
+color:#fff;
+margin:0;
 }
 
 h1,h2,h3{margin:0}
 
 .titleBar{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:#141414;
-    padding:12px;
-    border-bottom:2px solid #222;
+display:flex;
+align-items:center;
+gap:10px;
+background:#141414;
+padding:12px;
+border-bottom:2px solid #222;
 }
 
 .titleBar img{
-    width:42px;
+width:42px;
 }
 
 .topBar{
-    display:flex;
-    gap:10px;
-    padding:10px;
-    background:#181818;
-    position:sticky;
-    top:0;
-    z-index:100;
-    align-items:center;
-}
-
-.topBar .searchWrapper{
-    position: relative;
-    flex:1;
+display:flex;
+gap:5px;
+padding:10px;
+background:#181818;
+position:sticky;
+top:0;
+z-index:100;
+align-items:center;
 }
 
 .topBar input{
-    width: 100%;
-    padding:8px 32px 8px 8px; /* space for X */
-    border-radius:6px;
-    border:none;
+flex:1;
+padding:8px;
+border-radius:6px;
+border:none;
 }
 
 .topBar .clearBtn{
-    position:absolute;
-    right:8px;
-    top:50%;
-    transform: translateY(-50%);
-    background:#272727;
-    color:white;
-    border:none;
-    padding:0 8px;
-    border-radius:4px;
-    cursor:pointer;
-    font-weight:bold;
-    display:none;
-    height:28px;
-    line-height:28px;
+background:#272727;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+display:none; /* hidden by default */
 }
 
 .topBar .clearBtn:hover{
-    background:#444;
+background:#444;
 }
 
 button{
-    background:#272727;
-    color:white;
-    border:none;
-    padding:6px 10px;
-    border-radius:6px;
-    cursor:pointer;
+background:#272727;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
 }
 
 button:hover{
-    background:#444;
+background:#444;
 }
 
 #alphabet{
-    display:flex;
-    flex-wrap:wrap;
-    gap:5px;
-    padding:10px;
+display:flex;
+flex-wrap:wrap;
+gap:5px;
+padding:10px;
 }
 
 #stats{
-    padding:10px;
-    color:#bbb;
+padding:10px;
+color:#bbb;
 }
 
 #artistStats{
-    padding:10px;
-    background:#151515;
-    border-top:1px solid #222;
-    border-bottom:1px solid #222;
+padding:10px;
+background:#151515;
+border-top:1px solid #222;
+border-bottom:1px solid #222;
 }
 
 .song{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px;
-    border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:10px;
+border-bottom:1px solid #222;
 }
 
 .song:hover{
-    background:#1c1c1c;
+background:#1c1c1c;
 }
 
 .songInfo{
-    display:flex;
-    flex-direction:column;
+display:flex;
+flex-direction:column;
 }
 
 .songTitle{
-    font-weight:bold;
-    font-size:15px;
+font-weight:bold;
+font-size:15px;
 }
 
 .songArtist{
-    font-size:13px;
-    color:#aaa;
-    cursor:pointer;
+font-size:13px;
+color:#aaa;
+cursor:pointer;
 }
 
 .songArtist:hover{
-    color:#0f0;
+color:#0f0;
 }
 
 #paginationTop,#paginationBottom{
-    text-align:center;
-    padding:10px;
+text-align:center;
+padding:10px;
+}
+
+.queueItem{
+padding:6px;
+border-bottom:1px solid #222;
 }
 
 </style>
@@ -157,10 +151,8 @@ button:hover{
 
 <button onclick="goHome()">🏠 Home</button>
 
-<div class="searchWrapper">
-    <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
-    <button class="clearBtn" id="clearBtn" onclick="clearSearch()">✖</button>
-</div>
+<input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
+<button class="clearBtn" id="clearBtn" onclick="clearSearch()">✖</button>
 
 <button onclick="randomSong()">🎲 Random</button>
 
@@ -180,6 +172,10 @@ button:hover{
 
 <div id="paginationBottom"></div>
 
+<h2 style="padding:10px">Request Queue</h2>
+
+<div id="queue"></div>
+
 <script>
 
 const DB_URL="https://rocksmith-requests-default-rtdb.firebaseio.com";
@@ -190,197 +186,359 @@ let currentPage=1;
 const songsPerPage=40;
 
 async function init(){
-    await loadSongs();
+
+await loadSongs();
+
+loadQueue();
+
+setInterval(loadQueue,8000);
+
 }
 
 async function loadSongs(){
-    try{
-        const response=await fetch("songs.json");
-        songs=await response.json();
-        filteredSongs=songs;
-        buildAlphabet();
-        buildArtistStats();
-        renderSongs();
-        document.getElementById("stats").innerText=songs.length+" songs loaded";
-    }catch(e){
-        document.getElementById("stats").innerText="Error loading songs";
-    }
+
+try{
+
+const response=await fetch("songs.json");
+
+songs=await response.json();
+
+filteredSongs=songs;
+
+buildAlphabet();
+
+buildArtistStats();
+
+renderSongs();
+
+document.getElementById("stats").innerText=songs.length+" songs loaded";
+
+}catch(e){
+
+document.getElementById("stats").innerText="Error loading songs";
+
+}
+
 }
 
 function renderSongs(){
-    const list=document.getElementById("songList");
-    list.innerHTML="";
-    let start=(currentPage-1)*songsPerPage;
-    let end=start+songsPerPage;
-    let pageSongs=filteredSongs.slice(start,end);
-    const fragment=document.createDocumentFragment();
 
-    pageSongs.forEach(song=>{
-        const div=document.createElement("div");
-        div.className="song";
-        const sA=song.artist.replace(/'/g,"\\'");
-        const sS=song.song.replace(/'/g,"\\'");
-        div.innerHTML=
-        `<div class="songInfo">
-            <div class="songTitle">${song.song}</div>
-            <div class="songArtist" onclick="filterArtist('${sA}')">${song.artist}</div>
-        </div>
-        <button onclick="requestSong('${sA}','${sS}')">Request</button>`;
-        fragment.appendChild(div);
-    });
+const list=document.getElementById("songList");
 
-    list.appendChild(fragment);
-    renderPagination();
+list.innerHTML="";
+
+let start=(currentPage-1)*songsPerPage;
+let end=start+songsPerPage;
+
+let pageSongs=filteredSongs.slice(start,end);
+
+const fragment=document.createDocumentFragment();
+
+pageSongs.forEach(song=>{
+
+const div=document.createElement("div");
+
+div.className="song";
+
+const sA=song.artist.replace(/'/g,"\\'");
+const sS=song.song.replace(/'/g,"\\'");
+
+div.innerHTML=
+
+`<div class="songInfo">
+
+<div class="songTitle">${song.song}</div>
+<div class="songArtist" onclick="filterArtist('${sA}')">${song.artist}</div>
+
+</div>
+
+<button onclick="requestSong('${sA}','${sS}')">Request</button>`;
+
+fragment.appendChild(div);
+
+});
+
+list.appendChild(fragment);
+
+renderPagination();
+
 }
 
 function renderPagination(){
-    const top=document.getElementById("paginationTop");
-    const bottom=document.getElementById("paginationBottom");
-    top.innerHTML="";
-    bottom.innerHTML="";
-    let totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
 
-    function controls(container){
-        if(currentPage>1){
-            let prev=document.createElement("button");
-            prev.innerText="◀ Prev";
-            prev.onclick=()=>{currentPage--;renderSongs();};
-            container.appendChild(prev);
-        }
+const top=document.getElementById("paginationTop");
+const bottom=document.getElementById("paginationBottom");
 
-        let label=document.createElement("span");
-        label.innerText=` Page ${currentPage} / ${totalPages} `;
-        container.appendChild(label);
+top.innerHTML="";
+bottom.innerHTML="";
 
-        if(currentPage<totalPages){
-            let next=document.createElement("button");
-            next.innerText="Next ▶";
-            next.onclick=()=>{currentPage++;renderSongs();};
-            container.appendChild(next);
-        }
-    }
+let totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
 
-    controls(top);
-    controls(bottom);
+function controls(container){
+
+if(currentPage>1){
+
+let prev=document.createElement("button");
+prev.innerText="◀ Prev";
+prev.onclick=()=>{currentPage--;renderSongs();};
+
+container.appendChild(prev);
+
+}
+
+let label=document.createElement("span");
+label.innerText=` Page ${currentPage} / ${totalPages} `;
+container.appendChild(label);
+
+if(currentPage<totalPages){
+
+let next=document.createElement("button");
+next.innerText="Next ▶";
+next.onclick=()=>{currentPage++;renderSongs();};
+
+container.appendChild(next);
+
+}
+
+}
+
+controls(top);
+controls(bottom);
+
 }
 
 function handleSearchInput(){
-    searchSongs();
-    toggleClearButton();
+searchSongs();
+toggleClearButton();
 }
 
 function searchSongs(){
-    let q=document.getElementById("searchBox").value.toLowerCase();
-    filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
-    currentPage=1;
-    renderSongs();
+
+let q=document.getElementById("searchBox").value.toLowerCase();
+
+filteredSongs=songs.filter(s=>{
+
+return(
+
+s.artist.toLowerCase().includes(q) ||
+s.song.toLowerCase().includes(q)
+
+);
+
+});
+
+currentPage=1;
+
+renderSongs();
+
 }
 
 function toggleClearButton(){
-    const btn=document.getElementById("clearBtn");
-    const input=document.getElementById("searchBox");
-    btn.style.display = input.value ? "inline-block" : "none";
+const btn=document.getElementById("clearBtn");
+const input=document.getElementById("searchBox");
+btn.style.display = input.value ? "inline-block" : "none";
 }
 
 function clearSearch(){
-    document.getElementById("searchBox").value="";
-    filteredSongs=songs;
-    currentPage=1;
-    renderSongs();
-    toggleClearButton();
+document.getElementById("searchBox").value="";
+filteredSongs=songs;
+currentPage=1;
+renderSongs();
+toggleClearButton();
 }
 
 function filterArtist(artist){
-    document.getElementById("searchBox").value=artist;
-    filteredSongs=songs.filter(s=>s.artist===artist);
-    currentPage=1;
-    renderSongs();
-    toggleClearButton();
+
+document.getElementById("searchBox").value=artist;
+
+filteredSongs=songs.filter(s=>s.artist===artist);
+
+currentPage=1;
+
+renderSongs();
+toggleClearButton();
 }
 
 function buildAlphabet(){
-    const div=document.getElementById("alphabet");
-    div.innerHTML="";
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l=>{
-        let b=document.createElement("button");
-        b.innerText=l;
-        b.onclick=()=>jumpToLetter(l);
-        div.appendChild(b);
-    });
+
+const div=document.getElementById("alphabet");
+
+div.innerHTML="";
+
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l=>{
+
+let b=document.createElement("button");
+
+b.innerText=l;
+
+b.onclick=()=>jumpToLetter(l);
+
+div.appendChild(b);
+
+});
+
 }
 
 function jumpToLetter(letter){
-    const idx=filteredSongs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()));
-    if(idx===-1) return;
-    currentPage=Math.floor(idx/songsPerPage)+1;
-    renderSongs();
+
+const idx=filteredSongs.findIndex(
+
+s=>s.artist.toLowerCase().startsWith(letter.toLowerCase())
+
+);
+
+if(idx===-1) return;
+
+currentPage=Math.floor(idx/songsPerPage)+1;
+
+renderSongs();
+
 }
 
 function buildArtistStats(){
-    const map={};
-    songs.forEach(s=>{
-        if(!map[s.artist]) map[s.artist]=0;
-        map[s.artist]++;
-    });
-    const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10);
 
-    const div=document.getElementById("artistStats");
-    div.innerHTML=`
-        <h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3>
-        <div id="artistList" style="display:none"></div>
-    `;
-    const list=document.getElementById("artistList");
-    sorted.forEach(([artist,count])=>{
-        let row=document.createElement("div");
-        row.style.cursor="pointer";
-        row.innerText=`${artist} (${count})`;
-        row.onclick=()=>filterArtist(artist);
-        list.appendChild(row);
-    });
+const map={};
 
-    document.getElementById("artistToggle").onclick=()=>{
-        const list=document.getElementById("artistList");
-        const toggle=document.getElementById("artistToggle");
-        if(list.style.display==="none"){
-            list.style.display="block";
-            toggle.innerText="🎸 Top Artists In Library ▼";
-        }else{
-            list.style.display="none";
-            toggle.innerText="🎸 Top Artists In Library ▶";
-        }
-    };
+songs.forEach(s=>{
+
+if(!map[s.artist]) map[s.artist]=0;
+
+map[s.artist]++;
+
+});
+
+const sorted=Object.entries(map)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,10);
+
+const div=document.getElementById("artistStats");
+
+div.innerHTML=`
+<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3>
+<div id="artistList" style="display:none"></div>
+`;
+
+const list=document.getElementById("artistList");
+
+sorted.forEach(([artist,count])=>{
+
+let row=document.createElement("div");
+
+row.style.cursor="pointer";
+row.innerText=`${artist} (${count})`;
+
+row.onclick=()=>filterArtist(artist);
+
+list.appendChild(row);
+
+});
+
+document.getElementById("artistToggle").onclick=()=>{
+
+const list=document.getElementById("artistList");
+const toggle=document.getElementById("artistToggle");
+
+if(list.style.display==="none"){
+
+list.style.display="block";
+toggle.innerText="🎸 Top Artists In Library ▼";
+
+}else{
+
+list.style.display="none";
+toggle.innerText="🎸 Top Artists In Library ▶";
+
+}
+
+};
+
 }
 
 async function requestSong(artist,song){
-    let text=artist+" - "+song;
-    let command="!sr "+text;
 
-    try{await navigator.clipboard.writeText(command);}catch{}
-    try{
-        await fetch(DB_URL,{
-            method:'POST',
-            mode:'no-cors',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({artist,song})
-        });
-    }catch{}
+let text=artist+" - "+song;
 
-    alert("Copied to clipboard!\nPaste in chat: "+command);
+let command="!sr "+text;
+
+try{
+
+await navigator.clipboard.writeText(command);
+
+}catch{}
+
+try{
+
+await fetch(DB_URL,{
+method:'POST',
+mode:'no-cors',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({artist,song})
+});
+
+}catch{}
+
+alert("Copied to clipboard!\nPaste in chat: "+command);
+
+setTimeout(loadQueue,1000);
+
+}
+
+async function loadQueue(){
+
+try{
+
+const response=await fetch(DB_URL);
+
+if(!response.ok) return;
+
+const data=await response.json();
+
+const div=document.getElementById("queue");
+
+div.innerHTML="";
+
+if(!data) return;
+
+Object.values(data).forEach((song,i)=>{
+
+let item=document.createElement("div");
+
+item.className="queueItem";
+
+item.innerText=(i+1)+". "+song.artist+" - "+song.song;
+
+div.appendChild(item);
+
+});
+
+}catch{}
+
 }
 
 async function randomSong(){
-    if(!songs.length) return;
-    let s=songs[Math.floor(Math.random()*songs.length)];
-    await requestSong(s.artist,s.song);
+
+if(!songs.length) return;
+
+let s=songs[Math.floor(Math.random()*songs.length)];
+
+await requestSong(s.artist,s.song);
+
 }
 
 function goHome(){
-    document.getElementById("searchBox").value="";
-    filteredSongs=songs;
-    currentPage=1;
-    renderSongs();
-    toggleClearButton();
-    window.scrollTo({top:0,behavior:'smooth'});
+
+document.getElementById("searchBox").value="";
+
+filteredSongs=songs;
+
+currentPage=1;
+
+renderSongs();
+
+toggleClearButton();
+
+window.scrollTo({top:0,behavior:'smooth'});
+
 }
 
 init();
