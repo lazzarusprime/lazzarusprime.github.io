@@ -31,6 +31,7 @@
     <div id="queue"></div>
 
     <script>
+        // CONFIGURATION - MUST be exactly this format for REST API
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -73,24 +74,25 @@
                     div.appendChild(item);
                 });
             } catch (e) {
-                console.warn("Queue update paused - check network/AdBlock.");
+                console.warn("Queue load failed (could be blocked or empty)");
             }
         }
 
         async function requestSong(artist, song) {
             const command = "!sr " + artist + " - " + song;
 
-            // 1. Copy to clipboard
+            // 1. Clipboard Copy
             try {
                 await navigator.clipboard.writeText(command);
             } catch (err) {
-                console.warn("Clipboard access denied.");
+                console.warn("Clipboard failed");
             }
 
-            // 2. Post to Firebase
+            // 2. REST POST to Firebase
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
+                    mode: 'cors', // Explicitly allow CORS
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ artist, song })
                 });
@@ -99,19 +101,20 @@
                     alert("Added to Queue!\nPaste in chat: " + command);
                     loadQueue();
                 } else {
-                    const errData = await response.json();
-                    alert("Server Error: " + (errData.error || response.statusText));
+                    const errorMsg = await response.text();
+                    alert("Server Error: " + response.status + "\nCheck Firebase Rules.");
                 }
             } catch (e) {
-                // 'Failed to fetch' usually happens before reaching the server
                 alert("Request Failed: Check if an AdBlocker is blocking Firebase.");
-                console.error("Fetch Error:", e);
+                console.error("Network Error:", e);
             }
         }
 
         function renderSongs() {
             const list = document.getElementById("songList");
+            if (!list) return;
             list.innerHTML = "";
+
             let start = (currentPage - 1) * songsPerPage;
             let end = start + songsPerPage;
             let pageSongs = filteredSongs.slice(start, end);
@@ -130,12 +133,14 @@
 
         function renderPagination() {
             const div = document.getElementById("pagination");
+            if (!div) return;
             div.innerHTML = "";
             let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
+
             if (currentPage > 1) {
                 let btn = document.createElement("button");
                 btn.innerText = "Prev";
-                btn.onclick = () => { currentPage--; renderSongs(); scrollToTop(); };
+                btn.onclick = () => { currentPage--; renderSongs(); scrollToLibrary(); };
                 div.appendChild(btn);
             }
             let s = document.createElement("span");
@@ -144,13 +149,16 @@
             if (currentPage < totalPages) {
                 let btn = document.createElement("button");
                 btn.innerText = "Next";
-                btn.onclick = () => { currentPage++; renderSongs(); scrollToTop(); };
+                btn.onclick = () => { currentPage++; renderSongs(); scrollToLibrary(); };
                 div.appendChild(btn);
             }
         }
 
-        function scrollToTop() {
-            document.getElementById("libraryHeader").scrollIntoView({ behavior: 'smooth' });
+        function scrollToLibrary() {
+            const header = document.getElementById("libraryHeader");
+            if (header) {
+                header.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function searchSongs() {
@@ -158,11 +166,12 @@
             filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
             currentPage = 1;
             renderSongs();
-            scrollToTop();
+            scrollToLibrary();
         }
 
         function buildAlphabet() {
             const div = document.getElementById("alphabet");
+            if (!div) return;
             div.innerHTML = "";
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
                 let b = document.createElement("button");
@@ -177,13 +186,13 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToTop(); // Fixed: Scroll to top on letter jump
+            scrollToLibrary(); // SCROLL FIX: Jumps to top of list
         }
 
         async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            await requestSong(s.artist, s.song); // Now includes pop-up and clipboard
+            await requestSong(s.artist, s.song);
         }
 
         function goHome() {
