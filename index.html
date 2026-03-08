@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Lazzarus Prime Rocksmith Requests</title>
 
-    <!-- 1. LOAD FIREBASE CORE FIRST (No defer here to ensure it exists immediately) -->
+    <!-- FORCE LOAD LIBRARIES IMMEDIATELY -->
     <script src="https://www.gstatic.com"></script>
-    
-    <!-- 2. LOAD DATABASE COMPONENT SECOND -->
     <script src="https://www.gstatic.com"></script>
 
-    <!-- 3. YOUR SCRIPT (Keep defer so it waits for the HTML to be ready) -->
-    <script defer src="script.js"></script>
+    <!-- YOUR SCRIPT (No defer, we will handle the timing inside the script) -->
+    <script src="script.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
 </head>
-
 <body>
-
     <div class="titleBar">
         <img src="guitar.png" class="titleGuitar">
         <h1>Lazzarus Prime Rocksmith Requests</h1>
@@ -32,7 +27,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats">Loading library...</div>
+    <div id="stats">Checking connection...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -40,7 +35,5 @@
 
     <h2>Request Queue</h2>
     <div id="queue"></div>
-
 </body>
-
 </html>
