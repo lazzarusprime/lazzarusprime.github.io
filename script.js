@@ -3,14 +3,34 @@ const firebaseConfig = {
     databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
 };
 
-// 2. Initialize Firebase (v8 compat style)
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
+// Declare variables globally
+let db;
 let songs = [];
 let filteredSongs = [];
 let currentPage = 1;
 let songsPerPage = 25;
+
+// 2. Initialize App only when window is ready
+async function initApp() {
+    try {
+        // Double-check Firebase is loaded from HTML
+        if (typeof firebase === 'undefined') {
+            throw new Error("Firebase library not loaded. Check index.html scripts.");
+        }
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+
+        // Now load the song data
+        await loadSongs();
+        
+    } catch (error) {
+        console.error("Initialization error:", error);
+        const statsDiv = document.getElementById("stats");
+        if (statsDiv) statsDiv.innerText = "Connection Error: " + error.message;
+    }
+}
 
 // 3. Load Songs from JSON
 async function loadSongs() {
@@ -18,7 +38,7 @@ async function loadSongs() {
         const response = await fetch("songs.json");
         
         if (!response.ok) {
-            throw new Error(`Failed to load songs.json (Status: ${response.status})`);
+            throw new Error(`songs.json not found (Status: ${response.status})`);
         }
 
         songs = await response.json();
@@ -30,14 +50,15 @@ async function loadSongs() {
         renderSongs();
         showArtistStats();
     } catch (error) {
-        console.error("Error during initialization:", error);
+        console.error("Error loading songs.json:", error);
         const statsDiv = document.getElementById("stats");
-        if (statsDiv) statsDiv.innerText = "Error: " + error.message;
+        if (statsDiv) statsDiv.innerText = "Data Error: " + error.message;
     }
 }
 
 // 4. Real-time Queue Listener
 function listenQueue() {
+    if (!db) return;
     db.ref("queue").on("value", (snapshot) => {
         const data = snapshot.val();
         const div = document.getElementById("queue");
@@ -57,6 +78,8 @@ function listenQueue() {
 
 // 5. Request Song Function
 function requestSong(artist, song) {
+    if (!db) return alert("Database not connected.");
+    
     let text = artist + " - " + song;
     navigator.clipboard.writeText("!sr " + text);
 
@@ -82,9 +105,14 @@ function renderSongs() {
     pageSongs.forEach(song => {
         const div = document.createElement("div");
         div.className = "song";
+        
+        // Safety: Escape single quotes for the onclick function
+        const safeArtist = song.artist.replace(/'/g, "\\'");
+        const safeSong = song.song.replace(/'/g, "\\'");
+
         div.innerHTML = `
             <span><b>${song.artist}</b> - ${song.song}</span>
-            <button onclick="requestSong('${song.artist.replace(/'/g, "\\'")}', '${song.song.replace(/'/g, "\\'")}')">Request</button>
+            <button onclick="requestSong('${safeArtist}', '${safeSong}')">Request</button>
         `;
         list.appendChild(div);
     });
@@ -132,7 +160,7 @@ function searchSongs() {
 function buildAlphabet() {
     const div = document.getElementById("alphabet");
     if (!div) return;
-    div.innerHTML = ""; // Clear existing
+    div.innerHTML = "";
 
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
         let btn = document.createElement("button");
@@ -152,7 +180,7 @@ function jumpToLetter(letter) {
     renderSongs();
 }
 
-// 8. Stats and Helper Functions
+// 8. Helper Functions
 function showArtistStats() {
     const stats = document.getElementById("stats");
     if (stats) stats.innerText = songs.length + " songs loaded";
@@ -172,5 +200,5 @@ function goHome() {
     renderSongs();
 }
 
-// Start the app
-window.onload = loadSongs;
+// Run the initialization when the window loads
+window.onload = initApp;
