@@ -1,65 +1,64 @@
-// 1. Configuration (Make sure this URL matches your console exactly)
 const firebaseConfig = {
     databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
 };
 
-// Global variables
 let db;
 let songs = [];
 let filteredSongs = [];
 let currentPage = 1;
 const songsPerPage = 25;
 
-// 2. Initialize App
-function init() {
-    try {
-        // Use a conditional block to avoid re-initialization errors
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        
-        // Explicitly get the database instance
-        db = firebase.database();
-        console.log("Database initialized successfully");
-
-        // Now load data
-        loadSongs();
-        listenQueue();
-    } catch (error) {
-        console.error("Initialization failed:", error);
-        document.getElementById("stats").innerText = "Database Error: " + error.message;
+// 1. SAFETY LOOP: Wait for Firebase to be defined
+function checkFirebase() {
+    if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
+        console.log("Firebase is ready!");
+        init();
+    } else {
+        console.log("Firebase not loaded yet, retrying in 100ms...");
+        setTimeout(checkFirebase, 100);
     }
 }
 
-// 3. Load Songs from JSON
+// 2. Initialize App
+function init() {
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+        loadSongs();
+        listenQueue();
+    } catch (error) {
+        console.error("Init failed:", error);
+        document.getElementById("stats").innerText = "Init Error: " + error.message;
+    }
+}
+
+// 3. Load Songs
 async function loadSongs() {
     try {
         const r = await fetch("songs.json");
-        if (!r.ok) throw new Error("songs.json not found");
-        
+        if (!r.ok) throw new Error("songs.json missing from server");
         songs = await r.json();
         filteredSongs = songs;
-
+        
         buildAlphabet();
         renderSongs();
         showArtistStats();
     } catch (error) {
-        console.error("Fetch failed:", error);
-        document.getElementById("stats").innerText = "Error: " + error.message;
+        document.getElementById("stats").innerText = "Load Error: " + error.message;
     }
 }
 
-// 4. Real-time Queue Listener
+// 4. Firebase Queue
 function listenQueue() {
     if (!db) return;
     db.ref("queue").on("value", (snapshot) => {
         const data = snapshot.val();
         const div = document.getElementById("queue");
         if (!div) return;
-        
         div.innerHTML = "";
         if (!data) return;
-
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
@@ -69,30 +68,24 @@ function listenQueue() {
     });
 }
 
-// 5. Request Song Function
+// 5. Request Logic
 function requestSong(artist, song) {
-    // If db is somehow still null, try to grab it again
-    if (!db) db = firebase.database();
-    
     if (!db) {
-        alert("Database connection is still pending. Please wait a moment.");
+        alert("Database still connecting. Try again in 2 seconds.");
         return;
     }
-
     let text = artist + " - " + song;
     navigator.clipboard.writeText("!sr " + text);
-
     db.ref("queue").push({ artist, song })
-        .then(() => alert("Request added!\nPaste in chat:\n!sr " + text))
-        .catch(err => alert("Error sending request: " + err.message));
+        .then(() => alert("Request added!\n!sr " + text))
+        .catch(e => alert("Firebase Error: " + e.message));
 }
 
-// 6. UI Logic
+// 6. UI Rendering
 function renderSongs() {
     const list = document.getElementById("songList");
     if (!list) return;
     list.innerHTML = "";
-
     let start = (currentPage - 1) * songsPerPage;
     let end = start + songsPerPage;
     let pageSongs = filteredSongs.slice(start, end);
@@ -108,8 +101,6 @@ function renderSongs() {
     });
     renderPagination();
 }
-
-// ... All other UI functions (renderPagination, searchSongs, etc.) remain as they were ...
 
 function renderPagination() {
     const div = document.getElementById("pagination");
@@ -178,5 +169,5 @@ function goHome() {
     renderSongs();
 }
 
-// 7. Start on window load
-window.onload = init;
+// Start the check loop
+checkFirebase();
