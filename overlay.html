@@ -5,14 +5,17 @@
 
 <meta charset="UTF-8">
 
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <style>
 
 body{
 
 background:transparent;
 color:white;
+font-size:36px;
 font-family:Arial;
-font-size:28px;
 
 }
 
@@ -26,24 +29,26 @@ font-size:28px;
 
 <script>
 
-async function load(){
+const firebaseConfig={
+databaseURL:"YOUR_FIREBASE_DB_URL"
+}
 
-let r=await fetch("queue.json")
+firebase.initializeApp(firebaseConfig)
 
-let q=await r.json()
+const db=firebase.database()
 
-if(q.length>0){
+db.ref("queue").limitToFirst(1).on("value",(snap)=>{
+
+let data=snap.val()
+
+if(!data)return
+
+let song=Object.values(data)[0]
 
 document.getElementById("nowPlaying").innerText=
-"Now Playing: "+q[0].artist+" - "+q[0].song
+song.artist+" - "+song.song
 
-}
-
-}
-
-setInterval(load,3000)
-
-load()
+})
 
 </script>
 
