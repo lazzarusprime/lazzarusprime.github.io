@@ -1,237 +1,176 @@
-const firebaseConfig = {databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com/"}
+// 1. Correct Configuration
+const firebaseConfig = {
+    databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
+};
 
-const app = initializeApp(firebaseConfig);
+// 2. Initialize Firebase (v8 compat style)
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-firebase.initializeApp(firebaseConfig)
+let songs = [];
+let filteredSongs = [];
+let currentPage = 1;
+let songsPerPage = 25;
 
-const db = firebase.database()
+// 3. Load Songs from JSON
+async function loadSongs() {
+    try {
+        const response = await fetch("songs.json");
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load songs.json (Status: ${response.status})`);
+        }
 
-let songs=[]
-let filteredSongs=[]
+        songs = await response.json();
+        filteredSongs = songs;
 
-let currentPage=1
-let songsPerPage=25
-
-async function loadSongs(){
-
-const r=await fetch("songs.json")
-
-songs=await r.json()
-
-filteredSongs=songs
-
-listenQueue()
-
-buildAlphabet()
-
-renderSongs()
-
-showArtistStats()
-
+        // Initialize UI components
+        listenQueue();
+        buildAlphabet();
+        renderSongs();
+        showArtistStats();
+    } catch (error) {
+        console.error("Error during initialization:", error);
+        const statsDiv = document.getElementById("stats");
+        if (statsDiv) statsDiv.innerText = "Error: " + error.message;
+    }
 }
 
-function listenQueue(){
+// 4. Real-time Queue Listener
+function listenQueue() {
+    db.ref("queue").on("value", (snapshot) => {
+        const data = snapshot.val();
+        const div = document.getElementById("queue");
+        if (!div) return;
+        
+        div.innerHTML = "";
+        if (!data) return;
 
-db.ref("queue").on("value",(snapshot)=>{
-
-const data=snapshot.val()
-
-const div=document.getElementById("queue")
-
-div.innerHTML=""
-
-if(!data)return
-
-Object.values(data).forEach((song,i)=>{
-
-let item=document.createElement("div")
-
-item.className="queueItem"
-
-item.innerText=(i+1)+". "+song.artist+" - "+song.song
-
-div.appendChild(item)
-
-})
-
-})
-
+        Object.values(data).forEach((song, i) => {
+            let item = document.createElement("div");
+            item.className = "queueItem";
+            item.innerText = `${i + 1}. ${song.artist} - ${song.song}`;
+            div.appendChild(item);
+        });
+    });
 }
 
-function requestSong(artist,song){
+// 5. Request Song Function
+function requestSong(artist, song) {
+    let text = artist + " - " + song;
+    navigator.clipboard.writeText("!sr " + text);
 
-let text=artist+" - "+song
+    db.ref("queue").push({
+        artist: artist,
+        song: song
+    });
 
-navigator.clipboard.writeText("!sr "+text)
-
-db.ref("queue").push({
-
-artist:artist,
-song:song
-
-})
-
-alert("Request added!\nPaste in chat:\n!sr "+text)
-
+    alert("Request added!\nPaste in chat:\n!sr " + text);
 }
 
-function renderSongs(){
+// 6. UI Rendering Functions
+function renderSongs() {
+    const list = document.getElementById("songList");
+    if (!list) return;
+    
+    list.innerHTML = "";
 
-const list=document.getElementById("songList")
+    let start = (currentPage - 1) * songsPerPage;
+    let end = start + songsPerPage;
+    let pageSongs = filteredSongs.slice(start, end);
 
-list.innerHTML=""
+    pageSongs.forEach(song => {
+        const div = document.createElement("div");
+        div.className = "song";
+        div.innerHTML = `
+            <span><b>${song.artist}</b> - ${song.song}</span>
+            <button onclick="requestSong('${song.artist.replace(/'/g, "\\'")}', '${song.song.replace(/'/g, "\\'")}')">Request</button>
+        `;
+        list.appendChild(div);
+    });
 
-let start=(currentPage-1)*songsPerPage
-let end=start+songsPerPage
-
-let pageSongs=filteredSongs.slice(start,end)
-
-pageSongs.forEach(song=>{
-
-const div=document.createElement("div")
-
-div.className="song"
-
-div.innerHTML=`
-<span><b>${song.artist}</b> - ${song.song}</span>
-<button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
-`
-
-list.appendChild(div)
-
-})
-
-renderPagination()
-
+    renderPagination();
 }
 
-function renderPagination(){
+function renderPagination() {
+    const div = document.getElementById("pagination");
+    if (!div) return;
+    
+    div.innerHTML = "";
+    let totalPages = Math.ceil(filteredSongs.length / songsPerPage);
 
-const div=document.getElementById("pagination")
+    if (currentPage > 1) {
+        const prev = document.createElement("button");
+        prev.innerText = "Prev";
+        prev.onclick = () => { currentPage--; renderSongs(); };
+        div.appendChild(prev);
+    }
 
-div.innerHTML=""
+    let pageLabel = document.createElement("span");
+    pageLabel.innerText = ` Page ${currentPage} / ${totalPages} `;
+    div.appendChild(pageLabel);
 
-let totalPages=Math.ceil(filteredSongs.length/songsPerPage)
-
-if(currentPage>1){
-
-const prev=document.createElement("button")
-
-prev.innerText="Prev"
-
-prev.onclick=()=>{
-
-currentPage--
-renderSongs()
-
+    if (currentPage < totalPages) {
+        const next = document.createElement("button");
+        next.innerText = "Next";
+        next.onclick = () => { currentPage++; renderSongs(); };
+        div.appendChild(next);
+    }
 }
 
-div.appendChild(prev)
-
+// 7. Search and Filtering
+function searchSongs() {
+    let q = document.getElementById("searchBox").value.toLowerCase();
+    filteredSongs = songs.filter(song =>
+        song.artist.toLowerCase().includes(q) ||
+        song.song.toLowerCase().includes(q)
+    );
+    currentPage = 1;
+    renderSongs();
 }
 
-let page=document.createElement("span")
+function buildAlphabet() {
+    const div = document.getElementById("alphabet");
+    if (!div) return;
+    div.innerHTML = ""; // Clear existing
 
-page.innerText=" Page "+currentPage+" / "+totalPages+" "
-
-div.appendChild(page)
-
-if(currentPage<totalPages){
-
-const next=document.createElement("button")
-
-next.innerText="Next"
-
-next.onclick=()=>{
-
-currentPage++
-renderSongs()
-
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+        let btn = document.createElement("button");
+        btn.innerText = letter;
+        btn.onclick = () => jumpToLetter(letter);
+        div.appendChild(btn);
+    });
 }
 
-div.appendChild(next)
+function jumpToLetter(letter) {
+    const index = filteredSongs.findIndex(song =>
+        song.artist.toLowerCase().startsWith(letter.toLowerCase())
+    );
 
+    if (index === -1) return;
+    currentPage = Math.floor(index / songsPerPage) + 1;
+    renderSongs();
 }
 
+// 8. Stats and Helper Functions
+function showArtistStats() {
+    const stats = document.getElementById("stats");
+    if (stats) stats.innerText = songs.length + " songs loaded";
 }
 
-function searchSongs(){
-
-let q=document.getElementById("searchBox").value.toLowerCase()
-
-filteredSongs=songs.filter(song=>
-
-song.artist.toLowerCase().includes(q)||
-song.song.toLowerCase().includes(q)
-
-)
-
-currentPage=1
-
-renderSongs()
-
+function randomSong() {
+    if (songs.length === 0) return;
+    let song = songs[Math.floor(Math.random() * songs.length)];
+    alert(song.artist + " - " + song.song);
 }
 
-function buildAlphabet(){
-
-const div=document.getElementById("alphabet")
-
-let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-
-letters.forEach(letter=>{
-
-let btn=document.createElement("button")
-
-btn.innerText=letter
-
-btn.onclick=()=>jumpToLetter(letter)
-
-div.appendChild(btn)
-
-})
-
+function goHome() {
+    const searchBox = document.getElementById("searchBox");
+    if (searchBox) searchBox.value = "";
+    filteredSongs = songs;
+    currentPage = 1;
+    renderSongs();
 }
 
-function jumpToLetter(letter){
-
-const index=filteredSongs.findIndex(song=>
-
-song.artist.toLowerCase().startsWith(letter.toLowerCase())
-
-)
-
-if(index==-1)return
-
-currentPage=Math.floor(index/songsPerPage)+1
-
-renderSongs()
-
-}
-
-function randomSong(){
-
-let song=songs[Math.floor(Math.random()*songs.length)]
-
-alert(song.artist+" - "+song.song)
-
-}
-
-function goHome(){
-
-document.getElementById("searchBox").value=""
-
-filteredSongs=songs
-
-currentPage=1
-
-renderSongs()
-
-}
-
-function showArtistStats(){
-
-document.getElementById("stats").innerText=songs.length+" songs loaded"
-
-}
-
-window.onload=loadSongs
+// Start the app
+window.onload = loadSongs;
