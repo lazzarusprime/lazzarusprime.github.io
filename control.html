@@ -7,66 +7,64 @@
         body {
             background: #111;
             color: white;
-            font-family: 'Inter', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
-        h1 { color: #f1c40f; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        .panel { flex: 1; min-width: 400px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
-        #queue { max-width: 100%; margin: 20px auto; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+        .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
         .queueItem {
             background: #222;
             padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #333;
-            font-size: 14px;
+            border-left: 4px solid #f1c40f;
         }
         button {
             background: #e74c3c;
             color: white;
             border: none;
             padding: 8px 12px;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
         }
-        .next-btn { background: #2ecc71; margin-bottom: 10px; padding: 12px 20px; }
+        button:hover { opacity: 0.8; }
+        .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
         .clear-btn { background: #555; margin-left: 10px; }
-        iframe { border-radius: 10px; background: white; }
-    </script>
+        iframe { border-radius: 8px; background: white; border: none; }
+        h1, h2 { color: #f1c40f; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 
     <h1>Stream Queue Control</h1>
 
     <div class="container">
-        <!-- LEFT PANEL: CUSTOM FIREBASE QUEUE -->
+        <!-- LEFT: CUSTOM WEBSITE QUEUE -->
         <div class="panel">
             <h2>Website Requests</h2>
             <button class="next-btn" onclick="nextSong()">⏭️ Next Song</button>
-            <button class="clear-btn" onclick="clearQueue()">🗑️ Clear List</button>
-            <div id="queue">Loading...</div>
+            <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All</button>
+            <div id="queue">Loading requests...</div>
         </div>
 
-        <!-- RIGHT PANEL: RS PLAYLIST INTEGRATION -->
+        <!-- RIGHT: RS PLAYLIST EMBED -->
         <div class="panel">
             <h2>RS Playlist Live</h2>
             <iframe 
                 src="https://rsplaylist.com" 
                 width="100%" 
-                height="600px" 
-                style="border:none;">
+                height="500px">
             </iframe>
         </div>
     </div>
 
     <script>
-        // FIXED URL: Ensure no double dots or missing slashes
+        // CONFIGURATION - MUST MATCH YOUR MAIN PAGE
         const DB_BASE = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         async function listen() {
@@ -74,13 +72,15 @@
                 const response = await fetch(`${DB_BASE}.json`);
                 const data = await response.json();
                 const div = document.getElementById("queue");
+                
                 div.innerHTML = "";
 
                 if (!data) {
-                    div.innerHTML = "<p style='color: #888;'>No website requests yet.</p>";
+                    div.innerHTML = "<p style='color:#888'>Queue is currently empty.</p>";
                     return;
                 }
 
+                // Object.entries handles the Firebase unique keys automatically
                 const entries = Object.entries(data);
                 entries.forEach(([key, s], i) => {
                     let item = document.createElement("div");
@@ -93,34 +93,41 @@
                 });
             } catch (e) {
                 console.error("Fetch Error:", e);
-                document.getElementById("queue").innerText = "Connection Error. Check URL.";
+                document.getElementById("queue").innerText = "Error connecting to database.";
             }
         }
 
+        // REMOVE ONE: Deletes a specific item by its Firebase key
         async function removeItem(key) {
             await fetch(`${DB_BASE}/${key}.json`, { method: 'DELETE' });
             listen();
         }
 
+        // NEXT SONG: Deletes the very first item in the list
         async function nextSong() {
-            // Get the first item based on Firebase keys
             const response = await fetch(`${DB_BASE}.json?orderBy="$key"&limitToFirst=1`);
             const data = await response.json();
+            
             if (data) {
                 const firstKey = Object.keys(data)[0];
-                await fetch(`${DB_BASE}/${firstKey}.json`, { method: 'DELETE' });
-                listen();
+                if (firstKey) {
+                    await fetch(`${DB_BASE}/${firstKey}.json`, { method: 'DELETE' });
+                    listen();
+                }
             }
         }
 
+        // CLEAR ALL: Wipes the entire 'queue' node
         async function clearQueue() {
-            if (!confirm("Wipe the entire website request list?")) return;
+            if (!confirm("Are you sure you want to delete EVERY request?")) return;
             await fetch(`${DB_BASE}.json`, { method: 'DELETE' });
             listen();
         }
 
+        // Start loading and refresh every 5 seconds
         listen();
         setInterval(listen, 5000);
     </script>
+
 </body>
 </html>
