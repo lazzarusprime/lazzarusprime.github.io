@@ -51,11 +51,11 @@
     </div>
 </div>
 
-<!-- Firebase SDK (modular, correct version) -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.22.1/firebase-app.js";
-    import { getDatabase, ref, onValue, remove, query, orderByKey, limitToFirst, get } from "https://www.gstatic.com/firebasejs/10.22.1/firebase-database.js";
+<!-- Firebase compat CDN scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.22.1/firebase-database-compat.js"></script>
 
+<script>
     // --- Your Firebase config ---
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
@@ -69,13 +69,12 @@
     };
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const queueRef = ref(db, "/"); // adjust if your queue is nested like "/queue"
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const queueRef = db.ref("/"); // adjust if your queue is nested like "/queue"
 
     const queueDiv = document.getElementById("queue");
 
-    // Render queue
     function renderQueue(data) {
         queueDiv.innerHTML = "";
         if (!data) {
@@ -94,31 +93,29 @@
         });
     }
 
-    // Listen for real-time updates
-    onValue(queueRef, (snapshot) => {
+    // Real-time listener
+    queueRef.on("value", (snapshot) => {
         const data = snapshot.val();
         renderQueue(data);
     });
 
-    // Remove one item
-    window.removeItem = function(key) {
-        remove(ref(db, key));
+    // Remove a single request
+    function removeItem(key) {
+        db.ref(key).remove();
     }
 
     // Next song (remove first)
-    window.nextSong = async function() {
-        const firstQuery = query(queueRef, orderByKey(), limitToFirst(1));
-        const snapshot = await get(firstQuery);
-        const firstKey = Object.keys(snapshot.val() || {})[0];
-        if (firstKey) {
-            remove(ref(db, firstKey));
-        }
+    function nextSong() {
+        queueRef.orderByKey().limitToFirst(1).once("value", (snap) => {
+            const firstKey = Object.keys(snap.val() || {})[0];
+            if (firstKey) db.ref(firstKey).remove();
+        });
     }
 
     // Clear all
-    window.clearQueue = function() {
+    function clearQueue() {
         if (!confirm("Are you sure you want to delete EVERY request?")) return;
-        remove(queueRef);
+        queueRef.remove();
     }
 </script>
 
