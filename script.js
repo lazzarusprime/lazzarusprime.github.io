@@ -1,34 +1,38 @@
-// 1. Move initialization to the TOP so buttons can see 'db' and 'firebase'
+// 1. Configuration
 const firebaseConfig = {
     databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
 };
 
-// Global variables initialized immediately
+// Global variables
 let db;
 let songs = [];
 let filteredSongs = [];
 let currentPage = 1;
 let songsPerPage = 25;
 
-// Initialize Firebase immediately (must be after libraries load in HTML)
-try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.database();
-} catch (e) {
-    console.error("Firebase setup failed:", e);
+// 2. WAIT FOR FIREBASE (Safety Wrapper)
+function startApp() {
+    if (typeof firebase !== 'undefined') {
+        console.log("Firebase detected, initializing...");
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        loadSongs(); // Start loading your data
+    } else {
+        console.warn("Firebase not ready yet, retrying...");
+        setTimeout(startApp, 100); // Wait 100ms and try again
+    }
 }
 
-// 2. Main Loader
+// 3. Load Songs from JSON
 async function loadSongs() {
     const stats = document.getElementById("stats");
     try {
         const response = await fetch("songs.json");
-        if (!response.ok) throw new Error(`HTTP ${response.status}: songs.json missing`);
+        if (!response.ok) throw new Error("songs.json not found");
 
         songs = await response.json();
         filteredSongs = songs;
 
-        // UI Setup
         listenQueue();
         buildAlphabet();
         renderSongs();
@@ -39,9 +43,10 @@ async function loadSongs() {
     }
 }
 
-// 3. UI and Firebase Functions
+// --- ALL OTHER FUNCTIONS (listenQueue, renderSongs, etc.) REMAIN THE SAME ---
+
 function listenQueue() {
-    if (!db) return;
+    if(!db) return;
     db.ref("queue").on("value", (snapshot) => {
         const data = snapshot.val();
         const div = document.getElementById("queue");
@@ -58,7 +63,7 @@ function listenQueue() {
 }
 
 function requestSong(artist, song) {
-    if (!db) return alert("Database not ready.");
+    if(!db) return alert("Database not ready.");
     let text = artist + " - " + song;
     navigator.clipboard.writeText("!sr " + text);
     db.ref("queue").push({ artist, song });
@@ -72,7 +77,6 @@ function renderSongs() {
     let start = (currentPage - 1) * songsPerPage;
     let end = start + songsPerPage;
     let pageSongs = filteredSongs.slice(start, end);
-
     pageSongs.forEach(song => {
         const div = document.createElement("div");
         div.className = "song";
@@ -152,4 +156,5 @@ function goHome() {
     renderSongs();
 }
 
-window.onload = loadSongs;
+// RUN THE SAFETY WRAPPER ON LOAD
+window.onload = startApp;
