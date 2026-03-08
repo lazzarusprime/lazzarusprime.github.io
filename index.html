@@ -104,6 +104,11 @@ font-size:15px;
 .songArtist{
 font-size:13px;
 color:#aaa;
+cursor:pointer;
+}
+
+.songArtist:hover{
+color:#0f0;
 }
 
 #paginationTop,#paginationBottom{
@@ -226,7 +231,7 @@ div.innerHTML=
 `<div class="songInfo">
 
 <div class="songTitle">${song.song}</div>
-<div class="songArtist">${song.artist}</div>
+<div class="songArtist" onclick="filterArtist('${sA}')">${song.artist}</div>
 
 </div>
 
@@ -306,6 +311,18 @@ renderSongs();
 
 }
 
+function filterArtist(artist){
+
+document.getElementById("searchBox").value=artist;
+
+filteredSongs=songs.filter(s=>s.artist===artist);
+
+currentPage=1;
+
+renderSongs();
+
+}
+
 function buildAlphabet(){
 
 const div=document.getElementById("alphabet");
@@ -371,7 +388,10 @@ sorted.forEach(([artist,count])=>{
 
 let row=document.createElement("div");
 
+row.style.cursor="pointer";
 row.innerText=`${artist} (${count})`;
+
+row.onclick=()=>filterArtist(artist);
 
 list.appendChild(row);
 
