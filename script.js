@@ -6,9 +6,36 @@ let queue=[]
 let currentPage=1
 let songsPerPage=25
 
+function loadQueue(){
+
+let stored=localStorage.getItem("rocksmithQueue")
+
+if(stored){
+
+queue=JSON.parse(stored)
+
+}else{
+
+queue=[]
+
+}
+
+renderQueue()
+
+}
+
+function saveQueue(){
+
+localStorage.setItem("rocksmithQueue",JSON.stringify(queue))
+
+renderQueue()
+
+}
+
 async function loadSongs(){
 
 const r=await fetch("songs.json")
+
 songs=await r.json()
 
 filteredSongs=songs
@@ -23,18 +50,11 @@ renderSongs()
 
 }
 
-async function loadQueue(){
-
-const r=await fetch("queue.json")
-queue=await r.json()
-
-renderQueue()
-
-}
-
 function renderQueue(){
 
 const div=document.getElementById("queue")
+
+if(!div) return
 
 div.innerHTML=""
 
@@ -49,6 +69,26 @@ item.innerText=(i+1)+". "+song.artist+" - "+song.song
 div.appendChild(item)
 
 })
+
+}
+
+function addToQueue(artist,song){
+
+queue.push({artist:artist,song:song})
+
+saveQueue()
+
+}
+
+function requestSong(artist,song){
+
+let text=artist+" - "+song
+
+navigator.clipboard.writeText("!sr "+text)
+
+addToQueue(artist,song)
+
+alert("Added to queue!\nCopied to clipboard:\n!sr "+text)
 
 }
 
@@ -153,6 +193,8 @@ function buildAlphabet(){
 
 const div=document.getElementById("alphabet")
 
+if(!div) return
+
 let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
 letters.forEach(letter=>{
@@ -193,16 +235,6 @@ alert("Random Song:\n"+song.artist+" - "+song.song)
 
 }
 
-function requestSong(artist,song){
-
-let text=artist+" - "+song
-
-navigator.clipboard.writeText("!sr "+text)
-
-alert("Copied to clipboard!\nPaste in Twitch chat:\n!sr "+text)
-
-}
-
 function goHome(){
 
 document.getElementById("searchBox").value=""
@@ -234,7 +266,13 @@ Object.entries(stats)
 .slice(0,20)
 .forEach(a=>console.log(a[0]+" : "+a[1]))
 
-document.getElementById("stats").innerText=songs.length+" songs loaded"
+let statsDiv=document.getElementById("stats")
+
+if(statsDiv){
+
+statsDiv.innerText=songs.length+" songs loaded"
+
+}
 
 }
 
