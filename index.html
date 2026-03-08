@@ -31,6 +31,7 @@
     <div id="queue"></div>
 
     <script>
+        // Use the absolute URL with .json for REST API
         const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com";
 
         let songs = [];
@@ -81,17 +82,20 @@
             let text = artist + " - " + song;
             let command = "!sr " + text;
             
-            // Clipboard copy
+            // Clipboard copy logic
             try {
                 await navigator.clipboard.writeText(command);
             } catch (err) {
                 console.error('Clipboard failed');
             }
 
-            // Database POST
+            // Database POST with REQUIRED headers
             try {
                 const response = await fetch(DB_URL, {
                     method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ artist, song })
                 });
                 if (response.ok) {
@@ -156,6 +160,7 @@
             }
         }
 
+        // SCROLL FIX: Smoothly scrolls to the top of the library list
         function scrollToLibrary() {
             const header = document.getElementById("libraryHeader");
             if (header) {
@@ -187,15 +192,13 @@
             if (idx === -1) return;
             currentPage = Math.floor(idx / songsPerPage) + 1;
             renderSongs();
-            scrollToLibrary(); 
+            scrollToLibrary(); // Ensure list starts at the top
         }
 
-        // FIXED RANDOM SONG
         async function randomSong() {
             if (!songs.length) return;
             let s = songs[Math.floor(Math.random() * songs.length)];
-            
-            // This now uses the exact same logic as requestSong
+            // Uses updated requestSong logic for clipboard + pop-up
             await requestSong(s.artist, s.song);
         }
 
