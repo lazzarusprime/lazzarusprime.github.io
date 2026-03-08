@@ -1,509 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lazzarus Prime Rocksmith Requests</title>
+<title>Lazzarus Prime Rocksmith Library</title>
 
 <style>
 
 body{
-font-family:Segoe UI, Arial;
-background:#0f0f0f;
-color:#fff;
-margin:0;
+    font-family: Arial;
+    background:#111;
+    color:white;
+    margin:40px;
 }
 
-h1,h2,h3{margin:0}
-
-.titleBar{
-display:flex;
-align-items:center;
-gap:10px;
-background:#141414;
-padding:12px;
-border-bottom:2px solid #222;
+h1{
+    margin-bottom:10px;
 }
 
-.titleBar img{
-width:42px;
+.search-container{
+    position:relative;
+    width:320px;
+    margin-bottom:20px;
 }
 
-.topBar{
-display:flex;
-gap:10px;
-padding:10px;
-background:#181818;
-position:sticky;
-top:0;
-z-index:100;
+#search{
+    width:100%;
+    padding:10px 35px 10px 10px;
+    font-size:16px;
 }
 
-.topBar input{
-flex:1;
-padding:8px;
-border-radius:6px;
-border:none;
+#clearSearch{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    font-size:18px;
+    cursor:pointer;
+    color:#888;
+    display:none;
 }
 
-button{
-background:#272727;
-color:white;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-cursor:pointer;
-}
-
-button:hover{
-background:#444;
-}
-
-#alphabet{
-display:flex;
-flex-wrap:wrap;
-gap:5px;
-padding:10px;
-}
-
-#stats{
-padding:10px;
-color:#bbb;
-}
-
-#artistStats{
-padding:10px;
-background:#151515;
-border-top:1px solid #222;
-border-bottom:1px solid #222;
+#clearSearch:hover{
+    color:white;
 }
 
 .song{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:10px;
-border-bottom:1px solid #222;
+    padding:6px;
+    border-bottom:1px solid #333;
 }
 
-.song:hover{
-background:#1c1c1c;
+.artist{
+    color:#6cf;
 }
 
-.songInfo{
-display:flex;
-flex-direction:column;
+details{
+    margin-top:20px;
 }
 
-.songTitle{
-font-weight:bold;
-font-size:15px;
+summary{
+    cursor:pointer;
+    font-size:18px;
 }
 
-.songArtist{
-font-size:13px;
-color:#aaa;
-cursor:pointer;
-}
-
-.songArtist:hover{
-color:#0f0;
-}
-
-#paginationTop,#paginationBottom{
-text-align:center;
-padding:10px;
-}
-
-.queueItem{
-padding:6px;
-border-bottom:1px solid #222;
+.topArtist{
+    padding:4px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="titleBar">
-<img src="guitar.png">
-<h1>Lazzarus Prime Rocksmith Requests</h1>
+<h1>Lazzarus Prime Rocksmith Library</h1>
+
+<div id="songCount">Loading...</div>
+
+<br>
+
+<div class="search-container">
+
+<input 
+type="text"
+id="search"
+placeholder="Search artist or song..."
+oninput="filterSongs()"
+/>
+
+<button id="clearSearch" onclick="clearSearch()">✕</button>
+
 </div>
-
-<div class="topBar">
-
-<button onclick="goHome()">🏠 Home</button>
-
-<input id="searchBox" placeholder="Search artist or song..." oninput="searchSongs()">
-
-<button onclick="randomSong()">🎲 Random</button>
-
-</div>
-
-<div id="alphabet"></div>
-
-<div id="stats"></div>
-
-<div id="artistStats"></div>
-
-<h2 style="padding:10px">Song Library</h2>
-
-<div id="paginationTop"></div>
 
 <div id="songList"></div>
 
-<div id="paginationBottom"></div>
-
-<h2 style="padding:10px">Request Queue</h2>
-
-<div id="queue"></div>
+<details id="topArtistsSection">
+<summary>Top Artists in Library</summary>
+<div id="topArtists"></div>
+</details>
 
 <script>
 
-const DB_URL="https://rocksmith-requests-default-rtdb.firebaseio.com";
-
-let songs=[];
-let filteredSongs=[];
-let currentPage=1;
-const songsPerPage=40;
-
-async function init(){
-
-await loadSongs();
-
-loadQueue();
-
-setInterval(loadQueue,8000);
-
-}
+let songs=[]
+let filteredSongs=[]
 
 async function loadSongs(){
 
-try{
+    const response = await fetch("songs.json")
+    songs = await response.json()
 
-const response=await fetch("songs.json");
+    songs.sort((a,b)=>{
 
-songs=await response.json();
+        if(a.artist==b.artist)
+            return a.song.localeCompare(b.song)
 
-filteredSongs=songs;
+        return a.artist.localeCompare(b.artist)
 
-buildAlphabet();
+    })
 
-buildArtistStats();
+    filteredSongs=songs
 
-renderSongs();
+    renderSongs()
+    renderTopArtists()
 
-document.getElementById("stats").innerText=songs.length+" songs loaded";
-
-}catch(e){
-
-document.getElementById("stats").innerText="Error loading songs";
-
-}
+    document.getElementById("songCount").innerText =
+        songs.length + " songs in library"
 
 }
 
 function renderSongs(){
 
-const list=document.getElementById("songList");
+    const container=document.getElementById("songList")
 
-list.innerHTML="";
+    container.innerHTML=""
 
-let start=(currentPage-1)*songsPerPage;
-let end=start+songsPerPage;
+    filteredSongs.forEach(song=>{
 
-let pageSongs=filteredSongs.slice(start,end);
+        const div=document.createElement("div")
+        div.className="song"
 
-const fragment=document.createDocumentFragment();
+        div.innerHTML =
+            "<span class='artist'>"+
+            song.artist+
+            "</span> - "+
+            song.song
 
-pageSongs.forEach(song=>{
+        container.appendChild(div)
 
-const div=document.createElement("div");
-
-div.className="song";
-
-const sA=song.artist.replace(/'/g,"\\'");
-const sS=song.song.replace(/'/g,"\\'");
-
-div.innerHTML=
-
-`<div class="songInfo">
-
-<div class="songTitle">${song.song}</div>
-<div class="songArtist" onclick="filterArtist('${sA}')">${song.artist}</div>
-
-</div>
-
-<button onclick="requestSong('${sA}','${sS}')">Request</button>`;
-
-fragment.appendChild(div);
-
-});
-
-list.appendChild(fragment);
-
-renderPagination();
+    })
 
 }
 
-function renderPagination(){
+function filterSongs(){
 
-const top=document.getElementById("paginationTop");
-const bottom=document.getElementById("paginationBottom");
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase()
 
-top.innerHTML="";
-bottom.innerHTML="";
+    if(search===""){
 
-let totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
+        filteredSongs=songs
 
-function controls(container){
+    }else{
 
-if(currentPage>1){
+        filteredSongs=songs.filter(song=>
 
-let prev=document.createElement("button");
-prev.innerText="◀ Prev";
-prev.onclick=()=>{currentPage--;renderSongs();};
+            song.artist.toLowerCase().includes(search) ||
+            song.song.toLowerCase().includes(search)
 
-container.appendChild(prev);
+        )
 
-}
+    }
 
-let label=document.createElement("span");
-label.innerText=` Page ${currentPage} / ${totalPages} `;
-container.appendChild(label);
-
-if(currentPage<totalPages){
-
-let next=document.createElement("button");
-next.innerText="Next ▶";
-next.onclick=()=>{currentPage++;renderSongs();};
-
-container.appendChild(next);
+    renderSongs()
 
 }
 
-}
+function clearSearch(){
 
-controls(top);
-controls(bottom);
+    const input=document.getElementById("search")
 
-}
+    input.value=""
+    filterSongs()
 
-function searchSongs(){
-
-let q=document.getElementById("searchBox").value.toLowerCase();
-
-filteredSongs=songs.filter(s=>{
-
-return(
-
-s.artist.toLowerCase().includes(q) ||
-s.song.toLowerCase().includes(q)
-
-);
-
-});
-
-currentPage=1;
-
-renderSongs();
+    document.getElementById("clearSearch").style.display="none"
 
 }
 
-function filterArtist(artist){
+document
+.getElementById("search")
+.addEventListener("input",function(){
 
-document.getElementById("searchBox").value=artist;
+    const clearBtn=document.getElementById("clearSearch")
 
-filteredSongs=songs.filter(s=>s.artist===artist);
+    clearBtn.style.display =
+        this.value.length ? "block" : "none"
 
-currentPage=1;
+})
 
-renderSongs();
+function renderTopArtists(){
 
-}
+    const counts={}
 
-function buildAlphabet(){
+    songs.forEach(song=>{
 
-const div=document.getElementById("alphabet");
+        if(!counts[song.artist])
+            counts[song.artist]=0
 
-div.innerHTML="";
+        counts[song.artist]++
 
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l=>{
+    })
 
-let b=document.createElement("button");
+    const sorted =
+        Object.entries(counts)
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0,25)
 
-b.innerText=l;
+    const container=document.getElementById("topArtists")
 
-b.onclick=()=>jumpToLetter(l);
+    container.innerHTML=""
 
-div.appendChild(b);
+    sorted.forEach(a=>{
 
-});
+        const div=document.createElement("div")
 
-}
+        div.className="topArtist"
 
-function jumpToLetter(letter){
+        div.innerText=
+            a[0]+" ("+a[1]+" songs)"
 
-const idx=filteredSongs.findIndex(
+        container.appendChild(div)
 
-s=>s.artist.toLowerCase().startsWith(letter.toLowerCase())
-
-);
-
-if(idx===-1) return;
-
-currentPage=Math.floor(idx/songsPerPage)+1;
-
-renderSongs();
-
-}
-
-function buildArtistStats(){
-
-const map={};
-
-songs.forEach(s=>{
-
-if(!map[s.artist]) map[s.artist]=0;
-
-map[s.artist]++;
-
-});
-
-const sorted=Object.entries(map)
-.sort((a,b)=>b[1]-a[1])
-.slice(0,10);
-
-const div=document.getElementById("artistStats");
-
-div.innerHTML=`
-<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3>
-<div id="artistList" style="display:none"></div>
-`;
-
-const list=document.getElementById("artistList");
-
-sorted.forEach(([artist,count])=>{
-
-let row=document.createElement("div");
-
-row.style.cursor="pointer";
-row.innerText=`${artist} (${count})`;
-
-row.onclick=()=>filterArtist(artist);
-
-list.appendChild(row);
-
-});
-
-document.getElementById("artistToggle").onclick=()=>{
-
-const list=document.getElementById("artistList");
-const toggle=document.getElementById("artistToggle");
-
-if(list.style.display==="none"){
-
-list.style.display="block";
-toggle.innerText="🎸 Top Artists In Library ▼";
-
-}else{
-
-list.style.display="none";
-toggle.innerText="🎸 Top Artists In Library ▶";
+    })
 
 }
 
-};
-
-}
-
-async function requestSong(artist,song){
-
-let text=artist+" - "+song;
-
-let command="!sr "+text;
-
-try{
-
-await navigator.clipboard.writeText(command);
-
-}catch{}
-
-try{
-
-await fetch(DB_URL,{
-method:'POST',
-mode:'no-cors',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({artist,song})
-});
-
-}catch{}
-
-alert("Copied to clipboard!\nPaste in chat: "+command);
-
-setTimeout(loadQueue,1000);
-
-}
-
-async function loadQueue(){
-
-try{
-
-const response=await fetch(DB_URL);
-
-if(!response.ok) return;
-
-const data=await response.json();
-
-const div=document.getElementById("queue");
-
-div.innerHTML="";
-
-if(!data) return;
-
-Object.values(data).forEach((song,i)=>{
-
-let item=document.createElement("div");
-
-item.className="queueItem";
-
-item.innerText=(i+1)+". "+song.artist+" - "+song.song;
-
-div.appendChild(item);
-
-});
-
-}catch{}
-
-}
-
-async function randomSong(){
-
-if(!songs.length) return;
-
-let s=songs[Math.floor(Math.random()*songs.length)];
-
-await requestSong(s.artist,s.song);
-
-}
-
-function goHome(){
-
-document.getElementById("searchBox").value="";
-
-filteredSongs=songs;
-
-currentPage=1;
-
-renderSongs();
-
-window.scrollTo({top:0,behavior:'smooth'});
-
-}
-
-init();
+loadSongs()
 
 </script>
 
