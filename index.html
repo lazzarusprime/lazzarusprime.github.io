@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lazzarus Prime Rocksmith Requests</title>
     
-    <!-- 1. RELIABLE CLOUDFLARE CDNs -->
-    <script src="https://cdnjs.cloudflare.com"></script>
-    <script src="https://cdnjs.cloudflare.com"></script>
+    <!-- 1. STABLE FIREBASE V8 LIBRARIES (Less likely to be blocked) -->
+    <script src="https://www.gstatic.com"></script>
+    <script src="https://www.gstatic.com"></script>
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com" rel="stylesheet">
@@ -26,7 +26,7 @@
     </div>
 
     <div id="alphabet"></div>
-    <div id="stats">Connecting to Firebase...</div>
+    <div id="stats">Checking Database Connection...</div>
 
     <h2>Song Library</h2>
     <div id="songList"></div>
@@ -36,7 +36,7 @@
     <div id="queue"></div>
 
     <script>
-        // 2. CONFIGURATION
+        // 2. DATABASE CONFIGURATION
         const firebaseConfig = {
             databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
         };
@@ -47,32 +47,39 @@
         let currentPage = 1;
         const songsPerPage = 25;
 
-        // 3. STARTUP LOGIC
+        // 3. INITIALIZATION LOGIC
         function initApp() {
-            console.log("Checking for Firebase...");
-            
-            // Wait for both libraries to be available
-            if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
-                console.log("Firebase is ready!");
+            // Check if both the core and database libraries are available
+            const hasFirebase = typeof firebase !== 'undefined';
+            const hasDatabase = hasFirebase && typeof firebase.database === 'function';
+
+            if (hasDatabase) {
+                console.log("Firebase system is online!");
                 
-                if (!firebase.apps.length) {
+                // Initialize if not already running
+                if (firebase.apps.length === 0) {
                     firebase.initializeApp(firebaseConfig);
                 }
                 
                 db = firebase.database();
+                
+                // Once DB is ready, load the interface
                 loadSongs();
                 listenQueue();
             } else {
-                console.warn("Firebase libraries not found yet. Retrying...");
-                setTimeout(initApp, 500);
+                console.warn("Waiting for libraries... Check if AdBlock is disabling gstatic.com");
+                document.getElementById("stats").innerHTML = 
+                    "Connecting... <button onclick='initApp()'>Retry Now</button>";
+                
+                // Auto-retry every 2 seconds
+                setTimeout(initApp, 2000);
             }
         }
 
         async function loadSongs() {
-            const stats = document.getElementById("stats");
             try {
                 const response = await fetch("songs.json");
-                if (!response.ok) throw new Error("songs.json not found on server");
+                if (!response.ok) throw new Error("songs.json not found");
                 
                 songs = await response.json();
                 filteredSongs = songs;
@@ -81,8 +88,8 @@
                 renderSongs();
                 showArtistStats();
             } catch (error) {
-                console.error(error);
-                if (stats) stats.innerText = "Error: " + error.message;
+                console.error("Fetch Error:", error);
+                document.getElementById("stats").innerText = "Data Error: " + error.message;
             }
         }
 
@@ -106,7 +113,7 @@
         }
 
         function requestSong(artist, song) {
-            if (!db) return alert("Database connection lost. Refresh page.");
+            if (!db) return alert("Database not connected.");
             
             let text = artist + " - " + song;
             navigator.clipboard.writeText("!sr " + text);
@@ -191,12 +198,11 @@
         }
 
         function showArtistStats() {
-            const stats = document.getElementById("stats");
-            if (stats) stats.innerText = songs.length + " songs loaded";
+            document.getElementById("stats").innerText = songs.length + " songs loaded";
         }
 
         function randomSong() {
-            if (!songs.length) return;
+            if (songs.length === 0) return alert("Songs haven't loaded yet.");
             let s = songs[Math.floor(Math.random() * songs.length)];
             alert(s.artist + " - " + s.song);
         }
@@ -208,8 +214,8 @@
             renderSongs();
         }
 
-        // 4. RUN AFTER PAGE LOADS
-        window.addEventListener('load', initApp);
+        // 4. START ON PAGE LOAD
+        window.onload = initApp;
     </script>
 </body>
 </html>
