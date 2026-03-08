@@ -1,5 +1,5 @@
 const firebaseConfig = {
-databaseURL: "https://console.firebase.google.com/u/2/project/rocksmith-requests/database/rocksmith-requests-default-rtdb/data/~2F"
+databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com/"
 }
 
 firebase.initializeApp(firebaseConfig)
