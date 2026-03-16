@@ -96,7 +96,6 @@ function initAuth() {
                     queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; 
                     return; 
                 }
-
                 const entries = Object.entries(data).sort((a,b) => a[1].timestamp - b[1].timestamp);
                 entries.forEach(([key, s], i) => {
                     const statusClass = s.owned ? "owned" : "not-owned";
