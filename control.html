@@ -83,7 +83,6 @@
             if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
-                
                 firebase.database().ref("/queue").on("value", snap => {
                     queueDiv.innerHTML = "";
                     const data = snap.val();
