@@ -83,10 +83,12 @@
             if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
+                
+                // Real-time listener: this updates instantly
                 firebase.database().ref("/queue").on("value", snap => {
                     queueDiv.innerHTML = "";
                     const data = snap.val();
-                    if (!data) { queueDiv.innerHTML = "<p style='color:#666'>Queue is empty.</p>"; return; }
+                    if (!data) { queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; return; }
                     Object.entries(data).forEach(([key, s], i) => {
                         const item = document.createElement("div");
                         item.className = "queueItem";
@@ -110,7 +112,7 @@
 
     window.logout = () => firebase.auth().signOut();
     window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-    window.clearQueue = () => { if(confirm("Clear all?")) firebase.database().ref("/queue").remove(); };
+    window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
     window.nextSong = () => {
         firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
             if(s.exists()) {
