@@ -51,7 +51,6 @@
 <div id="queue"></div>
 
 <script>
-// UPDATED: Added /queue.json for correct REST API communication
 const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com/queue.json";
 
 let songs = [];
@@ -62,7 +61,6 @@ const songsPerPage = 40;
 async function init() {
     await loadSongs();
     loadQueue();
-    // SPEED FIX: Refresh queue every 3 seconds instead of 8
     setInterval(loadQueue, 3000);
 }
 
@@ -185,21 +183,17 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    const command = "!sr " + artist + " - " + song;
-    try { await navigator.clipboard.writeText(command); } catch (e) {}
-
-    // UPDATED: Standard fetch (no-cors removed) to ensure data is sent
-    fetch(DB_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artist, song })
-    })
-    .then(() => {
-        alert("Copied to clipboard!\nPaste in chat: " + command);
-        // SPEED FIX: Instant refresh after request
-        loadQueue();
-    })
-    .catch(() => alert("Request sent! (Database syncing...)"));
+    // Clean strings to prevent URL breakage in Nightbot
+    const cleanArtist = artist.replace(/[^a-zA-Z0-9 ]/g, "");
+    const cleanSong = song.replace(/[^a-zA-Z0-9 ]/g, "");
+    const command = `!sr ${cleanArtist} - ${cleanSong}`;
+    
+    try {
+        await navigator.clipboard.writeText(command);
+        alert("Copied to clipboard!\nPaste this in Twitch chat to request:\n\n" + command);
+    } catch (e) {
+        alert("Please manually type: " + command);
+    }
 }
 
 async function loadQueue() {
@@ -224,7 +218,7 @@ async function loadQueue() {
 async function randomSong() {
     if (!songs.length) return;
     let s = songs[Math.floor(Math.random() * songs.length)];
-    await requestSong(s.artist, s.song);
+    requestSong(s.artist, s.song);
 }
 
 function goHome() {
