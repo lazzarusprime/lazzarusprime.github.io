@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <div id="nowPlaying">Waiting...</div>
+    <div id="nowPlaying">Loading...</div>
 
     <script>
         const firebaseConfig = {
@@ -25,7 +25,8 @@
                 document.getElementById("nowPlaying").innerText = "No requests";
                 return;
             }
-            // Get the first item from the Firebase object
+            // Firebase returns an object { "-ID": { artist, song } }
+            // This grabs the first object inside the ID
             const firstKey = Object.keys(data)[0];
             const song = data[firstKey];
             document.getElementById("nowPlaying").innerText = song.artist + " - " + song.song;
