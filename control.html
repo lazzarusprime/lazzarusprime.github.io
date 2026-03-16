@@ -7,9 +7,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         body { background: #111; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .queueItem { background: #222; padding: 12px; margin: 10px auto; width: 80%; max-width: 500px; display: flex; justify-content: space-between; border-left: 4px solid #f1c40f; }
-        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; cursor: pointer; }
-        .next-btn { background: #27ae60; padding: 15px; font-size: 18px; margin-bottom: 20px; }
+        .queueItem { background: #222; padding: 12px; margin: 10px auto; width: 80%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
+        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; }
+        .next-btn { background: #27ae60; padding: 15px; font-size: 18px; margin-bottom: 20px; border: none; color: white; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -22,6 +22,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Listen for all queue items
         db.ref("queue").on("value", (snap) => {
             const data = snap.val();
             const div = document.getElementById("adminQueue");
@@ -31,13 +32,15 @@
             Object.entries(data).forEach(([key, s], i) => {
                 const item = document.createElement("div");
                 item.className = "queueItem";
-                item.innerHTML = `<span>${i+1}. ${s.artist} - ${s.song}</span>
+                item.innerHTML = `<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
                                   <button onclick="removeItem('${key}')">✕</button>`;
                 div.appendChild(item);
             });
         });
 
-        window.removeItem = (key) => db.ref("queue/" + key).remove();
+        window.removeItem = (key) => {
+            db.ref("queue/" + key).remove();
+        };
 
         window.nextSong = () => {
             db.ref("queue").limitToFirst(1).once("value", s => {
