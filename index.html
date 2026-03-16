@@ -7,6 +7,7 @@
 <title>Lazzarus Prime Rocksmith Requests</title>
 
 <style>
+
 body{
     font-family:Segoe UI, Arial;
     background:#0f0f0f;
@@ -96,6 +97,7 @@ button:hover{
     justify-content:space-between;
     padding:10px;
     border-bottom:1px solid #222;
+    transition: all .15s ease;
 }
 
 .songInfo{
@@ -112,7 +114,21 @@ button:hover{
     font-size:13px;
     color:#aaa;
     cursor:pointer;
+    transition: all .15s ease;
 }
+
+.songArtist:hover{
+    color:#f1c40f;
+    text-shadow:0 0 6px #f1c40f;
+}
+
+/* Highlight all songs by hovered artist */
+
+.song.highlight{
+    background:#1a1a1a;
+    box-shadow:0 0 6px rgba(241,196,15,.4);
+}
+
 </style>
 </head>
 
@@ -124,36 +140,46 @@ button:hover{
 </div>
 
 <div class="topBar">
+
 <button onclick="goHome()">🏠 Home</button>
 
-<input id="searchBox"
+<input
+id="searchBox"
 placeholder="Search artist or song..."
-oninput="handleSearchInput()">
+oninput="handleSearchInput()"
+>
 
-<button class="clearBtn"
+<button
+class="clearBtn"
 id="clearBtn"
-onclick="clearSearch()">✖</button>
+onclick="clearSearch()"
+>✖</button>
 
 <button onclick="randomSong()">🎲 Random</button>
+
 </div>
 
 <div id="alphabet"></div>
+
 <div id="stats"></div>
+
 <div id="artistStats"></div>
 
 <h2 style="padding:10px">Song Library</h2>
 
 <div id="paginationTop"></div>
+
 <div id="songList"></div>
+
 <div id="paginationBottom"></div>
 
 <script>
 
-let songs = [];
-let filteredSongs = [];
-let currentPage = 1;
+let songs=[];
+let filteredSongs=[];
+let currentPage=1;
 
-const songsPerPage = 40;
+const songsPerPage=40;
 
 async function init(){
     await loadSongs();
@@ -163,11 +189,11 @@ async function loadSongs(){
 
     try{
 
-        const response = await fetch("songs.json");
+        const response=await fetch("songs.json");
 
-        songs = await response.json();
+        songs=await response.json();
 
-        filteredSongs = songs;
+        filteredSongs=songs;
 
         buildAlphabet();
 
@@ -175,48 +201,64 @@ async function loadSongs(){
 
         renderSongs();
 
-        document.getElementById("stats").innerText =
-        songs.length + " songs loaded";
+        document.getElementById("stats").innerText=
+        songs.length+" songs loaded";
 
     }catch(e){
 
-        document.getElementById("stats").innerText =
+        document.getElementById("stats").innerText=
         "Error loading songs";
 
     }
+
 }
 
 function renderSongs(){
 
-    const list = document.getElementById("songList");
+    const list=document.getElementById("songList");
 
-    list.innerHTML = "";
+    list.innerHTML="";
 
-    let start = (currentPage - 1) * songsPerPage;
+    let start=(currentPage-1)*songsPerPage;
 
-    let end = start + songsPerPage;
+    let end=start+songsPerPage;
 
-    let pageSongs = filteredSongs.slice(start,end);
+    let pageSongs=filteredSongs.slice(start,end);
 
     pageSongs.forEach(song=>{
 
-        const div = document.createElement("div");
+        const div=document.createElement("div");
 
-        div.className = "song";
+        div.className="song";
 
-        const sA = song.artist.replace(/'/g,"\\'");
+        div.dataset.artist=song.artist;
 
-        const sS = song.song.replace(/'/g,"\\'");
+        const sA=song.artist.replace(/'/g,"\\'");
 
-        div.innerHTML = `
+        const sS=song.song.replace(/'/g,"\\'");
+
+        div.innerHTML=`
+
         <div class="songInfo">
-            <div class="songTitle">${song.song}</div>
-            <div class="songArtist"
-            onclick="filterArtist('${sA}')">${song.artist}</div>
+
+        <div class="songTitle">${song.song}</div>
+
+        <div class="songArtist"
+        onmouseenter="highlightArtist('${sA}')"
+        onmouseleave="clearHighlight()"
+        onclick="filterArtist('${sA}')">
+
+        ${song.artist}
+
         </div>
 
-        <button onclick="requestSong('${sA}','${sS}')">
+        </div>
+
+        <button
+        onclick="requestSong('${sA}','${sS}')">
+
         Request
+
         </button>
         `;
 
@@ -225,19 +267,48 @@ function renderSongs(){
     });
 
     renderPagination();
+
+}
+
+function highlightArtist(artist){
+
+    document
+    .querySelectorAll(".song")
+    .forEach(song=>{
+
+        if(song.dataset.artist===artist){
+
+            song.classList.add("highlight");
+
+        }
+
+    });
+
+}
+
+function clearHighlight(){
+
+    document
+    .querySelectorAll(".song")
+    .forEach(song=>{
+
+        song.classList.remove("highlight");
+
+    });
+
 }
 
 function renderPagination(){
 
-    const top = document.getElementById("paginationTop");
+    const top=document.getElementById("paginationTop");
 
-    const bottom = document.getElementById("paginationBottom");
+    const bottom=document.getElementById("paginationBottom");
 
     top.innerHTML="";
     bottom.innerHTML="";
 
-    let totalPages =
-    Math.ceil(filteredSongs.length / songsPerPage) || 1;
+    let totalPages=
+    Math.ceil(filteredSongs.length/songsPerPage)||1;
 
     [top,bottom].forEach(container=>{
 
@@ -253,11 +324,13 @@ function renderPagination(){
             };
 
             container.appendChild(prev);
+
         }
 
         let label=document.createElement("span");
 
-        label.innerText=` Page ${currentPage} / ${totalPages} `;
+        label.innerText=
+        ` Page ${currentPage} / ${totalPages} `;
 
         container.appendChild(label);
 
@@ -273,8 +346,11 @@ function renderPagination(){
             };
 
             container.appendChild(next);
+
         }
+
     });
+
 }
 
 function handleSearchInput(){
@@ -289,7 +365,7 @@ function searchSongs(){
     .value
     .toLowerCase();
 
-    filteredSongs = songs.filter(s=>
+    filteredSongs=songs.filter(s=>
         s.artist.toLowerCase().includes(q)
         ||
         s.song.toLowerCase().includes(q)
@@ -298,19 +374,20 @@ function searchSongs(){
     currentPage=1;
 
     renderSongs();
+
 }
 
 function toggleClearButton(){
 
-    const btn =
-    document.getElementById("clearBtn");
+    const btn=document.getElementById("clearBtn");
 
-    btn.style.display =
+    btn.style.display=
     document.getElementById("searchBox").value
     ?
     "inline-block"
     :
     "none";
+
 }
 
 function clearSearch(){
@@ -324,13 +401,14 @@ function clearSearch(){
     renderSongs();
 
     toggleClearButton();
+
 }
 
 function filterArtist(artist){
 
     document.getElementById("searchBox").value=artist;
 
-    filteredSongs =
+    filteredSongs=
     songs.filter(s=>s.artist===artist);
 
     currentPage=1;
@@ -338,12 +416,12 @@ function filterArtist(artist){
     renderSongs();
 
     toggleClearButton();
+
 }
 
 function buildAlphabet(){
 
-    const div =
-    document.getElementById("alphabet");
+    const div=document.getElementById("alphabet");
 
     div.innerHTML="";
 
@@ -358,24 +436,27 @@ function buildAlphabet(){
         b.onclick=()=>jumpToLetter(l);
 
         div.appendChild(b);
+
     });
+
 }
 
 function jumpToLetter(letter){
 
-    const idx =
+    const idx=
     filteredSongs.findIndex(s=>
         s.artist
         .toLowerCase()
         .startsWith(letter.toLowerCase())
     );
 
-    if(idx===-1) return;
+    if(idx===-1)return;
 
-    currentPage =
-    Math.floor(idx / songsPerPage) + 1;
+    currentPage=
+    Math.floor(idx/songsPerPage)+1;
 
     renderSongs();
+
 }
 
 function buildArtistStats(){
@@ -383,28 +464,29 @@ function buildArtistStats(){
     const map={};
 
     songs.forEach(s=>{
-        if(!map[s.artist]) map[s.artist]=0;
+        if(!map[s.artist])map[s.artist]=0;
         map[s.artist]++;
     });
 
-    const sorted =
+    const sorted=
     Object.entries(map)
     .sort((a,b)=>b[1]-a[1])
     .slice(0,10);
 
-    const div =
-    document.getElementById("artistStats");
+    const div=document.getElementById("artistStats");
 
     div.innerHTML=
     `<h3 id="artistToggle"
     style="cursor:pointer">
+
     🎸 Top Artists In Library ▶
+
     </h3>
 
     <div id="artistList"
     style="display:none"></div>`;
 
-    const list =
+    const list=
     document.getElementById("artistList");
 
     sorted.forEach(([artist,count])=>{
@@ -419,37 +501,40 @@ function buildArtistStats(){
         row.onclick=()=>filterArtist(artist);
 
         list.appendChild(row);
+
     });
 
     document
     .getElementById("artistToggle")
     .onclick=()=>{
 
-        const list =
+        const list=
         document.getElementById("artistList");
 
-        const toggle =
+        const toggle=
         document.getElementById("artistToggle");
 
-        list.style.display =
+        list.style.display=
         (list.style.display==="none")
         ?
         "block"
         :
         "none";
 
-        toggle.innerText =
+        toggle.innerText=
         (list.style.display==="none")
         ?
         "🎸 Top Artists In Library ▶"
         :
         "🎸 Top Artists In Library ▼";
+
     };
+
 }
 
 async function requestSong(artist,song){
 
-const command =
+const command=
 `!request "${artist}" "${song}"`;
 
 try{
@@ -457,28 +542,28 @@ try{
 await navigator.clipboard.writeText(command);
 
 alert(
-"Copied to clipboard!\n\nPaste this in Twitch chat to request:\n"
-+ command
+"Copied to clipboard!\n\nPaste in Twitch chat:\n"+command
 );
 
 }catch(e){
 
 alert(
-"Copy failed.\nPlease manually type:\n"
-+ command
+"Copy failed.\nType manually:\n"+command
 );
 
 }
+
 }
 
 async function randomSong(){
 
-if(!songs.length) return;
+if(!songs.length)return;
 
-let s =
+let s=
 songs[Math.floor(Math.random()*songs.length)];
 
 requestSong(s.artist,s.song);
+
 }
 
 function goHome(){
