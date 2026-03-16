@@ -6,34 +6,29 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         body { background: transparent; color: white; font-size: 36px; font-family: Arial; text-shadow: 2px 2px 4px #000; }
+        #nowPlaying { font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="nowPlaying">Waiting for requests...</div>
+    <div id="nowPlaying">Waiting...</div>
 
     <script>
-        // Note: Ensure NO trailing slash in the databaseURL
         const firebaseConfig = {
-            databaseURL: "https://lazzarus-prime-default-rtdb.firebaseio.com"
+            databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         db.ref("queue").limitToFirst(1).on("value", (snap) => {
             const data = snap.val();
-            const display = document.getElementById("nowPlaying");
-            
             if (!data) {
-                display.innerText = "No requests";
+                document.getElementById("nowPlaying").innerText = "No requests";
                 return;
             }
-            
-            // Extract the first item from the object
+            // Get the first item from the Firebase object
             const firstKey = Object.keys(data)[0];
             const song = data[firstKey];
-            display.innerText = song.artist + " - " + song.song;
-        }, (error) => {
-            console.error("Firebase Error:", error);
+            document.getElementById("nowPlaying").innerText = song.artist + " - " + song.song;
         });
     </script>
 </body>
