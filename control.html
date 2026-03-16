@@ -8,7 +8,6 @@
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
         .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; text-align: left; }
-        .song-info a { color: #f1c40f; text-decoration: underline; margin-left: 10px; }
         button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         button:hover { filter: brightness(1.2); }
         .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 15px; width: 100%; }
@@ -17,7 +16,8 @@
         #login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; width: 320px; }
         #login-box input { display: block; width: 100%; margin: 10px 0; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
         #login-box button { width: 100%; padding: 12px; background: #f1c40f; color: #111; font-size: 16px; }
-        .song-info { flex-grow: 1; margin-right: 10px; font-size: 14px; line-height: 1.3em; }
+        .song-info { flex-grow: 1; margin-right: 10px; }
+        .owned-status { color: #f1c40f; font-weight: bold; margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -85,28 +85,21 @@
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
 
-                firebase.database().ref("/queue").on("value", snap => {
+                firebase.database().ref("/queue").orderByChild("timestamp").on("value", snap => {
                     queueDiv.innerHTML = "";
                     const data = snap.val();
-                    if (!data) {
-                        queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>";
-                        return;
+                    if (!data) { 
+                        queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; 
+                        return; 
                     }
-
-                    Object.entries(data).forEach(([key, s], i) => {
+                    // Sort by timestamp ascending
+                    const entries = Object.entries(data).sort((a,b) => a[1].timestamp - b[1].timestamp);
+                    entries.forEach(([key, s], i) => {
+                        const statusText = s.owned ? "(Owned)" : "(Not Owned)";
                         const item = document.createElement("div");
                         item.className = "queueItem";
-
-                        const ownedText = s.owned ? "✅ Owned" : "❌ Not in library";
-                        const downloadHtml = s.downloadLink && !s.owned ? `<a href="${s.downloadLink}" target="_blank">Download</a>` : "";
-
-                        item.innerHTML = `
-                            <div class="song-info">
-                                <strong>${i+1}.</strong> ${s.artist} - ${s.song} <br>
-                                Requested by: ${s.user} | ${ownedText} ${downloadHtml}
-                            </div>
-                            <button onclick="removeItem('${key}')">✕</button>
-                        `;
+                        item.innerHTML = `<div class="song-info"><strong>${i+1}.</strong> ${s.artist} - ${s.song} <span class="owned-status">${statusText}</span></div>
+                                          <button onclick="removeItem('${key}')">✕</button>`;
                         queueDiv.appendChild(item);
                     });
                 });
@@ -127,7 +120,7 @@
     window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
     window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
     window.nextSong = () => {
-        firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
+        firebase.database().ref("/queue").orderByChild("timestamp").limitToFirst(1).once("value", s => {
             if(s.exists()) {
                 const key = Object.keys(s.val())[0];
                 firebase.database().ref("/queue/" + key).remove();
