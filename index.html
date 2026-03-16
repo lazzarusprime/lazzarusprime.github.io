@@ -21,7 +21,7 @@
     .songInfo{ display:flex; flex-direction:column; }
     .songTitle{ font-weight:bold; font-size:15px; }
     .songArtist{ font-size:13px; color:#aaa; cursor:pointer; }
-    .queueItem{ padding:8px; border-bottom:1px solid #333; background:#111; margin-bottom:2px; }
+    .queueItem{ padding:10px; border-bottom:1px solid #333; background:#111; margin-bottom:2px; text-align: left; }
 </style>
 </head>
 <body>
@@ -181,9 +181,8 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    // Standard command format for Nightbot: !sr Artist Song
-    // Note: We removed the " - " because Nightbot parsing is cleaner without it
-    const command = `!sr ${artist} ${song}`;
+    // UPDATED: Now using !request to avoid bot conflicts
+    const command = `!request "${artist}" "${song}"`;
     try {
         await navigator.clipboard.writeText(command);
         alert("Copied to clipboard!\n\nPaste this in Twitch chat to request:\n" + command);
@@ -205,7 +204,6 @@ async function loadQueue() {
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
-            // Check for specific artist/song keys or handle Nightbot's dynamic keying
             item.innerText = (i + 1) + ". " + (song.artist || "Unknown") + " - " + (song.song || "Unknown");
             div.appendChild(item);
         });
