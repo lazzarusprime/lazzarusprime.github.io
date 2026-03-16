@@ -21,7 +21,7 @@
     .songInfo{ display:flex; flex-direction:column; }
     .songTitle{ font-weight:bold; font-size:15px; }
     .songArtist{ font-size:13px; color:#aaa; cursor:pointer; }
-    .queueItem{ padding:6px; border-bottom:1px solid #222; }
+    .queueItem{ padding:10px; border-bottom:1px solid #333; background: #111; text-align: left; }
 </style>
 </head>
 <body>
@@ -52,7 +52,6 @@
 
 <script>
 const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com/queue.json";
-
 let songs = [];
 let filteredSongs = [];
 let currentPage = 1;
@@ -61,7 +60,7 @@ const songsPerPage = 40;
 async function init() {
     await loadSongs();
     loadQueue();
-    setInterval(loadQueue, 3000);
+    setInterval(loadQueue, 3000); // Check for new songs added by Nightbot every 3s
 }
 
 async function loadSongs() {
@@ -102,7 +101,7 @@ function renderPagination() {
     const bottom = document.getElementById("paginationBottom");
     top.innerHTML = ""; bottom.innerHTML = "";
     let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
-    function controls(container) {
+    [top, bottom].forEach(container => {
         if (currentPage > 1) {
             let prev = document.createElement("button");
             prev.innerText = "◀ Prev";
@@ -118,8 +117,7 @@ function renderPagination() {
             next.onclick = () => { currentPage++; renderSongs(); };
             container.appendChild(next);
         }
-    }
-    controls(top); controls(bottom);
+    });
 }
 
 function handleSearchInput() { searchSongs(); toggleClearButton(); }
@@ -183,16 +181,14 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    // Clean strings to prevent URL breakage in Nightbot
-    const cleanArtist = artist.replace(/[^a-zA-Z0-9 ]/g, "");
-    const cleanSong = song.replace(/[^a-zA-Z0-9 ]/g, "");
-    const command = `!sr ${cleanArtist} - ${cleanSong}`;
+    // Standard command format: !sr Artist - Song
+    const command = `!sr ${artist} - ${song}`;
     
     try {
         await navigator.clipboard.writeText(command);
-        alert("Copied to clipboard!\nPaste this in Twitch chat to request:\n\n" + command);
+        alert("Copied to clipboard!\n\nPaste this in Twitch chat to add it to the queue:\n" + command);
     } catch (e) {
-        alert("Please manually type: " + command);
+        alert("Copy failed. Please manually type: " + command);
     }
 }
 
