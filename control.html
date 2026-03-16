@@ -1,39 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Stream Queue Control</title>
-<style>
-    body { background: #111; color: white; font-family: Arial; text-align: center; padding: 20px; }
-    .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-    .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
-    .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
-    button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    button:hover { opacity: 0.8; }
-    .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
-    .clear-btn { background: #555; margin-left: 10px; }
-    h1, h2 { color: #f1c40f; margin-bottom: 15px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Stream Queue Control (Admin)</title>
+    <style>
+        body { background: #111; color: white; font-family: Arial; text-align: center; padding: 20px; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+        .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; } /* Hidden until login */
+        .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
+        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { opacity: 0.8; }
+        .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
+        .clear-btn { background: #555; margin-left: 10px; }
+        h1, h2 { color: #f1c40f; margin-bottom: 15px; }
+
+        /* Login Overlay */
+        #login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; }
+        #login-box input { display: block; width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; }
+        #login-box button { width: 100%; padding: 10px; background: #f1c40f; color: #111; }
+    </style>
 </head>
 <body>
 
 <h1>Stream Queue Control</h1>
 
+<!-- Login Form -->
+<div id="login-box">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Admin Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<!-- Control Panel (Hidden until Auth) -->
 <div class="container">
-    <div class="panel">
+    <div id="admin-panel" class="panel">
         <h2>Website Requests</h2>
         <button class="next-btn" onclick="nextSong()">⏭️ Next Song</button>
         <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All</button>
         <div id="queue">Loading requests...</div>
+        <br><button onclick="logout()" style="background:#444; margin-top: 20px;">Logout</button>
     </div>
 </div>
 
-<!-- 🔹 Load Firebase SDKs -->
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com"></script>
 <script src="https://www.gstatic.com"></script>
 <script src="https://www.gstatic.com"></script>
 
 <script>
-    // 1. Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
         authDomain: "rocksmith-requests.firebaseapp.com",
@@ -45,53 +60,62 @@
         measurementId: "G-JWN29ZF9SR"
     };
 
-    // 2. Initialize Firebase (Outside listener so it's ready immediately)
     firebase.initializeApp(firebaseConfig);
     const DB = firebase.database();
+    const AUTH = firebase.auth();
     const queueRef = DB.ref("/queue");
 
-    // 3. Define Global Functions (Attaching to 'window' ensures HTML buttons can find them)
-    window.nextSong = function() {
-        queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
-            const val = snapshot.val();
-            if (val) {
-                const firstKey = Object.keys(val)[0];
-                DB.ref("/queue/" + firstKey).remove();
-            }
+    // --- Global Actions ---
+    window.login = () => {
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+        AUTH.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+    };
+
+    window.logout = () => AUTH.signOut();
+
+    window.nextSong = () => {
+        queueRef.orderByKey().limitToFirst(1).once("value", snap => {
+            const firstKey = Object.keys(snap.val() || {})[0];
+            if(firstKey) DB.ref("/queue/"+firstKey).remove();
         });
     };
 
-    window.clearQueue = function() {
-        if (confirm("Are you sure you want to delete EVERY request?")) {
-            queueRef.remove();
-        }
+    window.clearQueue = () => {
+        if(confirm("Wipe the entire queue?")) queueRef.remove();
     };
 
-    window.removeItem = function(key) {
-        DB.ref("/queue/" + key).remove();
-    };
+    window.removeItem = key => DB.ref("/queue/"+key).remove();
 
-    // 4. UI Logic
-    document.addEventListener("DOMContentLoaded", () => {
+    // --- UI Logic ---
+    AUTH.onAuthStateChanged(user => {
+        const loginBox = document.getElementById("login-box");
+        const adminPanel = document.getElementById("admin-panel");
         const queueDiv = document.getElementById("queue");
 
-        function renderQueue(data) {
-            queueDiv.innerHTML = "";
-            if (!data) { 
-                queueDiv.innerHTML = "<p style='color:#888'>Queue is empty.</p>"; 
-                return; 
-            }
-            Object.entries(data).forEach(([key, s], i) => {
-                const item = document.createElement("div");
-                item.className = "queueItem";
-                item.innerHTML = `<span><strong>${i + 1}.</strong> ${s.artist} - ${s.song}</span>
-                                  <button onclick="removeItem('${key}')">Remove</button>`;
-                queueDiv.appendChild(item);
+        if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
+            loginBox.style.display = "none";
+            adminPanel.style.display = "block";
+            
+            // Start listening to queue only after login
+            queueRef.on("value", snapshot => {
+                queueDiv.innerHTML = "";
+                const data = snapshot.val();
+                if(!data) { queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
+                
+                Object.entries(data).forEach(([key,s],i)=>{
+                    const item = document.createElement("div");
+                    item.className = "queueItem";
+                    item.innerHTML = `<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
+                                      <button onclick="removeItem('${key}')">Remove</button>`;
+                    queueDiv.appendChild(item);
+                });
             });
+        } else {
+            loginBox.style.display = "inline-block";
+            adminPanel.style.display = "none";
+            queueRef.off(); // Stop listening if logged out
         }
-
-        // Listen for real-time updates
-        queueRef.on("value", snapshot => renderQueue(snapshot.val()));
     });
 </script>
 
