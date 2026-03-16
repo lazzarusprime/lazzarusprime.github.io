@@ -36,12 +36,13 @@
     </div>
 </div>
 
-<!-- 🔹 RELIABLE JS DELIVR LINKS -->
-<script src="https://cdn.jsdelivr.net"></script>
-<script src="https://cdn.jsdelivr.net"></script>
-<script src="https://cdn.jsdelivr.net"></script>
+<!-- Try loading from cdnjs one last time, but with a fallback wrapper -->
+<script src="https://cdnjs.cloudflare.com"></script>
+<script src="https://cdnjs.cloudflare.com"></script>
+<script src="https://cdnjs.cloudflare.com"></script>
 
 <script>
+    // 1. CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
         authDomain: "rocksmith-requests.firebaseapp.com",
@@ -53,61 +54,67 @@
         measurementId: "G-JWN29ZF9SR"
     };
 
-    if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-        const DB = firebase.database();
-        const AUTH = firebase.auth();
-        const queueRef = DB.ref("/queue");
+    // 2. DEFINE FUNCTIONS GLOBALLY IMMEDIATELY (Stops "login is not defined" error)
+    window.login = function() {
+        if (typeof firebase === 'undefined') return alert("Firebase is blocked on your network.");
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+        firebase.auth().signInWithEmailAndPassword(email, pass).catch(e => {
+            document.getElementById("login-status").innerText = e.message;
+        });
+    };
 
-        window.login = () => {
-            const email = document.getElementById("email").value;
-            const pass = document.getElementById("password").value;
-            AUTH.signInWithEmailAndPassword(email, pass).catch(e => {
-                document.getElementById("login-status").innerText = e.message;
-            });
-        };
+    window.logout = () => firebase.auth().signOut();
 
-        window.logout = () => AUTH.signOut();
-
-        window.nextSong = () => {
-            queueRef.orderByKey().limitToFirst(1).once("value", snap => {
-                if (snap.exists()) {
-                    const firstKey = Object.keys(snap.val())[0];
-                    DB.ref("/queue/" + firstKey).remove();
-                }
-            });
-        };
-
-        window.clearQueue = () => { if (confirm("Wipe the entire queue?")) queueRef.remove(); };
-        window.removeItem = (key) => { DB.ref("/queue/" + key).remove(); };
-
-        AUTH.onAuthStateChanged(user => {
-            const loginBox = document.getElementById("login-box");
-            const adminPanel = document.getElementById("admin-panel");
-            const queueDiv = document.getElementById("queue");
-
-            if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
-                loginBox.style.display = "none";
-                adminPanel.style.display = "block";
-                queueRef.on("value", snapshot => {
-                    queueDiv.innerHTML = "";
-                    const data = snapshot.val();
-                    if (!data) { queueDiv.innerHTML = "<p style='color:#888'>Queue is empty.</p>"; return; }
-                    Object.entries(data).forEach(([key, s], i) => {
-                        const item = document.createElement("div");
-                        item.className = "queueItem";
-                        item.innerHTML = `<span><strong>${i + 1}.</strong> ${s.artist} - ${s.song}</span>
-                                          <button onclick="removeItem('${key}')">Remove</button>`;
-                        queueDiv.appendChild(item);
-                    });
-                });
-            } else {
-                loginBox.style.display = "inline-block";
-                adminPanel.style.display = "none";
-                queueRef.off();
+    window.nextSong = () => {
+        const ref = firebase.database().ref("/queue");
+        ref.orderByKey().limitToFirst(1).once("value", snap => {
+            if (snap.exists()) {
+                const key = Object.keys(snap.val())[0];
+                firebase.database().ref("/queue/" + key).remove();
             }
         });
+    };
+
+    window.clearQueue = () => { if (confirm("Wipe all?")) firebase.database().ref("/queue").remove(); };
+    window.removeItem = (key) => firebase.database().ref("/queue/" + key).remove();
+
+    // 3. INITIALIZE IF LOADED
+    function start() {
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            
+            firebase.auth().onAuthStateChanged(user => {
+                const loginBox = document.getElementById("login-box");
+                const adminPanel = document.getElementById("admin-panel");
+                const queueDiv = document.getElementById("queue");
+
+                if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
+                    loginBox.style.display = "none";
+                    adminPanel.style.display = "block";
+                    firebase.database().ref("/queue").on("value", snapshot => {
+                        queueDiv.innerHTML = "";
+                        const data = snapshot.val();
+                        if (!data) { queueDiv.innerHTML = "Queue empty."; return; }
+                        Object.entries(data).forEach(([key, s], i) => {
+                            const item = document.createElement("div");
+                            item.className = "queueItem";
+                            item.innerHTML = `<span><strong>${i + 1}.</strong> ${s.artist} - ${s.song}</span>
+                                              <button onclick="removeItem('${key}')">Remove</button>`;
+                            queueDiv.appendChild(item);
+                        });
+                    });
+                } else {
+                    loginBox.style.display = "inline-block";
+                    adminPanel.style.display = "none";
+                }
+            });
+        } else {
+            document.getElementById("login-status").innerText = "NETWORK BLOCK: Firebase cannot load. Try a VPN or Hotspot.";
+        }
     }
+
+    start();
 </script>
 </body>
 </html>
