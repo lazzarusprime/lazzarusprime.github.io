@@ -1,57 +1,34 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<meta charset="UTF-8">
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<style>
-
-body{
-
-background:transparent;
-color:white;
-font-size:36px;
-font-family:Arial;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        body { background: transparent; color: white; font-size: 36px; font-family: Arial; text-shadow: 2px 2px 4px #000; }
+    </style>
 </head>
-
 <body>
+    <div id="nowPlaying">Waiting for requests...</div>
 
-<div id="nowPlaying">Loading...</div>
+    <script>
+        const firebaseConfig = {
+            databaseURL: "https://lazzarus-prime-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-<script>
-
-const firebaseConfig={
-databaseURL:"YOUR_FIREBASE_DB_URL"
-}
-
-firebase.initializeApp(firebaseConfig)
-
-const db=firebase.database()
-
-db.ref("queue").limitToFirst(1).on("value",(snap)=>{
-
-let data=snap.val()
-
-if(!data)return
-
-let song=Object.values(data)[0]
-
-document.getElementById("nowPlaying").innerText=
-song.artist+" - "+song.song
-
-})
-
-</script>
-
+        db.ref("queue").limitToFirst(1).on("value", (snap) => {
+            const data = snap.val();
+            if (!data) {
+                document.getElementById("nowPlaying").innerText = "No requests";
+                return;
+            }
+            // Get the first child regardless of its random ID
+            const firstKey = Object.keys(data)[0];
+            const song = data[firstKey];
+            document.getElementById("nowPlaying").innerText = song.artist + " - " + song.song;
+        });
+    </script>
 </body>
-
 </html>
