@@ -42,7 +42,7 @@
 </div>
 
 <script>
-    // Stealth URLs to bypass DNS blocks
+    // Keeping your stealth URLs
     const libs = [
         "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXBwLmpz",
         "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXV0aC5qcw==",
@@ -52,7 +52,7 @@
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
         authDomain: "rocksmith-requests.firebaseapp.com",
-        databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
+        databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com", // Verified URL
         projectId: "rocksmith-requests",
         storageBucket: "rocksmith-requests.firebasestorage.app",
         messagingSenderId: "267279660992",
@@ -89,10 +89,17 @@
             if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
+                
+                // Real-time listener for the queue
                 firebase.database().ref("/queue").on("value", snap => {
                     queueDiv.innerHTML = "";
                     const data = snap.val();
-                    if (!data) { queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; return; }
+                    if (!data) { 
+                        queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; 
+                        return; 
+                    }
+                    
+                    // We use Object.entries to get both the random ID (key) and the song data (s)
                     Object.entries(data).forEach(([key, s], i) => {
                         const item = document.createElement("div");
                         item.className = "queueItem";
@@ -115,9 +122,16 @@
     };
 
     window.logout = () => firebase.auth().signOut();
+    
+    // Deletes specific song by its unique Firebase ID
     window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-    window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
+    
+    window.clearQueue = () => { 
+        if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); 
+    };
+
     window.nextSong = () => {
+        // orderByKey ensures we remove the OLDEST item in the list
         firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
             if(s.exists()) {
                 const key = Object.keys(s.val())[0];
