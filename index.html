@@ -78,13 +78,14 @@ button:hover{background:#444;}
 <script>
 // 🔹 Firebase config
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
+    authDomain: "rocksmith-requests.firebaseapp.com",
+    databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
+    projectId: "rocksmith-requests",
+    storageBucket: "rocksmith-requests.firebasestorage.app",
+    messagingSenderId: "267279660992",
+    appId: "1:267279660992:web:41c3976abef3712a34ba25",
+    measurementId: "G-JWN29ZF9SR"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -141,7 +142,7 @@ function isOwned(artist,song){
     return songs.some(s => s.artist.toLowerCase()===artist.toLowerCase() && s.song.toLowerCase()===song.toLowerCase());
 }
 
-// 🔹 Load queue
+// 🔹 Load queue and announce new songs
 async function loadQueue(){
     try{
         const snapshot = await DB.ref("/").get();
@@ -166,13 +167,20 @@ async function loadQueue(){
             div.appendChild(item);
         });
 
+        // 🔹 Auto announce new requests
         if(queueItems.length > lastQueueCount){
             const newest = queueItems[queueItems.length-1];
             let owned = isOwned(newest.artist,newest.song);
             let message = owned
                 ? `🎸 ${newest.artist} - ${newest.song} requested — I already have this!`
                 : `🎸 ${newest.artist} - ${newest.song} requested — I need to download this`;
-            // announceToChat(message); // optional
+            
+            // Auto copy the !sr command to clipboard for Twitch chat
+            const command = `!sr ${newest.artist} - ${newest.song}`;
+            try { navigator.clipboard.writeText(command); } catch {}
+            console.log("Auto announce:", message);
+            // Optional: show alert once (can comment out if annoying)
+            // alert(message + "\nCommand copied: " + command);
         }
 
         lastQueueCount = queueItems.length;
@@ -197,7 +205,7 @@ function renderSongs(){
     });
 }
 
-// 🔹 Request song
+// 🔹 Request song manually
 async function requestSong(artist,song){
     if(!userUID || userUID !== ALLOWED_UID) { alert("Not authorized"); return; }
     let command = "!sr "+artist+" - "+song;
