@@ -4,43 +4,7 @@
 <meta charset="UTF-8">
 <title>Stream Queue Control</title>
 <style>
-body {
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-}
-.container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-.panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
-.queueItem {
-    background: #222;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 4px solid #f1c40f;
-}
-button {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-button:hover { opacity: 0.8; }
-.next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
-.clear-btn { background: #555; margin-left: 10px; }
-h1, h2 { color: #f1c40f; margin-bottom: 15px; }
-#loginForm{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f0f0f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:9999;}
-#loginForm input{padding:10px;border-radius:6px;border:none;width:220px;}
-#loginForm button{padding:10px 20px;border-radius:6px;border:none;cursor:pointer;}
-#loginError{color:#ff5555;font-size:14px;}
-#mainContent{display:none;}
+/* ... keep your existing CSS ... */
 </style>
 </head>
 <body>
@@ -55,7 +19,7 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 </div>
 
 <!-- Main Content -->
-<div id="mainContent">
+<div id="mainContent" style="display:none;">
 <h1>Stream Queue Control</h1>
 <div class="container">
     <div class="panel">
@@ -67,13 +31,15 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 </div>
 </div>
 
-<!-- Firebase Scripts -->
+<!-- Firebase Scripts (must be first!) -->
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
 <script>
-// Firebase config
+// wait until window loads
+window.onload = () => {
+
 const firebaseConfig = {
     apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
     authDomain: "rocksmith-requests.firebaseapp.com",
@@ -84,6 +50,8 @@ const firebaseConfig = {
     appId: "1:267279660992:web:41c3976abef3712a34ba25",
     measurementId: "G-JWN29ZF9SR"
 };
+
+// initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 const DB = firebase.database();
@@ -97,25 +65,25 @@ const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");
 
 // Login function
-async function login(){
+async function login() {
     loginError.innerText = "";
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email,password);
         userUID = userCredential.user.uid;
         if(userUID !== ALLOWED_UID){
             loginError.innerText = "Access denied";
             firebase.auth().signOut();
             return;
         }
-        loginForm.style.display = "none";
-        mainContent.style.display = "block";
+        loginForm.style.display="none";
+        mainContent.style.display="block";
         loadQueue();
         queueRef.on("value", snapshot => renderQueue(snapshot.val()));
     } catch(e){
         console.error(e);
-        loginError.innerText = "Login failed: " + e.message;
+        loginError.innerText = "Login failed: "+e.message;
     }
 }
 
@@ -124,36 +92,32 @@ function renderQueue(data){
     queueDiv.innerHTML = "";
     if(!data){ queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
     const entries = Object.entries(data);
-    entries.forEach(([key, s], i)=>{
+    entries.forEach(([key,s],i)=>{
         const item = document.createElement("div");
         item.className="queueItem";
-        item.innerHTML = `<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
-                          <button onclick="removeItem('${key}')">Remove</button>`;
+        item.innerHTML=`<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
+                        <button onclick="removeItem('${key}')">Remove</button>`;
         queueDiv.appendChild(item);
     });
 }
 
 // Remove item
-function removeItem(key){ DB.ref("/queue/"+key).remove(); }
-
-// Next song
-function nextSong(){
-    queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
-        const firstKey = Object.keys(snapshot.val() || {})[0];
+window.removeItem = function(key){ DB.ref("/queue/"+key).remove(); }
+window.nextSong = function(){ 
+    queueRef.orderByKey().limitToFirst(1).once("value", snapshot=>{
+        const firstKey = Object.keys(snapshot.val()||{})[0];
         if(firstKey) DB.ref("/queue/"+firstKey).remove();
     });
 }
-
-// Clear queue
-function clearQueue(){
+window.clearQueue = function(){
     if(!confirm("Are you sure you want to delete EVERY request?")) return;
     queueRef.remove();
 }
 
 // Initial load
-function loadQueue(){
-    queueRef.once("value").then(snapshot => renderQueue(snapshot.val()));
-}
+function loadQueue(){ queueRef.once("value").then(snapshot => renderQueue(snapshot.val())); }
+
+};
 </script>
 
 </body>
