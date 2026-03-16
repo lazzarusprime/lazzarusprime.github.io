@@ -89,15 +89,15 @@ function initAuth() {
             loginBox.style.display = "none";
             adminPanel.style.display = "block";
 
-            firebase.database().ref("/queue").on("value", snap => {
+            firebase.database().ref("/queue").orderByChild("timestamp").on("value", snap => {
                 queueDiv.innerHTML = "";
                 const data = snap.val();
                 if (!data) { 
                     queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; 
                     return; 
                 }
-                // Sort by timestamp ascending
-                const entries = Object.entries(data).sort((a,b) => (a[1].timestamp||0) - (b[1].timestamp||0));
+
+                const entries = Object.entries(data).sort((a,b) => a[1].timestamp - b[1].timestamp);
                 entries.forEach(([key, s], i) => {
                     const statusClass = s.owned ? "owned" : "not-owned";
                     const statusText = s.owned ? "Owned" : "Not Owned";
