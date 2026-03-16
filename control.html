@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stream Queue Control (Admin)</title>
+    <title>Stream Queue Control (Local Fix)</title>
     <style>
         body { background: #111; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
         .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; }
         .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
         button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.8; }
-        .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
-        .clear-btn { background: #555; margin-left: 10px; }
-        h1, h2 { color: #f1c40f; margin-bottom: 15px; }
+        h1, h2 { color: #f1c40f; }
         #login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; width: 300px; }
         #login-box input { display: block; width: 100%; margin: 10px 0; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
         #login-box button { width: 100%; padding: 12px; background: #f1c40f; color: #111; font-size: 16px; }
@@ -33,17 +30,17 @@
 <div class="container">
     <div id="admin-panel" class="panel">
         <h2>Website Requests</h2>
-        <button class="next-btn" onclick="nextSong()">⏭️ Next Song</button>
-        <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All</button>
+        <button class="next-btn" onclick="nextSong()" style="background: #2ecc71; padding: 12px 20px; margin-bottom: 10px;">⏭️ Next Song</button>
+        <button class="clear-btn" onclick="clearQueue()" style="background: #555; margin-left: 10px;">🗑️ Clear All</button>
         <div id="queue">Loading requests...</div>
         <br><button onclick="logout()" style="background:#444; margin-top: 20px; width: 100%;">Logout</button>
     </div>
 </div>
 
-<!-- 🔹 ALTERNATIVE CDN (Cloudflare) -->
-<script src="https://cdnjs.cloudflare.com"></script>
-<script src="https://cdnjs.cloudflare.com"></script>
-<script src="https://cdnjs.cloudflare.com"></script>
+<!-- 🔹 DIRECT LOCAL LINKS -->
+<script src="firebase-app-compat.min.js"></script>
+<script src="firebase-auth-compat.min.js"></script>
+<script src="firebase-database-compat.min.js"></script>
 
 <script>
     const firebaseConfig = {
@@ -57,6 +54,7 @@
         measurementId: "G-JWN29ZF9SR"
     };
 
+    // Initialize only if files loaded
     if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         const DB = firebase.database();
@@ -76,7 +74,7 @@
         window.nextSong = () => {
             queueRef.orderByKey().limitToFirst(1).once("value", snap => {
                 if (snap.exists()) {
-                    const firstKey = Object.keys(snap.val());
+                    const firstKey = Object.keys(snap.val())[0];
                     DB.ref("/queue/" + firstKey).remove();
                 }
             });
@@ -112,7 +110,7 @@
             }
         });
     } else {
-        document.body.innerHTML = "<h2>Connection Error</h2><p>Your network is blocking all Firebase/CDN connections. Please try using a different WiFi or a Mobile Hotspot.</p>";
+        alert("CRITICAL: The 3 local JS files were not found in your folder!");
     }
 </script>
 
