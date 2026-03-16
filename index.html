@@ -3,144 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Lazzarus Prime Rocksmith Requests</title>
 
 <style>
-body{
-    font-family:Segoe UI, Arial;
-    background:#0f0f0f;
-    color:#fff;
-    margin:0;
-}
-
+body{font-family:Segoe UI, Arial;background:#0f0f0f;color:#fff;margin:0;}
 h1,h2,h3{margin:0}
-
-.titleBar{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:#141414;
-    padding:12px;
-    border-bottom:2px solid #222;
-}
-
-.titleBar img{
-    width:42px;
-}
-
-.topBar{
-    display:flex;
-    gap:5px;
-    padding:10px;
-    background:#181818;
-    position:sticky;
-    top:0;
-    z-index:100;
-    align-items:center;
-}
-
-.topBar input{
-    flex:1;
-    padding:8px;
-    border-radius:6px;
-    border:none;
-}
-
-.topBar .clearBtn{
-    background:#272727;
-    color:white;
-    border:none;
-    padding:6px 10px;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:bold;
-    display:none;
-}
-
-button{
-    background:#272727;
-    color:white;
-    border:none;
-    padding:6px 10px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#444;
-}
-
-#alphabet{
-    display:flex;
-    flex-wrap:wrap;
-    gap:5px;
-    padding:10px;
-}
-
-#stats{
-    padding:10px;
-    color:#bbb;
-}
-
-.song{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px;
-    border-bottom:1px solid #222;
-}
-
-.song:hover{
-    background:#1c1c1c;
-}
-
-.songInfo{
-    display:flex;
-    flex-direction:column;
-}
-
-.songTitle{
-    font-weight:bold;
-}
-
-.songArtist{
-    font-size:13px;
-    color:#aaa;
-    cursor:pointer;
-}
-
-.songArtist:hover{
-    color:#0f0;
-}
-
-.queueItem{
-    padding:8px;
-    border-bottom:1px solid #222;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.owned{
-    color:#00ff88;
-    font-weight:bold;
-}
-
-.missing{
-    color:#ff5555;
-    font-weight:bold;
-}
-
-.downloadBtn{
-    background:#444;
-    padding:4px 8px;
-    font-size:12px;
-}
+.titleBar{display:flex;align-items:center;gap:10px;background:#141414;padding:12px;border-bottom:2px solid #222;}
+.titleBar img{width:42px;}
+.topBar{display:flex;gap:5px;padding:10px;background:#181818;position:sticky;top:0;z-index:100;align-items:center;}
+.topBar input{flex:1;padding:8px;border-radius:6px;border:none;}
+.topBar .clearBtn{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:bold;display:none;}
+button{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;}
+button:hover{background:#444;}
+#alphabet{display:flex;flex-wrap:wrap;gap:5px;padding:10px;}
+#stats{padding:10px;color:#bbb;}
+.song{display:flex;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid #222;}
+.song:hover{background:#1c1c1c;}
+.songInfo{display:flex;flex-direction:column;}
+.songTitle{font-weight:bold;}
+.songArtist{font-size:13px;color:#aaa;cursor:pointer;}
+.songArtist:hover{color:#0f0;}
+.queueItem{padding:8px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;}
+.owned{color:#00ff88;font-weight:bold;}
+.missing{color:#ff5555;font-weight:bold;}
+.downloadBtn{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;}
+.downloadBtn:hover{background:#444;}
 </style>
 </head>
-
 <body>
+
+<!-- Hidden main content until login -->
+<div id="mainContent" style="display:none;">
 
 <div class="titleBar">
     <img src="guitar.png">
@@ -163,18 +56,61 @@ button:hover{
 <h2 style="padding:10px">Request Queue</h2>
 <div id="queue"></div>
 
+</div> <!-- End mainContent -->
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
+
 <script>
-const DB_URL="https://rocksmith-requests-default-rtdb.firebaseio.com";
-const NIGHTBOT_URL="YOUR_NIGHTBOT_WEBHOOK";
+// 🔹 Your Firebase config
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+const DB = firebase.database();
+const ALLOWED_UID = "IF6pmcBswAUEM87hr4uGJBeZeXR2"; // Only your UID can see/write
+let userUID = null;
 
 let songs=[];
 let filteredSongs=[];
 let lastQueueCount=0;
 
-// 🔹 Add this function for CustomsForge links
+// 🔹 CustomsForge link function
 function ignitionLink(artist,song){
     return "https://ignition4.customsforge.com/?search=" + encodeURIComponent(artist+" "+song);
 }
+
+// 🔹 Firebase login and page access
+async function login() {
+    let email = prompt("Enter Firebase email:");
+    let password = prompt("Enter Firebase password:");
+    try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        userUID = userCredential.user.uid;
+        if(userUID !== ALLOWED_UID){
+            alert("Access denied: UID mismatch");
+            document.body.innerHTML = "<h1>Access Denied</h1>";
+            return;
+        }
+        console.log("Logged in with UID:", userUID);
+        document.getElementById("mainContent").style.display = "block";
+        init(); // Load songs & queue
+    } catch(e){
+        alert("Login failed: " + e.message);
+        document.body.innerHTML = "<h1>Access Denied</h1>";
+    }
+}
+
+login(); // prompt login
 
 async function init(){
     await loadSongs();
@@ -183,73 +119,60 @@ async function init(){
 }
 
 async function loadSongs(){
-    const response=await fetch("songs.json");
-    songs=await response.json();
-    filteredSongs=songs;
-    document.getElementById("stats").innerText=songs.length+" songs loaded";
+    const response = await fetch("songs.json");
+    songs = await response.json();
+    filteredSongs = songs;
+    document.getElementById("stats").innerText = songs.length+" songs loaded";
     renderSongs();
 }
 
 function isOwned(artist,song){
-    return songs.some(s =>
-        s.artist.toLowerCase()===artist.toLowerCase() &&
-        s.song.toLowerCase()===song.toLowerCase()
-    );
+    return songs.some(s => s.artist.toLowerCase()===artist.toLowerCase() && s.song.toLowerCase()===song.toLowerCase());
 }
 
-// 🔹 Updated queue rendering to show download link for missing songs
+// 🔹 Queue rendering
 async function loadQueue(){
-    try{
-        const response=await fetch(DB_URL);
-        const data=await response.json();
-        const div=document.getElementById("queue");
+    try {
+        const snapshot = await DB.ref("/").get();
+        const data = snapshot.val();
+        const div = document.getElementById("queue");
         div.innerHTML="";
         if(!data) return;
-        const queueItems=Object.values(data);
+        const queueItems = Object.values(data);
 
         queueItems.forEach((song,i)=>{
-            let owned=isOwned(song.artist,song.song);
-            let status;
-            let downloadButton="";
-
+            let owned = isOwned(song.artist,song.song);
+            let status, downloadButton = "";
             if(owned){
-                status=`<span class="owned">🟢 Owned</span>`;
-            }else{
-                status=`<span class="missing">🔴 Need Download</span>`;
-                downloadButton=`<a target="_blank" href="${ignitionLink(song.artist,song.song)}">⬇ Download</a>`;
+                status = `<span class="owned">🟢 Owned</span>`;
+            } else {
+                status = `<span class="missing">🔴 Need Download</span>`;
+                downloadButton = `<a target="_blank" href="${ignitionLink(song.artist,song.song)}"><button class="downloadBtn">⬇ Download</button></a>`;
             }
-
-            let item=document.createElement("div");
+            let item = document.createElement("div");
             item.className="queueItem";
             item.innerHTML=(i+1)+". "+song.artist+" - "+song.song+" "+status+" "+downloadButton;
             div.appendChild(item);
         });
 
-        if(queueItems.length>lastQueueCount){
-            const newest=queueItems[queueItems.length-1];
-            let owned=isOwned(newest.artist,newest.song);
-            let message=owned
+        if(queueItems.length > lastQueueCount){
+            const newest = queueItems[queueItems.length-1];
+            let owned = isOwned(newest.artist,newest.song);
+            let message = owned
                 ? `🎸 ${newest.artist} - ${newest.song} requested — I already have this!`
                 : `🎸 ${newest.artist} - ${newest.song} requested — I need to download this`;
-            announceToChat(message);
+            // announceToChat(message); // optional
         }
 
-        lastQueueCount=queueItems.length;
-    }catch(e){
-        console.error(e);
-    }
-}
-
-function announceToChat(msg){
-    if(!NIGHTBOT_URL) return;
-    fetch(NIGHTBOT_URL+"?msg="+encodeURIComponent(msg));
+        lastQueueCount = queueItems.length;
+    } catch(e){ console.error(e); }
 }
 
 function renderSongs(){
-    const list=document.getElementById("songList");
+    const list = document.getElementById("songList");
     list.innerHTML="";
     filteredSongs.forEach(song=>{
-        const div=document.createElement("div");
+        const div = document.createElement("div");
         div.className="song";
         div.innerHTML=`
             <div class="songInfo">
@@ -263,26 +186,19 @@ function renderSongs(){
 }
 
 async function requestSong(artist,song){
-    let command="!sr "+artist+" - "+song;
+    if(!userUID || userUID !== ALLOWED_UID) { alert("Not authorized"); return; }
+    let command = "!sr "+artist+" - "+song;
     try{ await navigator.clipboard.writeText(command); }catch{}
-    try{
-        await fetch(DB_URL,{
-            method:'POST',
-            mode:'no-cors',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({artist,song})
-        });
-    }catch{}
+    try {
+        await DB.ref("/").push({artist,song});
+    } catch(e){ console.error("Firebase write error:", e); }
     alert("Copied to clipboard. Paste in Twitch chat:\n"+command);
     setTimeout(loadQueue,1000);
 }
 
 function handleSearchInput(){
-    let q=document.getElementById("searchBox").value.toLowerCase();
-    filteredSongs=songs.filter(s =>
-        s.artist.toLowerCase().includes(q) ||
-        s.song.toLowerCase().includes(q)
-    );
+    let q = document.getElementById("searchBox").value.toLowerCase();
+    filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
     renderSongs();
     toggleClearButton();
 }
@@ -305,7 +221,7 @@ function filterArtist(artist){
 }
 
 async function randomSong(){
-    let s=songs[Math.floor(Math.random()*songs.length)];
+    let s = songs[Math.floor(Math.random()*songs.length)];
     requestSong(s.artist,s.song);
 }
 
@@ -313,8 +229,6 @@ function goHome(){
     clearSearch();
     window.scrollTo({top:0,behavior:'smooth'});
 }
-
-init();
 </script>
 
 </body>
