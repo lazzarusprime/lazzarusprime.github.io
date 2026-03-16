@@ -12,6 +12,7 @@
     <div id="nowPlaying">Waiting for requests...</div>
 
     <script>
+        // Note: Ensure NO trailing slash in the databaseURL
         const firebaseConfig = {
             databaseURL: "https://lazzarus-prime-default-rtdb.firebaseio.com"
         };
@@ -20,14 +21,19 @@
 
         db.ref("queue").limitToFirst(1).on("value", (snap) => {
             const data = snap.val();
+            const display = document.getElementById("nowPlaying");
+            
             if (!data) {
-                document.getElementById("nowPlaying").innerText = "No requests";
+                display.innerText = "No requests";
                 return;
             }
-            // Get the first child regardless of its random ID
+            
+            // Extract the first item from the object
             const firstKey = Object.keys(data)[0];
             const song = data[firstKey];
-            document.getElementById("nowPlaying").innerText = song.artist + " - " + song.song;
+            display.innerText = song.artist + " - " + song.song;
+        }, (error) => {
+            console.error("Firebase Error:", error);
         });
     </script>
 </body>
