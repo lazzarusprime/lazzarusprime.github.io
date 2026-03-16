@@ -2,20 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stream Queue Control (Admin)</title>
     <style>
         body { background: #111; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
         .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; }
         .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
-        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         button:hover { opacity: 0.8; }
         .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
         .clear-btn { background: #555; margin-left: 10px; }
         h1, h2 { color: #f1c40f; margin-bottom: 15px; }
-
-        /* Login Overlay */
         #login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; width: 300px; }
         #login-box input { display: block; width: 100%; margin: 10px 0; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
         #login-box button { width: 100%; padding: 12px; background: #f1c40f; color: #111; font-size: 16px; }
@@ -25,7 +22,6 @@
 
 <h1>Stream Queue Control</h1>
 
-<!-- Login Form -->
 <div id="login-box">
     <h2>Admin Login</h2>
     <input type="email" id="email" placeholder="Admin Email">
@@ -34,26 +30,22 @@
     <p id="login-status" style="color: #e74c3c; font-size: 14px; margin-top: 10px;"></p>
 </div>
 
-<!-- Control Panel (Hidden until Auth) -->
 <div class="container">
     <div id="admin-panel" class="panel">
         <h2>Website Requests</h2>
         <button class="next-btn" onclick="nextSong()">⏭️ Next Song</button>
         <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All</button>
         <div id="queue">Loading requests...</div>
-        <br>
-        <button onclick="logout()" style="background:#444; margin-top: 20px; width: 100%;">Logout</button>
+        <br><button onclick="logout()" style="background:#444; margin-top: 20px; width: 100%;">Logout</button>
     </div>
 </div>
 
-<!-- 1. LOAD FIREBASE CORE FIRST -->
-<script src="https://www.gstatic.com"></script>
-<!-- 2. LOAD PLUGINS SECOND -->
-<script src="https://www.gstatic.com"></script>
-<script src="https://www.gstatic.com"></script>
+<!-- 🔹 ALTERNATIVE CDN (Cloudflare) -->
+<script src="https://cdnjs.cloudflare.com"></script>
+<script src="https://cdnjs.cloudflare.com"></script>
+<script src="https://cdnjs.cloudflare.com"></script>
 
 <script>
-    // Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
         authDomain: "rocksmith-requests.firebaseapp.com",
@@ -65,64 +57,46 @@
         measurementId: "G-JWN29ZF9SR"
     };
 
-    // Safety check to ensure Firebase loaded
     if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         const DB = firebase.database();
         const AUTH = firebase.auth();
         const queueRef = DB.ref("/queue");
 
-        // --- Auth Actions ---
         window.login = () => {
             const email = document.getElementById("email").value;
             const pass = document.getElementById("password").value;
-            const status = document.getElementById("login-status");
-            
-            status.innerText = "Attempting login...";
             AUTH.signInWithEmailAndPassword(email, pass).catch(e => {
-                status.innerText = "Error: " + e.message;
+                document.getElementById("login-status").innerText = "Error: " + e.message;
             });
         };
 
         window.logout = () => AUTH.signOut();
 
-        // --- Queue Actions ---
         window.nextSong = () => {
             queueRef.orderByKey().limitToFirst(1).once("value", snap => {
                 if (snap.exists()) {
-                    const firstKey = Object.keys(snap.val())[0];
+                    const firstKey = Object.keys(snap.val());
                     DB.ref("/queue/" + firstKey).remove();
                 }
             });
         };
 
-        window.clearQueue = () => {
-            if (confirm("Wipe the entire queue?")) queueRef.remove();
-        };
+        window.clearQueue = () => { if (confirm("Wipe the entire queue?")) queueRef.remove(); };
+        window.removeItem = (key) => { DB.ref("/queue/" + key).remove(); };
 
-        window.removeItem = (key) => {
-            DB.ref("/queue/" + key).remove();
-        };
-
-        // --- Monitor Auth State & Update UI ---
         AUTH.onAuthStateChanged(user => {
             const loginBox = document.getElementById("login-box");
             const adminPanel = document.getElementById("admin-panel");
             const queueDiv = document.getElementById("queue");
 
-            // Match your specific UID rule
             if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
-                
                 queueRef.on("value", snapshot => {
                     queueDiv.innerHTML = "";
                     const data = snapshot.val();
-                    if (!data) { 
-                        queueDiv.innerHTML = "<p style='color:#888'>Queue is empty.</p>"; 
-                        return; 
-                    }
-                    
+                    if (!data) { queueDiv.innerHTML = "<p style='color:#888'>Queue is empty.</p>"; return; }
                     Object.entries(data).forEach(([key, s], i) => {
                         const item = document.createElement("div");
                         item.className = "queueItem";
@@ -134,14 +108,11 @@
             } else {
                 loginBox.style.display = "inline-block";
                 adminPanel.style.display = "none";
-                queueRef.off(); // stop listening
-                if (user) {
-                    document.getElementById("login-status").innerText = "Warning: Logged in user does not match Admin UID.";
-                }
+                queueRef.off();
             }
         });
     } else {
-        document.body.innerHTML = "<h2>Fatal Error: Firebase scripts were blocked by your browser or internet connection.</h2><p>Please disable ad-blockers and refresh.</p>";
+        document.body.innerHTML = "<h2>Connection Error</h2><p>Your network is blocking all Firebase/CDN connections. Please try using a different WiFi or a Mobile Hotspot.</p>";
     }
 </script>
 
