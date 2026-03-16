@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rocksmith Requests</title>
+    <title>Lazzarus Prime Rocksmith Requests</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="topBar">
@@ -20,8 +22,12 @@
     </div>
 
     <script>
-        // Updated to include .json for Firebase REST compatibility
-        const DB_URL = "https://lazzarus-prime-default-rtdb.firebaseio.com/queue.json"; 
+        const firebaseConfig = {
+            databaseURL: "https://lazzarus-prime-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let allSongs = [];
 
         async function loadSongs() {
@@ -50,47 +56,39 @@
             displaySongs(filtered);
         }
 
-        async function requestSong(artist, song) {
+        function requestSong(artist, song) {
             const command = `!sr ${artist} - ${song}`;
-            try {
-                // Removed 'no-cors' so we can actually see if the save succeeded
-                const response = await fetch(DB_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ artist, song })
-                });
-
-                if (response.ok) {
-                    await navigator.clipboard.writeText(command);
-                    alert("Requested! Copied to clipboard: " + command);
-                    loadQueue();
-                }
-            } catch (err) {
+            
+            // Using SDK push() instead of fetch POST
+            db.ref("queue").push({
+                artist: artist,
+                song: song,
+                timestamp: Date.now()
+            }).then(() => {
+                navigator.clipboard.writeText(command);
+                alert("Requested! Copied to clipboard: " + command);
+            }).catch(err => {
                 console.error("Save failed:", err);
-            }
+                alert("Database Error. Check console.");
+            });
         }
 
-        async function loadQueue() {
-            try {
-                const res = await fetch(DB_URL);
-                const data = await res.json();
-                const div = document.getElementById("queue");
-                div.innerHTML = "";
-                if (!data) { div.innerText = "Queue is empty"; return; }
+        // Live-update queue display using SDK
+        db.ref("queue").on("value", (snap) => {
+            const data = snap.val();
+            const div = document.getElementById("queue");
+            div.innerHTML = "";
+            if (!data) { div.innerText = "Queue is empty"; return; }
 
-                // Firebase returns an object of objects, so we iterate through values
-                Object.values(data).forEach((s, i) => {
-                    const item = document.createElement("div");
-                    item.style.padding = "5px";
-                    item.innerText = `${i + 1}. ${s.artist} - ${s.song}`;
-                    div.appendChild(item);
-                });
-            } catch (e) {}
-        }
+            Object.values(data).forEach((s, i) => {
+                const item = document.createElement("div");
+                item.style.padding = "5px";
+                item.innerText = `${i + 1}. ${s.artist} - ${s.song}`;
+                div.appendChild(item);
+            });
+        });
 
         loadSongs();
-        loadQueue();
-        setInterval(loadQueue, 5000);
     </script>
 </body>
 </html>
