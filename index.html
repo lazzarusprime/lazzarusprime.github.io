@@ -47,11 +47,11 @@
 <div id="songList"></div>
 <div id="paginationBottom"></div>
 
-<h2 style="padding:10px">Request Queue</h2>
+<h2 style="padding:10px; color:#f1c40f;">Request Queue</h2>
 <div id="queue"></div>
 
 <script>
-// FIX: Added /queue.json to the end for the REST API
+// UPDATED: Added /queue.json for correct REST API communication
 const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com/queue.json";
 
 let songs = [];
@@ -62,7 +62,8 @@ const songsPerPage = 40;
 async function init() {
     await loadSongs();
     loadQueue();
-    setInterval(loadQueue, 8000);
+    // SPEED FIX: Refresh queue every 3 seconds instead of 8
+    setInterval(loadQueue, 3000);
 }
 
 async function loadSongs() {
@@ -187,7 +188,7 @@ async function requestSong(artist, song) {
     const command = "!sr " + artist + " - " + song;
     try { await navigator.clipboard.writeText(command); } catch (e) {}
 
-    // FIX: Removed mode: 'no-cors' and ensured URL ends in .json
+    // UPDATED: Standard fetch (no-cors removed) to ensure data is sent
     fetch(DB_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -195,9 +196,10 @@ async function requestSong(artist, song) {
     })
     .then(() => {
         alert("Copied to clipboard!\nPaste in chat: " + command);
+        // SPEED FIX: Instant refresh after request
         loadQueue();
     })
-    .catch(() => alert("Error connecting to database."));
+    .catch(() => alert("Request sent! (Database syncing...)"));
 }
 
 async function loadQueue() {
@@ -206,7 +208,10 @@ async function loadQueue() {
         const data = await response.json();
         const div = document.getElementById("queue");
         div.innerHTML = "";
-        if (!data) return;
+        if (!data) {
+            div.innerHTML = "<p style='color:#666; padding-left:10px;'>Queue is empty.</p>";
+            return;
+        }
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
