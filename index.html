@@ -28,11 +28,22 @@ button:hover{background:#444;}
 .missing{color:#ff5555;font-weight:bold;}
 .downloadBtn{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;}
 .downloadBtn:hover{background:#444;}
+#loginForm{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f0f0f;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+#loginForm input{padding:10px;border-radius:6px;border:none;width:200px;}
+#loginForm button{padding:10px 20px;}
 </style>
 </head>
 <body>
 
-<!-- Hidden main content until login -->
+<!-- Login Form -->
+<div id="loginForm">
+  <h1>Login to Access Queue</h1>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- Main Content (hidden until login) -->
 <div id="mainContent" style="display:none;">
 
 <div class="titleBar">
@@ -64,7 +75,7 @@ button:hover{background:#444;}
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
 <script>
-// 🔹 Your Firebase config
+// 🔹 Firebase config
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -77,47 +88,45 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const DB = firebase.database();
-const ALLOWED_UID = "IF6pmcBswAUEM87hr4uGJBeZeXR2"; // Only your UID can see/write
+const ALLOWED_UID = "IF6pmcBswAUEM87hr4uGJBeZeXR2";
 let userUID = null;
 
 let songs=[];
 let filteredSongs=[];
 let lastQueueCount=0;
 
-// 🔹 CustomsForge link function
+// 🔹 CustomsForge link
 function ignitionLink(artist,song){
     return "https://ignition4.customsforge.com/?search=" + encodeURIComponent(artist+" "+song);
 }
 
-// 🔹 Firebase login and page access
-async function login() {
-    let email = prompt("Enter Firebase email:");
-    let password = prompt("Enter Firebase password:");
-    try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+// 🔹 Login function
+async function login(){
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    try{
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email,password);
         userUID = userCredential.user.uid;
         if(userUID !== ALLOWED_UID){
-            alert("Access denied: UID mismatch");
-            document.body.innerHTML = "<h1>Access Denied</h1>";
+            alert("Access denied");
             return;
         }
-        console.log("Logged in with UID:", userUID);
-        document.getElementById("mainContent").style.display = "block";
-        init(); // Load songs & queue
-    } catch(e){
+        document.getElementById('loginForm').style.display='none';
+        document.getElementById('mainContent').style.display='block';
+        init();
+    }catch(e){
         alert("Login failed: " + e.message);
-        document.body.innerHTML = "<h1>Access Denied</h1>";
     }
 }
 
-login(); // prompt login
-
+// 🔹 Initialize
 async function init(){
     await loadSongs();
     loadQueue();
     setInterval(loadQueue,6000);
 }
 
+// 🔹 Load songs
 async function loadSongs(){
     const response = await fetch("songs.json");
     songs = await response.json();
@@ -126,13 +135,14 @@ async function loadSongs(){
     renderSongs();
 }
 
+// 🔹 Check if song owned
 function isOwned(artist,song){
     return songs.some(s => s.artist.toLowerCase()===artist.toLowerCase() && s.song.toLowerCase()===song.toLowerCase());
 }
 
-// 🔹 Queue rendering
+// 🔹 Load queue
 async function loadQueue(){
-    try {
+    try{
         const snapshot = await DB.ref("/").get();
         const data = snapshot.val();
         const div = document.getElementById("queue");
@@ -142,10 +152,10 @@ async function loadQueue(){
 
         queueItems.forEach((song,i)=>{
             let owned = isOwned(song.artist,song.song);
-            let status, downloadButton = "";
+            let status, downloadButton="";
             if(owned){
                 status = `<span class="owned">🟢 Owned</span>`;
-            } else {
+            }else{
                 status = `<span class="missing">🔴 Need Download</span>`;
                 downloadButton = `<a target="_blank" href="${ignitionLink(song.artist,song.song)}"><button class="downloadBtn">⬇ Download</button></a>`;
             }
@@ -165,9 +175,10 @@ async function loadQueue(){
         }
 
         lastQueueCount = queueItems.length;
-    } catch(e){ console.error(e); }
+    }catch(e){ console.error(e); }
 }
 
+// 🔹 Render songs
 function renderSongs(){
     const list = document.getElementById("songList");
     list.innerHTML="";
@@ -185,46 +196,43 @@ function renderSongs(){
     });
 }
 
+// 🔹 Request song
 async function requestSong(artist,song){
     if(!userUID || userUID !== ALLOWED_UID) { alert("Not authorized"); return; }
     let command = "!sr "+artist+" - "+song;
     try{ await navigator.clipboard.writeText(command); }catch{}
-    try {
+    try{
         await DB.ref("/").push({artist,song});
-    } catch(e){ console.error("Firebase write error:", e); }
+    }catch(e){ console.error("Firebase write error:", e); }
     alert("Copied to clipboard. Paste in Twitch chat:\n"+command);
     setTimeout(loadQueue,1000);
 }
 
+// 🔹 Search
 function handleSearchInput(){
     let q = document.getElementById("searchBox").value.toLowerCase();
     filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
     renderSongs();
     toggleClearButton();
 }
-
 function clearSearch(){
     document.getElementById("searchBox").value="";
     filteredSongs=songs;
     renderSongs();
     toggleClearButton();
 }
-
 function toggleClearButton(){
     const btn=document.getElementById("clearBtn");
     btn.style.display=document.getElementById("searchBox").value ? "inline-block" : "none";
 }
-
 function filterArtist(artist){
     document.getElementById("searchBox").value=artist;
     handleSearchInput();
 }
-
 async function randomSong(){
     let s = songs[Math.floor(Math.random()*songs.length)];
     requestSong(s.artist,s.song);
 }
-
 function goHome(){
     clearSearch();
     window.scrollTo({top:0,behavior:'smooth'});
