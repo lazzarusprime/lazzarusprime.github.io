@@ -3,130 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Stream Queue Control</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        body { background: #111; color: white; font-family: 'Segoe UI', Arial, sans-serif; text-align: center; padding: 20px; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-        .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; text-align: left; }
-        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        button:hover { filter: brightness(1.2); }
-        .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 15px; width: 100%; }
-        .clear-btn { background: #555; width: 100%; margin-top: 10px; }
-        h1, h2 { color: #f1c40f; margin-bottom: 15px; }
-        #login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; width: 320px; }
-        #login-box input { display: block; width: 100%; margin: 10px 0; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
-        #login-box button { width: 100%; padding: 12px; background: #f1c40f; color: #111; font-size: 16px; }
-        .song-info { flex-grow: 1; margin-right: 10px; }
+        body { background: #111; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .queueItem { background: #222; padding: 12px; margin: 10px auto; width: 80%; max-width: 500px; display: flex; justify-content: space-between; border-left: 4px solid #f1c40f; }
+        button { background: #e74c3c; color: white; border: none; padding: 8px 12px; cursor: pointer; }
+        .next-btn { background: #27ae60; padding: 15px; font-size: 18px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
+    <h1>Queue Control</h1>
+    <button class="next-btn" onclick="nextSong()">NEXT SONG (Pop Queue)</button>
+    <div id="adminQueue"></div>
 
-<h1>Stream Queue Control</h1>
+    <script>
+        const firebaseConfig = { databaseURL: "https://lazzarus-prime-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-<div id="login-box">
-    <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Email" autocomplete="username">
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password">
-    <button onclick="login()">Login</button>
-    <p id="status" style="color: #f1c40f; font-size: 13px; margin-top: 15px;">Connecting...</p>
-</div>
+        db.ref("queue").on("value", (snap) => {
+            const data = snap.val();
+            const div = document.getElementById("adminQueue");
+            div.innerHTML = "";
+            if (!data) return;
 
-<div class="container">
-    <div id="admin-panel" class="panel">
-        <h2>Website Requests</h2>
-        <button class="next-btn" onclick="nextSong()">⏭️ Play Next Song</button>
-        <div id="queue">Loading queue...</div>
-        <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All Requests</button>
-        <br><button onclick="logout()" style="background:transparent; color:#888; margin-top: 25px; font-size: 12px; border: 1px solid #444;">Logout</button>
-    </div>
-</div>
-
-<script>
-    // Stealth URLs to bypass DNS blocks
-    const libs = [
-        "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXBwLmpz",
-        "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXV0aC5qcw==",
-        "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtZGF0YWJhc2UuanM="
-    ];
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
-        authDomain: "rocksmith-requests.firebaseapp.com",
-        databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
-        projectId: "rocksmith-requests",
-        storageBucket: "rocksmith-requests.firebasestorage.app",
-        messagingSenderId: "267279660992",
-        appId: "1:267279660992:web:41c3976abef3712a34ba25"
-    };
-
-    async function start() {
-        try {
-            for(let b64 of libs) {
-                await new Promise((res, rej) => {
-                    const s = document.createElement('script');
-                    s.src = atob(b64);
-                    s.onload = res;
-                    s.onerror = rej;
-                    document.head.appendChild(s);
-                });
-            }
-            firebase.initializeApp(firebaseConfig);
-            document.getElementById("status").innerText = "Ready.";
-            document.getElementById("status").style.color = "green";
-            initAuth();
-        } catch (e) {
-            document.getElementById("status").innerText = "Block detected. Use VPN.";
-            document.getElementById("status").style.color = "red";
-        }
-    }
-
-    function initAuth() {
-        firebase.auth().onAuthStateChanged(user => {
-            const loginBox = document.getElementById("login-box");
-            const adminPanel = document.getElementById("admin-panel");
-            const queueDiv = document.getElementById("queue");
-
-            if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
-                loginBox.style.display = "none";
-                adminPanel.style.display = "block";
-                firebase.database().ref("/queue").on("value", snap => {
-                    queueDiv.innerHTML = "";
-                    const data = snap.val();
-                    if (!data) { queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; return; }
-                    Object.entries(data).forEach(([key, s], i) => {
-                        const item = document.createElement("div");
-                        item.className = "queueItem";
-                        item.innerHTML = `<div class="song-info"><strong>${i+1}.</strong> ${s.artist} - ${s.song}</div>
-                                          <button onclick="removeItem('${key}')">✕</button>`;
-                        queueDiv.appendChild(item);
-                    });
-                });
-            } else {
-                loginBox.style.display = "inline-block";
-                adminPanel.style.display = "none";
-            }
+            Object.entries(data).forEach(([key, s], i) => {
+                const item = document.createElement("div");
+                item.className = "queueItem";
+                item.innerHTML = `<span>${i+1}. ${s.artist} - ${s.song}</span>
+                                  <button onclick="removeItem('${key}')">✕</button>`;
+                div.appendChild(item);
+            });
         });
-    }
 
-    window.login = () => {
-        const e = document.getElementById("email").value;
-        const p = document.getElementById("password").value;
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
-    };
+        window.removeItem = (key) => db.ref("queue/" + key).remove();
 
-    window.logout = () => firebase.auth().signOut();
-    window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-    window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
-    window.nextSong = () => {
-        firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
-            if(s.exists()) {
-                const key = Object.keys(s.val())[0];
-                firebase.database().ref("/queue/" + key).remove();
-            }
-        });
-    };
-
-    start();
-</script>
+        window.nextSong = () => {
+            db.ref("queue").limitToFirst(1).once("value", s => {
+                if (s.exists()) {
+                    const key = Object.keys(s.val())[0];
+                    db.ref("queue/" + key).remove();
+                }
+            });
+        };
+    </script>
 </body>
 </html>
