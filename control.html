@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stream Queue Control (Self-Contained)</title>
+    <title>Stream Queue Control</title>
     <style>
         body { background: #111; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
@@ -23,7 +23,7 @@
     <input type="email" id="email" placeholder="Admin Email">
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
-    <p id="login-status" style="color: #f1c40f; font-size: 14px; margin-top: 10px;">Waiting for user...</p>
+    <p id="status" style="color: #f1c40f; font-size: 14px; margin-top: 10px;">Loading System...</p>
 </div>
 
 <div class="container">
@@ -36,7 +36,11 @@
     </div>
 </div>
 
-<!-- We use a tiny "loader" script that manually fetches the library code -->
+<!-- 🔹 Load from jsDelivr (High compatibility) -->
+<script src="https://cdn.jsdelivr.net"></script>
+<script src="https://cdn.jsdelivr.net"></script>
+<script src="https://cdn.jsdelivr.net"></script>
+
 <script>
     const config = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
@@ -48,53 +52,16 @@
         appId: "1:267279660992:web:41c3976abef3712a34ba25"
     };
 
-    // 1. Define UI actions globally so buttons work even if library is slow
-    window.login = () => {
-        const e = document.getElementById("email").value;
-        const p = document.getElementById("password").value;
-        if (!window.firebase) return alert("System still loading...");
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
-    };
+    function startApp() {
+        if (typeof firebase === 'undefined') {
+            document.getElementById("status").innerText = "Critical: Library blocked by DNS.";
+            document.getElementById("status").style.color = "red";
+            return;
+        }
 
-    window.logout = () => firebase.auth().signOut();
-    window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-    window.clearQueue = () => { if(confirm("Clear all?")) firebase.database().ref("/queue").remove(); };
-    window.nextSong = () => {
-        firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
-            if(s.exists()) firebase.database().ref("/queue/" + Object.keys(s.val())[0]).remove();
-        });
-    };
-
-    // 2. The "Hard Reload" Injection
-    // This forces the browser to fetch fresh copies and bypasses GitHub's cache
-    function injectScripts() {
-        const timestamp = new Date().getTime();
-        const urls = [
-            `https://www.gstatic.com{timestamp}`,
-            `https://www.gstatic.com{timestamp}`,
-            `https://www.gstatic.com{timestamp}`
-        ];
-
-        let loaded = 0;
-        urls.forEach(url => {
-            const script = document.createElement('script');
-            script.src = url;
-            script.onload = () => {
-                loaded++;
-                if (loaded === urls.length) init();
-            };
-            script.onerror = () => {
-                document.getElementById("login-status").innerText = "Connection Error. Refresh the page.";
-                document.getElementById("login-status").style.color = "red";
-            };
-            document.head.appendChild(script);
-        });
-    }
-
-    function init() {
         firebase.initializeApp(config);
-        document.getElementById("login-status").innerText = "System Ready.";
-        document.getElementById("login-status").style.color = "green";
+        document.getElementById("status").innerText = "Ready to Login";
+        document.getElementById("status").style.color = "green";
 
         firebase.auth().onAuthStateChanged(user => {
             const loginBox = document.getElementById("login-box");
@@ -123,7 +90,23 @@
         });
     }
 
-    injectScripts();
+    window.login = () => {
+        const e = document.getElementById("email").value;
+        const p = document.getElementById("password").value;
+        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+    };
+
+    window.logout = () => firebase.auth().signOut();
+    window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
+    window.clearQueue = () => { if(confirm("Clear all?")) firebase.database().ref("/queue").remove(); };
+    window.nextSong = () => {
+        firebase.database().ref("/queue").orderByKey().limitToFirst(1).once("value", s => {
+            if(s.exists()) firebase.database().ref("/queue/" + Object.keys(s.val())[0]).remove();
+        });
+    };
+
+    // Run start check
+    window.onload = startApp;
 </script>
 </body>
 </html>
