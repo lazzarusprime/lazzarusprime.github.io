@@ -4,23 +4,21 @@
 <meta charset="UTF-8">
 <title>Stream Queue Control</title>
 <style>
-/* ... keep your existing CSS ... */
+body { background: #111; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+.container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+.panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+.queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
+button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+button:hover { opacity: 0.8; }
+.next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
+.clear-btn { background: #555; margin-left: 10px; }
+h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 </style>
 </head>
 <body>
 
-<!-- Login Form -->
-<div id="loginForm">
-  <h1>Login to Control Queue</h1>
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <div id="loginError"></div>
-</div>
-
-<!-- Main Content -->
-<div id="mainContent" style="display:none;">
 <h1>Stream Queue Control</h1>
+
 <div class="container">
     <div class="panel">
         <h2>Website Requests</h2>
@@ -29,17 +27,13 @@
         <div id="queue">Loading requests...</div>
     </div>
 </div>
-</div>
 
-<!-- Firebase Scripts (must be first!) -->
+<!-- 🔥 Firebase Scripts FIRST -->
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
+<!-- 🔥 Then your inline Firebase code -->
 <script>
-// wait until window loads
-window.onload = () => {
-
 const firebaseConfig = {
     apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
     authDomain: "rocksmith-requests.firebaseapp.com",
@@ -51,48 +45,17 @@ const firebaseConfig = {
     measurementId: "G-JWN29ZF9SR"
 };
 
-// initialize Firebase
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
 const DB = firebase.database();
-const ALLOWED_UID = "IF6pmcBswAUEM87hr4uGJBeZeXR2";
-let userUID = null;
-
 const queueRef = DB.ref("/queue");
 const queueDiv = document.getElementById("queue");
-const mainContent = document.getElementById("mainContent");
-const loginForm = document.getElementById("loginForm");
-const loginError = document.getElementById("loginError");
 
-// Login function
-async function login() {
-    loginError.innerText = "";
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email,password);
-        userUID = userCredential.user.uid;
-        if(userUID !== ALLOWED_UID){
-            loginError.innerText = "Access denied";
-            firebase.auth().signOut();
-            return;
-        }
-        loginForm.style.display="none";
-        mainContent.style.display="block";
-        loadQueue();
-        queueRef.on("value", snapshot => renderQueue(snapshot.val()));
-    } catch(e){
-        console.error(e);
-        loginError.innerText = "Login failed: "+e.message;
-    }
-}
-
-// Render queue
+// Render queue function
 function renderQueue(data){
     queueDiv.innerHTML = "";
     if(!data){ queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
-    const entries = Object.entries(data);
-    entries.forEach(([key,s],i)=>{
+    Object.entries(data).forEach(([key,s],i)=>{
         const item = document.createElement("div");
         item.className="queueItem";
         item.innerHTML=`<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
@@ -101,23 +64,20 @@ function renderQueue(data){
     });
 }
 
-// Remove item
-window.removeItem = function(key){ DB.ref("/queue/"+key).remove(); }
-window.nextSong = function(){ 
-    queueRef.orderByKey().limitToFirst(1).once("value", snapshot=>{
+// Queue operations
+window.removeItem = key => DB.ref("/queue/"+key).remove();
+window.nextSong = () => {
+    queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
         const firstKey = Object.keys(snapshot.val()||{})[0];
         if(firstKey) DB.ref("/queue/"+firstKey).remove();
     });
 }
-window.clearQueue = function(){
-    if(!confirm("Are you sure you want to delete EVERY request?")) return;
-    queueRef.remove();
+window.clearQueue = () => {
+    if(confirm("Are you sure you want to delete EVERY request?")) queueRef.remove();
 }
 
-// Initial load
-function loadQueue(){ queueRef.once("value").then(snapshot => renderQueue(snapshot.val())); }
-
-};
+// Listen for real-time updates
+queueRef.on("value", snapshot => renderQueue(snapshot.val()));
 </script>
 
 </body>
