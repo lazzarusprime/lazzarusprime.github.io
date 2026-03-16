@@ -50,11 +50,11 @@
 <div id="songList"></div>
 <div id="paginationBottom"></div>
 
-<h2 style="padding:10px; color:#ff5500;">Live Request Queue</h2>
+<h2 style="padding:10px; color:#f1c40f;">Request Queue</h2>
 <div id="queue"></div>
 
 <script>
-// CRITICAL: Must include /queue.json for REST API to work
+// IMPORTANT: URL must end in .json for Firebase REST API
 const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com/queue.json";
 
 let songs = [];
@@ -187,7 +187,7 @@ function buildArtistStats() {
     const list = document.getElementById("artistList");
     sorted.forEach(([artist, count]) => {
         let row = document.createElement("div");
-        row.style.padding = "5px";
+        row.style.padding = "5px"; row.style.cursor = "pointer";
         row.innerText = `${artist} (${count})`;
         row.onclick = () => filterArtist(artist);
         list.appendChild(row);
@@ -201,20 +201,23 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    let command = "!sr " + artist + " - " + song;
-    try { await navigator.clipboard.writeText(command); } catch {}
+    const command = "!sr " + artist + " - " + song;
     
-    try {
-        const response = await fetch(DB_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ artist, song, timestamp: Date.now() })
-        });
-        if(response.ok) {
-            alert("Copied to clipboard!\nPaste in chat: " + command);
-            loadQueue();
-        }
-    } catch (err) { alert("Error sending request to database."); }
+    // Copy to clipboard first
+    try { await navigator.clipboard.writeText(command); } catch(e) {}
+
+    // Send to Firebase
+    fetch(DB_URL, {
+        method: 'POST',
+        body: JSON.stringify({ artist, song })
+    }).then(() => {
+        // Show alert AFTER fetch is triggered
+        alert("Copied to clipboard!\nPaste in chat: " + command);
+        loadQueue();
+    }).catch(err => {
+        console.error("Request failed", err);
+        alert("Requested! (Note: DB connection slow)");
+    });
 }
 
 async function loadQueue() {
@@ -223,7 +226,7 @@ async function loadQueue() {
         const data = await response.json();
         const div = document.getElementById("queue");
         div.innerHTML = "";
-        if (!data) { div.innerHTML = "<p style='padding:10px; color:#555;'>Queue is empty</p>"; return; }
+        if (!data) return;
         
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
@@ -237,7 +240,7 @@ async function loadQueue() {
 async function randomSong() {
     if (!songs.length) return;
     let s = songs[Math.floor(Math.random() * songs.length)];
-    await requestSong(s.artist, s.song);
+    requestSong(s.artist, s.song);
 }
 
 function goHome() {
