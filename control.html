@@ -32,10 +32,11 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
-<!-- 2️⃣ Then your inline Firebase code -->
+<!-- 2️⃣ Then your Firebase code -->
 <script>
-  // Initialize Firebase
-  const firebaseConfig = {
+  // Make sure functions are global (attached to window)
+  window.onload = () => {
+    const firebaseConfig = {
       apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
       authDomain: "rocksmith-requests.firebaseapp.com",
       databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
@@ -44,42 +45,44 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
       messagingSenderId: "267279660992",
       appId: "1:267279660992:web:41c3976abef3712a34ba25",
       measurementId: "G-JWN29ZF9SR"
+    };
+
+    // ✅ Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const DB = firebase.database();
+    const queueRef = DB.ref("/queue");
+    const queueDiv = document.getElementById("queue");
+
+    // Render queue items
+    function renderQueue(data){
+        queueDiv.innerHTML = "";
+        if(!data){ queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
+        Object.entries(data).forEach(([key,s],i)=>{
+            const item = document.createElement("div");
+            item.className="queueItem";
+            item.innerHTML = `<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
+                              <button onclick="removeItem('${key}')">Remove</button>`;
+            queueDiv.appendChild(item);
+        });
+    }
+
+    // 3️⃣ Make functions global for button onclicks
+    window.removeItem = key => DB.ref("/queue/"+key).remove();
+
+    window.nextSong = () => {
+        queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
+            const firstKey = Object.keys(snapshot.val()||{})[0];
+            if(firstKey) DB.ref("/queue/"+firstKey).remove();
+        });
+    };
+
+    window.clearQueue = () => {
+        if(confirm("Are you sure you want to delete EVERY request?")) queueRef.remove();
+    };
+
+    // Listen for real-time updates
+    queueRef.on("value", snapshot => renderQueue(snapshot.val()));
   };
-
-  firebase.initializeApp(firebaseConfig);
-  const DB = firebase.database();
-  const queueRef = DB.ref("/queue");
-  const queueDiv = document.getElementById("queue");
-
-  // Render queue
-  function renderQueue(data){
-      queueDiv.innerHTML = "";
-      if(!data){ queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
-      Object.entries(data).forEach(([key,s],i)=>{
-          const item = document.createElement("div");
-          item.className="queueItem";
-          item.innerHTML=`<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
-                          <button onclick="removeItem('${key}')">Remove</button>`;
-          queueDiv.appendChild(item);
-      });
-  }
-
-  // ✅ Make functions global so buttons can access
-  window.removeItem = key => DB.ref("/queue/"+key).remove();
-
-  window.nextSong = () => {
-      queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
-          const firstKey = Object.keys(snapshot.val()||{})[0];
-          if(firstKey) DB.ref("/queue/"+firstKey).remove();
-      });
-  };
-
-  window.clearQueue = () => {
-      if(confirm("Are you sure you want to delete EVERY request?")) queueRef.remove();
-  };
-
-  // Listen for real-time updates
-  queueRef.on("value", snapshot => renderQueue(snapshot.val()));
 </script>
 
 </body>
