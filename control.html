@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <title>Stream Queue Control</title>
 <style>
-body { background: #111; color: white; font-family: Arial; text-align: center; padding: 20px; }
-.container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-.panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
-.queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
-button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-button:hover { opacity: 0.8; }
-.next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
-.clear-btn { background: #555; margin-left: 10px; }
-h1, h2 { color: #f1c40f; margin-bottom: 15px; }
+    body { background: #111; color: white; font-family: Arial; text-align: center; padding: 20px; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+    .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+    .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
+    button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    button:hover { opacity: 0.8; }
+    .next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 10px; }
+    .clear-btn { background: #555; margin-left: 10px; }
+    h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 </style>
 </head>
 <body>
@@ -28,14 +28,12 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
     </div>
 </div>
 
-<!-- 🔹 Firebase SDKs must load first -->
-<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
+<!-- 🔹 Load Firebase SDKs -->
+<script src="https://www.gstatic.com"></script>
+<script src="https://www.gstatic.com"></script>
 
-<!-- 🔹 Then our custom code -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    // Firebase config
+    // 1. Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
         authDomain: "rocksmith-requests.firebaseapp.com",
@@ -47,42 +45,54 @@ document.addEventListener("DOMContentLoaded", () => {
         measurementId: "G-JWN29ZF9SR"
     };
 
-    // Initialize Firebase
+    // 2. Initialize Firebase (Outside listener so it's ready immediately)
     firebase.initializeApp(firebaseConfig);
     const DB = firebase.database();
     const queueRef = DB.ref("/queue");
-    const queueDiv = document.getElementById("queue");
 
-    // 🔹 Expose functions globally for buttons
-    window.nextSong = () => {
+    // 3. Define Global Functions (Attaching to 'window' ensures HTML buttons can find them)
+    window.nextSong = function() {
         queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
-            const firstKey = Object.keys(snapshot.val() || {})[0];
-            if(firstKey) DB.ref("/queue/"+firstKey).remove();
+            const val = snapshot.val();
+            if (val) {
+                const firstKey = Object.keys(val)[0];
+                DB.ref("/queue/" + firstKey).remove();
+            }
         });
     };
 
-    window.clearQueue = () => {
-        if(confirm("Are you sure you want to delete EVERY request?")) queueRef.remove();
+    window.clearQueue = function() {
+        if (confirm("Are you sure you want to delete EVERY request?")) {
+            queueRef.remove();
+        }
     };
 
-    window.removeItem = key => DB.ref("/queue/"+key).remove();
+    window.removeItem = function(key) {
+        DB.ref("/queue/" + key).remove();
+    };
 
-    // 🔹 Render queue
-    function renderQueue(data) {
-        queueDiv.innerHTML = "";
-        if(!data) { queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
-        Object.entries(data).forEach(([key,s],i)=>{
-            const item = document.createElement("div");
-            item.className = "queueItem";
-            item.innerHTML = `<span><strong>${i+1}.</strong> ${s.artist} - ${s.song}</span>
-                              <button onclick="removeItem('${key}')">Remove</button>`;
-            queueDiv.appendChild(item);
-        });
-    }
+    // 4. UI Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        const queueDiv = document.getElementById("queue");
 
-    // 🔹 Listen for realtime updates
-    queueRef.on("value", snapshot => renderQueue(snapshot.val()));
-});
+        function renderQueue(data) {
+            queueDiv.innerHTML = "";
+            if (!data) { 
+                queueDiv.innerHTML = "<p style='color:#888'>Queue is empty.</p>"; 
+                return; 
+            }
+            Object.entries(data).forEach(([key, s], i) => {
+                const item = document.createElement("div");
+                item.className = "queueItem";
+                item.innerHTML = `<span><strong>${i + 1}.</strong> ${s.artist} - ${s.song}</span>
+                                  <button onclick="removeItem('${key}')">Remove</button>`;
+                queueDiv.appendChild(item);
+            });
+        }
+
+        // Listen for real-time updates
+        queueRef.on("value", snapshot => renderQueue(snapshot.val()));
+    });
 </script>
 
 </body>
