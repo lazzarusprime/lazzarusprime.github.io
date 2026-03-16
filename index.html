@@ -21,7 +21,7 @@
     .songInfo{ display:flex; flex-direction:column; }
     .songTitle{ font-weight:bold; font-size:15px; }
     .songArtist{ font-size:13px; color:#aaa; cursor:pointer; }
-    .queueItem{ padding:10px; border-bottom:1px solid #333; background: #111; text-align: left; }
+    .queueItem{ padding:8px; border-bottom:1px solid #333; background:#111; margin-bottom:2px; }
 </style>
 </head>
 <body>
@@ -60,7 +60,7 @@ const songsPerPage = 40;
 async function init() {
     await loadSongs();
     loadQueue();
-    setInterval(loadQueue, 3000); // Check for new songs added by Nightbot every 3s
+    setInterval(loadQueue, 3000); // Polls every 3 seconds
 }
 
 async function loadSongs() {
@@ -181,12 +181,11 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    // Standard command format: !sr Artist - Song
+    // Replaced the auto-POST with just a clipboard copy
     const command = `!sr ${artist} - ${song}`;
-    
     try {
         await navigator.clipboard.writeText(command);
-        alert("Copied to clipboard!\n\nPaste this in Twitch chat to add it to the queue:\n" + command);
+        alert("Copied to clipboard!\n\nPaste this in Twitch chat to request:\n" + command);
     } catch (e) {
         alert("Copy failed. Please manually type: " + command);
     }
@@ -202,10 +201,11 @@ async function loadQueue() {
             div.innerHTML = "<p style='color:#666; padding-left:10px;'>Queue is empty.</p>";
             return;
         }
+        // Convert object to array and display
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
-            item.innerText = (i + 1) + ". " + song.artist + " - " + song.song;
+            item.innerText = (i + 1) + ". " + (song.artist || "Unknown") + " - " + (song.song || "Unknown");
             div.appendChild(item);
         });
     } catch (e) {}
