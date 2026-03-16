@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Stream Queue Control</title>
 <style>
-body { background: #111; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+body { background: #111; color: white; font-family: Arial; text-align: center; padding: 20px; }
 .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
 .panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; }
 .queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
@@ -28,11 +28,11 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
     </div>
 </div>
 
-<!-- 🔥 Firebase Scripts FIRST -->
+<!-- 1️⃣ Load Firebase SDK FIRST -->
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
-<!-- 🔥 Then your inline Firebase code -->
+<!-- 2️⃣ Then your inline Firebase code -->
 <script>
 const firebaseConfig = {
     apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
@@ -51,7 +51,7 @@ const DB = firebase.database();
 const queueRef = DB.ref("/queue");
 const queueDiv = document.getElementById("queue");
 
-// Render queue function
+// Render queue
 function renderQueue(data){
     queueDiv.innerHTML = "";
     if(!data){ queueDiv.innerHTML="<p style='color:#888'>Queue is empty.</p>"; return; }
@@ -64,17 +64,19 @@ function renderQueue(data){
     });
 }
 
-// Queue operations
+// Make functions global so buttons can access
 window.removeItem = key => DB.ref("/queue/"+key).remove();
+
 window.nextSong = () => {
     queueRef.orderByKey().limitToFirst(1).once("value", snapshot => {
         const firstKey = Object.keys(snapshot.val()||{})[0];
         if(firstKey) DB.ref("/queue/"+firstKey).remove();
     });
-}
+};
+
 window.clearQueue = () => {
     if(confirm("Are you sure you want to delete EVERY request?")) queueRef.remove();
-}
+};
 
 // Listen for real-time updates
 queueRef.on("value", snapshot => renderQueue(snapshot.val()));
