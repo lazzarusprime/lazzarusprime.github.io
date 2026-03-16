@@ -28,25 +28,9 @@ button:hover{background:#444;}
 .missing{color:#ff5555;font-weight:bold;}
 .downloadBtn{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;}
 .downloadBtn:hover{background:#444;}
-#loginForm{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f0f0f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:9999;}
-#loginForm input{padding:10px;border-radius:6px;border:none;width:220px;}
-#loginForm button{padding:10px 20px;border-radius:6px;border:none;cursor:pointer;}
-#loginError{color:#ff5555;font-size:14px;}
 </style>
 </head>
 <body>
-
-<!-- Login Form -->
-<div id="loginForm">
-  <h1>Login to Access Queue</h1>
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <div id="loginError"></div>
-</div>
-
-<!-- Main Content (hidden until login) -->
-<div id="mainContent" style="display:none;">
 
 <div class="titleBar">
     <img src="guitar.png">
@@ -67,13 +51,10 @@ button:hover{background:#444;}
 <div id="songList"></div>
 
 <h2 style="padding:10px">Request Queue</h2>
-<div id="queue"></div>
-
-</div> <!-- End mainContent -->
+<div id="queue">Loading queue...</div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.30.0/firebase-database-compat.js"></script>
 
 <script>
@@ -91,46 +72,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const DB = firebase.database();
-const ALLOWED_UID = "IF6pmcBswAUEM87hr4uGJBeZeXR2";
-let userUID = null;
+const queueRef = DB.ref("/queue"); // Only watch /queue
 
-let songs=[];
-let filteredSongs=[];
-let lastQueueCount=0;
+let songs = [];
+let filteredSongs = [];
+let lastQueueCount = 0;
 
 // 🔹 CustomsForge link
 function ignitionLink(artist,song){
     return "https://ignition4.customsforge.com/?search=" + encodeURIComponent(artist+" "+song);
-}
-
-// 🔹 Login function
-async function login(){
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const loginError = document.getElementById('loginError');
-    loginError.innerText = "";
-    try{
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email,password);
-        userUID = userCredential.user.uid;
-        if(userUID !== ALLOWED_UID){
-            loginError.innerText = "Access denied: You are not authorized.";
-            firebase.auth().signOut();
-            return;
-        }
-        document.getElementById('loginForm').style.display='none';
-        document.getElementById('mainContent').style.display='block';
-        init();
-    }catch(e){
-        console.error(e);
-        loginError.innerText = "Login failed: " + e.message;
-    }
-}
-
-// 🔹 Initialize after login
-async function init(){
-    await loadSongs();
-    loadQueue();
-    setInterval(loadQueue,6000);
 }
 
 // 🔹 Load songs
@@ -152,51 +102,6 @@ function isOwned(artist,song){
     return songs.some(s => s.artist.toLowerCase()===artist.toLowerCase() && s.song.toLowerCase()===song.toLowerCase());
 }
 
-// 🔹 Load queue and auto announce
-async function loadQueue(){
-    try{
-        const snapshot = await DB.ref("/").get();
-        const data = snapshot.val();
-        const div = document.getElementById("queue");
-        div.innerHTML="";
-        if(!data) return;
-        const queueItems = Object.values(data);
-
-        queueItems.forEach((song,i)=>{
-            let owned = isOwned(song.artist,song.song);
-            let status, downloadButton="";
-            if(owned){
-                status = `<span class="owned">🟢 Owned</span>`;
-            }else{
-                status = `<span class="missing">🔴 Need Download</span>`;
-                downloadButton = `<a target="_blank" href="${ignitionLink(song.artist,song.song)}"><button class="downloadBtn">⬇ Download</button></a>`;
-            }
-            let item = document.createElement("div");
-            item.className="queueItem";
-            item.innerHTML=(i+1)+". "+song.artist+" - "+song.song+" "+status+" "+downloadButton;
-            div.appendChild(item);
-        });
-
-        if(queueItems.length > lastQueueCount){
-            const newest = queueItems[queueItems.length-1];
-            let owned = isOwned(newest.artist,newest.song);
-            let message = owned
-                ? `🎸 ${newest.artist} - ${newest.song} requested — I already have this!`
-                : `🎸 ${newest.artist} - ${newest.song} requested — I need to download this`;
-
-            // Copy Twitch chat command automatically
-            const command = `!sr ${newest.artist} - ${newest.song}`;
-            try { navigator.clipboard.writeText(command); } catch {}
-            console.log("Auto announce:", message, "| Command copied:", command);
-        }
-
-        lastQueueCount = queueItems.length;
-    }catch(e){
-        console.error("Failed to load queue:", e);
-        document.getElementById("queue").innerText = "Unable to load queue. Check Firebase rules.";
-    }
-}
-
 // 🔹 Render songs
 function renderSongs(){
     const list = document.getElementById("songList");
@@ -209,23 +114,45 @@ function renderSongs(){
                 <div class="songTitle">${song.song}</div>
                 <div class="songArtist" onclick="filterArtist('${song.artist}')">${song.artist}</div>
             </div>
-            <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
         `;
         list.appendChild(div);
     });
 }
 
-// 🔹 Request song manually
-async function requestSong(artist,song){
-    if(!userUID || userUID !== ALLOWED_UID) { alert("Not authorized"); return; }
-    let command = "!sr "+artist+" - "+song;
-    try{ await navigator.clipboard.writeText(command); }catch{}
-    try{
-        await DB.ref("/").push({artist,song});
-    }catch(e){ console.error("Firebase write error:", e); alert("Failed to push song: "+e.message);}
-    alert("Copied to clipboard. Paste in Twitch chat:\n"+command);
-    setTimeout(loadQueue,1000);
-}
+// 🔹 Queue listener
+queueRef.on("value", snapshot => {
+    const data = snapshot.val();
+    const div = document.getElementById("queue");
+    div.innerHTML="";
+    if(!data){ div.innerText="Queue is empty"; return; }
+    const queueItems = Object.values(data);
+
+    queueItems.forEach((song,i)=>{
+        let owned = isOwned(song.artist,song.song);
+        let status, downloadButton="";
+        if(owned){
+            status = `<span class="owned">🟢 Owned</span>`;
+        }else{
+            status = `<span class="missing">🔴 Need Download</span>`;
+            downloadButton = `<a target="_blank" href="${ignitionLink(song.artist,song.song)}"><button class="downloadBtn">⬇ Download</button></a>`;
+        }
+        const item = document.createElement("div");
+        item.className="queueItem";
+        item.innerHTML=(i+1)+". "+song.artist+" - "+song.song+" "+status+" "+downloadButton;
+        div.appendChild(item);
+    });
+
+    // Auto announce last added
+    if(queueItems.length > lastQueueCount){
+        const newest = queueItems[queueItems.length-1];
+        let owned = isOwned(newest.artist,newest.song);
+        let message = owned
+            ? `🎸 ${newest.artist} - ${newest.song} requested — I already have this!`
+            : `🎸 ${newest.artist} - ${newest.song} requested — I need to download this`;
+        console.log("Auto announce:", message);
+    }
+    lastQueueCount = queueItems.length;
+});
 
 // 🔹 Search functions
 function handleSearchInput(){
@@ -248,14 +175,17 @@ function filterArtist(artist){
     document.getElementById("searchBox").value=artist;
     handleSearchInput();
 }
-async function randomSong(){
+function randomSong(){
     let s = songs[Math.floor(Math.random()*songs.length)];
-    requestSong(s.artist,s.song);
+    console.log("Random song selected:", s.artist,"-",s.song);
 }
 function goHome(){
     clearSearch();
     window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// 🔹 Init
+loadSongs();
 </script>
 
 </body>
