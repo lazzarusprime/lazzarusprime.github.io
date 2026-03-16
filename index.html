@@ -47,7 +47,7 @@
 <div id="songList"></div>
 <div id="paginationBottom"></div>
 
-<h2 style="padding:10px; color:#f1c40f;">Request Queue</h2>
+<h2 style="padding:10px; color:#f1c40f;">Current Request Queue</h2>
 <div id="queue"></div>
 
 <script>
@@ -60,7 +60,7 @@ const songsPerPage = 40;
 async function init() {
     await loadSongs();
     loadQueue();
-    setInterval(loadQueue, 3000); // Polls every 3 seconds
+    setInterval(loadQueue, 3000); 
 }
 
 async function loadSongs() {
@@ -181,8 +181,9 @@ function buildArtistStats() {
 }
 
 async function requestSong(artist, song) {
-    // Replaced the auto-POST with just a clipboard copy
-    const command = `!sr ${artist} - ${song}`;
+    // Standard command format for Nightbot: !sr Artist Song
+    // Note: We removed the " - " because Nightbot parsing is cleaner without it
+    const command = `!sr ${artist} ${song}`;
     try {
         await navigator.clipboard.writeText(command);
         alert("Copied to clipboard!\n\nPaste this in Twitch chat to request:\n" + command);
@@ -201,10 +202,10 @@ async function loadQueue() {
             div.innerHTML = "<p style='color:#666; padding-left:10px;'>Queue is empty.</p>";
             return;
         }
-        // Convert object to array and display
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
+            // Check for specific artist/song keys or handle Nightbot's dynamic keying
             item.innerText = (i + 1) + ". " + (song.artist || "Unknown") + " - " + (song.song || "Unknown");
             div.appendChild(item);
         });
