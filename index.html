@@ -18,13 +18,10 @@
     #stats{ padding:10px; color:#bbb; }
     #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
     .song{ display:flex; align-items:center; justify-content:space-between; padding:10px; border-bottom:1px solid #222; }
-    .song:hover{ background:#1c1c1c; }
     .songInfo{ display:flex; flex-direction:column; }
     .songTitle{ font-weight:bold; font-size:15px; }
     .songArtist{ font-size:13px; color:#aaa; cursor:pointer; }
-    .songArtist:hover{ color:#0f0; }
-    #paginationTop,#paginationBottom{ text-align:center; padding:10px; }
-    .queueItem{ padding:10px; border-bottom:1px solid #333; background: #111; text-align: left; }
+    .queueItem{ padding:6px; border-bottom:1px solid #222; }
 </style>
 </head>
 <body>
@@ -50,11 +47,11 @@
 <div id="songList"></div>
 <div id="paginationBottom"></div>
 
-<h2 style="padding:10px; color:#f1c40f;">Request Queue</h2>
+<h2 style="padding:10px">Request Queue</h2>
 <div id="queue"></div>
 
 <script>
-// IMPORTANT: URL must end in .json for Firebase REST API
+// FIX: Added /queue.json to the end for the REST API
 const DB_URL = "https://rocksmith-requests-default-rtdb.firebaseio.com/queue.json";
 
 let songs = [];
@@ -77,9 +74,7 @@ async function loadSongs() {
         buildArtistStats();
         renderSongs();
         document.getElementById("stats").innerText = songs.length + " songs loaded";
-    } catch (e) {
-        document.getElementById("stats").innerText = "Error loading songs";
-    }
+    } catch (e) { document.getElementById("stats").innerText = "Error loading songs"; }
 }
 
 function renderSongs() {
@@ -88,7 +83,6 @@ function renderSongs() {
     let start = (currentPage - 1) * songsPerPage;
     let end = start + songsPerPage;
     let pageSongs = filteredSongs.slice(start, end);
-
     pageSongs.forEach(song => {
         const div = document.createElement("div");
         div.className = "song";
@@ -109,8 +103,7 @@ function renderPagination() {
     const bottom = document.getElementById("paginationBottom");
     top.innerHTML = ""; bottom.innerHTML = "";
     let totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
-
-    [top, bottom].forEach(container => {
+    function controls(container) {
         if (currentPage > 1) {
             let prev = document.createElement("button");
             prev.innerText = "◀ Prev";
@@ -126,38 +119,31 @@ function renderPagination() {
             next.onclick = () => { currentPage++; renderSongs(); };
             container.appendChild(next);
         }
-    });
+    }
+    controls(top); controls(bottom);
 }
 
 function handleSearchInput() { searchSongs(); toggleClearButton(); }
-
 function searchSongs() {
     let q = document.getElementById("searchBox").value.toLowerCase();
     filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
-    currentPage = 1;
-    renderSongs();
+    currentPage = 1; renderSongs();
 }
 
 function toggleClearButton() {
     const btn = document.getElementById("clearBtn");
-    const input = document.getElementById("searchBox");
-    btn.style.display = input.value ? "inline-block" : "none";
+    btn.style.display = document.getElementById("searchBox").value ? "inline-block" : "none";
 }
 
 function clearSearch() {
     document.getElementById("searchBox").value = "";
-    filteredSongs = songs;
-    currentPage = 1;
-    renderSongs();
-    toggleClearButton();
+    filteredSongs = songs; currentPage = 1; renderSongs(); toggleClearButton();
 }
 
 function filterArtist(artist) {
     document.getElementById("searchBox").value = artist;
     filteredSongs = songs.filter(s => s.artist === artist);
-    currentPage = 1;
-    renderSongs();
-    toggleClearButton();
+    currentPage = 1; renderSongs(); toggleClearButton();
 }
 
 function buildAlphabet() {
@@ -165,8 +151,7 @@ function buildAlphabet() {
     div.innerHTML = "";
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
         let b = document.createElement("button");
-        b.innerText = l;
-        b.onclick = () => jumpToLetter(l);
+        b.innerText = l; b.onclick = () => jumpToLetter(l);
         div.appendChild(b);
     });
 }
@@ -174,8 +159,7 @@ function buildAlphabet() {
 function jumpToLetter(letter) {
     const idx = filteredSongs.findIndex(s => s.artist.toLowerCase().startsWith(letter.toLowerCase()));
     if (idx === -1) return;
-    currentPage = Math.floor(idx / songsPerPage) + 1;
-    renderSongs();
+    currentPage = Math.floor(idx / songsPerPage) + 1; renderSongs();
 }
 
 function buildArtistStats() {
@@ -187,8 +171,7 @@ function buildArtistStats() {
     const list = document.getElementById("artistList");
     sorted.forEach(([artist, count]) => {
         let row = document.createElement("div");
-        row.style.padding = "5px"; row.style.cursor = "pointer";
-        row.innerText = `${artist} (${count})`;
+        row.style.cursor = "pointer"; row.innerText = `${artist} (${count})`;
         row.onclick = () => filterArtist(artist);
         list.appendChild(row);
     });
@@ -202,22 +185,19 @@ function buildArtistStats() {
 
 async function requestSong(artist, song) {
     const command = "!sr " + artist + " - " + song;
-    
-    // Copy to clipboard first
-    try { await navigator.clipboard.writeText(command); } catch(e) {}
+    try { await navigator.clipboard.writeText(command); } catch (e) {}
 
-    // Send to Firebase
+    // FIX: Removed mode: 'no-cors' and ensured URL ends in .json
     fetch(DB_URL, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ artist, song })
-    }).then(() => {
-        // Show alert AFTER fetch is triggered
+    })
+    .then(() => {
         alert("Copied to clipboard!\nPaste in chat: " + command);
         loadQueue();
-    }).catch(err => {
-        console.error("Request failed", err);
-        alert("Requested! (Note: DB connection slow)");
-    });
+    })
+    .catch(() => alert("Error connecting to database."));
 }
 
 async function loadQueue() {
@@ -227,7 +207,6 @@ async function loadQueue() {
         const div = document.getElementById("queue");
         div.innerHTML = "";
         if (!data) return;
-        
         Object.values(data).forEach((song, i) => {
             let item = document.createElement("div");
             item.className = "queueItem";
@@ -240,18 +219,14 @@ async function loadQueue() {
 async function randomSong() {
     if (!songs.length) return;
     let s = songs[Math.floor(Math.random() * songs.length)];
-    requestSong(s.artist, s.song);
+    await requestSong(s.artist, s.song);
 }
 
 function goHome() {
     document.getElementById("searchBox").value = "";
-    filteredSongs = songs;
-    currentPage = 1;
-    renderSongs();
-    toggleClearButton();
+    filteredSongs = songs; currentPage = 1; renderSongs(); toggleClearButton();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 init();
 </script>
 </body>
