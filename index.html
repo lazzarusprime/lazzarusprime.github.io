@@ -28,10 +28,10 @@ button:hover{background:#444;}
 .missing{color:#ff5555;font-weight:bold;}
 .downloadBtn{background:#272727;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;}
 .downloadBtn:hover{background:#444;}
-/* Login form styles */
 #loginForm{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f0f0f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:9999;}
 #loginForm input{padding:10px;border-radius:6px;border:none;width:220px;}
 #loginForm button{padding:10px 20px;border-radius:6px;border:none;cursor:pointer;}
+#loginError{color:#ff5555;font-size:14px;}
 </style>
 </head>
 <body>
@@ -42,6 +42,7 @@ button:hover{background:#444;}
   <input id="email" type="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
+  <div id="loginError"></div>
 </div>
 
 <!-- Main Content (hidden until login) -->
@@ -106,22 +107,26 @@ function ignitionLink(artist,song){
 async function login(){
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const loginError = document.getElementById('loginError');
+    loginError.innerText = "";
     try{
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email,password);
         userUID = userCredential.user.uid;
         if(userUID !== ALLOWED_UID){
-            alert("Access denied");
+            loginError.innerText = "Access denied: You are not authorized.";
+            firebase.auth().signOut();
             return;
         }
         document.getElementById('loginForm').style.display='none';
         document.getElementById('mainContent').style.display='block';
         init();
     }catch(e){
-        alert("Login failed: " + e.message);
+        console.error(e);
+        loginError.innerText = "Login failed: " + e.message;
     }
 }
 
-// 🔹 Initialize
+// 🔹 Initialize after login
 async function init(){
     await loadSongs();
     loadQueue();
@@ -130,11 +135,16 @@ async function init(){
 
 // 🔹 Load songs
 async function loadSongs(){
-    const response = await fetch("songs.json");
-    songs = await response.json();
-    filteredSongs = songs;
-    document.getElementById("stats").innerText = songs.length+" songs loaded";
-    renderSongs();
+    try {
+        const response = await fetch("songs.json");
+        songs = await response.json();
+        filteredSongs = songs;
+        document.getElementById("stats").innerText = songs.length+" songs loaded";
+        renderSongs();
+    } catch(e){
+        console.error("Failed to load songs.json:", e);
+        document.getElementById("stats").innerText = "Failed to load songs";
+    }
 }
 
 // 🔹 Check if song owned
@@ -142,7 +152,7 @@ function isOwned(artist,song){
     return songs.some(s => s.artist.toLowerCase()===artist.toLowerCase() && s.song.toLowerCase()===song.toLowerCase());
 }
 
-// 🔹 Load queue and announce new songs
+// 🔹 Load queue and auto announce
 async function loadQueue(){
     try{
         const snapshot = await DB.ref("/").get();
@@ -167,24 +177,24 @@ async function loadQueue(){
             div.appendChild(item);
         });
 
-        // 🔹 Auto announce new requests
         if(queueItems.length > lastQueueCount){
             const newest = queueItems[queueItems.length-1];
             let owned = isOwned(newest.artist,newest.song);
             let message = owned
                 ? `🎸 ${newest.artist} - ${newest.song} requested — I already have this!`
                 : `🎸 ${newest.artist} - ${newest.song} requested — I need to download this`;
-            
-            // Auto copy the !sr command to clipboard for Twitch chat
+
+            // Copy Twitch chat command automatically
             const command = `!sr ${newest.artist} - ${newest.song}`;
             try { navigator.clipboard.writeText(command); } catch {}
-            console.log("Auto announce:", message);
-            // Optional: show alert once (can comment out if annoying)
-            // alert(message + "\nCommand copied: " + command);
+            console.log("Auto announce:", message, "| Command copied:", command);
         }
 
         lastQueueCount = queueItems.length;
-    }catch(e){ console.error(e); }
+    }catch(e){
+        console.error("Failed to load queue:", e);
+        document.getElementById("queue").innerText = "Unable to load queue. Check Firebase rules.";
+    }
 }
 
 // 🔹 Render songs
@@ -212,12 +222,12 @@ async function requestSong(artist,song){
     try{ await navigator.clipboard.writeText(command); }catch{}
     try{
         await DB.ref("/").push({artist,song});
-    }catch(e){ console.error("Firebase write error:", e); }
+    }catch(e){ console.error("Firebase write error:", e); alert("Failed to push song: "+e.message);}
     alert("Copied to clipboard. Paste in Twitch chat:\n"+command);
     setTimeout(loadQueue,1000);
 }
 
-// 🔹 Search
+// 🔹 Search functions
 function handleSearchInput(){
     let q = document.getElementById("searchBox").value.toLowerCase();
     filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
