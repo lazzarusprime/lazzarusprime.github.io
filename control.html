@@ -84,7 +84,6 @@
                 loginBox.style.display = "none";
                 adminPanel.style.display = "block";
                 
-                // Real-time listener: this updates instantly
                 firebase.database().ref("/queue").on("value", snap => {
                     queueDiv.innerHTML = "";
                     const data = snap.val();
@@ -92,8 +91,8 @@
                     Object.entries(data).forEach(([key, s], i) => {
                         const item = document.createElement("div");
                         item.className = "queueItem";
-                        item.innerHTML = `<div class="song-info"><strong>${i+1}.</strong> ${s.artist} - ${s.song}</div>
-                                          <button onclick="removeItem('${key}')">✕</button>`;
+                        item.innerHTML = `<div class=\"song-info\"><strong>${i+1}.</strong> ${s.artist} - ${s.song}</div>
+                                          <button onclick=\"removeItem('${key}')\">✕</button>`;
                         queueDiv.appendChild(item);
                     });
                 });
