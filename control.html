@@ -1,139 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Stream Queue Control</title>
-<style>
-body { background: #111; color: white; font-family: 'Segoe UI', Arial, sans-serif; text-align: center; padding: 20px; }
-.container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
-.panel { flex: 1; min-width: 350px; max-width: 600px; background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.queueItem { background: #222; padding: 12px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; text-align: left; }
-.song-info { flex-grow: 1; margin-right: 10px; }
-.owned-badge { padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
-.owned { background: #27ae60; color: #fff; }
-.not-owned { background: #e74c3c; color: #fff; }
-button { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-button:hover { filter: brightness(1.2); }
-.next-btn { background: #2ecc71; padding: 12px 20px; font-size: 16px; margin-bottom: 15px; width: 100%; }
-.clear-btn { background: #555; width: 100%; margin-top: 10px; }
-h1, h2 { color: #f1c40f; margin-bottom: 15px; }
-#login-box { background: #222; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; border: 1px solid #444; width: 320px; }
-#login-box input { display: block; width: 100%; margin: 10px 0; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
-#login-box button { width: 100%; padding: 12px; background: #f1c40f; color: #111; font-size: 16px; }
-</style>
-</head>
-<body>
+// requestbot.js
+const tmi = require('tmi.js');
+const admin = require('firebase-admin');
+const fs = require('fs');
+const path = require('path');
 
-<h1>Stream Queue Control</h1>
+// Load songs.json
+const songsPath = path.join(__dirname, 'songs.json');
+const songsData = JSON.parse(fs.readFileSync(songsPath, 'utf8'));
 
-<div id="login-box">
-    <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Email" autocomplete="username">
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password">
-    <button onclick="login()">Login</button>
-    <p id="status" style="color: #f1c40f; font-size: 13px; margin-top: 15px;">Connecting...</p>
-</div>
+// Create lookup maps
+const songsById = {};
+const songsByTitleArtist = {};
+songsData.forEach(s => {
+    songsById[s.id] = s;
+    songsByTitleArtist[`${s.artist.toLowerCase()}|${s.song.toLowerCase()}`] = s;
+});
 
-<div class="container">
-    <div id="admin-panel" class="panel">
-        <h2>Website Requests</h2>
-        <button class="next-btn" onclick="nextSong()">⏭️ Play Next Song</button>
-        <div id="queue">Loading queue...</div>
-        <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All Requests</button>
-        <br><button onclick="logout()" style="background:transparent; color:#888; margin-top: 25px; font-size: 12px; border: 1px solid #444;">Logout</button>
-    </div>
-</div>
+// Firebase setup
+const serviceAccount = require('./firebase-service-account.json');
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com"
+});
+const db = admin.database();
 
-<script>
-const libs = [
-    "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXBwLmpz",
-    "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXV0aC5qcw==",
-    "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtZGF0YWJhc2UuanM="
-];
+// Twitch setup
+const client = new tmi.Client({
+    options: { debug: true },
+    connection: { reconnect: true },
+    identity: {
+        username: 'YourBotUsername',
+        password: 'oauth:rqi3rxz2terwtvxy3wmjlcfgq6pul4'
+    },
+    channels: [ 'YourChannel' ]
+});
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
-    authDomain: "rocksmith-requests.firebaseapp.com",
-    databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
-    projectId: "rocksmith-requests"
-};
+client.connect();
 
-async function start() {
-    try {
-        for (let b64 of libs) {
-            await new Promise((res, rej) => {
-                const s = document.createElement('script');
-                s.src = atob(b64);
-                s.onload = res;
-                s.onerror = rej;
-                document.head.appendChild(s);
-            });
+client.on('message', async (channel, tags, message, self) => {
+    if (self) return;
+
+    let song = null;
+
+    // RSPlaylist command: !sr song:ID
+    const srMatch = message.match(/^!sr song:(\d+)$/i);
+    if (srMatch) {
+        const songId = parseInt(srMatch[1], 10);
+        song = songsById[songId];
+        if (!song) {
+            client.say(channel, `Song ID ${songId} not found.`);
+            return;
         }
-        firebase.initializeApp(firebaseConfig);
-        document.getElementById("status").innerText = "Ready.";
-        document.getElementById("status").style.color = "green";
-        initAuth();
-    } catch (e) {
-        document.getElementById("status").innerText = "Block detected.";
-        document.getElementById("status").style.color = "red";
     }
-}
 
-function initAuth() {
-    firebase.auth().onAuthStateChanged(user => {
-        const loginBox = document.getElementById("login-box");
-        const adminPanel = document.getElementById("admin-panel");
-        const queueDiv = document.getElementById("queue");
+    // Library command: !request "Artist" "Song"
+    const reqMatch = message.match(/^!request\s+"(.+)"\s+"(.+)"$/i);
+    if (reqMatch) {
+        const artist = reqMatch[1].trim();
+        const title = reqMatch[2].trim();
+        const key = `${artist.toLowerCase()}|${title.toLowerCase()}`;
+        const entry = songsByTitleArtist[key];
+        song = entry ? entry : { artist, song: title, owned: false };
+    }
 
-        if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
-            loginBox.style.display = "none";
-            adminPanel.style.display = "block";
+    if (!song) return;
 
-            firebase.database().ref("/queue").orderByChild("timestamp").on("value", snap => {
-                queueDiv.innerHTML = "";
-                const data = snap.val();
-                if (!data) { 
-                    queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>"; 
-                    return; 
-                }
-                const entries = Object.entries(data).sort((a,b) => a[1].timestamp - b[1].timestamp);
-                entries.forEach(([key, s], i) => {
-                    const statusClass = s.owned ? "owned" : "not-owned";
-                    const statusText = s.owned ? "Owned" : "Not Owned";
-                    const item = document.createElement("div");
-                    item.className = "queueItem";
-                    item.innerHTML = `<div class="song-info"><strong>${i+1}.</strong> ${s.artist} - ${s.song} <span class="owned-badge ${statusClass}">${statusText}</span></div>
-                                      <button onclick="removeItem('${key}')">✕</button>`;
-                    queueDiv.appendChild(item);
-                });
-            });
+    // Ensure owned is boolean
+    const owned = !!song.owned;
 
-        } else {
-            loginBox.style.display = "inline-block";
-            adminPanel.style.display = "none";
-        }
+    // Push to Firebase with timestamp
+    const newEntry = {
+        artist: song.artist,
+        song: song.song,
+        owned: owned,
+        timestamp: Date.now()
+    };
+
+    db.ref('queue').push(newEntry, err => {
+        if(err) console.error('Firebase push error:', err);
     });
-}
-
-window.login = () => {
-    const e = document.getElementById("email").value;
-    const p = document.getElementById("password").value;
-    firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
-};
-
-window.logout = () => firebase.auth().signOut();
-window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
-window.nextSong = () => {
-    firebase.database().ref("/queue").orderByChild("timestamp").limitToFirst(1).once("value", s => {
-        if(s.exists()) {
-            const key = Object.keys(s.val())[0];
-            firebase.database().ref("/queue/" + key).remove();
-        }
-    });
-};
-
-start();
-</script>
-</body>
-</html>
+});
