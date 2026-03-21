@@ -7,124 +7,126 @@
 
 <style>
 body{
-font-family:Segoe UI,Arial;
-background:#0f0f0f;
-color:white;
-margin:0;
+  font-family:Segoe UI,Arial;
+  background:#0f0f0f;
+  color:white;
+  margin:0;
 }
 
 /* HEADER */
 .titleBar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#141414;
-padding:12px;
-border-bottom:2px solid #222;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#141414;
+  padding:12px;
+  border-bottom:2px solid #222;
 }
 
 .titleLeft{
-display:flex;
-align-items:center;
-gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .titleBar img{
-width:40px;
+  width:40px;
 }
 
 .socialLinks{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
 }
 
 .socialLinks a{
-color:#aaa;
-text-decoration:none;
-font-size:14px;
+  color:#aaa;
+  text-decoration:none;
+  font-size:14px;
 }
 
 .socialLinks a:hover{
-color:#f1c40f;
+  color:#f1c40f;
 }
 
 /* SECTION */
 .section{
-padding:10px;
+  padding:10px;
 }
 
 .song{
-display:flex;
-justify-content:space-between;
-padding:10px;
-border-bottom:1px solid #222;
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  border-bottom:1px solid #222;
 }
 
 .songTitle{
-font-weight:bold;
+  font-weight:bold;
 }
 
 .songArtist{
-font-size:13px;
-color:#aaa;
+  font-size:13px;
+  color:#aaa;
 }
 
 /* BUTTON */
 button{
-background:#27ae60;
-color:white;
-border:none;
-padding:7px 12px;
-border-radius:6px;
-cursor:pointer;
+  background:#27ae60;
+  color:white;
+  border:none;
+  padding:7px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
 button:hover{
-background:#1e8449;
+  background:#1e8449;
 }
 
-/* COLLAPSE */
+/* COLLAPSIBLE */
 .collapsible{
-cursor:pointer;
-padding:10px;
-background:#181818;
-border:none;
-text-align:left;
-width:100%;
-font-size:16px;
-color:white;
+  cursor:pointer;
+  padding:10px;
+  background:#181818;
+  border:none;
+  text-align:left;
+  width:100%;
+  font-size:16px;
+  color:white;
 }
 
 .content{
-display:none;
-padding:10px;
+  display:none;
+  padding:10px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- 🔥 HEADER -->
 <div class="titleBar">
-<div class="titleLeft">
-<img src="guitar.png">
-<h2>Lazzarus Prime Rocksmith Requests</h2>
-</div>
+  <div class="titleLeft">
+    <img src="guitar.png">
+    <h2>Lazzarus Prime Rocksmith Requests</h2>
+  </div>
 
-<div class="socialLinks">
-<a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
-<a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-<a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">🛒 Merch</a>
-</div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">🛒 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+  </div>
 </div>
 
 <!-- 🔥 BASS CAMP SECTION -->
 <div class="section">
-<h2>🔥 Bass Camp 2 (Click to Request)</h2>
-<div id="bassCampList"></div>
+  <h2>🔥 Bass Camp 2 (Click to Request)</h2>
+  <div id="bassCampList"></div>
 </div>
 
-<!-- 🔽 COLLAPSIBLE SONG LIBRARY -->
+<!-- 🔽 COLLAPSIBLE FULL SONG LIBRARY -->
 <button class="collapsible">📚 Full Song Library</button>
 <div class="content" id="songList"></div>
 
@@ -193,45 +195,44 @@ const bassCampSongs = [
 
 // 🎸 REQUEST FUNCTION
 function requestSong(artist, song){
-const command = `!request "${artist}" "${song}"`;
+  const command = `!request "${artist}" "${song}"`;
 
-navigator.clipboard.writeText(command)
-.then(()=>{
-alert("Copied! Paste in Twitch chat:\n" + command);
-})
-.catch(()=>{
-alert("Type in chat:\n" + command);
-});
+  navigator.clipboard.writeText(command)
+  .then(()=>{
+    alert("Copied! Paste in Twitch chat:\n" + command);
+  })
+  .catch(()=>{
+    alert("Type in chat:\n" + command);
+  });
 }
 
 // 🔥 BUILD BASS CAMP LIST
 const bcDiv = document.getElementById("bassCampList");
 
 bassCampSongs.forEach(([artist,song])=>{
-const div = document.createElement("div");
-div.className="song";
+  const div = document.createElement("div");
+  div.className="song";
 
-div.innerHTML = `
-<div>
-<div class="songTitle">${song}</div>
-<div class="songArtist">${artist}</div>
-</div>
-<button onclick="requestSong('${artist.replace(/'/g,"\\'")}','${song.replace(/'/g,"\\'")}')">
-Request
-</button>
-`;
+  div.innerHTML = `
+  <div>
+    <div class="songTitle">${song}</div>
+    <div class="songArtist">${artist}</div>
+  </div>
+  <button onclick="requestSong('${artist.replace(/'/g,"\\'")}','${song.replace(/'/g,"\\'")}')">
+    Request
+  </button>
+  `;
 
-bcDiv.appendChild(div);
+  bcDiv.appendChild(div);
 });
 
-// 📚 COLLAPSIBLE LIBRARY TOGGLE
+// 📚 COLLAPSIBLE FULL SONG LIBRARY TOGGLE
 document.querySelector(".collapsible").onclick = function(){
-this.classList.toggle("active");
-const content = document.querySelector(".content");
-content.style.display = content.style.display === "block" ? "none" : "block";
+  this.classList.toggle("active");
+  const content = document.querySelector(".content");
+  content.style.display = content.style.display === "block" ? "none" : "block";
 };
 
 </script>
-
 </body>
 </html>
