@@ -6,524 +6,233 @@
 <title>Lazzarus Prime Rocksmith Requests</title>
 
 <style>
-
 body{
-font-family:Segoe UI,Arial;
-background:#0f0f0f;
-color:white;
-margin:0;
+  font-family:Segoe UI,Arial;
+  background:#0f0f0f;
+  color:white;
+  margin:0;
 }
 
-/* 🔥 TITLE BAR UPDATED */
+/* HEADER */
 .titleBar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#141414;
-padding:12px;
-border-bottom:2px solid #222;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#141414;
+  padding:12px;
+  border-bottom:2px solid #222;
 }
 
 .titleLeft{
-display:flex;
-align-items:center;
-gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .titleBar img{
-width:40px;
+  width:40px;
 }
 
-/* 🔥 SOCIAL LINKS */
 .socialLinks{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
 }
 
 .socialLinks a{
-color:#aaa;
-text-decoration:none;
-font-size:14px;
-transition:.15s;
+  color:#aaa;
+  text-decoration:none;
+  font-size:14px;
 }
 
 .socialLinks a:hover{
-color:#f1c40f;
-text-shadow:
-0 0 5px #f1c40f,
-0 0 10px #f39c12,
-0 0 15px #e67e22;
+  color:#f1c40f;
 }
 
-/* 🔥 TOP BAR */
-.topBar{
-display:flex;
-gap:6px;
-padding:10px;
-background:#181818;
-position:sticky;
-top:0;
-z-index:100;
-}
-
-.topBar input{
-flex:1;
-padding:8px;
-border-radius:6px;
-border:none;
-}
-
-.clearBtn{
-display:none;
-background:#333;
-}
-
-button{
-background:#272727;
-color:white;
-border:none;
-padding:7px 12px;
-border-radius:6px;
-cursor:pointer;
-}
-
-button:hover{
-background:#444;
-}
-
-#alphabet{
-display:flex;
-flex-wrap:wrap;
-gap:5px;
-padding:10px;
-}
-
-#stats{
-padding:10px;
-color:#aaa;
+/* SECTION */
+.section{
+  padding:10px;
 }
 
 .song{
-display:flex;
-justify-content:space-between;
-padding:10px;
-border-bottom:1px solid #222;
-transition:.15s;
-}
-
-.songInfo{
-display:flex;
-flex-direction:column;
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  border-bottom:1px solid #222;
 }
 
 .songTitle{
-font-weight:bold;
+  font-weight:bold;
 }
 
 .songArtist{
-font-size:13px;
-color:#aaa;
-cursor:pointer;
-transition:.15s;
+  font-size:13px;
+  color:#aaa;
 }
 
-.songArtist:hover{
-color:#f1c40f;
-text-shadow:0 0 6px #f1c40f;
+/* BUTTON */
+button{
+  background:#27ae60;
+  color:white;
+  border:none;
+  padding:7px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.song.highlight{
-background:#1a1a1a;
-box-shadow:0 0 6px rgba(241,196,15,.4);
+button:hover{
+  background:#1e8449;
 }
 
-#artistStats{
-padding:10px;
-background:#151515;
-border-top:1px solid #222;
-border-bottom:1px solid #222;
+/* COLLAPSIBLE */
+.collapsible{
+  cursor:pointer;
+  padding:10px;
+  background:#181818;
+  border:none;
+  text-align:left;
+  width:100%;
+  font-size:16px;
+  color:white;
 }
 
-.pagination{
-padding:10px;
+.content{
+  display:none;
+  padding:10px;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 UPDATED HEADER WITH YOUR LINKS -->
+<!-- 🔥 HEADER -->
 <div class="titleBar">
+  <div class="titleLeft">
+    <img src="guitar.png">
+    <h2>Lazzarus Prime Rocksmith Requests</h2>
+  </div>
 
-<div class="titleLeft">
-<img src="guitar.png">
-<h2>Lazzarus Prime Rocksmith Requests</h2>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">🛒 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+  </div>
 </div>
 
-<div class="socialLinks">
-<a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
-<a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-<a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">🛒 Merch</a>
-<a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-<a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
+<!-- 🔥 BASS CAMP SECTION -->
+<div class="section">
+  <h2>🔥 Bass Camp 2 (Click to Request)</h2>
+  <div id="bassCampList"></div>
 </div>
 
-</div>
-
-<div class="topBar">
-
-<button onclick="goHome()">🏠 Home</button>
-
-<input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
-
-<button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
-
-<button onclick="randomSong()">🎲 Random</button>
-
-</div>
-
-<div id="alphabet"></div>
-
-<div id="stats"></div>
-
-<div id="artistStats"></div>
-
-<h3 style="padding:10px">Song Library</h3>
-
-<div id="paginationTop" class="pagination"></div>
-
-<div id="songList"></div>
-
-<div id="paginationBottom" class="pagination"></div>
+<!-- 🔽 COLLAPSIBLE FULL SONG LIBRARY -->
+<button class="collapsible">📚 Full Song Library</button>
+<div class="content" id="songList"></div>
 
 <script>
 
-let songs=[]
-let filteredSongs=[]
-let currentPage=1
-const songsPerPage=40
+// 🔥 BASS CAMP SONGS
+const bassCampSongs = [
+["Arctic Monkeys","Fireside"],
+["Arctic Monkeys","From the Ritz to the Rubble"],
+["Arctic Monkeys","I Bet You Look Good On The Dancefloor"],
+["Audioslave","Set It Off"],
+["Audioslave","Your Time Has Come"],
+["Billy Talent","Worker Bees"],
+["Billy Talent","Crooked Minds"],
+["Billy Talent","Hanging Out With All The Wrong People"],
+["Billy Talent","Line And Sinker"],
+["Billy Talent","Voice Of Violence"],
+["Blues Traveler","Hook"],
+["Foo Fighters","Bridge Burning"],
+["Foo Fighters","I'll Stick Around"],
+["Foo Fighters","Rope"],
+["Foo Fighters","Something From Nothing"],
+["Foo Fighters","Waiting On A War"],
+["Green Day","Basket Case"],
+["Green Day","Coming Clean"],
+["Green Day","Jesus of Suburbia"],
+["Green Day","She"],
+["Guns N' Roses","Sweet Child O Mine"],
+["Guns N' Roses","You Could Be Mine"],
+["I Mother Earth","One More Astronaut"],
+["Incubus","Nice To Know You"],
+["Incubus","Pardon Me"],
+["Iron Maiden","Flight of Icarus"],
+["Iron Maiden","Powerslave"],
+["Linkin Park","IGYEIH"],
+["Metallica","Breadfan"],
+["Metallica","One"],
+["The Offspring","Come Out Swinging"],
+["The Offspring","Half-Truism"],
+["The Offspring","Smash"],
+["Ozzy Osbourne","Perry Mason"],
+["Rage Against The Machine","Bombtrack"],
+["Rage Against The Machine","Bullet in the Head"],
+["Rage Against The Machine","Calm Like a Bomb"],
+["Rage Against The Machine","Freedom"],
+["Rage Against The Machine","Killing in the Name"],
+["Rage Against The Machine","Take the Power Back"],
+["Rage Against The Machine","Wake Up"],
+["Red Hot Chili Peppers","By the Way"],
+["Red Hot Chili Peppers","Californication"],
+["Red Hot Chili Peppers","Dani California"],
+["Red Hot Chili Peppers","Turn It Again"],
+["Red Hot Chili Peppers","Under the Bridge"],
+["Rival Sons","Open My Eyes"],
+["Soundgarden","Burden In My Hand"],
+["Soundgarden","Fell on Black Days"],
+["Stone Temple Pilots","Interstate Love Song"],
+["Stone Temple Pilots","Wicked Garden"],
+["Sublime","Santeria"],
+["Sublime","Wrong Way"],
+["Sum 41","Makes No Difference"],
+["Sum 41","Over My Head (Better Off Dead)"],
+["Tool","Stinkfist"],
+["The Tragically Hip","Grace, Too"]
+];
 
-async function init(){
+// 🎸 REQUEST FUNCTION
+function requestSong(artist, song){
+  const command = `!request "${artist}" "${song}"`;
 
-const response=await fetch("songs.json")
-songs=await response.json()
-
-filteredSongs=songs
-
-buildAlphabet()
-buildArtistStats()
-renderSongs()
-
-document.getElementById("stats").innerText=songs.length+" songs loaded"
-
+  navigator.clipboard.writeText(command)
+  .then(()=>{
+    alert("Copied! Paste in Twitch chat:\n" + command);
+  })
+  .catch(()=>{
+    alert("Type in chat:\n" + command);
+  });
 }
 
-function renderSongs(){
-
-const list=document.getElementById("songList")
-list.innerHTML=""
-
-let start=(currentPage-1)*songsPerPage
-let end=start+songsPerPage
-
-let pageSongs=filteredSongs.slice(start,end)
-
-pageSongs.forEach(song=>{
-
-const div=document.createElement("div")
-div.className="song"
-div.dataset.artist=song.artist
-
-const a=song.artist.replace(/'/g,"\\'")
-const s=song.song.replace(/'/g,"\\'")
-
-div.innerHTML=`
-
-<div class="songInfo">
-
-<div class="songTitle">${song.song}</div>
-
-<div class="songArtist"
-onmouseenter="highlightArtist('${a}')"
-onmouseleave="clearHighlight()"
-onclick="filterArtist('${a}')">
-
-${song.artist}
-
-</div>
-
-</div>
-
-<button onclick="requestSong('${a}','${s}')">
-
-Request
-
-</button>
-`
-
-list.appendChild(div)
-
-})
-
-renderPagination()
-
-}
-
-function highlightArtist(artist){
-
-document.querySelectorAll(".song").forEach(song=>{
-
-if(song.dataset.artist===artist)
-song.classList.add("highlight")
-
-})
-
-}
-
-function clearHighlight(){
-
-document.querySelectorAll(".song").forEach(song=>{
-song.classList.remove("highlight")
-})
-
-}
-
-function renderPagination(){
-
-const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1
-
-const containers=[
-document.getElementById("paginationTop"),
-document.getElementById("paginationBottom")
-]
-
-containers.forEach(container=>{
-
-container.innerHTML=""
-
-if(currentPage>1){
-
-let prev=document.createElement("button")
-prev.innerText="◀ Prev"
-
-prev.onclick=()=>{
-currentPage--
-renderSongs()
-}
-
-container.appendChild(prev)
-
-}
-
-let label=document.createElement("span")
-label.innerText=" Page "+currentPage+" / "+totalPages+" "
-
-container.appendChild(label)
-
-if(currentPage<totalPages){
-
-let next=document.createElement("button")
-next.innerText="Next ▶"
-
-next.onclick=()=>{
-currentPage++
-renderSongs()
-}
-
-container.appendChild(next)
-
-}
-
-})
-
-}
-
-function handleSearchInput(){
-
-searchSongs()
-toggleClearButton()
-
-}
-
-function searchSongs(){
-
-let q=document.getElementById("searchBox").value.toLowerCase()
-
-filteredSongs=songs.filter(s=>
-s.artist.toLowerCase().includes(q) ||
-s.song.toLowerCase().includes(q)
-)
-
-currentPage=1
-renderSongs()
-
-}
-
-function toggleClearButton(){
-
-let btn=document.getElementById("clearBtn")
-
-btn.style.display=document.getElementById("searchBox").value?"inline":"none"
-
-}
-
-function clearSearch(){
-
-document.getElementById("searchBox").value=""
-
-filteredSongs=songs
-currentPage=1
-
-renderSongs()
-toggleClearButton()
-
-}
-
-function filterArtist(artist){
-
-document.getElementById("searchBox").value=artist
-
-filteredSongs=songs.filter(s=>s.artist===artist)
-
-currentPage=1
-renderSongs()
-
-toggleClearButton()
-
-}
-
-function buildAlphabet(){
-
-const div=document.getElementById("alphabet")
-
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
-
-let b=document.createElement("button")
-
-b.innerText=letter
-
-b.onclick=()=>jumpToLetter(letter)
-
-div.appendChild(b)
-
-})
-
-}
-
-function jumpToLetter(letter){
-
-const idx=filteredSongs.findIndex(s=>
-s.artist.toLowerCase().startsWith(letter.toLowerCase())
-)
-
-if(idx===-1)return
-
-currentPage=Math.floor(idx/songsPerPage)+1
-
-renderSongs()
-
-}
-
-function buildArtistStats(){
-
-const map={}
-
-songs.forEach(s=>{
-
-if(!map[s.artist])map[s.artist]=0
-map[s.artist]++
-
-})
-
-const sorted=Object.entries(map)
-.sort((a,b)=>b[1]-a[1])
-.slice(0,10)
-
-const div=document.getElementById("artistStats")
-
-div.innerHTML=
-'<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3><div id="artistList" style="display:none"></div>'
-
-const list=document.getElementById("artistList")
-
-sorted.forEach(([artist,count])=>{
-
-let row=document.createElement("div")
-
-row.style.cursor="pointer"
-row.innerText=artist+" ("+count+")"
-
-row.onclick=()=>filterArtist(artist)
-
-list.appendChild(row)
-
-})
-
-document.getElementById("artistToggle").onclick=()=>{
-
-const list=document.getElementById("artistList")
-
-if(list.style.display==="none"){
-list.style.display="block"
-document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▼"
-}
-else{
-list.style.display="none"
-document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▶"
-}
-
-}
-
-}
-
-async function requestSong(artist,song){
-
-const command=`!request "${artist}" "${song}"`
-
-try{
-
-await navigator.clipboard.writeText(command)
-
-alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)
-
-}catch{
-
-alert("Type in chat:\n"+command)
-
-}
-
-}
-
-function randomSong(){
-
-if(!songs.length)return
-
-let s=songs[Math.floor(Math.random()*songs.length)]
-
-requestSong(s.artist,s.song)
-
-}
-
-function goHome(){
-
-document.getElementById("searchBox").value=""
-
-filteredSongs=songs
-currentPage=1
-
-renderSongs()
-
-toggleClearButton()
-
-window.scrollTo({top:0,behavior:"smooth"})
-
-}
-
-init()
+// 🔥 BUILD BASS CAMP LIST
+const bcDiv = document.getElementById("bassCampList");
+
+bassCampSongs.forEach(([artist,song])=>{
+  const div = document.createElement("div");
+  div.className="song";
+
+  div.innerHTML = `
+  <div>
+    <div class="songTitle">${song}</div>
+    <div class="songArtist">${artist}</div>
+  </div>
+  <button onclick="requestSong('${artist.replace(/'/g,"\\'")}','${song.replace(/'/g,"\\'")}')">
+    Request
+  </button>
+  `;
+
+  bcDiv.appendChild(div);
+});
+
+// 📚 COLLAPSIBLE FULL SONG LIBRARY TOGGLE
+document.querySelector(".collapsible").onclick = function(){
+  this.classList.toggle("active");
+  const content = document.querySelector(".content");
+  content.style.display = content.style.display === "block" ? "none" : "block";
+};
 
 </script>
-
 </body>
 </html>
