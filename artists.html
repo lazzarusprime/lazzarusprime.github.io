@@ -3,31 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Artists</title>
+<title>Lazzarus Prime Rocksmith Artists</title>
 <style>
-/* same CSS as index.html to keep Top Artists styling consistent */
 body{
   font-family:Segoe UI,Arial;
   background:#0f0f0f;
   color:white;
   margin:0;
 }
-.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:12px;border-bottom:2px solid #222;flex-wrap:wrap}
-.titleLeft{display:flex;align-items:center;gap:10px}
-.titleBar img{width:40px}
-.socialLinks{display:flex;gap:15px;flex-wrap:wrap}
-.socialLinks a{color:#aaa;text-decoration:none;font-size:14px;transition:.15s}
-.socialLinks a:hover{color:#f1c40f;text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f1c40f}
-.topBar{display:flex;gap:6px;padding:10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:center}
-.topBar input{flex:1;padding:8px;border-radius:6px;border:none;min-width:180px}
-.clearBtn{display:none;background:#333}
-button{background:#272727;color:white;border:none;padding:7px 12px;border-radius:6px;cursor:pointer}
-button:hover{background:#444}
-#artistStats{padding:10px;background:#151515;border-top:1px solid #222;border-bottom:1px solid #222;text-align:left}
-#artistStats h3{cursor:pointer;margin:0}
-#artistList{display:none;margin-top:5px}
-#artistList div{padding:4px 0;cursor:pointer;transition:.15s}
-#artistList div:hover{color:#f1c40f;text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f39c12;transform:scale(1.05)}
+
+/* TITLE BAR */
+.titleBar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#141414;
+  padding:12px;
+  border-bottom:2px solid #222;
+  flex-wrap:wrap;
+}
+.titleLeft{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.titleBar img{
+  width:40px;
+}
+.socialLinks{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.socialLinks a{
+  color:#aaa;
+  text-decoration:none;
+  font-size:14px;
+  transition:.15s;
+}
+.socialLinks a:hover{
+  color:#f1c40f;
+  text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f1c40f;
+}
+
+/* TOP BAR */
+.topBar{
+  display:flex;
+  gap:6px;
+  padding:10px;
+  background:#181818;
+  position:sticky;
+  top:0;
+  z-index:100;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.topBar input{
+  flex:1;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  min-width:180px;
+}
+button{
+  background:#272727;
+  color:white;
+  border:none;
+  padding:7px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+button:hover{
+  background:#444;
+}
+
+/* TOP ARTISTS COLLAPSIBLE */
+#artistStats{
+  padding:10px;
+  background:#151515;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+  text-align:left;
+}
+#artistStats h3{
+  cursor:pointer;
+  margin:0;
+}
+#artistList{
+  display:none;
+  margin-top:5px;
+}
+#artistList div{
+  padding:4px 0;
+  cursor:pointer;
+  transition:.15s;
+  transform-origin:top left; /* prevents shifting left */
+}
+#artistList div:hover{
+  color:#f1c40f;
+  text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f39c12;
+  transform:scale(1.05) translateX(0); /* vertical expand only */
+}
+
+/* ARTIST LIST */
+.artistContainer{
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+}
+.artistContainer div{
+  padding:6px 0;
+  border-bottom:1px solid #222;
+  cursor:pointer;
+  transition:.15s;
+}
+.artistContainer div:hover{
+  color:#f1c40f;
+  text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f;
+}
+
+/* SEARCH */
+#searchBox{
+  margin:10px;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  width:calc(100% - 40px);
+}
+
+/* PAGINATION */
+.pagination{
+  padding:10px;
+  text-align:center;
+}
 </style>
 </head>
 <body>
@@ -35,7 +143,7 @@ button:hover{background:#444}
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
-    <h2>Lazzarus Prime Artists</h2>
+    <h2>Lazzarus Prime Rocksmith Artists</h2>
   </div>
   <div class="socialLinks">
     <a href="index.html">🏠 Home</a>
@@ -49,10 +157,7 @@ button:hover{background:#444}
 </div>
 
 <div class="topBar">
-  <button onclick="window.location.href='index.html'">🏠 Home</button>
-  <button onclick="window.location.href='artists.html'">🎸 Artists</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
-  <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
 </div>
 
 <div id="artistStats">
@@ -60,14 +165,25 @@ button:hover{background:#444}
   <div id="artistList"></div>
 </div>
 
+<h3 style="padding:10px">All Artists</h3>
+<div class="artistContainer" id="allArtists"></div>
+
+<div id="paginationTop" class="pagination"></div>
+<div id="paginationBottom" class="pagination"></div>
+
 <script>
 let songs=[]
+let filteredArtists=[]
+let currentPage=1
+const artistsPerPage=50
+
 async function init(){
-  const response=await fetch("songs.json")
-  songs=await response.json()
+  const response = await fetch("songs.json")
+  songs = await response.json()
   buildArtistStats()
-  document.getElementById("artistStats").style.display="block"
+  buildAllArtists()
 }
+
 function buildArtistStats(){
   const map={}
   songs.forEach(s=>{
@@ -85,22 +201,52 @@ function buildArtistStats(){
   })
   document.getElementById("artistToggle").onclick=()=>{
     const list=document.getElementById("artistList")
-    if(list.style.display==="none"||list.style.display===""){list.style.display="block";document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▼"}
-    else{list.style.display="none";document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▶"}
+    if(list.style.display==="none"||list.style.display===""){
+      list.style.display="block"
+      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▼"
+    } else{
+      list.style.display="none"
+      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▶"
+    }
   }
 }
+
+function buildAllArtists(){
+  const map={}
+  songs.forEach(s=>{
+    if(!map[s.artist]) map[s.artist]=0
+    map[s.artist]++
+  })
+  filteredArtists=Object.keys(map).sort()
+  renderArtists()
+}
+
+function renderArtists(){
+  const container=document.getElementById("allArtists")
+  container.innerHTML=""
+  filteredArtists.forEach(artist=>{
+    const div=document.createElement("div")
+    div.innerText=artist
+    div.onclick=()=>filterArtist(artist)
+    container.appendChild(div)
+  })
+}
+
 function handleSearchInput(){
   const q=document.getElementById("searchBox").value.toLowerCase()
-  filterArtist(q)
-  toggleClearButton()
+  filteredArtists = Object.keys(songs.reduce((acc,s)=>{acc[s.artist]=1; return acc},{}) )
+                     .filter(a=>a.toLowerCase().includes(q))
+                     .sort()
+  renderArtists()
 }
-function toggleClearButton(){
-  document.getElementById("clearBtn").style.display=document.getElementById("searchBox").value?"inline":"none"
+
+function filterArtist(artist){
+  alert(`Filter songs by artist: ${artist} (redirect to index or search)`)
+  // Optionally redirect to index with search pre-filled:
+  // window.location.href=`index.html?search=${encodeURIComponent(artist)}`
 }
-function clearSearch(){document.getElementById("searchBox").value="";filterArtist("");toggleClearButton()}
-function filterArtist(artist){artist=artist.toLowerCase();const div=document.getElementById("artistList");Array.from(div.children).forEach(row=>{row.style.display=row.innerText.toLowerCase().includes(artist)||artist===""?"block":"none"})}
+
 init()
 </script>
-
 </body>
 </html>
