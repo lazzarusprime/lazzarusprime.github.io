@@ -146,30 +146,13 @@ button:hover{
 /* 🔹 PAGINATION */
 .pagination{
   padding:10px;
-}
-
-/* 🔹 TOP ARTISTS LIST FIX */
-#artistList div{
-  color:#f1c40f;
-  font-weight:600;
-  cursor:pointer;
-  transition: transform 0.2s, text-shadow 0.2s;
-  margin:4px 0;
-  display:block;
-}
-
-#artistList div:hover{
-  text-shadow:
-    0 0 10px #f1c40f,
-    0 0 20px #f1c40f,
-    0 0 30px #f39c12;
-  transform: translateY(-6px);
+  text-align:center;
 }
 </style>
 </head>
 <body>
 
-<!-- 🔥 TITLE BAR WITH GUITAR AND SOCIAL LINKS -->
+<!-- 🔥 TITLE BAR -->
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
@@ -186,10 +169,10 @@ button:hover{
   </div>
 </div>
 
-<!-- 🔥 SEARCH BAR & BACK BUTTON -->
+<!-- 🔥 TOP BAR -->
 <div class="topBar">
   <button onclick="window.location.href='index.html'">🏠 Back to Songs</button>
-  <input type="text" id="search" placeholder="Search artist...">
+  <input type="text" id="search" placeholder="Search artist..." oninput="handleSearch()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
 </div>
 
@@ -214,12 +197,120 @@ let filteredArtists=[]
 let currentPage=1
 const artistsPerPage=12
 
-const artistFixes={
-"metalica":"Metallica",
-"greenday":"Green Day",
-"acdc":"AC/DC",
-"guns n roses":"Guns N' Roses"
+// Load songs.json and build artist list
+async function init(){
+  const res=await fetch("songs.json")
+  songs=await res.json()
+  
+  const map={}
+  songs.forEach(s=>{
+    if(!map[s.artist]) map[s.artist]=0
+    map[s.artist]++
+  })
+  
+  artists=Object.entries(map).map(([name,count])=>({name,count}))
+  artists.sort((a,b)=>b.count-a.count)
+  
+  filteredArtists=artists
+  buildAlphabet()
+  renderArtists()
 }
-function normalizeArtist(name){
-  if(!name)return "Unknown"
-  let
+
+// Render artists grid with pagination
+function renderArtists(){
+  const grid=document.getElementById("artistGrid")
+  grid.innerHTML=""
+  const start=(currentPage-1)*artistsPerPage
+  const end=start+artistsPerPage
+  filteredArtists.slice(start,end).forEach(a=>{
+    const div=document.createElement("div")
+    div.className="artist-card"
+    div.innerHTML=`
+      <div class="artist-name">${a.name}</div>
+      <div class="song-count">${a.count} songs</div>
+    `
+    div.onclick=()=>filterByArtist(a.name)
+    grid.appendChild(div)
+  })
+  renderPagination()
+}
+
+// Filter by artist search
+function handleSearch(){
+  const q=document.getElementById("search").value.toLowerCase()
+  filteredArtists=artists.filter(a=>a.name.toLowerCase().includes(q))
+  currentPage=1
+  renderArtists()
+  toggleClear()
+}
+
+function toggleClear(){
+  document.getElementById("clearBtn").style.display=document.getElementById("search").value?"inline":"none"
+}
+
+function clearSearch(){
+  document.getElementById("search").value=""
+  filteredArtists=artists
+  currentPage=1
+  renderArtists()
+  toggleClear()
+}
+
+// Jump to artist starting with letter
+function jumpToLetter(letter){
+  const idx=filteredArtists.findIndex(a=>a.name.toLowerCase().startsWith(letter.toLowerCase()))
+  if(idx===-1) return
+  currentPage=Math.floor(idx/artistsPerPage)+1
+  renderArtists()
+}
+
+// Build alphabet nav
+function buildAlphabet(){
+  const div=document.getElementById("alphabet")
+  div.innerHTML=""
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
+    const b=document.createElement("button")
+    b.innerText=letter
+    b.onclick=()=>jumpToLetter(letter)
+    div.appendChild(b)
+  })
+}
+
+// Pagination
+function renderPagination(){
+  const totalPages=Math.ceil(filteredArtists.length/artistsPerPage)||1
+  const top=document.getElementById("paginationTop")
+  const bottom=document.getElementById("paginationBottom")
+  [top,bottom].forEach(container=>{
+    container.innerHTML=""
+    if(currentPage>1){
+      const prev=document.createElement("button")
+      prev.innerText="◀ Prev"
+      prev.onclick=()=>{currentPage--; renderArtists()}
+      container.appendChild(prev)
+    }
+    const label=document.createElement("span")
+    label.innerText=` Page ${currentPage} / ${totalPages} `
+    container.appendChild(label)
+    if(currentPage<totalPages){
+      const next=document.createElement("button")
+      next.innerText="Next ▶"
+      next.onclick=()=>{currentPage++; renderArtists()}
+      container.appendChild(next)
+    }
+  })
+}
+
+// Filter by clicking an artist card
+function filterByArtist(name){
+  document.getElementById("search").value=name
+  filteredArtists=artists.filter(a=>a.name===name)
+  currentPage=1
+  renderArtists()
+  toggleClear()
+}
+
+init()
+</script>
+</body>
+</html>
