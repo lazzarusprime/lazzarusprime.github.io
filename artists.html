@@ -7,82 +7,85 @@
 
 <style>
 body{
-font-family:Segoe UI,Arial;
-background:#0f0f0f;
-color:white;
-margin:0;
-text-align:center;
+  font-family:Segoe UI,Arial;
+  background:#0f0f0f;
+  color:white;
+  margin:0;
+  text-align:center;
 }
 h1{
-margin:20px;
-color:#ff3c00;
-text-shadow:0 0 10px #ff3c00;
+  margin:20px;
+  color:#f1c40f;
+  text-shadow:0 0 10px #f1c40f;
 }
 .topBar{
-display:flex;
-gap:6px;
-padding:10px;
-background:#181818;
-position:sticky;
-top:0;
-z-index:100;
+  display:flex;
+  gap:6px;
+  padding:10px;
+  background:#181818;
+  position:sticky;
+  top:0;
+  z-index:100;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 .topBar input{
-flex:1;
-padding:8px;
-border-radius:6px;
-border:none;
+  flex:1;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  min-width:180px;
 }
 button{
-background:#272727;
-color:white;
-border:none;
-padding:7px 12px;
-border-radius:6px;
-cursor:pointer;
+  background:#272727;
+  color:white;
+  border:none;
+  padding:7px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
 button:hover{
-background:#444;
+  background:#444;
+}
+#alphabet{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  justify-content:center;
+  padding:10px;
 }
 #artistGrid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-gap:20px;
-padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:20px;
+  padding:20px;
 }
 .artist-card{
-background:#0b0b0b;
-border:2px solid #ff3c00;
-border-radius:12px;
-padding:20px;
-cursor:pointer;
-transition:all 0.2s ease-in-out;
-box-shadow:0 0 10px #ff3c00;
+  background:#0b0b0b;
+  border:2px solid #f1c40f;
+  border-radius:12px;
+  padding:20px;
+  cursor:pointer;
+  transition:all 0.2s ease-in-out;
+  box-shadow:0 0 10px #f1c40f;
 }
 .artist-card:hover{
-transform:scale(1.05);
-background:#ff3c00;
-color:black;
-box-shadow:
-0 0 20px #ff3c00,
-0 0 40px #ff3c00,
-0 0 60px #ff3c00;
+  transform:scale(1.05);
+  background:#f1c40f;
+  color:black;
+  box-shadow:
+    0 0 20px #f1c40f,
+    0 0 40px #f1c40f,
+    0 0 60px #f1c40f;
 }
 .artist-name{
-font-size:18px;
-font-weight:bold;
+  font-size:18px;
+  font-weight:bold;
 }
 .song-count{
-font-size:12px;
-opacity:0.7;
-margin-top:5px;
-}
-input{
-padding:8px;
-width:200px;
-border-radius:6px;
-border:none;
-margin:10px;
+  font-size:12px;
+  opacity:0.7;
+  margin-top:5px;
 }
 </style>
 </head>
@@ -93,70 +96,125 @@ margin:10px;
 <input type="text" id="search" placeholder="Search artist...">
 </div>
 
+<div id="alphabet"></div>
+
 <h1>🎸 Artists</h1>
 
 <div id="artistGrid"></div>
 
+<div class="pagination" id="pagination"></div>
+
 <script>
-// 🔹 COPY YOUR SONGS DATA
+// 🔹 SONG DATA
 let songs = []
+let artists = []
+let filteredArtists = []
+let currentPage = 1
+const artistsPerPage = 12
 
-// load songs.json (same as index.html)
-fetch("songs.json")
-.then(r=>r.json())
-.then(data=>{
-songs = data.map(s=>({
-artist: normalizeArtist(s.artist),
-song: s.song
-}))
-render()
-})
-
-// 🔹 NORMALIZER (MATCHES index.html)
+// 🔹 NORMALIZER (matches index.html)
 const artistFixes={
 "metalica":"Metallica",
 "greenday":"Green Day",
 "acdc":"AC/DC",
 "guns n roses":"Guns N' Roses"
 }
-
 function normalizeArtist(name){
-if(!name)return "Unknown"
-let cleaned=name.trim().toLowerCase()
-cleaned=cleaned.replace(/\s+/g," ")
-if(artistFixes[cleaned])return artistFixes[cleaned]
-return cleaned.replace(/\b\w/g,c=>c.toUpperCase())
+  if(!name)return "Unknown"
+  let cleaned=name.trim().toLowerCase()
+  cleaned=cleaned.replace(/\s+/g," ")
+  if(artistFixes[cleaned])return artistFixes[cleaned]
+  return cleaned.replace(/\b\w/g,c=>c.toUpperCase())
 }
 
-// 🔹 BUILD ARTIST MAP
-function render(filter=""){
-const artistMap={}
-songs.forEach(s=>{
-if(!artistMap[s.artist]) artistMap[s.artist]=0
-artistMap[s.artist]++
+// 🔹 LOAD SONGS
+fetch("songs.json")
+.then(r=>r.json())
+.then(data=>{
+  songs = data.map(s=>({artist: normalizeArtist(s.artist), song: s.song}))
+  buildArtistList()
+  buildAlphabet()
+  renderArtists()
 })
 
-const grid = document.getElementById("artistGrid")
-grid.innerHTML=""
-
-Object.keys(artistMap)
-.filter(a=>a.toLowerCase().includes(filter.toLowerCase()))
-.sort((a,b)=>a.localeCompare(b))
-.forEach(artist=>{
-const card = document.createElement("div")
-card.className="artist-card"
-card.innerHTML=`<div class="artist-name">${artist}</div>
-<div class="song-count">${artistMap[artist]} songs</div>`
-card.onclick=()=>window.location.href=`index.html?artist=${encodeURIComponent(artist)}`
-grid.appendChild(card)
-})
+// 🔹 BUILD CLEAN ARTIST LIST
+function buildArtistList(){
+  const map = {}
+  songs.forEach(s=>{
+    if(!map[s.artist]) map[s.artist]=0
+    map[s.artist]++
+  })
+  artists = Object.keys(map).sort((a,b)=>a.localeCompare(b))
+  filteredArtists = artists
 }
 
-// 🔹 SEARCH INPUT
+// 🔹 RENDER ALPHABET
+function buildAlphabet(){
+  const container = document.getElementById("alphabet")
+  container.innerHTML=""
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
+    const btn = document.createElement("button")
+    btn.innerText=letter
+    btn.onclick=()=>filterByLetter(letter)
+    container.appendChild(btn)
+  })
+}
+
+// 🔹 FILTER BY LETTER
+function filterByLetter(letter){
+  filteredArtists = artists.filter(a=>a.toUpperCase().startsWith(letter))
+  currentPage=1
+  renderArtists()
+}
+
+// 🔹 RENDER ARTISTS WITH PAGINATION
+function renderArtists(){
+  const grid = document.getElementById("artistGrid")
+  grid.innerHTML=""
+  const start = (currentPage-1)*artistsPerPage
+  const end = start + artistsPerPage
+  const pageArtists = filteredArtists.slice(start,end)
+  pageArtists.forEach(artist=>{
+    const count = songs.filter(s=>s.artist===artist).length
+    const card = document.createElement("div")
+    card.className="artist-card"
+    card.innerHTML=`<div class="artist-name">${artist}</div><div class="song-count">${count} songs</div>`
+    card.onclick=()=>window.location.href=`index.html?artist=${encodeURIComponent(artist)}`
+    grid.appendChild(card)
+  })
+  renderPagination()
+}
+
+// 🔹 PAGINATION CONTROLS
+function renderPagination(){
+  const container = document.getElementById("pagination")
+  container.innerHTML=""
+  const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1
+  if(currentPage>1){
+    const prev = document.createElement("button")
+    prev.innerText="◀ Prev"
+    prev.onclick=()=>{currentPage--; renderArtists()}
+    container.appendChild(prev)
+  }
+  const label = document.createElement("span")
+  label.innerText=" Page "+currentPage+" / "+totalPages+" "
+  container.appendChild(label)
+  if(currentPage<totalPages){
+    const next = document.createElement("button")
+    next.innerText="Next ▶"
+    next.onclick=()=>{currentPage++; renderArtists()}
+    container.appendChild(next)
+  }
+}
+
+// 🔹 SEARCH
 document.getElementById("search").addEventListener("input",e=>{
-render(e.target.value)
+  const q = e.target.value.toLowerCase()
+  filteredArtists = artists.filter(a=>a.toLowerCase().includes(q))
+  currentPage=1
+  renderArtists()
 })
-</script>
 
+</script>
 </body>
 </html>
