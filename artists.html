@@ -231,121 +231,136 @@ button:hover{
 <div class="pagination" id="paginationBottom"></div>
 
 <script>
-let songs=[]
-let artists=[]
-let filteredArtists=[]
-let currentPage=1
-const artistsPerPage=12
+// Data holders
+let songs = []
+let artists = [] // {name,count}
+let filteredArtists = []
+let currentPage = 1
+const artistsPerPage = 12
 
 // Load songs and build artist list
 async function init(){
-  const res=await fetch("songs.json")
-  songs=await res.json()
-  
-  const map={}
+  const res = await fetch("songs.json")
+  songs = await res.json()
+
+  const map = {}
   songs.forEach(s=>{
-    if(!map[s.artist]) map[s.artist]=0
-    map[s.artist]++
+    const name = s.artist || "Unknown"
+    map[name] = (map[name]||0)+1
   })
-  
-  artists=Object.entries(map).map(([name,count])=>({name,count}))
+
+  artists = Object.entries(map).map(([name,count])=>({name,count}))
   artists.sort((a,b)=>b.count-a.count)
-  filteredArtists=artists
-  
+  filteredArtists = artists
+
   buildAlphabet()
   buildTopArtists()
   renderArtists()
 }
 
-// Build Top Artists section
+// Build top 10 artists collapsible
 function buildTopArtists(){
-  const topList=document.getElementById("topArtistList")
+  const topList = document.getElementById("topArtistList")
   topList.innerHTML=""
   artists.slice(0,10).forEach(a=>{
-    const div=document.createElement("div")
-    div.innerText=`${a.name} (${a.count})`
-    div.onclick=()=>filterByArtist(a.name)
+    const div = document.createElement("div")
+    div.innerText = `${a.name} (${a.count})`
+    div.onclick = ()=>filterByArtist(a.name)
     topList.appendChild(div)
   })
-  
-  const toggle=document.getElementById("topToggle")
-  toggle.onclick=()=>{
-    if(topList.style.display==="none"){
+
+  const toggle = document.getElementById("topToggle")
+  toggle.onclick = ()=>{
+    if(topList.style.display==="none" || topList.style.display===""){
       topList.style.display="block"
       toggle.innerText="🎸 Top Artists In Library ▼"
-    }else{
+    } else{
       topList.style.display="none"
       toggle.innerText="🎸 Top Artists In Library ▶"
     }
   }
 }
 
-// Render artists grid with pagination
+// Render artist grid with pagination
 function renderArtists(){
-  const grid=document.getElementById("artistGrid")
+  const grid = document.getElementById("artistGrid")
   grid.innerHTML=""
-  const start=(currentPage-1)*artistsPerPage
-  const end=start+artistsPerPage
+  const start = (currentPage-1)*artistsPerPage
+  const end = start + artistsPerPage
   filteredArtists.slice(start,end).forEach(a=>{
-    const div=document.createElement("div")
-    div.className="artist-card"
-    div.innerHTML=`
-      <div class="artist-name">${a.name}</div>
-      <div class="song-count">${a.count} songs</div>
-    `
-    div.onclick=()=>filterByArtist(a.name)
+    const div = document.createElement("div")
+    div.className = "artist-card"
+    div.innerHTML = `<div class="artist-name">${a.name}</div><div class="song-count">${a.count} songs</div>`
+    div.onclick = ()=>filterByArtist(a.name)
     grid.appendChild(div)
   })
   renderPagination()
 }
 
-// Filter by artist search
+// Search
 function handleSearch(){
-  const q=document.getElementById("search").value.toLowerCase()
-  filteredArtists=artists.filter(a=>a.name.toLowerCase().includes(q))
-  currentPage=1
+  const q = document.getElementById("search").value.toLowerCase()
+  filteredArtists = artists.filter(a=>a.name.toLowerCase().includes(q))
+  currentPage = 1
   renderArtists()
   toggleClear()
 }
 
 function toggleClear(){
-  document.getElementById("clearBtn").style.display=document.getElementById("search").value?"inline":"none"
+  document.getElementById("clearBtn").style.display = document.getElementById("search").value ? "inline":"none"
 }
 
 function clearSearch(){
   document.getElementById("search").value=""
-  filteredArtists=artists
+  filteredArtists = artists
+  currentPage = 1
+  renderArtists()
+  toggleClear()
+}
+
+// Filter by artist card or top artist
+function filterByArtist(name){
+  document.getElementById("search").value = name
+  filteredArtists = artists.filter(a=>a.name===name)
   currentPage=1
   renderArtists()
   toggleClear()
 }
 
-// Jump to artist starting with letter
-function jumpToLetter(letter){
-  const idx=filteredArtists.findIndex(a=>a.name.toLowerCase().startsWith(letter.toLowerCase()))
-  if(idx===-1) return
-  currentPage=Math.floor(idx/artistsPerPage)+1
-  renderArtists()
+// Alphabet navigation
+function buildAlphabet(){
+  const container = document.getElementById("alphabet")
+  container.innerHTML=""
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
+    const btn = document.createElement("button")
+    btn.innerText = letter
+    btn.onclick = ()=>{
+      filteredArtists = artists.filter(a=>a.name.toUpperCase().startsWith(letter))
+      currentPage=1
+      renderArtists()
+    }
+    container.appendChild(btn)
+  })
 }
 
 // Pagination
 function renderPagination(){
-  const totalPages=Math.ceil(filteredArtists.length/artistsPerPage)||1
-  const top=document.getElementById("paginationTop")
-  const bottom=document.getElementById("paginationBottom")
+  const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1
+  const top = document.getElementById("paginationTop")
+  const bottom = document.getElementById("paginationBottom")
   [top,bottom].forEach(container=>{
     container.innerHTML=""
     if(currentPage>1){
-      const prev=document.createElement("button")
+      const prev = document.createElement("button")
       prev.innerText="◀ Prev"
       prev.onclick=()=>{currentPage--; renderArtists()}
       container.appendChild(prev)
     }
-    const label=document.createElement("span")
+    const label = document.createElement("span")
     label.innerText=` Page ${currentPage} / ${totalPages} `
     container.appendChild(label)
     if(currentPage<totalPages){
-      const next=document.createElement("button")
+      const next = document.createElement("button")
       next.innerText="Next ▶"
       next.onclick=()=>{currentPage++; renderArtists()}
       container.appendChild(next)
@@ -353,15 +368,7 @@ function renderPagination(){
   })
 }
 
-// Filter by clicking an artist card or top artist
-function filterByArtist(name){
-  document.getElementById("search").value=name
-  filteredArtists=artists.filter(a=>a.name===name)
-  currentPage=1
-  renderArtists()
-  toggleClear()
-}
-
+// Init
 init()
 </script>
 </body>
