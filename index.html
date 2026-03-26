@@ -5,157 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Rocksmith Requests</title>
 <style>
-body{
-  font-family:Segoe UI,Arial;
-  background:#0f0f0f;
-  color:white;
-  margin:0;
-}
-/* TITLE BAR */
-.titleBar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#141414;
-  padding:12px;
-  border-bottom:2px solid #222;
-  flex-wrap:wrap;
-}
-.titleLeft{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.titleBar img{
-  width:40px;
-}
-.socialLinks{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-}
-.socialLinks a{
-  color:#aaa;
-  text-decoration:none;
-  font-size:14px;
-  transition:.15s;
-}
-.socialLinks a:hover{
-  color:#f1c40f;
-  text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f1c40f;
-}
-/* TOP BAR */
-.topBar{
-  display:flex;
-  gap:6px;
-  padding:10px;
-  background:#181818;
-  position:sticky;
-  top:0;
-  z-index:100;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.topBar input{
-  flex:1;
-  padding:8px;
-  border-radius:6px;
-  border:none;
-  min-width:180px;
-}
-.clearBtn{
-  display:none;
-  background:#333;
-}
-button{
-  background:#272727;
-  color:white;
-  border:none;
-  padding:7px 12px;
-  border-radius:6px;
-  cursor:pointer;
-}
-button:hover{
-  background:#444;
-}
-/* ALPHABET NAV */
-#alphabet{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-  padding:10px;
-  justify-content:center;
-}
-/* SONG LIST */
-.song{
-  display:flex;
-  justify-content:space-between;
-  padding:10px;
-  border-bottom:1px solid #222;
-  transition:.15s;
-}
-.songInfo{
-  display:flex;
-  flex-direction:column;
-}
-/* SONG / ARTIST STYLING */
-.songTitle{
-  font-weight:700;
-  font-size:16px;
-  color:#ffffff;
-}
-.songArtist{
-  font-size:14px;
-  font-weight:600;
-  color:#f1c40f;
-  cursor:pointer;
-  transition:.15s;
-}
-.songArtist:hover{
-  text-shadow:0 0 4px #f1c40f,0 0 8px #f1c40f,0 0 12px #f39c12;
-  transform:scale(1.05);
-}
-/* HIGHLIGHT ON HOVER */
-.song.highlight{
-  background:#1a1a1a;
-  box-shadow:0 0 6px rgba(241,196,15,.4);
-}
-/* TOP ARTISTS COLLAPSIBLE */
-#artistStats{
-  padding:10px;
-  background:#151515;
-  border-top:1px solid #222;
-  border-bottom:1px solid #222;
-  text-align:left;
-}
-#artistStats h3{
-  cursor:pointer;
-  margin:0;
-}
-#artistList{
-  display:none;
-  margin-top:5px;
-}
-#artistList div{
-  padding:4px 0;
-  cursor:pointer;
-  transition:.15s;
-  transform-origin:top left;
-}
-#artistList div:hover{
-  color:#f1c40f;
-  text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f39c12;
-  transform:scale(1.05) translateX(0);
-}
-/* PAGINATION */
-.pagination{
-  padding:10px;
-}
+body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+.titleLeft{ display:flex; align-items:center; gap:10px; }
+.titleBar img{ width:40px; }
+.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f1c40f; }
+.topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
+.topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; }
+.clearBtn{ display:none; background:#333; }
+button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
+button:hover{ background:#444; }
+#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+.song{ display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; transition:.15s; }
+.songInfo{ display:flex; flex-direction:column; }
+.songTitle{ font-weight:700; font-size:16px; color:#ffffff; }
+.songArtist{ font-size:14px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; }
+.songArtist:hover{ text-shadow:0 0 4px #f1c40f, 0 0 8px #f1c40f; transform:scale(1.05); }
+.song.highlight{ background:#1a1a1a; box-shadow:0 0 6px rgba(241,196,15,.4); }
+#artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
+#artistToggle{ cursor:pointer; margin:0; }
+#artistList{ display:none; margin-top:5px; }
+#artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
+#artistList div:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+.pagination{ padding:10px; text-align:center; }
 </style>
 </head>
 <body>
 
-<!-- TITLE BAR -->
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
@@ -172,18 +50,16 @@ button:hover{
   </div>
 </div>
 
-<!-- TOP BAR -->
 <div class="topBar">
   <button onclick="goHome()">🏠 Home</button>
+  <button onclick="window.location.href='artists.html'">🎸 Artists</button>
   <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
   <button onclick="randomSong()">🎲 Random</button>
 </div>
 
-<!-- ALPHABET NAV -->
 <div id="alphabet"></div>
 
-<!-- TOP ARTISTS -->
 <div id="artistStats">
   <h3 id="artistToggle">🎸 Top Artists In Library ▶</h3>
   <div id="artistList"></div>
@@ -198,18 +74,27 @@ button:hover{
 <script>
 let songs=[], filteredSongs=[], currentPage=1, songsPerPage=40;
 
-// INIT
 async function init(){
-  const response=await fetch("songs.json");
-  songs=await response.json();
-  filteredSongs=songs;
-  buildAlphabet();
-  buildArtistStats();
-  renderSongs();
-  document.getElementById("stats")?.remove();
+  try {
+    const response=await fetch("songs.json");
+    songs=await response.json();
+    filteredSongs=songs;
+
+    // Check for artist filter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const artistSearch = urlParams.get('search');
+    if(artistSearch) {
+      document.getElementById("searchBox").value = artistSearch;
+      filteredSongs = songs.filter(s => s.artist === artistSearch);
+      toggleClearButton();
+    }
+
+    buildAlphabet();
+    buildArtistStats();
+    renderSongs();
+  } catch(e) { console.error("Load error:", e); }
 }
 
-// RENDER SONGS
 function renderSongs(){
   const list=document.getElementById("songList")
   list.innerHTML=""
@@ -222,12 +107,7 @@ function renderSongs(){
     div.innerHTML=`
       <div class="songInfo">
         <div class="songTitle">${song.song}</div>
-        <div class="songArtist"
-          onmouseenter="highlightArtist('${song.artist}')"
-          onmouseleave="clearHighlight()"
-          onclick="filterArtist('${song.artist}')">
-          ${song.artist}
-        </div>
+        <div class="songArtist" onmouseenter="highlightArtist('${song.artist}')" onmouseleave="clearHighlight()" onclick="filterArtist('${song.artist}')">${song.artist}</div>
       </div>
       <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
     `;
@@ -236,19 +116,15 @@ function renderSongs(){
   renderPagination();
 }
 
-// HIGHLIGHT ARTIST
 function highlightArtist(artist){
-  document.querySelectorAll(".song").forEach(song=>{
-    if(song.dataset.artist===artist) song.classList.add("highlight")
-  })
+  document.querySelectorAll(".song").forEach(song=>{ if(song.dataset.artist===artist) song.classList.add("highlight") })
 }
 function clearHighlight(){
   document.querySelectorAll(".song").forEach(song=>song.classList.remove("highlight"))
 }
 
-// PAGINATION
 function renderPagination(){
-  const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1
+  const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
   [document.getElementById("paginationTop"),document.getElementById("paginationBottom")].forEach(container=>{
     container.innerHTML=""
     if(currentPage>1){let prev=document.createElement("button");prev.innerText="◀ Prev";prev.onclick=()=>{currentPage--;renderSongs()};container.appendChild(prev)}
@@ -257,7 +133,6 @@ function renderPagination(){
   })
 }
 
-// SEARCH
 function handleSearchInput(){
   const q=document.getElementById("searchBox").value.toLowerCase()
   filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q)||s.song.toLowerCase().includes(q))
@@ -265,18 +140,20 @@ function handleSearchInput(){
   renderSongs()
   toggleClearButton()
 }
+
 function toggleClearButton(){
   document.getElementById("clearBtn").style.display=document.getElementById("searchBox").value?"inline":"none"
 }
+
 function clearSearch(){
   document.getElementById("searchBox").value=""
   filteredSongs=songs
   currentPage=1
   renderSongs()
   toggleClearButton()
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-// ARTIST FILTER
 function filterArtist(artist){
   document.getElementById("searchBox").value=artist
   filteredSongs=songs.filter(s=>s.artist===artist)
@@ -285,7 +162,6 @@ function filterArtist(artist){
   toggleClearButton()
 }
 
-// ALPHABET NAV
 function buildAlphabet(){
   const div=document.getElementById("alphabet")
   div.innerHTML=""
@@ -296,6 +172,7 @@ function buildAlphabet(){
     div.appendChild(b)
   })
 }
+
 function jumpToLetter(letter){
   const idx=filteredSongs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()))
   if(idx===-1) return
@@ -303,7 +180,6 @@ function jumpToLetter(letter){
   renderSongs()
 }
 
-// TOP ARTISTS COLLAPSIBLE
 function buildArtistStats(){
   const map={}
   songs.forEach(s=>{if(!map[s.artist]) map[s.artist]=0; map[s.artist]++})
@@ -314,29 +190,23 @@ function buildArtistStats(){
     let row=document.createElement("div")
     row.innerText=artist+" ("+count+")"
     row.onclick=()=>filterArtist(artist)
-    row.onmouseenter=()=>highlightArtist(artist)
-    row.onmouseleave=()=>clearHighlight()
     list.appendChild(row)
   })
   document.getElementById("artistToggle").onclick=()=>{
-    if(list.style.display==="none"||list.style.display===""){
-      list.style.display="block"
-      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▼"
-    }else{
-      list.style.display="none"
-      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▶"
-    }
+    const isHidden = list.style.display==="none"||list.style.display===""
+    list.style.display=isHidden?"block":"none"
+    document.getElementById("artistToggle").innerText=isHidden?"🎸 Top Artists In Library ▼":"🎸 Top Artists In Library ▶"
   }
 }
 
-// REQUEST & RANDOM
 async function requestSong(artist,song){
   const command=`!request "${artist}" "${song}"`
   try{await navigator.clipboard.writeText(command);alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)}
   catch{alert("Type in chat:\n"+command)}
 }
+
 function randomSong(){if(!songs.length)return;let s=songs[Math.floor(Math.random()*songs.length)];requestSong(s.artist,s.song)}
-function goHome(){document.getElementById("searchBox").value="";filteredSongs=songs;currentPage=1;renderSongs();toggleClearButton();window.scrollTo({top:0,behavior:"smooth"})}
+function goHome(){clearSearch();window.scrollTo({top:0,behavior:"smooth"})}
 
 init()
 </script>
