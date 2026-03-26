@@ -104,6 +104,40 @@ button:hover{
   padding:10px;
 }
 
+/* 🔹 TOP ARTISTS COLLAPSIBLE */
+#topArtists{
+  padding:10px;
+  background:#151515;
+  border:1px solid #222;
+  margin:10px 20px;
+  border-radius:6px;
+  text-align:left;
+}
+
+#topArtists h3{
+  cursor:pointer;
+  margin:0;
+}
+
+#topArtistList{
+  display:none;
+  margin-top:5px;
+}
+
+#topArtistList div{
+  padding:4px 0;
+  cursor:pointer;
+  transition:.15s;
+}
+
+#topArtistList div:hover{
+  color:#f1c40f;
+  text-shadow:
+    0 0 5px #f1c40f,
+    0 0 10px #f1c40f,
+    0 0 15px #f39c12;
+}
+
 /* 🔹 ARTIST GRID */
 #artistGrid{
   display:grid;
@@ -179,6 +213,12 @@ button:hover{
 <!-- 🔹 ALPHABET NAVIGATION -->
 <div id="alphabet"></div>
 
+<!-- 🔹 TOP ARTISTS COLLAPSIBLE -->
+<div id="topArtists">
+  <h3 id="topToggle">🎸 Top Artists In Library ▶</h3>
+  <div id="topArtistList"></div>
+</div>
+
 <h1>🎸 Artists</h1>
 
 <!-- 🔹 PAGINATION TOP -->
@@ -197,7 +237,7 @@ let filteredArtists=[]
 let currentPage=1
 const artistsPerPage=12
 
-// Load songs.json and build artist list
+// Load songs and build artist list
 async function init(){
   const res=await fetch("songs.json")
   songs=await res.json()
@@ -210,10 +250,34 @@ async function init(){
   
   artists=Object.entries(map).map(([name,count])=>({name,count}))
   artists.sort((a,b)=>b.count-a.count)
-  
   filteredArtists=artists
+  
   buildAlphabet()
+  buildTopArtists()
   renderArtists()
+}
+
+// Build Top Artists section
+function buildTopArtists(){
+  const topList=document.getElementById("topArtistList")
+  topList.innerHTML=""
+  artists.slice(0,10).forEach(a=>{
+    const div=document.createElement("div")
+    div.innerText=`${a.name} (${a.count})`
+    div.onclick=()=>filterByArtist(a.name)
+    topList.appendChild(div)
+  })
+  
+  const toggle=document.getElementById("topToggle")
+  toggle.onclick=()=>{
+    if(topList.style.display==="none"){
+      topList.style.display="block"
+      toggle.innerText="🎸 Top Artists In Library ▼"
+    }else{
+      topList.style.display="none"
+      toggle.innerText="🎸 Top Artists In Library ▶"
+    }
+  }
 }
 
 // Render artists grid with pagination
@@ -264,18 +328,6 @@ function jumpToLetter(letter){
   renderArtists()
 }
 
-// Build alphabet nav
-function buildAlphabet(){
-  const div=document.getElementById("alphabet")
-  div.innerHTML=""
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
-    const b=document.createElement("button")
-    b.innerText=letter
-    b.onclick=()=>jumpToLetter(letter)
-    div.appendChild(b)
-  })
-}
-
 // Pagination
 function renderPagination(){
   const totalPages=Math.ceil(filteredArtists.length/artistsPerPage)||1
@@ -301,7 +353,7 @@ function renderPagination(){
   })
 }
 
-// Filter by clicking an artist card
+// Filter by clicking an artist card or top artist
 function filterByArtist(name){
   document.getElementById("search").value=name
   filteredArtists=artists.filter(a=>a.name===name)
