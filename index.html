@@ -187,6 +187,9 @@ function buildAlphabet(){
 }
 
 function jumpToLetter(letter){
+  // FIRST: Clear any existing search filters
+  clearSearch();
+  
   const idx=filteredSongs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()))
   if(idx===-1) return
   currentPage=Math.floor(idx/songsPerPage)+1
