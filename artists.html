@@ -90,7 +90,7 @@ button:hover{ background:#444; }
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
-let allUniqueArtists = []; // Will store objects: {name, count}
+let allUniqueArtists = []; 
 let filteredArtists = [];
 let currentPage = 1;
 const artistsPerPage = 60;
@@ -102,7 +102,6 @@ async function init() {
     const map = {};
     songs.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
     
-    // Create sorted array of objects with counts
     allUniqueArtists = Object.keys(map)
       .sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}))
       .map(name => ({ name: name, count: map[name] }));
@@ -126,8 +125,15 @@ function buildAlphabet() {
 }
 
 function jumpToLetter(letter) {
+  // Clear search bar and reset list before jumping
+  document.getElementById("searchBox").value = "";
+  filteredArtists = [...allUniqueArtists];
+  
   const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
-  if (idx === -1) return;
+  if (idx === -1) {
+    renderArtists(); // Re-render the full list if letter not found
+    return;
+  }
   currentPage = Math.floor(idx / artistsPerPage) + 1;
   renderArtists();
   window.scrollTo(0, 0);
