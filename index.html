@@ -121,24 +121,22 @@ button:hover{
 /* 🔹 UPDATED FONT STYLING */
 .songTitle{
   font-weight:700;
-  font-size:16px; /* Slightly smaller than before */
-  color:#f1c40f;  /* Amber color for emphasis */
+  font-size:16px;
+  color:#ffffff;  /* Song title in plain white */
 }
 
 .songArtist{
-  font-size:14px; /* Slightly bigger */
-  font-weight:600; /* Bolder for readability */
-  color:#ddd;     /* Brighter than before */
+  font-size:14px;
+  font-weight:600;
+  color:#f1c40f; /* Amber color for glow */
+  text-shadow:
+    0 0 4px #f1c40f,
+    0 0 8px #f1c40f,
+    0 0 12px #f39c12;
   cursor:pointer;
   transition:.15s;
 }
 
-.songArtist:hover{
-  color:#f1c40f;
-  text-shadow:0 0 6px #f1c40f;
-}
-
-/* 🔹 SONG HIGHLIGHT */
 .song.highlight{
   background:#1a1a1a;
   box-shadow:0 0 6px rgba(241,196,15,.4);
