@@ -23,11 +23,13 @@ body{
   border-bottom:2px solid #222;
   flex-wrap:wrap;
 }
+
 .titleLeft{
   display:flex;
   align-items:center;
   gap:10px;
 }
+
 .titleBar img{
   width:40px;
 }
@@ -38,12 +40,14 @@ body{
   gap:15px;
   flex-wrap:wrap;
 }
+
 .socialLinks a{
   color:#aaa;
   text-decoration:none;
   font-size:14px;
   transition:.15s;
 }
+
 .socialLinks a:hover{
   color:#f1c40f;
   text-shadow:
@@ -64,6 +68,7 @@ body{
   flex-wrap:wrap;
   justify-content:center;
 }
+
 .topBar input{
   flex:1;
   padding:8px;
@@ -71,10 +76,12 @@ body{
   border:none;
   min-width:180px;
 }
+
 .clearBtn{
   display:none;
   background:#333;
 }
+
 button{
   background:#272727;
   color:white;
@@ -84,6 +91,7 @@ button{
   cursor:pointer;
   transition:.15s;
 }
+
 button:hover{
   background:#444;
 }
@@ -105,6 +113,7 @@ button:hover{
   border-bottom:1px solid #222;
   transition:.15s;
 }
+
 .songInfo{
   display:flex;
   flex-direction:column;
@@ -120,19 +129,15 @@ button:hover{
 .songArtist{
   font-size:14px;
   font-weight:600;
-  color:#f1c40f; /* Amber color normally */
-  cursor:pointer;
-  transition:.2s;
-}
-.songArtist:hover{
+  color:#f1c40f; /* Amber color for glow */
   text-shadow:
-    0 0 6px #f1c40f,
-    0 0 12px #f1c40f,
-    0 0 18px #f39c12;
-  transform: scale(1.05);
+    0 0 4px #f1c40f,
+    0 0 8px #f1c40f,
+    0 0 12px #f39c12;
+  cursor:pointer;
+  transition:.15s;
 }
 
-/* 🔹 HIGHLIGHTED SONGS */
 .song.highlight{
   background:#1a1a1a;
   box-shadow:0 0 6px rgba(241,196,15,.4);
@@ -145,6 +150,24 @@ button:hover{
   border-bottom:1px solid #222;
 }
 
+/* 🔹 TOP ARTISTS HOVER EFFECT */
+#artistList div{
+  color:#f1c40f;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+  margin:4px 0;
+}
+
+#artistList div:hover{
+  text-shadow:
+    0 0 10px #f1c40f,
+    0 0 20px #f1c40f,
+    0 0 30px #f39c12;
+  transform:scale(1.05);
+}
+
+/* 🔹 PAGINATION */
 .pagination{
   padding:10px;
 }
@@ -171,10 +194,10 @@ button:hover{
 <!-- 🔹 TOP BAR -->
 <div class="topBar">
   <button onclick="goHome()">🏠 Home</button>
-  <button onclick="window.location.href='artists.html'">🎤 Artists</button>
   <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
   <button onclick="randomSong()">🎲 Random</button>
+  <button onclick="window.location.href='artists.html'">🎤 Artists</button>
 </div>
 
 <!-- 🔹 ALPHABET NAV -->
@@ -197,8 +220,191 @@ button:hover{
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
-// JS code remains the same as your previous index.html
-// highlighting, filtering, pagination, search, requestSong, goHome...
+let songs=[]
+let filteredSongs=[]
+let currentPage=1
+const songsPerPage=40
+
+async function init(){
+  const response=await fetch("songs.json")
+  songs=await response.json()
+  filteredSongs=songs
+  buildAlphabet()
+  buildArtistStats()
+  renderSongs()
+  document.getElementById("stats").innerText=songs.length+" songs loaded"
+}
+
+function renderSongs(){
+  const list=document.getElementById("songList")
+  list.innerHTML=""
+  let start=(currentPage-1)*songsPerPage
+  let end=start+songsPerPage
+  let pageSongs=filteredSongs.slice(start,end)
+
+  pageSongs.forEach(song=>{
+    const div=document.createElement("div")
+    div.className="song"
+    div.dataset.artist=song.artist
+    const a=song.artist.replace(/'/g,"\\'")
+    const s=song.song.replace(/'/g,"\\'")
+    div.innerHTML=`
+      <div class="songInfo">
+        <div class="songTitle">${song.song}</div>
+        <div class="songArtist"
+          onmouseenter="highlightArtist('${a}')"
+          onmouseleave="clearHighlight()"
+          onclick="filterArtist('${a}')">
+          ${song.artist}
+        </div>
+      </div>
+      <button onclick="requestSong('${a}','${s}')">Request</button>
+    `
+    list.appendChild(div)
+  })
+
+  renderPagination()
+}
+
+function highlightArtist(artist){
+  document.querySelectorAll(".song").forEach(song=>{
+    if(song.dataset.artist===artist) song.classList.add("highlight")
+  })
+}
+
+function clearHighlight(){
+  document.querySelectorAll(".song").forEach(song=>{
+    song.classList.remove("highlight")
+  })
+}
+
+function renderPagination(){
+  const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1
+  const containers=[document.getElementById("paginationTop"), document.getElementById("paginationBottom")]
+  
+  containers.forEach(container=>{
+    container.innerHTML=""
+    if(currentPage>1){
+      let prev=document.createElement("button")
+      prev.innerText="◀ Prev"
+      prev.onclick=()=>{currentPage--; renderSongs()}
+      container.appendChild(prev)
+    }
+    let label=document.createElement("span")
+    label.innerText=" Page "+currentPage+" / "+totalPages+" "
+    container.appendChild(label)
+    if(currentPage<totalPages){
+      let next=document.createElement("button")
+      next.innerText="Next ▶"
+      next.onclick=()=>{currentPage++; renderSongs()}
+      container.appendChild(next)
+    }
+  })
+}
+
+function handleSearchInput(){
+  const q=document.getElementById("searchBox").value.toLowerCase()
+  filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q)||s.song.toLowerCase().includes(q))
+  currentPage=1
+  renderSongs()
+  toggleClearButton()
+}
+
+function toggleClearButton(){
+  let btn=document.getElementById("clearBtn")
+  btn.style.display=document.getElementById("searchBox").value?"inline":"none"
+}
+
+function clearSearch(){
+  document.getElementById("searchBox").value=""
+  filteredSongs=songs
+  currentPage=1
+  renderSongs()
+  toggleClearButton()
+}
+
+function filterArtist(artist){
+  document.getElementById("searchBox").value=artist
+  filteredSongs=songs.filter(s=>s.artist===artist)
+  currentPage=1
+  renderSongs()
+  toggleClearButton()
+}
+
+function buildAlphabet(){
+  const div=document.getElementById("alphabet")
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
+    let b=document.createElement("button")
+    b.innerText=letter
+    b.onclick=()=>jumpToLetter(letter)
+    div.appendChild(b)
+  })
+}
+
+function jumpToLetter(letter){
+  const idx=filteredSongs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()))
+  if(idx===-1) return
+  currentPage=Math.floor(idx/songsPerPage)+1
+  renderSongs()
+}
+
+function buildArtistStats(){
+  const map={}
+  songs.forEach(s=>{
+    if(!map[s.artist]) map[s.artist]=0
+    map[s.artist]++
+  })
+
+  const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10)
+  const div=document.getElementById("artistStats")
+  div.innerHTML='<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3><div id="artistList" style="display:none"></div>'
+  const list=document.getElementById("artistList")
+  sorted.forEach(([artist,count])=>{
+    let row=document.createElement("div")
+    row.style.cursor="pointer"
+    row.innerText=artist+" ("+count+")"
+    row.onclick=()=>filterArtist(artist)
+    list.appendChild(row)
+  })
+
+  document.getElementById("artistToggle").onclick=()=>{
+    const list=document.getElementById("artistList")
+    if(list.style.display==="none"){
+      list.style.display="block"
+      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▼"
+    } else{
+      list.style.display="none"
+      document.getElementById("artistToggle").innerText="🎸 Top Artists In Library ▶"
+    }
+  }
+}
+
+async function requestSong(artist,song){
+  const command=`!request "${artist}" "${song}"`
+  try{
+    await navigator.clipboard.writeText(command)
+    alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)
+  }catch{
+    alert("Type in chat:\n"+command)
+  }
+}
+
+function randomSong(){
+  if(!songs.length) return
+  let s=songs[Math.floor(Math.random()*songs.length)]
+  requestSong(s.artist,s.song)
+}
+
+function goHome(){
+  document.getElementById("searchBox").value=""
+  filteredSongs=songs
+  currentPage=1
+  renderSongs()
+  toggleClearButton()
+  window.scrollTo({top:0,behavior:"smooth"})
+}
+
+init()
 </script>
 
 </body>
