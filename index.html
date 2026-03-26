@@ -11,7 +11,7 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 .titleBar img{ width:40px; }
 .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
 .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f,0 0 10px #f1c40f,0 0 15px #f1c40f; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 .topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
 .topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; }
 .clearBtn{ display:none; background:#333; }
@@ -22,14 +22,14 @@ button:hover{ background:#444; }
 .songInfo{ display:flex; flex-direction:column; }
 .songTitle{ font-weight:700; font-size:16px; color:#ffffff; }
 .songArtist{ font-size:14px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; }
-.songArtist:hover{ text-shadow:0 0 4px #f1c40f, 0 0 8px #f1c40f; transform:scale(1.05); }
+.songArtist:hover{ text-shadow:0 0 4px #f1c40f; transform:scale(1.02); }
 .song.highlight{ background:#1a1a1a; box-shadow:0 0 6px rgba(241,196,15,.4); }
 #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
 #artistToggle{ cursor:pointer; margin:0; }
 #artistList{ display:none; margin-top:5px; }
 #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
-#artistList div:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
-.pagination{ padding:10px; text-align:center; }
+#artistList div:hover{ color:#f1c40f; }
+.pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
 </style>
 </head>
 <body>
@@ -40,8 +40,6 @@ button:hover{ background:#444; }
     <h2>Lazzarus Prime Rocksmith Requests</h2>
   </div>
   <div class="socialLinks">
-    <a href="index.html">🏠 Home</a>
-    <a href="artists.html">🎸 Artists</a>
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">Twitch</a>
     <a href="https://discord.gg/WCg5sktJNM" target="_blank">Discord</a>
     <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">Merch</a>
@@ -65,10 +63,11 @@ button:hover{ background:#444; }
   <div id="artistList"></div>
 </div>
 
+<div id="paginationTop" class="pagination"></div>
+
 <h3 style="padding:10px">Song Library</h3>
 <div id="songList"></div>
 
-<div id="paginationTop" class="pagination"></div>
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
@@ -80,7 +79,6 @@ async function init(){
     songs=await response.json();
     filteredSongs=songs;
 
-    // Check for artist filter from URL
     const urlParams = new URLSearchParams(window.location.search);
     const artistSearch = urlParams.get('search');
     if(artistSearch) {
@@ -125,12 +123,27 @@ function clearHighlight(){
 
 function renderPagination(){
   const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
-  [document.getElementById("paginationTop"),document.getElementById("paginationBottom")].forEach(container=>{
-    container.innerHTML=""
-    if(currentPage>1){let prev=document.createElement("button");prev.innerText="◀ Prev";prev.onclick=()=>{currentPage--;renderSongs()};container.appendChild(prev)}
-    let label=document.createElement("span");label.innerText=" Page "+currentPage+" / "+totalPages+" ";container.appendChild(label)
-    if(currentPage<totalPages){let next=document.createElement("button");next.innerText="Next ▶";next.onclick=()=>{currentPage++;renderSongs()};container.appendChild(next)}
-  })
+  const top = document.getElementById("paginationTop");
+  const bottom = document.getElementById("paginationBottom");
+  
+  [top, bottom].forEach(container => {
+    container.innerHTML = "";
+    if(currentPage > 1){
+      let prev = document.createElement("button");
+      prev.innerText = "◀ Prev";
+      prev.onclick = () => { currentPage--; renderSongs(); window.scrollTo(0,0); };
+      container.appendChild(prev);
+    }
+    let label = document.createElement("span");
+    label.innerText = ` Page ${currentPage} / ${totalPages} `;
+    container.appendChild(label);
+    if(currentPage < totalPages){
+      let next = document.createElement("button");
+      next.innerText = "Next ▶";
+      next.onclick = () => { currentPage++; renderSongs(); window.scrollTo(0,0); };
+      container.appendChild(next);
+    }
+  });
 }
 
 function handleSearchInput(){
