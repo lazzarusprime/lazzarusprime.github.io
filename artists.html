@@ -160,8 +160,14 @@ button:hover{
 
 <h1>🎸 Artists</h1>
 
+<!-- 🔹 PAGINATION TOP -->
+<div class="pagination" id="paginationTop"></div>
+
+<!-- 🔹 ARTIST GRID -->
 <div id="artistGrid"></div>
-<div class="pagination" id="pagination"></div>
+
+<!-- 🔹 PAGINATION BOTTOM -->
+<div class="pagination" id="paginationBottom"></div>
 
 <script>
 // 🔹 SONG DATA
@@ -244,29 +250,38 @@ function renderArtists(){
   renderPagination()
 }
 
-// 🔹 PAGINATION CONTROLS
+// 🔹 PAGINATION CONTROLS (TOP & BOTTOM)
 function renderPagination(){
-  const container = document.getElementById("pagination")
-  container.innerHTML=""
   const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1
-  if(currentPage>1){
-    const prev = document.createElement("button")
-    prev.innerText="◀ Prev"
-    prev.onclick=()=>{currentPage--; renderArtists()}
-    container.appendChild(prev)
-  }
-  const label = document.createElement("span")
-  label.innerText=" Page "+currentPage+" / "+totalPages+" "
-  container.appendChild(label)
-  if(currentPage<totalPages){
-    const next = document.createElement("button")
-    next.innerText="Next ▶"
-    next.onclick=()=>{currentPage++; renderArtists()}
-    container.appendChild(next)
-  }
+  const containers = [
+    document.getElementById("paginationTop"),
+    document.getElementById("paginationBottom")
+  ]
+  
+  containers.forEach(container=>{
+    container.innerHTML=""
+    
+    if(currentPage>1){
+      const prev = document.createElement("button")
+      prev.innerText="◀ Prev"
+      prev.onclick=()=>{currentPage--; renderArtists()}
+      container.appendChild(prev)
+    }
+    
+    const label = document.createElement("span")
+    label.innerText=" Page "+currentPage+" / "+totalPages+" "
+    container.appendChild(label)
+    
+    if(currentPage<totalPages){
+      const next = document.createElement("button")
+      next.innerText="Next ▶"
+      next.onclick=()=>{currentPage++; renderArtists()}
+      container.appendChild(next)
+    }
+  })
 }
 
-// 🔹 SEARCH
+// 🔹 SEARCH & CLEAR BUTTON
 const searchInput = document.getElementById("search")
 const clearBtn = document.getElementById("clearBtn")
 
