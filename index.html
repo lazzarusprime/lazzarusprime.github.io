@@ -56,7 +56,7 @@ body{
     0 0 15px #f1c40f;
 }
 
-/* 🔥 TOP BAR */
+/* 🔹 TOP BAR */
 .topBar{
   display:flex;
   gap:6px;
@@ -118,28 +118,25 @@ button:hover{
   flex-direction:column;
 }
 
-/* 🔹 UPDATED FONT STYLING */
 .songTitle{
-  font-weight:700;
-  font-size:16px;
-  color:#ffffff;  /* Song title in plain white */
+  font-weight:bold;
+  color:white;
 }
 
 .songArtist{
   font-size:14px;
-  font-weight:600;
-  color:#f1c40f; /* Amber color for glow */
+  color:#ffffff;
   text-shadow:
-    0 0 4px #f1c40f,
-    0 0 8px #f1c40f,
-    0 0 12px #f39c12;
+    0 1px 0 #000000,
+    0 2px 0 #000000,
+    0 3px 0 #000000;
   cursor:pointer;
   transition:.15s;
 }
 
 .song.highlight{
   background:#1a1a1a;
-  box-shadow:0 0 6px rgba(241,196,15,.4);
+  box-shadow:0 0 6px rgba(255,255,255,.4);
 }
 
 #artistStats{
@@ -151,13 +148,15 @@ button:hover{
 
 .pagination{
   padding:10px;
+  display:flex;
+  justify-content:center;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 TITLE BAR WITH GUITAR AND SOCIAL LINKS -->
+<!-- 🔥 TITLE BAR -->
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
@@ -180,23 +179,14 @@ button:hover{
   <button onclick="randomSong()">🎲 Random</button>
 </div>
 
-<!-- 🔹 ALPHABET NAV -->
 <div id="alphabet"></div>
-
-<!-- 🔹 STATS -->
 <div id="stats"></div>
-
 <div id="artistStats"></div>
 
 <h3 style="padding:10px">Song Library</h3>
 
-<!-- 🔹 PAGINATION TOP -->
 <div id="paginationTop" class="pagination"></div>
-
-<!-- 🔹 SONG LIST -->
 <div id="songList"></div>
-
-<!-- 🔹 PAGINATION BOTTOM -->
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
@@ -221,7 +211,7 @@ function renderSongs(){
   let start=(currentPage-1)*songsPerPage
   let end=start+songsPerPage
   let pageSongs=filteredSongs.slice(start,end)
-
+  
   pageSongs.forEach(song=>{
     const div=document.createElement("div")
     div.className="song"
@@ -242,7 +232,7 @@ function renderSongs(){
     `
     list.appendChild(div)
   })
-
+  
   renderPagination()
 }
 
@@ -260,8 +250,7 @@ function clearHighlight(){
 
 function renderPagination(){
   const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1
-  const containers=[document.getElementById("paginationTop"), document.getElementById("paginationBottom")]
-  
+  const containers=[document.getElementById("paginationTop"),document.getElementById("paginationBottom")]
   containers.forEach(container=>{
     container.innerHTML=""
     if(currentPage>1){
@@ -283,16 +272,15 @@ function renderPagination(){
 }
 
 function handleSearchInput(){
-  const q=document.getElementById("searchBox").value.toLowerCase()
-  filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q)||s.song.toLowerCase().includes(q))
+  let q=document.getElementById("searchBox").value.toLowerCase()
+  filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q) || s.song.toLowerCase().includes(q))
   currentPage=1
   renderSongs()
   toggleClearButton()
 }
 
 function toggleClearButton(){
-  let btn=document.getElementById("clearBtn")
-  btn.style.display=document.getElementById("searchBox").value?"inline":"none"
+  document.getElementById("clearBtn").style.display=document.getElementById("searchBox").value?"inline":"none"
 }
 
 function clearSearch(){
@@ -313,6 +301,7 @@ function filterArtist(artist){
 
 function buildAlphabet(){
   const div=document.getElementById("alphabet")
+  div.innerHTML=""
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
     let b=document.createElement("button")
     b.innerText=letter
@@ -330,11 +319,7 @@ function jumpToLetter(letter){
 
 function buildArtistStats(){
   const map={}
-  songs.forEach(s=>{
-    if(!map[s.artist]) map[s.artist]=0
-    map[s.artist]++
-  })
-
+  songs.forEach(s=>{ if(!map[s.artist]) map[s.artist]=0; map[s.artist]++ })
   const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10)
   const div=document.getElementById("artistStats")
   div.innerHTML='<h3 id="artistToggle" style="cursor:pointer">🎸 Top Artists In Library ▶</h3><div id="artistList" style="display:none"></div>'
@@ -346,7 +331,6 @@ function buildArtistStats(){
     row.onclick=()=>filterArtist(artist)
     list.appendChild(row)
   })
-
   document.getElementById("artistToggle").onclick=()=>{
     const list=document.getElementById("artistList")
     if(list.style.display==="none"){
@@ -363,14 +347,28 @@ async function requestSong(artist,song){
   const command=`!request "${artist}" "${song}"`
   try{
     await navigator.clipboard.writeText(command)
-    alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)
+    // temporary inline alert to notify user, won't trigger browser "site says"
+    const notif=document.createElement("div")
+    notif.innerText=`Copied to clipboard! Paste in Twitch chat:\n${command}`
+    notif.style.position="fixed"
+    notif.style.bottom="20px"
+    notif.style.left="50%"
+    notif.style.transform="translateX(-50%)"
+    notif.style.background="#272727"
+    notif.style.color="#fff"
+    notif.style.padding="10px 20px"
+    notif.style.borderRadius="6px"
+    notif.style.boxShadow="0 0 10px rgba(255,255,255,.3)"
+    notif.style.zIndex="1000"
+    document.body.appendChild(notif)
+    setTimeout(()=>document.body.removeChild(notif),2000)
   }catch{
     alert("Type in chat:\n"+command)
   }
 }
 
 function randomSong(){
-  if(!songs.length) return
+  if(!songs.length)return
   let s=songs[Math.floor(Math.random()*songs.length)]
   requestSong(s.artist,s.song)
 }
