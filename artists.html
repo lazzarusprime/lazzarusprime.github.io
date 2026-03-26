@@ -16,36 +16,39 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 .topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; }
 button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
 button:hover{ background:#444; }
+#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
 #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
 #artistToggle{ cursor:pointer; margin:0; }
 #artistList{ display:none; margin-top:5px; }
 #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
 #artistList div:hover{ color:#f1c40f; }
 
-/* GRID LAYOUT */
 .artistContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
   padding: 20px;
 }
 .artistContainer div {
-  padding: 12px;
+  padding: 15px;
   background: #181818;
   border: 1px solid #222;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: .15s;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .artistContainer div:hover {
   background: #222;
   color: #f1c40f;
   border-color: #f1c40f;
+  transform: translateY(-2px);
 }
+.artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+.artistCount { font-size: 12px; color: #888; }
 
 .pagination { padding: 20px; text-align: center; background: #111; }
 </style>
@@ -58,11 +61,11 @@ button:hover{ background:#444; }
     <h2>Lazzarus Prime Rocksmith Artists</h2>
   </div>
   <div class="socialLinks">
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">Twitch</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">Merch</a>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">Instagram</a>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">Donations</a>
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
   </div>
 </div>
 
@@ -71,6 +74,8 @@ button:hover{ background:#444; }
   <button onclick="window.location.href='artists.html'">🎸 Artists</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
+
+<div id="alphabet"></div>
 
 <div id="artistStats">
   <h3 id="artistToggle">🎸 Top Artists In Library ▶</h3>
@@ -85,10 +90,10 @@ button:hover{ background:#444; }
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
-let allUniqueArtists = [];
+let allUniqueArtists = []; // Will store objects: {name, count}
 let filteredArtists = [];
 let currentPage = 1;
-const artistsPerPage = 60; // Increased for grid view
+const artistsPerPage = 60;
 
 async function init() {
   try {
@@ -96,11 +101,36 @@ async function init() {
     const songs = await response.json();
     const map = {};
     songs.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
-    allUniqueArtists = Object.keys(map).sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
+    
+    // Create sorted array of objects with counts
+    allUniqueArtists = Object.keys(map)
+      .sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}))
+      .map(name => ({ name: name, count: map[name] }));
+      
     filteredArtists = [...allUniqueArtists];
+    buildAlphabet();
     buildArtistStats(map);
     renderArtists();
   } catch (e) { console.error("Error:", e); }
+}
+
+function buildAlphabet() {
+  const div = document.getElementById("alphabet");
+  div.innerHTML = "";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+    let b = document.createElement("button");
+    b.innerText = letter;
+    b.onclick = () => jumpToLetter(letter);
+    div.appendChild(b);
+  });
+}
+
+function jumpToLetter(letter) {
+  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
+  if (idx === -1) return;
+  currentPage = Math.floor(idx / artistsPerPage) + 1;
+  renderArtists();
+  window.scrollTo(0, 0);
 }
 
 function buildArtistStats(map) {
@@ -128,9 +158,11 @@ function renderArtists() {
   
   pageArtists.forEach(artist => {
     const div = document.createElement("div");
-    div.innerText = artist;
-    div.title = artist;
-    div.onclick = () => selectArtist(artist);
+    div.onclick = () => selectArtist(artist.name);
+    div.innerHTML = `
+      <span class="artistName">${artist.name}</span>
+      <span class="artistCount">${artist.count} ${artist.count === 1 ? 'song' : 'songs'}</span>
+    `;
     container.appendChild(div);
   });
   renderPagination();
@@ -163,13 +195,13 @@ function renderPagination() {
 
 function handleSearchInput() {
   const q = document.getElementById("searchBox").value.toLowerCase();
-  filteredArtists = allUniqueArtists.filter(a => a.toLowerCase().includes(q));
+  filteredArtists = allUniqueArtists.filter(a => a.name.toLowerCase().includes(q));
   currentPage = 1;
   renderArtists();
 }
 
-function selectArtist(artist) {
-  window.location.href = `index.html?search=${encodeURIComponent(artist)}`;
+function selectArtist(artistName) {
+  window.location.href = `index.html?search=${encodeURIComponent(artistName)}`;
 }
 
 init();
