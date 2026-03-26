@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artists - Lazzarus Prime</title>
+
+<style>
+body{
+font-family:Segoe UI,Arial;
+background:#0f0f0f;
+color:white;
+margin:0;
+text-align:center;
+}
+h1{
+margin:20px;
+color:#ff3c00;
+text-shadow:0 0 10px #ff3c00;
+}
+.topBar{
+display:flex;
+gap:6px;
+padding:10px;
+background:#181818;
+position:sticky;
+top:0;
+z-index:100;
+}
+.topBar input{
+flex:1;
+padding:8px;
+border-radius:6px;
+border:none;
+}
+button{
+background:#272727;
+color:white;
+border:none;
+padding:7px 12px;
+border-radius:6px;
+cursor:pointer;
+}
+button:hover{
+background:#444;
+}
+#artistGrid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:20px;
+padding:20px;
+}
+.artist-card{
+background:#0b0b0b;
+border:2px solid #ff3c00;
+border-radius:12px;
+padding:20px;
+cursor:pointer;
+transition:all 0.2s ease-in-out;
+box-shadow:0 0 10px #ff3c00;
+}
+.artist-card:hover{
+transform:scale(1.05);
+background:#ff3c00;
+color:black;
+box-shadow:
+0 0 20px #ff3c00,
+0 0 40px #ff3c00,
+0 0 60px #ff3c00;
+}
+.artist-name{
+font-size:18px;
+font-weight:bold;
+}
+.song-count{
+font-size:12px;
+opacity:0.7;
+margin-top:5px;
+}
+input{
+padding:8px;
+width:200px;
+border-radius:6px;
+border:none;
+margin:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="topBar">
+<button onclick="window.location.href='index.html'">🏠 Back to Songs</button>
+<input type="text" id="search" placeholder="Search artist...">
+</div>
+
+<h1>🎸 Artists</h1>
+
+<div id="artistGrid"></div>
+
+<script>
+// 🔹 COPY YOUR SONGS DATA
+let songs = []
+
+// load songs.json (same as index.html)
+fetch("songs.json")
+.then(r=>r.json())
+.then(data=>{
+songs = data.map(s=>({
+artist: normalizeArtist(s.artist),
+song: s.song
+}))
+render()
+})
+
+// 🔹 NORMALIZER (MATCHES index.html)
+const artistFixes={
+"metalica":"Metallica",
+"greenday":"Green Day",
+"acdc":"AC/DC",
+"guns n roses":"Guns N' Roses"
+}
+
+function normalizeArtist(name){
+if(!name)return "Unknown"
+let cleaned=name.trim().toLowerCase()
+cleaned=cleaned.replace(/\s+/g," ")
+if(artistFixes[cleaned])return artistFixes[cleaned]
+return cleaned.replace(/\b\w/g,c=>c.toUpperCase())
+}
+
+// 🔹 BUILD ARTIST MAP
+function render(filter=""){
+const artistMap={}
+songs.forEach(s=>{
+if(!artistMap[s.artist]) artistMap[s.artist]=0
+artistMap[s.artist]++
+})
+
+const grid = document.getElementById("artistGrid")
+grid.innerHTML=""
+
+Object.keys(artistMap)
+.filter(a=>a.toLowerCase().includes(filter.toLowerCase()))
+.sort((a,b)=>a.localeCompare(b))
+.forEach(artist=>{
+const card = document.createElement("div")
+card.className="artist-card"
+card.innerHTML=`<div class="artist-name">${artist}</div>
+<div class="song-count">${artistMap[artist]} songs</div>`
+card.onclick=()=>window.location.href=`index.html?artist=${encodeURIComponent(artist)}`
+grid.appendChild(card)
+})
+}
+
+// 🔹 SEARCH INPUT
+document.getElementById("search").addEventListener("input",e=>{
+render(e.target.value)
+})
+</script>
+
+</body>
+</html>
