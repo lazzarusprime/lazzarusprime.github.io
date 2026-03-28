@@ -5,41 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Rocksmith Artists</title>
 <style>
-  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:#dcdcdc; margin:0; }
   .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
   .titleLeft{ display:flex; align-items:center; gap:10px; }
   .titleBar img{ width:40px; }
   .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-  .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-  .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+  .socialLinks a{ color:#888; text-decoration:none; font-size:14px; transition:.15s; }
+  .socialLinks a:hover{ color:#d4af37; text-shadow:0 0 5px rgba(212,175,55,0.4); }
 
-  /* Prominent Navigation */
-  .topBar{ display:flex; gap:10px; padding:15px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; border-bottom: 1px solid #333; }
-  .topBar input{ flex:1; padding:10px; border-radius:6px; border:1px solid #444; background: #0a0a0a; color: white; min-width:180px; }
+  /* Softer Navigation */
+  .topBar{ display:flex; gap:10px; padding:15px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; border-bottom: 1px solid #2a2a2a; }
+  .topBar input{ flex:1; padding:10px; border-radius:6px; border:1px solid #333; background: #0a0a0a; color: white; min-width:180px; }
   
-  .nav-btn { background:#b30000; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: .2s; border: 1px solid transparent; }
-  .nav-btn:hover { background:#ff0000; box-shadow: 0 0 10px #ff0000; }
-  .nav-active { background: #f1c40f !important; color: #000 !important; }
+  .nav-btn { background:#333; color:#ccc; border:1px solid #444; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: .2s; }
+  .nav-btn:hover { background:#444; color:#fff; border-color:#d4af37; }
+  .nav-active { background: #d4af37 !important; color: #1a1a1a !important; border-color: #d4af37 !important; }
 
-  button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
-  button:hover{ background:#444; }
+  button{ background:#252525; color:#ccc; border:1px solid #333; padding:7px 12px; border-radius:6px; cursor:pointer; transition: .2s; }
+  button:hover{ background:#3a3a3a; color:#fff; }
 
   #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
 
-  /* Top Artists & Flame Animation */
-  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
-  #artistToggle{ cursor:pointer; margin:0; padding: 10px; transition: .2s; border-radius: 4px; }
-  #artistToggle:hover { color: #f1c40f; background: #1a1a1a; }
+  /* Top Artists & Warm Flame Animation */
+  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; position: relative; overflow: hidden; }
+  #artistToggle{ cursor:pointer; margin:0; padding: 10px; transition: .2s; border-radius: 4px; color: #aaa; }
+  #artistToggle:hover { color: #d4af37; background: #1a1a1a; }
   
   #artistList{ display:none; margin-top:5px; padding-left: 10px; }
-  #artistList div{ padding:6px 10px; cursor:pointer; transition:.15s; border-left: 3px solid transparent; }
-  #artistList div:hover{ color:#f1c40f; border-left: 3px solid #f1c40f; background: linear-gradient(90deg, #222, transparent); text-shadow: 0 0 8px #f1c40f; }
+  #artistList div{ padding:6px 10px; cursor:pointer; transition:.2s; border-left: 3px solid transparent; color: #bbb; }
+  #artistList div:hover{ color:#d4af37; border-left: 3px solid #d4af37; background: linear-gradient(90deg, #1e1e1e, transparent); }
 
-  .flame-effect { animation: flameBurst 0.5s ease-out; }
-  @keyframes flameBurst {
-    0% { box-shadow: inset 0 0 0px #f1c40f; }
-    50% { box-shadow: inset 0 0 20px #e67e22, 0 0 15px #f1c40f; }
-    100% { box-shadow: inset 0 0 0px #f1c40f; }
+  .flame-effect { animation: warmFlame 0.6s ease-out; }
+  @keyframes warmFlame {
+    0% { box-shadow: inset 0 0 0px transparent; }
+    50% { box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.2), 0 0 10px rgba(165, 42, 42, 0.3); }
+    100% { box-shadow: inset 0 0 0px transparent; }
   }
 
   .artistContainer {
@@ -51,7 +51,7 @@
   .artistContainer div {
     padding: 15px;
     background: #181818;
-    border: 1px solid #222;
+    border: 1px solid #2a2a2a;
     border-radius: 8px;
     cursor: pointer;
     transition: .15s;
@@ -62,14 +62,13 @@
   }
   .artistContainer div:hover {
     background: #222;
-    color: #f1c40f;
-    border-color: #f1c40f;
+    color: #d4af37;
+    border-color: #d4af37;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(241, 196, 15, 0.2);
   }
-  .artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-  .artistCount { font-size: 12px; color: #888; }
-  .pagination { padding: 20px; text-align: center; background: #111; }
+  .artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; color: #efefef; }
+  .artistCount { font-size: 12px; color: #666; }
+  .pagination { padding: 20px; text-align: center; background: #111; color: #777; }
 </style>
 </head>
 <body>
@@ -103,7 +102,7 @@
 
 <div id="paginationTop" class="pagination"></div>
 
-<h3 style="padding:10px">All Artists (Alphabetical)</h3>
+<h3 style="padding:10px; color: #888; font-size: 1.1em;">All Artists (Alphabetical)</h3>
 <div class="artistContainer" id="allArtists"></div>
 
 <div id="paginationBottom" class="pagination"></div>
@@ -171,9 +170,8 @@ function buildArtistStats(map) {
   document.getElementById("artistToggle").onclick = () => {
     const isHidden = div.style.display === "none" || div.style.display === "";
     
-    // Flame Animation Trigger
     statsContainer.classList.remove("flame-effect");
-    void statsContainer.offsetWidth; // Trigger reflow
+    void statsContainer.offsetWidth; 
     statsContainer.classList.add("flame-effect");
 
     div.style.display = isHidden ? "block" : "none";
