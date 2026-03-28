@@ -3,111 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime | Song Library</title>
+<title>Lazzarus Prime Rocksmith Requests</title>
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --card-bg: #151515;
-    --accent: #d4af37;
-    --accent-glow: rgba(212, 175, 55, 0.3);
-    --text: #e0e0e0;
-    --nav-bg: rgba(20, 20, 20, 0.9);
-  }
+  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+  .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+  .titleLeft{ display:flex; align-items:center; gap:10px; }
+  .titleBar img{ width:40px; }
 
-  body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
-  
-  /* UPDATED HEADER TEXT STYLE */
-  .titleBar { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 20px; border-bottom: 1px solid #222; flex-wrap: wrap; }
-  .titleLeft { display: flex; align-items: center; gap: 15px; }
-  
+  /* IMPROVED HEADER TEXT ONLY */
   .titleLeft h2 { 
     margin: 0; 
     font-weight: 900; 
-    letter-spacing: -1px; 
     text-transform: uppercase; 
-    /* Metallic Gradient Effect */
-    background: linear-gradient(to bottom, #fff 20%, #d4af37 40%, #8a6d1a 80%);
+    background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* Subtle Neon Glow */
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
-    font-size: 24px;
+    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
   }
-  
-  .titleBar img { width: 45px; filter: drop-shadow(0 0 5px var(--accent)); }
-  
-  .socialLinks { display: flex; gap: 20px; }
-  .socialLinks a { color: #666; text-decoration: none; font-size: 13px; font-weight: 600; transition: .3s; text-transform: uppercase; }
-  .socialLinks a:hover { color: var(--accent); transform: translateY(-2px); }
 
-  /* NAVIGATION BAR */
-  .topBar { 
-    display: flex; gap: 12px; padding: 15px 20px; background: var(--nav-bg); 
-    position: sticky; top: 0; z-index: 100; flex-wrap: wrap; justify-content: center; 
-    border-bottom: 1px solid #333; backdrop-filter: blur(10px);
-  }
-  
-  .topBar input { 
-    flex: 1; padding: 12px 20px; border-radius: 8px; border: 1px solid #333; 
-    background: #000; color: #fff; min-width: 200px; transition: .3s;
-  }
-  .topBar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-  
-  .nav-btn { 
-    background: #222; color: #aaa; border: 1px solid #333; padding: 10px 22px; 
-    border-radius: 8px; cursor: pointer; font-weight: 700; text-transform: uppercase; 
-    font-size: 12px; transition: .3s; 
-  }
-  .nav-btn:hover { background: #2a2a2a; color: #fff; border-color: #444; transform: translateY(-1px); }
-  .nav-active { background: var(--accent) !important; color: #000 !important; border-color: var(--accent) !important; box-shadow: 0 0 15px var(--accent-glow); }
+  .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+  .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+  .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 
-  #alphabet { display: flex; flex-wrap: wrap; gap: 4px; padding: 15px; justify-content: center; background: #0e0e0e; }
-  #alphabet button { 
-    background: transparent; border: 1px solid transparent; color: #555; 
-    width: 30px; height: 30px; padding: 0; border-radius: 4px; font-weight: bold; transition: .2s; 
-  }
-  #alphabet button:hover { color: var(--accent); border-color: #333; background: #151515; }
+  .topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
+  .topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; background: white; color: black; }
 
-  #artistStats { margin: 10px 20px; background: var(--card-bg); border-radius: 12px; border: 1px solid #222; overflow: hidden; }
-  #artistToggle { 
-    cursor: pointer; margin: 0; padding: 15px 20px; transition: .3s; 
-    display: flex; justify-content: space-between; align-items: center; font-size: 14px; letter-spacing: 1px;
-  }
-  #artistToggle:hover { background: #1a1a1a; color: var(--accent); }
-  
-  #artistList { display: none; padding: 10px 20px; border-top: 1px solid #222; animation: slideDown 0.3s ease-out; }
-  @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-  
-  #artistList div { padding: 8px 12px; cursor: pointer; border-radius: 6px; margin-bottom: 2px; transition: .2s; color: #888; }
-  #artistList div:hover { color: var(--accent); background: #222; padding-left: 20px; }
+  button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight: 600; transition: .2s; }
+  button:hover{ background:#444; }
 
-  #songList { padding: 0 20px 40px 20px; }
-  .song { 
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 15px 20px; background: #111; border-radius: 10px; 
-    margin-bottom: 8px; border: 1px solid #1a1a1a; transition: .2s;
-  }
-  .song:hover { background: #161616; border-color: #333; transform: scale(1.005); }
-  
-  .songTitle { font-weight: 700; font-size: 16px; color: #fff; display: block; }
-  .songArtist { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; cursor: pointer; opacity: 0.7; }
-  .songArtist:hover { opacity: 1; text-decoration: underline; }
-  
-  .request-btn { 
-    background: transparent; border: 1px solid var(--accent); color: var(--accent); 
-    padding: 8px 16px; border-radius: 6px; font-weight: bold; transition: .3s; 
-  }
-  .request-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 12px var(--accent-glow); }
+  #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+  .song{ display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; transition:.15s; }
+  .songInfo{ display:flex; flex-direction:column; }
+  .songTitle{ font-weight:700; font-size:16px; color:#ffffff; }
+  .songArtist{ font-size:14px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; }
+  .songArtist:hover{ text-shadow:0 0 4px #f1c40f; }
+  .song.highlight{ background:#1a1a1a; box-shadow: inset 3px 0 0 #f1c40f; }
 
-  .pagination { padding: 30px; text-align: center; color: #555; font-size: 14px; }
-  .pagination button { margin: 0 10px; background: #222; border: none; color: #fff; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
+  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
+  #artistToggle{ cursor:pointer; margin:0; }
+  #artistList{ display:none; margin-top:5px; }
+  #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
+  #artistList div:hover{ color:#f1c40f; }
 
-  .flame-effect { animation: warmPulse 0.6s ease-out; }
-  @keyframes warmPulse {
-    0% { box-shadow: 0 0 0px transparent; }
-    50% { box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.15); border-color: var(--accent); }
-    100% { box-shadow: 0 0 0px transparent; }
-  }
+  .pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
+  .clearBtn{ display:none; background:#333; }
 </style>
 </head>
 <body>
@@ -118,28 +57,32 @@
     <h2>Lazzarus Prime Rocksmith Requests</h2>
   </div>
   <div class="socialLinks">
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">Twitch</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">Merch</a>
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
   </div>
 </div>
 
 <div class="topBar">
-  <button class="nav-btn nav-active" onclick="goHome()">🏠 Home</button>
-  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="randomArtist()">🎲 Random</button>
-  <input id="searchBox" placeholder="Search for tracks or artists..." oninput="handleSearchInput()">
+  <button onclick="goHome()">🏠 Home</button>
+  <button onclick="window.location.href='artists.html'">🎸 Artists</button>
+  <button onclick="randomArtist()">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
+  <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
 </div>
 
 <div id="alphabet"></div>
 
 <div id="artistStats">
-  <h3 id="artistToggle"><span>🎸 TOP ARTISTS</span> <span>▼</span></h3>
+  <h3 id="artistToggle">🎸 Top Artists In Library ▶</h3>
   <div id="artistList"></div>
 </div>
 
 <div id="paginationTop" class="pagination"></div>
 
+<h3 style="padding:10px">Song Library</h3>
 <div id="songList"></div>
 
 <div id="paginationBottom" class="pagination"></div>
@@ -158,6 +101,7 @@ async function init(){
     if(artistSearch) {
       document.getElementById("searchBox").value = artistSearch;
       filteredSongs = songs.filter(s => s.artist === artistSearch);
+      toggleClearButton();
     }
 
     buildAlphabet();
@@ -174,36 +118,45 @@ function renderSongs(){
   pageSongs.forEach(song=>{
     const div=document.createElement("div")
     div.className="song"
+    div.dataset.artist=song.artist
     div.innerHTML=`
       <div class="songInfo">
-        <span class="songTitle">${song.song}</span>
-        <span class="songArtist" onclick="filterArtist('${song.artist}')">${song.artist}</span>
+        <div class="songTitle">${song.song}</div>
+        <div class="songArtist" onmouseenter="highlightArtist('${song.artist}')" onmouseleave="clearHighlight()" onclick="filterArtist('${song.artist}')">${song.artist}</div>
       </div>
-      <button class="request-btn" onclick="requestSong('${song.artist}','${song.song}')">REQUEST</button>
+      <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
     `;
     list.appendChild(div);
   })
   renderPagination();
 }
 
+function highlightArtist(artist){
+  document.querySelectorAll(".song").forEach(song=>{ if(song.dataset.artist===artist) song.classList.add("highlight") })
+}
+function clearHighlight(){
+  document.querySelectorAll(".song").forEach(song=>song.classList.remove("highlight"))
+}
+
 function renderPagination(){
   const totalPages=Math.ceil(filteredSongs.length/songsPerPage)||1;
-  const containers = [document.getElementById("paginationTop"), document.getElementById("paginationBottom")];
+  const top = document.getElementById("paginationTop");
+  const bottom = document.getElementById("paginationBottom");
   
-  containers.forEach(container => {
+  [top, bottom].forEach(container => {
     container.innerHTML = "";
     if(currentPage > 1){
       let prev = document.createElement("button");
-      prev.innerText = "◀";
+      prev.innerText = "◀ Prev";
       prev.onclick = () => { currentPage--; renderSongs(); window.scrollTo(0,0); };
       container.appendChild(prev);
     }
     let label = document.createElement("span");
-    label.innerText = ` ${currentPage} / ${totalPages} `;
+    label.innerText = ` Page ${currentPage} / ${totalPages} `;
     container.appendChild(label);
     if(currentPage < totalPages){
       let next = document.createElement("button");
-      next.innerText = "▶";
+      next.innerText = "Next ▶";
       next.onclick = () => { currentPage++; renderSongs(); window.scrollTo(0,0); };
       container.appendChild(next);
     }
@@ -215,6 +168,20 @@ function handleSearchInput(){
   filteredSongs=songs.filter(s=>s.artist.toLowerCase().includes(q)||s.song.toLowerCase().includes(q))
   currentPage=1
   renderSongs()
+  toggleClearButton()
+}
+
+function toggleClearButton(){
+  document.getElementById("clearBtn").style.display=document.getElementById("searchBox").value?"inline":"none"
+}
+
+function clearSearch(){
+  document.getElementById("searchBox").value=""
+  filteredSongs=songs
+  currentPage=1
+  renderSongs()
+  toggleClearButton()
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
 function filterArtist(artist){
@@ -222,10 +189,12 @@ function filterArtist(artist){
   filteredSongs=songs.filter(s=>s.artist===artist)
   currentPage=1
   renderSongs()
+  toggleClearButton()
 }
 
 function buildAlphabet(){
   const div=document.getElementById("alphabet")
+  div.innerHTML=""
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
     let b=document.createElement("button")
     b.innerText=letter
@@ -235,10 +204,9 @@ function buildAlphabet(){
 }
 
 function jumpToLetter(letter){
-  document.getElementById("searchBox").value="";
-  const idx=songs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()))
+  clearSearch();
+  const idx=filteredSongs.findIndex(s=>s.artist.toLowerCase().startsWith(letter.toLowerCase()))
   if(idx===-1) return
-  filteredSongs = songs;
   currentPage=Math.floor(idx/songsPerPage)+1
   renderSongs()
 }
@@ -248,7 +216,6 @@ function buildArtistStats(){
   songs.forEach(s=>{if(!map[s.artist]) map[s.artist]=0; map[s.artist]++})
   const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10)
   const list=document.getElementById("artistList")
-  const statsContainer = document.getElementById("artistStats");
   list.innerHTML=""
   sorted.forEach(([artist,count])=>{
     let row=document.createElement("div")
@@ -258,25 +225,25 @@ function buildArtistStats(){
   })
   document.getElementById("artistToggle").onclick=()=>{
     const isHidden = list.style.display==="none"||list.style.display===""
-    statsContainer.classList.remove("flame-effect");
-    void statsContainer.offsetWidth; 
-    statsContainer.classList.add("flame-effect");
     list.style.display=isHidden?"block":"none"
+    document.getElementById("artistToggle").innerText=isHidden?"🎸 Top Artists In Library ▼":"🎸 Top Artists In Library ▶"
   }
 }
 
 async function requestSong(artist,song){
   const command=`!request "${artist}" "${song}"`
-  try{await navigator.clipboard.writeText(command);alert("Copied to clipboard!")}
+  try{await navigator.clipboard.writeText(command);alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)}
   catch{alert("Type in chat:\n"+command)}
 }
 
 function randomArtist(){
-  const unique = [...new Set(songs.map(s=>s.artist))];
-  filterArtist(unique[Math.floor(Math.random()*unique.length)]);
+  if(!songs.length)return;
+  const uniqueArtists = [...new Set(songs.map(s => s.artist))];
+  const random = uniqueArtists[Math.floor(Math.random()*uniqueArtists.length)];
+  filterArtist(random);
 }
 
-function goHome(){ window.location.href='index.html'; }
+function goHome(){clearSearch();window.scrollTo({top:0,behavior:"smooth"})}
 
 init()
 </script>
