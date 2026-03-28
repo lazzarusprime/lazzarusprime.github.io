@@ -3,70 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Rocksmith Artists</title>
+<title>Lazzarus Prime | Artists</title>
 <style>
-  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:#dcdcdc; margin:0; }
-  .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
-  .titleLeft{ display:flex; align-items:center; gap:10px; }
-  .titleBar img{ width:40px; }
-  .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-  .socialLinks a{ color:#888; text-decoration:none; font-size:14px; transition:.15s; }
-  .socialLinks a:hover{ color:#d4af37; text-shadow:0 0 5px rgba(212,175,55,0.4); }
-
-  .topBar{ display:flex; gap:10px; padding:15px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; border-bottom: 1px solid #2a2a2a; }
-  .topBar input{ flex:1; padding:10px; border-radius:6px; border:1px solid #333; background: #0a0a0a; color: white; min-width:180px; }
-  
-  .nav-btn { background:#333; color:#ccc; border:1px solid #444; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: .2s; }
-  .nav-btn:hover { background:#444; color:#fff; border-color:#d4af37; }
-  .nav-active { background: #d4af37 !important; color: #1a1a1a !important; border-color: #d4af37 !important; }
-
-  button{ background:#252525; color:#ccc; border:1px solid #333; padding:7px 12px; border-radius:6px; cursor:pointer; transition: .2s; }
-  button:hover{ background:#3a3a3a; color:#fff; }
-
-  #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
-
-  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; position: relative; overflow: hidden; }
-  #artistToggle{ cursor:pointer; margin:0; padding: 10px; transition: .2s; border-radius: 4px; color: #aaa; }
-  #artistToggle:hover { color: #d4af37; background: #1a1a1a; }
-  
-  #artistList{ display:none; margin-top:5px; padding-left: 10px; }
-  #artistList div{ padding:6px 10px; cursor:pointer; transition:.2s; border-left: 3px solid transparent; color: #bbb; }
-  #artistList div:hover{ color:#d4af37; border-left: 3px solid #d4af37; background: linear-gradient(90deg, #1e1e1e, transparent); text-shadow: 0 0 8px rgba(212,175,55,0.3); }
-
-  .flame-effect { animation: warmFlame 0.6s ease-out; }
-  @keyframes warmFlame {
-    0% { box-shadow: inset 0 0 0px transparent; }
-    50% { box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.2), 0 0 10px rgba(165, 42, 42, 0.3); }
-    100% { box-shadow: inset 0 0 0px transparent; }
+  :root {
+    --bg: #0a0a0a;
+    --card-bg: #151515;
+    --accent: #d4af37;
+    --accent-glow: rgba(212, 175, 55, 0.3);
+    --text: #e0e0e0;
+    --nav-bg: rgba(20, 20, 20, 0.9);
   }
+
+  body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+  
+  /* UPDATED HEADER TEXT STYLE */
+  .titleBar { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 20px; border-bottom: 1px solid #222; }
+  .titleLeft { display: flex; align-items: center; gap: 15px; }
+  
+  .titleLeft h2 { 
+    margin: 0; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    background: linear-gradient(to bottom, #fff 20%, #d4af37 40%, #8a6d1a 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+    font-size: 24px;
+  }
+  
+  .titleBar img { width: 45px; filter: drop-shadow(0 0 5px var(--accent)); }
+
+  /* NAVIGATION BAR */
+  .topBar { 
+    display: flex; gap: 12px; padding: 15px 20px; background: var(--nav-bg); 
+    position: sticky; top: 0; z-index: 100; flex-wrap: wrap; justify-content: center; 
+    border-bottom: 1px solid #333; backdrop-filter: blur(10px);
+  }
+  
+  .nav-btn { 
+    background: #222; color: #aaa; border: 1px solid #333; padding: 10px 22px; 
+    border-radius: 8px; cursor: pointer; font-weight: 700; text-transform: uppercase; 
+    font-size: 12px; transition: .3s; 
+  }
+  .nav-btn:hover { background: #2a2a2a; color: #fff; border-color: #444; }
+  .nav-active { background: var(--accent) !important; color: #000 !important; border-color: var(--accent) !important; box-shadow: 0 0 15px var(--accent-glow); }
+
+  .topBar input { flex: 1; padding: 12px 20px; border-radius: 8px; border: 1px solid #333; background: #000; color: #fff; min-width: 200px; }
 
   .artistContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 30px;
   }
-  .artistContainer div {
-    padding: 15px;
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
+  .artistCard {
+    padding: 25px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
     cursor: pointer;
-    transition: .15s;
+    transition: .3s;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
-  .artistContainer div:hover {
-    background: #222;
-    color: #d4af37;
-    border-color: #d4af37;
-    transform: translateY(-2px);
+  .artistCard:hover {
+    background: #181818;
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
   }
-  .artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; color: #efefef; }
-  .artistCount { font-size: 12px; color: #666; }
-  .pagination { padding: 20px; text-align: center; background: #111; color: #777; }
+  .artistName { font-weight: 700; display: block; margin-bottom: 5px; color: #fff; }
+  .artistCount { font-size: 11px; color: #555; text-transform: uppercase; font-weight: bold; }
+
+  .pagination { padding: 30px; text-align: center; color: #555; }
+  .pagination button { margin: 0 10px; background: #222; border: none; color: #fff; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -74,14 +83,7 @@
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
-    <h2>Lazzarus Prime Rocksmith Artists</h2>
-  </div>
-  <div class="socialLinks">
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
+    <h2>Lazzarus Prime Rocksmith Requests</h2>
   </div>
 </div>
 
@@ -89,146 +91,71 @@
   <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <button class="nav-btn nav-active" onclick="window.location.href='artists.html'">🎸 Artists</button>
   <button class="nav-btn" onclick="randomArtist()">🎲 Random</button>
-  <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
+  <input id="searchBox" placeholder="Search for an artist..." oninput="handleSearchInput()">
 </div>
 
-<div id="alphabet"></div>
-
-<div id="artistStats">
-  <h3 id="artistToggle">🎸 Top Artists In Library ▶</h3>
-  <div id="artistList"></div>
-</div>
-
-<div id="paginationTop" class="pagination"></div>
-
-<h3 style="padding:10px; color: #888; font-size: 1.1em;">All Artists (Alphabetical)</h3>
-<div class="artistContainer" id="allArtists"></div>
+<div id="allArtists" class="artistContainer"></div>
 
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
-let songs_global = [];
-let allUniqueArtists = []; 
-let filteredArtists = [];
+let allArtists = [];
+let filtered = [];
 let currentPage = 1;
-const artistsPerPage = 60;
+const perPage = 48;
 
 async function init() {
-  try {
-    const response = await fetch("songs.json");
-    songs_global = await response.json();
-    const map = {};
-    songs_global.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
-    
-    allUniqueArtists = Object.keys(map)
-      .sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}))
-      .map(name => ({ name: name, count: map[name] }));
-      
-    filteredArtists = [...allUniqueArtists];
-    buildAlphabet();
-    buildArtistStats(map);
-    renderArtists();
-  } catch (e) { console.error("Error:", e); }
+  const res = await fetch("songs.json");
+  const songs = await res.json();
+  const map = {};
+  songs.forEach(s => { if(!map[s.artist]) map[s.artist]=0; map[s.artist]++; });
+  allArtists = Object.keys(map).sort().map(name => ({ name, count: map[name] }));
+  filtered = allArtists;
+  render();
 }
 
-function buildAlphabet() {
-  const div = document.getElementById("alphabet");
-  div.innerHTML = "";
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
-    let b = document.createElement("button");
-    b.innerText = letter;
-    b.onclick = () => jumpToLetter(letter);
-    div.appendChild(b);
-  });
-}
-
-function jumpToLetter(letter) {
-  document.getElementById("searchBox").value = "";
-  filteredArtists = [...allUniqueArtists];
-  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
-  if (idx === -1) { renderArtists(); return; }
-  currentPage = Math.floor(idx / artistsPerPage) + 1;
-  renderArtists();
-  window.scrollTo(0, 0);
-}
-
-function buildArtistStats(map) {
-  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 10);
-  const div = document.getElementById("artistList");
-  const statsContainer = document.getElementById("artistStats");
-  div.innerHTML = "";
-  sorted.forEach(([artist, count]) => {
-    let row = document.createElement("div");
-    row.innerText = `${artist} (${count})`;
-    row.onclick = () => selectArtist(artist);
-    div.appendChild(row);
-  });
-  document.getElementById("artistToggle").onclick = () => {
-    const isHidden = div.style.display === "none" || div.style.display === "";
-    statsContainer.classList.remove("flame-effect");
-    void statsContainer.offsetWidth; 
-    statsContainer.classList.add("flame-effect");
-    div.style.display = isHidden ? "block" : "none";
-    document.getElementById("artistToggle").innerText = isHidden ? "🎸 Top Artists In Library ▼" : "🎸 Top Artists In Library ▶";
-  };
-}
-
-function renderArtists() {
+function render() {
   const container = document.getElementById("allArtists");
   container.innerHTML = "";
-  const start = (currentPage - 1) * artistsPerPage;
-  const pageArtists = filteredArtists.slice(start, start + artistsPerPage);
-  pageArtists.forEach(artist => {
+  const start = (currentPage-1)*perPage;
+  filtered.slice(start, start+perPage).forEach(a => {
     const div = document.createElement("div");
-    div.onclick = () => selectArtist(artist.name);
-    div.innerHTML = `
-      <span class="artistName">${artist.name}</span>
-      <span class="artistCount">${artist.count} ${artist.count === 1 ? 'song' : 'songs'}</span>
-    `;
+    div.className = "artistCard";
+    div.onclick = () => window.location.href=`index.html?search=${encodeURIComponent(a.name)}`;
+    div.innerHTML = `<span class="artistName">${a.name}</span><span class="artistCount">${a.count} SONGS</span>`;
     container.appendChild(div);
   });
   renderPagination();
 }
 
 function renderPagination() {
-  const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1;
-  const top = document.getElementById("paginationTop");
-  const bottom = document.getElementById("paginationBottom");
-  [top, bottom].forEach(container => {
-    container.innerHTML = "";
-    if (currentPage > 1) {
-      let prev = document.createElement("button");
-      prev.innerText = "◀ Prev";
-      prev.onclick = () => { currentPage--; renderArtists(); window.scrollTo(0,0); };
-      container.appendChild(prev);
-    }
-    let label = document.createElement("span");
-    label.innerText = ` Page ${currentPage} / ${totalPages} `;
-    container.appendChild(label);
-    if (currentPage < totalPages) {
-      let next = document.createElement("button");
-      next.innerText = "Next ▶";
-      next.onclick = () => { currentPage++; renderArtists(); window.scrollTo(0,0); };
-      container.appendChild(next);
-    }
-  });
+  const total = Math.ceil(filtered.length/perPage);
+  const container = document.getElementById("paginationBottom");
+  container.innerHTML = "";
+  if(currentPage > 1) {
+    let b = document.createElement("button"); b.innerText = "◀";
+    b.onclick = () => { currentPage--; render(); window.scrollTo(0,0); };
+    container.appendChild(b);
+  }
+  let s = document.createElement("span"); s.innerText = ` ${currentPage} / ${total} `;
+  container.appendChild(s);
+  if(currentPage < total) {
+    let b = document.createElement("button"); b.innerText = "▶";
+    b.onclick = () => { currentPage++; render(); window.scrollTo(0,0); };
+    container.appendChild(b);
+  }
 }
 
 function handleSearchInput() {
   const q = document.getElementById("searchBox").value.toLowerCase();
-  filteredArtists = allUniqueArtists.filter(a => a.name.toLowerCase().includes(q));
+  filtered = allArtists.filter(a => a.name.toLowerCase().includes(q));
   currentPage = 1;
-  renderArtists();
+  render();
 }
 
-function selectArtist(artistName) {
-  window.location.href = `index.html?search=${encodeURIComponent(artistName)}`;
-}
-
-function randomArtist(){
-  if(!allUniqueArtists.length)return;
-  const random = allUniqueArtists[Math.floor(Math.random()*allUniqueArtists.length)];
-  selectArtist(random.name);
+function randomArtist() {
+  const random = allArtists[Math.floor(Math.random()*allArtists.length)];
+  window.location.href=`index.html?search=${encodeURIComponent(random.name)}`;
 }
 
 init();
