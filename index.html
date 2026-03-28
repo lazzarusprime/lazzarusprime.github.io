@@ -5,48 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Rocksmith Requests</title>
 <style>
-  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
-  .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
-  .titleLeft{ display:flex; align-items:center; gap:10px; }
-  .titleBar img{ width:40px; }
+body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+.titleLeft{ display:flex; align-items:center; gap:10px; }
+.titleBar img{ width:40px; }
 
-  /* IMPROVED HEADER TEXT ONLY */
-  .titleLeft h2 { 
-    margin: 0; 
-    font-weight: 900; 
-    text-transform: uppercase; 
-    background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
-  }
+/* NEW STYLE FOR HEADER TEXT ONLY */
+.titleLeft h2 { 
+  margin: 0; 
+  font-weight: 900; 
+  text-transform: uppercase; 
+  background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
+}
 
-  .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-  .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-  .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 
-  .topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
-  .topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; background: white; color: black; }
+.topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
+.topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; background: white; color: black; }
 
-  button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight: 600; transition: .2s; }
-  button:hover{ background:#444; }
+button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight: 600; }
+button:hover{ background:#444; }
 
-  #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
-  .song{ display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; transition:.15s; }
-  .songInfo{ display:flex; flex-direction:column; }
-  .songTitle{ font-weight:700; font-size:16px; color:#ffffff; }
-  .songArtist{ font-size:14px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; }
-  .songArtist:hover{ text-shadow:0 0 4px #f1c40f; }
-  .song.highlight{ background:#1a1a1a; box-shadow: inset 3px 0 0 #f1c40f; }
+#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+.song{ display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; transition:.15s; }
+.songInfo{ display:flex; flex-direction:column; }
+.songTitle{ font-weight:700; font-size:16px; color:#ffffff; }
+.songArtist{ font-size:14px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; }
+.songArtist:hover{ text-shadow:0 0 4px #f1c40f; transform:scale(1.02); }
+.song.highlight{ background:#1a1a1a; box-shadow:0 0 6px rgba(241,196,15,.4); }
 
-  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
-  #artistToggle{ cursor:pointer; margin:0; }
-  #artistList{ display:none; margin-top:5px; }
-  #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
-  #artistList div:hover{ color:#f1c40f; }
+#artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
+#artistToggle{ cursor:pointer; margin:0; }
+#artistList{ display:none; margin-top:5px; }
+#artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
+#artistList div:hover{ color:#f1c40f; }
 
-  .pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
-  .clearBtn{ display:none; background:#333; }
+.pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
+.clearBtn{ display:none; background:#333; }
 </style>
 </head>
 <body>
@@ -68,7 +68,7 @@
 <div class="topBar">
   <button onclick="goHome()">🏠 Home</button>
   <button onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button onclick="randomArtist()">🎲 Random</button>
+  <button onclick="randomSong()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
 </div>
@@ -236,13 +236,7 @@ async function requestSong(artist,song){
   catch{alert("Type in chat:\n"+command)}
 }
 
-function randomArtist(){
-  if(!songs.length)return;
-  const uniqueArtists = [...new Set(songs.map(s => s.artist))];
-  const random = uniqueArtists[Math.floor(Math.random()*uniqueArtists.length)];
-  filterArtist(random);
-}
-
+function randomSong(){if(!songs.length)return;let s=songs[Math.floor(Math.random()*songs.length)];requestSong(s.artist,s.song)}
 function goHome(){clearSearch();window.scrollTo({top:0,behavior:"smooth"})}
 
 init()
