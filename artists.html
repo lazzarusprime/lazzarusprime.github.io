@@ -5,62 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Rocksmith Artists</title>
 <style>
-  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
-  .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
-  .titleLeft{ display:flex; align-items:center; gap:10px; }
-  .titleBar img{ width:40px; }
+body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+.titleLeft{ display:flex; align-items:center; gap:10px; }
+.titleBar img{ width:40px; }
 
-  /* MATCHING HEADER TEXT */
-  .titleLeft h2 { 
-    margin: 0; 
-    font-weight: 900; 
-    text-transform: uppercase; 
-    background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
-  }
+/* MATCHING HEADER STYLE */
+.titleLeft h2 { 
+  margin: 0; 
+  font-weight: 900; 
+  text-transform: uppercase; 
+  background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
+}
 
-  .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-  .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-  .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 
-  .topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
-  .topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; background: white; color: black; }
+.topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
+.topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; background: white; color: black; }
 
-  button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight: 600; transition: .2s; }
-  button:hover{ background:#444; }
+button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight: 600; }
+button:hover{ background:#444; }
 
-  #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
-  
-  .artistContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-    padding: 20px;
-  }
-  .artistContainer div {
-    padding: 15px;
-    background: #181818;
-    border: 1px solid #222;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: .15s;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .artistContainer div:hover {
-    background: #222;
-    color: #f1c40f;
-    border-color: #f1c40f;
-    transform: translateY(-2px);
-  }
-  .artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-  .artistCount { font-size: 12px; color: #888; }
+.artistContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  padding: 20px;
+}
+.artistContainer div {
+  padding: 15px;
+  background: #181818;
+  border: 1px solid #222;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.artistContainer div:hover {
+  background: #222;
+  color: #f1c40f;
+  border-color: #f1c40f;
+  transform: translateY(-2px);
+}
+.artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+.artistCount { font-size: 12px; color: #888; }
 
-  .pagination { padding: 20px; text-align: center; background: #111; }
+.pagination { padding: 20px; text-align: center; background: #111; }
 </style>
 </head>
 <body>
@@ -85,8 +82,6 @@
   <button onclick="randomArtist()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
-
-<div id="alphabet"></div>
 
 <div id="paginationTop" class="pagination"></div>
 
@@ -113,30 +108,8 @@ async function init() {
       .map(name => ({ name: name, count: map[name] }));
       
     filteredArtists = [...allUniqueArtists];
-    buildAlphabet();
     renderArtists();
   } catch (e) { console.error("Error:", e); }
-}
-
-function buildAlphabet() {
-  const div = document.getElementById("alphabet");
-  div.innerHTML = "";
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
-    let b = document.createElement("button");
-    b.innerText = letter;
-    b.onclick = () => jumpToLetter(letter);
-    div.appendChild(b);
-  });
-}
-
-function jumpToLetter(letter) {
-  document.getElementById("searchBox").value = "";
-  filteredArtists = [...allUniqueArtists];
-  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
-  if (idx === -1) { renderArtists(); return; }
-  currentPage = Math.floor(idx / artistsPerPage) + 1;
-  renderArtists();
-  window.scrollTo(0, 0);
 }
 
 function renderArtists() {
