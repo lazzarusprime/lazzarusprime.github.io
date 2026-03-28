@@ -43,6 +43,10 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 }
 .nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
 
+/* ORIGINAL BUTTON STYLE (Used for Request Button) */
+button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
+button:hover{ background:#444; }
+
 #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
 .song{ display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222; transition:.15s; }
 .songInfo{ display:flex; flex-direction:column; }
@@ -68,19 +72,6 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 
 .pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
 .clearBtn{ display:none; background:#333; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; }
-
-/* RESTORED REQUEST BUTTON STYLE */
-.request-btn { 
-  background: transparent; 
-  border: 1px solid #f1c40f; 
-  color: #f1c40f; 
-  padding: 8px 16px; 
-  border-radius: 6px; 
-  font-weight: bold; 
-  cursor: pointer;
-  transition: .3s; 
-}
-.request-btn:hover { background: #f1c40f; color: #000; box-shadow: 0 0 12px rgba(241, 196, 15, 0.3); }
 </style>
 </head>
 <body>
@@ -158,7 +149,7 @@ function renderSongs(){
         <div class="songTitle">${song.song}</div>
         <div class="songArtist" onmouseenter="highlightArtist('${song.artist}')" onmouseleave="clearHighlight()" onclick="filterArtist('${song.artist}')">${song.artist}</div>
       </div>
-      <button class="request-btn" onclick="requestSong('${song.artist}','${song.song}')">REQUEST</button>
+      <button onclick="requestSong('${song.artist}','${song.song}')">Request</button>
     `;
     list.appendChild(div);
   })
