@@ -88,7 +88,7 @@
 <div class="topBar">
   <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <button class="nav-btn nav-active" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="randomSong()">🎲 Random</button>
+  <button class="nav-btn" onclick="randomArtist()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
 
@@ -225,13 +225,11 @@ function selectArtist(artistName) {
   window.location.href = `index.html?search=${encodeURIComponent(artistName)}`;
 }
 
-async function requestSong(artist,song){
-  const command=`!request "${artist}" "${song}"`
-  try{await navigator.clipboard.writeText(command);alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)}
-  catch{alert("Type in chat:\n"+command)}
+function randomArtist(){
+  if(!allUniqueArtists.length)return;
+  const random = allUniqueArtists[Math.floor(Math.random()*allUniqueArtists.length)];
+  selectArtist(random.name);
 }
-
-function randomSong(){if(!songs_global.length)return;let s=songs_global[Math.floor(Math.random()*songs_global.length)];requestSong(s.artist,s.song)}
 
 init();
 </script>
