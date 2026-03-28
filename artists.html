@@ -181,7 +181,6 @@ function selectArtist(artistName) {
   window.location.href = `index.html?search=${encodeURIComponent(artistName)}`;
 }
 
-// RESTORED RANDOM ARTIST REDIRECT
 function randomArtistRedirect() {
   if(!allUniqueArtists.length) return;
   const random = allUniqueArtists[Math.floor(Math.random()*allUniqueArtists.length)];
