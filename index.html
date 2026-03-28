@@ -69,7 +69,7 @@
 <div class="topBar">
   <button class="nav-btn nav-active" onclick="goHome()">🏠 Home</button>
   <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="randomSong()">🎲 Random</button>
+  <button class="nav-btn" onclick="randomArtist()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
 </div>
@@ -241,7 +241,13 @@ async function requestSong(artist,song){
   catch{alert("Type in chat:\n"+command)}
 }
 
-function randomSong(){if(!songs.length)return;let s=songs[Math.floor(Math.random()*songs.length)];requestSong(s.artist,s.song)}
+function randomArtist(){
+  if(!songs.length)return;
+  const uniqueArtists = [...new Set(songs.map(s => s.artist))];
+  const random = uniqueArtists[Math.floor(Math.random()*uniqueArtists.length)];
+  filterArtist(random);
+}
+
 function goHome(){clearSearch();window.scrollTo({top:0,behavior:"smooth"})}
 
 init()
