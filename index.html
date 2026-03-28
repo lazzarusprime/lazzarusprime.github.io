@@ -51,16 +51,36 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 .songArtist:hover{ text-shadow:0 0 4px #f1c40f; transform:scale(1.02); }
 .song.highlight{ background:#1a1a1a; box-shadow:0 0 6px rgba(241,196,15,.4); }
 
-#artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
-#artistToggle{ cursor:pointer; margin:0; }
-#artistList{ display:none; margin-top:5px; }
+/* ARTIST STATS & FLAME ANIMATION */
+#artistStats{ margin: 10px 0; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
+#artistToggle{ cursor:pointer; margin:0; padding: 10px; }
+#artistList{ display:none; padding: 10px; border-top: 1px solid #222; animation: slideDown 0.3s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
-#artistList div:hover{ color:#f1c40f; }
+#artistList div:hover{ color:#f1c40f; padding-left: 5px; }
+
+.flame-effect { animation: warmPulse 0.6s ease-out; }
+@keyframes warmPulse {
+  0% { box-shadow: 0 0 0px transparent; }
+  50% { box-shadow: inset 0 0 30px rgba(241, 196, 15, 0.15); border-color: #f1c40f; }
+  100% { box-shadow: 0 0 0px transparent; }
+}
 
 .pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
 .clearBtn{ display:none; background:#333; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; }
-.request-btn { background:#f1c40f; color: black; border: none; padding: 7px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: .2s; }
-.request-btn:hover { background: #fff; transform: scale(1.05); }
+
+/* RESTORED REQUEST BUTTON STYLE */
+.request-btn { 
+  background: transparent; 
+  border: 1px solid #f1c40f; 
+  color: #f1c40f; 
+  padding: 8px 16px; 
+  border-radius: 6px; 
+  font-weight: bold; 
+  cursor: pointer;
+  transition: .3s; 
+}
+.request-btn:hover { background: #f1c40f; color: #000; box-shadow: 0 0 12px rgba(241, 196, 15, 0.3); }
 </style>
 </head>
 <body>
@@ -90,7 +110,7 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 <div id="alphabet"></div>
 
 <div id="artistStats">
-  <h3 id="artistToggle">🎸 Top Artists In Library ▶</h3>
+  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
   <div id="artistList"></div>
 </div>
 
@@ -138,7 +158,7 @@ function renderSongs(){
         <div class="songTitle">${song.song}</div>
         <div class="songArtist" onmouseenter="highlightArtist('${song.artist}')" onmouseleave="clearHighlight()" onclick="filterArtist('${song.artist}')">${song.artist}</div>
       </div>
-      <button class="request-btn" onclick="requestSong('${song.artist}','${song.song}')">Request</button>
+      <button class="request-btn" onclick="requestSong('${song.artist}','${song.song}')">REQUEST</button>
     `;
     list.appendChild(div);
   })
@@ -238,6 +258,7 @@ function buildArtistStats(){
   songs.forEach(s=>{if(!map[s.artist]) map[s.artist]=0; map[s.artist]++})
   const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10)
   const list=document.getElementById("artistList")
+  const statsContainer = document.getElementById("artistStats");
   list.innerHTML=""
   sorted.forEach(([artist,count])=>{
     let row=document.createElement("div")
@@ -247,8 +268,14 @@ function buildArtistStats(){
   })
   document.getElementById("artistToggle").onclick=()=>{
     const isHidden = list.style.display==="none"||list.style.display===""
+    
+    // Trigger Flame Animation
+    statsContainer.classList.remove("flame-effect");
+    void statsContainer.offsetWidth; 
+    statsContainer.classList.add("flame-effect");
+    
     list.style.display=isHidden?"block":"none"
-    document.getElementById("artistToggle").innerText=isHidden?"🎸 Top Artists In Library ▼":"🎸 Top Artists In Library ▶"
+    document.getElementById("artistToggle").querySelector('span:last-child').innerText=isHidden?"▼":"▶"
   }
 }
 
@@ -258,7 +285,6 @@ async function requestSong(artist,song){
   catch{alert("Type in chat:\n"+command)}
 }
 
-// RESTORED RANDOM ARTIST FILTER
 function randomArtistFilter(){
   if(!songs.length)return;
   const uniqueArtists = [...new Set(songs.map(s => s.artist))];
