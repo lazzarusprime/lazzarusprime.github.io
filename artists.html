@@ -5,52 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Rocksmith Artists</title>
 <style>
-body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
-.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
-.titleLeft{ display:flex; align-items:center; gap:10px; }
-.titleBar img{ width:40px; }
-.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
-.topBar{ display:flex; gap:6px; padding:10px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; }
-.topBar input{ flex:1; padding:8px; border-radius:6px; border:none; min-width:180px; }
-button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
-button:hover{ background:#444; }
-#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
-#artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; }
-#artistToggle{ cursor:pointer; margin:0; }
-#artistList{ display:none; margin-top:5px; }
-#artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
-#artistList div:hover{ color:#f1c40f; }
+  body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+  .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+  .titleLeft{ display:flex; align-items:center; gap:10px; }
+  .titleBar img{ width:40px; }
+  .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+  .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+  .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 
-.artistContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-  padding: 20px;
-}
-.artistContainer div {
-  padding: 15px;
-  background: #181818;
-  border: 1px solid #222;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .15s;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.artistContainer div:hover {
-  background: #222;
-  color: #f1c40f;
-  border-color: #f1c40f;
-  transform: translateY(-2px);
-}
-.artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
-.artistCount { font-size: 12px; color: #888; }
+  /* Prominent Navigation */
+  .topBar{ display:flex; gap:10px; padding:15px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; border-bottom: 1px solid #333; }
+  .topBar input{ flex:1; padding:10px; border-radius:6px; border:1px solid #444; background: #0a0a0a; color: white; min-width:180px; }
+  
+  .nav-btn { background:#b30000; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: .2s; border: 1px solid transparent; }
+  .nav-btn:hover { background:#ff0000; box-shadow: 0 0 10px #ff0000; }
+  .nav-active { background: #f1c40f !important; color: #000 !important; }
 
-.pagination { padding: 20px; text-align: center; background: #111; }
+  button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
+  button:hover{ background:#444; }
+
+  #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+
+  /* Top Artists & Flame Animation */
+  #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
+  #artistToggle{ cursor:pointer; margin:0; padding: 10px; transition: .2s; border-radius: 4px; }
+  #artistToggle:hover { color: #f1c40f; background: #1a1a1a; }
+  
+  #artistList{ display:none; margin-top:5px; padding-left: 10px; }
+  #artistList div{ padding:6px 10px; cursor:pointer; transition:.15s; border-left: 3px solid transparent; }
+  #artistList div:hover{ color:#f1c40f; border-left: 3px solid #f1c40f; background: linear-gradient(90deg, #222, transparent); text-shadow: 0 0 8px #f1c40f; }
+
+  .flame-effect { animation: flameBurst 0.5s ease-out; }
+  @keyframes flameBurst {
+    0% { box-shadow: inset 0 0 0px #f1c40f; }
+    50% { box-shadow: inset 0 0 20px #e67e22, 0 0 15px #f1c40f; }
+    100% { box-shadow: inset 0 0 0px #f1c40f; }
+  }
+
+  .artistContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    padding: 20px;
+  }
+  .artistContainer div {
+    padding: 15px;
+    background: #181818;
+    border: 1px solid #222;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .15s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .artistContainer div:hover {
+    background: #222;
+    color: #f1c40f;
+    border-color: #f1c40f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(241, 196, 15, 0.2);
+  }
+  .artistName { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+  .artistCount { font-size: 12px; color: #888; }
+  .pagination { padding: 20px; text-align: center; background: #111; }
 </style>
 </head>
 <body>
@@ -70,8 +89,8 @@ button:hover{ background:#444; }
 </div>
 
 <div class="topBar">
-  <button onclick="window.location.href='index.html'">🏠 Home</button>
-  <button onclick="window.location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn nav-active" onclick="window.location.href='artists.html'">🎸 Artists</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
 
@@ -125,13 +144,12 @@ function buildAlphabet() {
 }
 
 function jumpToLetter(letter) {
-  // Clear search bar and reset list before jumping
   document.getElementById("searchBox").value = "";
   filteredArtists = [...allUniqueArtists];
   
   const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
   if (idx === -1) {
-    renderArtists(); // Re-render the full list if letter not found
+    renderArtists();
     return;
   }
   currentPage = Math.floor(idx / artistsPerPage) + 1;
@@ -142,6 +160,7 @@ function jumpToLetter(letter) {
 function buildArtistStats(map) {
   const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 10);
   const div = document.getElementById("artistList");
+  const statsContainer = document.getElementById("artistStats");
   div.innerHTML = "";
   sorted.forEach(([artist, count]) => {
     let row = document.createElement("div");
@@ -151,6 +170,12 @@ function buildArtistStats(map) {
   });
   document.getElementById("artistToggle").onclick = () => {
     const isHidden = div.style.display === "none" || div.style.display === "";
+    
+    // Flame Animation Trigger
+    statsContainer.classList.remove("flame-effect");
+    void statsContainer.offsetWidth; // Trigger reflow
+    statsContainer.classList.add("flame-effect");
+
     div.style.display = isHidden ? "block" : "none";
     document.getElementById("artistToggle").innerText = isHidden ? "🎸 Top Artists In Library ▼" : "🎸 Top Artists In Library ▶";
   };
