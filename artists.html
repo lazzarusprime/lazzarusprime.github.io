@@ -13,7 +13,6 @@
   .socialLinks a{ color:#888; text-decoration:none; font-size:14px; transition:.15s; }
   .socialLinks a:hover{ color:#d4af37; text-shadow:0 0 5px rgba(212,175,55,0.4); }
 
-  /* Softer Navigation */
   .topBar{ display:flex; gap:10px; padding:15px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; border-bottom: 1px solid #2a2a2a; }
   .topBar input{ flex:1; padding:10px; border-radius:6px; border:1px solid #333; background: #0a0a0a; color: white; min-width:180px; }
   
@@ -26,14 +25,13 @@
 
   #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
 
-  /* Top Artists & Warm Flame Animation */
   #artistStats{ padding:10px; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; position: relative; overflow: hidden; }
   #artistToggle{ cursor:pointer; margin:0; padding: 10px; transition: .2s; border-radius: 4px; color: #aaa; }
   #artistToggle:hover { color: #d4af37; background: #1a1a1a; }
   
   #artistList{ display:none; margin-top:5px; padding-left: 10px; }
   #artistList div{ padding:6px 10px; cursor:pointer; transition:.2s; border-left: 3px solid transparent; color: #bbb; }
-  #artistList div:hover{ color:#d4af37; border-left: 3px solid #d4af37; background: linear-gradient(90deg, #1e1e1e, transparent); }
+  #artistList div:hover{ color:#d4af37; border-left: 3px solid #d4af37; background: linear-gradient(90deg, #1e1e1e, transparent); text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
   .flame-effect { animation: warmFlame 0.6s ease-out; }
   @keyframes warmFlame {
@@ -90,6 +88,7 @@
 <div class="topBar">
   <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <button class="nav-btn nav-active" onclick="window.location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="randomSong()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
 
@@ -108,6 +107,7 @@
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
+let songs_global = [];
 let allUniqueArtists = []; 
 let filteredArtists = [];
 let currentPage = 1;
@@ -116,9 +116,9 @@ const artistsPerPage = 60;
 async function init() {
   try {
     const response = await fetch("songs.json");
-    const songs = await response.json();
+    songs_global = await response.json();
     const map = {};
-    songs.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
+    songs_global.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
     
     allUniqueArtists = Object.keys(map)
       .sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}))
@@ -145,12 +145,8 @@ function buildAlphabet() {
 function jumpToLetter(letter) {
   document.getElementById("searchBox").value = "";
   filteredArtists = [...allUniqueArtists];
-  
   const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
-  if (idx === -1) {
-    renderArtists();
-    return;
-  }
+  if (idx === -1) { renderArtists(); return; }
   currentPage = Math.floor(idx / artistsPerPage) + 1;
   renderArtists();
   window.scrollTo(0, 0);
@@ -169,11 +165,9 @@ function buildArtistStats(map) {
   });
   document.getElementById("artistToggle").onclick = () => {
     const isHidden = div.style.display === "none" || div.style.display === "";
-    
     statsContainer.classList.remove("flame-effect");
     void statsContainer.offsetWidth; 
     statsContainer.classList.add("flame-effect");
-
     div.style.display = isHidden ? "block" : "none";
     document.getElementById("artistToggle").innerText = isHidden ? "🎸 Top Artists In Library ▼" : "🎸 Top Artists In Library ▶";
   };
@@ -184,7 +178,6 @@ function renderArtists() {
   container.innerHTML = "";
   const start = (currentPage - 1) * artistsPerPage;
   const pageArtists = filteredArtists.slice(start, start + artistsPerPage);
-  
   pageArtists.forEach(artist => {
     const div = document.createElement("div");
     div.onclick = () => selectArtist(artist.name);
@@ -201,7 +194,6 @@ function renderPagination() {
   const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1;
   const top = document.getElementById("paginationTop");
   const bottom = document.getElementById("paginationBottom");
-
   [top, bottom].forEach(container => {
     container.innerHTML = "";
     if (currentPage > 1) {
@@ -232,6 +224,14 @@ function handleSearchInput() {
 function selectArtist(artistName) {
   window.location.href = `index.html?search=${encodeURIComponent(artistName)}`;
 }
+
+async function requestSong(artist,song){
+  const command=`!request "${artist}" "${song}"`
+  try{await navigator.clipboard.writeText(command);alert("Copied to clipboard!\n\nPaste in Twitch chat:\n"+command)}
+  catch{alert("Type in chat:\n"+command)}
+}
+
+function randomSong(){if(!songs_global.length)return;let s=songs_global[Math.floor(Math.random()*songs_global.length)];requestSong(s.artist,s.song)}
 
 init();
 </script>
