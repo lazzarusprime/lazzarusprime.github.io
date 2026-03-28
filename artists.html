@@ -43,6 +43,9 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 }
 .nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
 
+/* ALPHABET BAR */
+#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+
 /* ARTIST STATS & FLAME ANIMATION */
 #artistStats{ margin: 10px 0; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
 #artistToggle{ cursor:pointer; margin:0; padding: 10px; }
@@ -92,7 +95,7 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
-    <h2>Lazzarus Prime Rocksmith Requests</h2>
+    <h2>Lazzarus Prime Rocksmith Artists</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -109,6 +112,8 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
   <button class="nav-btn" onclick="randomArtistRedirect()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
 </div>
+
+<div id="alphabet"></div>
 
 <div id="artistStats">
   <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
@@ -140,9 +145,39 @@ async function init() {
       .map(name => ({ name: name, count: map[name] }));
       
     filteredArtists = [...allUniqueArtists];
+    buildAlphabet();
     buildArtistStats(map);
     renderArtists();
   } catch (e) { console.error("Error:", e); }
+}
+
+function buildAlphabet(){
+  const div=document.getElementById("alphabet")
+  div.innerHTML=""
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
+    let b=document.createElement("button")
+    b.innerText=letter
+    b.className = "nav-btn";
+    b.style.padding = "6px 10px";
+    b.style.fontSize = "11px";
+    b.onclick=()=>jumpToLetter(letter)
+    div.appendChild(b)
+  })
+}
+
+function jumpToLetter(letter){
+  // Clear any existing search filters
+  document.getElementById("searchBox").value = "";
+  filteredArtists = [...allUniqueArtists];
+  
+  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
+  if (idx === -1) {
+    renderArtists();
+    return;
+  }
+  currentPage = Math.floor(idx / artistsPerPage) + 1;
+  renderArtists();
+  window.scrollTo({top:0, behavior: 'smooth'});
 }
 
 function buildArtistStats(map) {
