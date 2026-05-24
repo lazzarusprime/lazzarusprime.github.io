@@ -41,24 +41,6 @@ body{
     filter:drop-shadow(0 0 5px rgba(241,196,15,.6));
 }
 
-.socialLinks{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-.socialLinks a{
-    color:#aaa;
-    text-decoration:none;
-    font-size:14px;
-    transition:.15s;
-}
-
-.socialLinks a:hover{
-    color:#f1c40f;
-    text-shadow:0 0 5px #f1c40f;
-}
-
 .topBar{
     display:flex;
     gap:8px;
@@ -136,7 +118,6 @@ body{
     width:2px;
     height:100%;
     background:#f1c40f;
-    z-index:2;
 }
 
 .needle{
@@ -202,8 +183,14 @@ button.control{
     font-weight:800;
     font-size:15px;
 }
+
+button.control.active{
+    background:#e74c3c;
+    color:white;
+}
 </style>
 </head>
+
 <body>
 
 <div class="titleBar">
@@ -234,7 +221,7 @@ button.control{
         <div class="stringGuide" id="strings"></div>
 
         <div class="controls">
-            <button class="control" onclick="startTuner()">Start Tuner</button>
+            <button id="tunerBtn" class="control" onclick="toggleTuner(event)">Start Tuner</button>
         </div>
     </div>
 </div>
@@ -253,6 +240,15 @@ const noteEl = document.getElementById('note');
 const freqEl = document.getElementById('freq');
 const needle = document.getElementById('needle');
 const statusEl = document.getElementById('status');
+const btn = document.getElementById('tunerBtn');
+
+let isRunning = false;
+let audioCtx = null;
+let analyser = null;
+let stream = null;
+let source = null;
+let buffer = null;
+let rafId = null;
 
 function renderStrings(active){
     const wrap=document.getElementById('strings');
@@ -264,6 +260,7 @@ function renderStrings(active){
         wrap.appendChild(d);
     });
 }
+
 renderStrings();
 
 function nearestString(freq){
@@ -272,52 +269,92 @@ function nearestString(freq){
     );
 }
 
-async function startTuner(){
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    const audioCtx = new AudioContext();
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize=2048;
+function detect(){
+    analyser.getFloatTimeDomainData(buffer);
 
-    const source = audioCtx.createMediaStreamSource(stream);
-    source.connect(analyser);
-
-    const buffer = new Float32Array(analyser.fftSize);
-
-    function detect(){
-        analyser.getFloatTimeDomainData(buffer);
-
-        let crossings=0;
-        for(let i=1;i<buffer.length;i++){
-            if(buffer[i-1]<0 && buffer[i]>=0) crossings++;
-        }
-
-        const freq = crossings * audioCtx.sampleRate / buffer.length;
-
-        if(freq>60 && freq<400){
-            const target=nearestString(freq);
-            const cents=1200*Math.log2(freq/target.freq);
-
-            noteEl.textContent=target.note;
-            freqEl.textContent=freq.toFixed(2)+" Hz";
-
-            const pos=Math.max(0,Math.min(100,50+(cents*1.5)));
-            needle.style.left=pos+"%";
-
-            renderStrings(target.note);
-
-            if(Math.abs(cents)<5){
-                statusEl.textContent="IN TUNE";
-                statusEl.className="status inTune";
-            } else {
-                statusEl.textContent=cents>0?"Sharp":"Flat";
-                statusEl.className="status offTune";
-            }
-        }
-
-        requestAnimationFrame(detect);
+    let crossings=0;
+    for(let i=1;i<buffer.length;i++){
+        if(buffer[i-1]<0 && buffer[i]>=0) crossings++;
     }
 
+    const freq = crossings * audioCtx.sampleRate / buffer.length;
+
+    if(freq>60 && freq<400){
+        const target=nearestString(freq);
+        const cents=1200*Math.log2(freq/target.freq);
+
+        noteEl.textContent=target.note;
+        freqEl.textContent=freq.toFixed(2)+" Hz";
+
+        const pos=Math.max(0,Math.min(100,50+(cents*1.5)));
+        needle.style.left=pos+"%";
+
+        renderStrings(target.note);
+
+        if(Math.abs(cents)<5){
+            statusEl.textContent="IN TUNE";
+            statusEl.className="status inTune";
+        } else {
+            statusEl.textContent=cents>0?"Sharp":"Flat";
+            statusEl.className="status offTune";
+        }
+    }
+
+    rafId = requestAnimationFrame(detect);
+}
+
+async function start(){
+    stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    audioCtx = new AudioContext();
+
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+
+    source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+
+    buffer = new Float32Array(analyser.fftSize);
+
     detect();
+}
+
+function stop(){
+    if(rafId) cancelAnimationFrame(rafId);
+
+    if(stream){
+        stream.getTracks().forEach(t=>t.stop());
+    }
+
+    if(audioCtx){
+        audioCtx.close();
+    }
+
+    stream = null;
+    audioCtx = null;
+    analyser = null;
+    source = null;
+    buffer = null;
+}
+
+async function toggleTuner(e){
+    e.target.blur(); // FIX: removes stuck highlight
+
+    if(!isRunning){
+        await start();
+        btn.textContent = "Stop Tuner";
+        btn.classList.add("active");
+        isRunning = true;
+    } else {
+        stop();
+        btn.textContent = "Start Tuner";
+        btn.classList.remove("active");
+        statusEl.textContent = "Stopped";
+        statusEl.className = "status offTune";
+        noteEl.textContent = "--";
+        freqEl.textContent = "0.00 Hz";
+        needle.style.left = "50%";
+        isRunning = false;
+    }
 }
 </script>
 
