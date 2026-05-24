@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime Guitar Tuner</title>
+
+<style>
+body{
+    font-family:Segoe UI,Arial;
+    background:#0f0f0f;
+    color:white;
+    margin:0;
+}
+
+.titleBar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#141414;
+    padding:12px;
+    border-bottom:2px solid #222;
+    flex-wrap:wrap;
+}
+
+.titleLeft{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.titleBar img{ width:40px; }
+
+.titleLeft h2{
+    margin:0;
+    font-weight:900;
+    text-transform:uppercase;
+    background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 5px rgba(241,196,15,.6));
+}
+
+.socialLinks{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.socialLinks a{
+    color:#aaa;
+    text-decoration:none;
+    font-size:14px;
+    transition:.15s;
+}
+
+.socialLinks a:hover{
+    color:#f1c40f;
+    text-shadow:0 0 5px #f1c40f;
+}
+
+.topBar{
+    display:flex;
+    gap:8px;
+    padding:12px;
+    background:#181818;
+    position:sticky;
+    top:0;
+    z-index:100;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-bottom:1px solid #333;
+}
+
+.nav-btn{
+    background:#2a2a2a;
+    color:white;
+    border:1px solid #444;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav-btn:hover{
+    background:#444;
+    border-color:#f1c40f;
+    color:#f1c40f;
+}
+
+.tunerWrap{
+    max-width:900px;
+    margin:40px auto;
+    padding:25px;
+}
+
+.panel{
+    background:#181818;
+    border:1px solid #222;
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 0 25px rgba(0,0,0,.5);
+}
+
+.noteDisplay{
+    text-align:center;
+    font-size:110px;
+    font-weight:900;
+    color:#f1c40f;
+    text-shadow:0 0 20px rgba(241,196,15,.35);
+}
+
+.freqDisplay{
+    text-align:center;
+    font-size:22px;
+    color:#aaa;
+    margin-bottom:25px;
+}
+
+.meter{
+    height:20px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+}
+
+.centerLine{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:2px;
+    height:100%;
+    background:#f1c40f;
+    z-index:2;
+}
+
+.needle{
+    position:absolute;
+    top:0;
+    width:6px;
+    height:100%;
+    background:#fff;
+    transition:left .12s ease-out;
+    border-radius:4px;
+}
+
+.status{
+    text-align:center;
+    margin-top:18px;
+    font-size:20px;
+    font-weight:700;
+}
+
+.inTune{
+    color:#2ecc71;
+    text-shadow:0 0 12px rgba(46,204,113,.6);
+}
+
+.offTune{
+    color:#e74c3c;
+}
+
+.stringGuide{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+    margin-top:30px;
+}
+
+.stringCard{
+    background:#202020;
+    border:1px solid #333;
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+    transition:.2s;
+}
+
+.stringCard.active{
+    border-color:#f1c40f;
+    box-shadow:0 0 18px rgba(241,196,15,.25);
+    color:#f1c40f;
+}
+
+.controls{
+    text-align:center;
+    margin-top:25px;
+}
+
+button.control{
+    background:#f1c40f;
+    color:#111;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:800;
+    font-size:15px;
+}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+    <div class="titleLeft">
+        <img src="guitar.png">
+        <h2>Lazzarus Prime Guitar Tuner</h2>
+    </div>
+</div>
+
+<div class="topBar">
+    <button class="nav-btn" onclick="location.href='index.html'">🏠 Home</button>
+    <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+    <button class="nav-btn">🎵 Tuner</button>
+</div>
+
+<div class="tunerWrap">
+    <div class="panel">
+        <div class="noteDisplay" id="note">--</div>
+        <div class="freqDisplay" id="freq">0.00 Hz</div>
+
+        <div class="meter">
+            <div class="centerLine"></div>
+            <div class="needle" id="needle"></div>
+        </div>
+
+        <div class="status offTune" id="status">Waiting...</div>
+
+        <div class="stringGuide" id="strings"></div>
+
+        <div class="controls">
+            <button class="control" onclick="startTuner()">Start Tuner</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const strings = [
+    {note:'E2',freq:82.41},
+    {note:'A2',freq:110.00},
+    {note:'D3',freq:146.83},
+    {note:'G3',freq:196.00},
+    {note:'B3',freq:246.94},
+    {note:'E4',freq:329.63}
+];
+
+const noteEl = document.getElementById('note');
+const freqEl = document.getElementById('freq');
+const needle = document.getElementById('needle');
+const statusEl = document.getElementById('status');
+
+function renderStrings(active){
+    const wrap=document.getElementById('strings');
+    wrap.innerHTML='';
+    strings.forEach(s=>{
+        const d=document.createElement('div');
+        d.className='stringCard'+(s.note===active?' active':'');
+        d.innerHTML=`<strong>${s.note}</strong><br>${s.freq} Hz`;
+        wrap.appendChild(d);
+    });
+}
+renderStrings();
+
+function nearestString(freq){
+    return strings.reduce((a,b)=>
+        Math.abs(b.freq-freq)<Math.abs(a.freq-freq)?b:a
+    );
+}
+
+async function startTuner(){
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const audioCtx = new AudioContext();
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize=2048;
+
+    const source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+
+    const buffer = new Float32Array(analyser.fftSize);
+
+    function detect(){
+        analyser.getFloatTimeDomainData(buffer);
+
+        let crossings=0;
+        for(let i=1;i<buffer.length;i++){
+            if(buffer[i-1]<0 && buffer[i]>=0) crossings++;
+        }
+
+        const freq = crossings * audioCtx.sampleRate / buffer.length;
+
+        if(freq>60 && freq<400){
+            const target=nearestString(freq);
+            const cents=1200*Math.log2(freq/target.freq);
+
+            noteEl.textContent=target.note;
+            freqEl.textContent=freq.toFixed(2)+" Hz";
+
+            const pos=Math.max(0,Math.min(100,50+(cents*1.5)));
+            needle.style.left=pos+"%";
+
+            renderStrings(target.note);
+
+            if(Math.abs(cents)<5){
+                statusEl.textContent="IN TUNE";
+                statusEl.className="status inTune";
+            } else {
+                statusEl.textContent=cents>0?"Sharp":"Flat";
+                statusEl.className="status offTune";
+            }
+        }
+
+        requestAnimationFrame(detect);
+    }
+
+    detect();
+}
+</script>
+
+</body>
+</html>
