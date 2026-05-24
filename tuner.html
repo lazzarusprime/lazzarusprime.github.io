@@ -3,360 +3,417 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Guitar Tuner</title>
+<title>Lazzarus Prime Precision Tuner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-body{
-    font-family:Segoe UI,Arial;
-    background:#0f0f0f;
-    color:white;
-    margin:0;
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f0f;
+    color: white;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.titleBar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#141414;
-    padding:12px;
-    border-bottom:2px solid #222;
-    flex-wrap:wrap;
+/* METALLIC HEADER STYLE */
+.titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #141414;
+    padding: 15px 20px;
+    border-bottom: 2px solid #222;
+    flex-wrap: wrap;
 }
 
-.titleLeft{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.titleLeft {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-.titleBar img{ width:40px; }
-
-.titleLeft h2{
-    margin:0;
-    font-weight:900;
-    text-transform:uppercase;
-    background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 5px rgba(241,196,15,.6));
+.titleLeft h2 {
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.4));
 }
 
-.topBar{
-    display:flex;
-    gap:8px;
-    padding:12px;
-    background:#181818;
-    position:sticky;
-    top:0;
-    z-index:100;
-    justify-content:center;
-    flex-wrap:wrap;
-    border-bottom:1px solid #333;
+.topBar {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: #181818;
+    justify-content: center;
+    border-bottom: 1px solid #262626;
 }
 
-.nav-btn{
-    background:#2a2a2a;
-    color:white;
-    border:1px solid #444;
-    padding:10px 18px;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:700;
-    text-transform:uppercase;
-    font-size:13px;
-    transition:.2s;
+/* TUNER APP CONTAINER */
+.tuner-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.nav-btn:hover{
-    background:#444;
-    border-color:#f1c40f;
-    color:#f1c40f;
+.display-panel {
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    margin-bottom: 25px;
 }
 
-.tunerWrap{
-    max-width:900px;
-    margin:40px auto;
-    padding:25px;
+.note-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    line-height: 1;
+    color: #fff;
+    margin: 10px 0;
+    text-shadow: 0 0 20px rgba(255,255,255,0.1);
+    transition: color 0.15s ease;
 }
 
-.panel{
-    background:#181818;
-    border:1px solid #222;
-    border-radius:12px;
-    padding:30px;
-    box-shadow:0 0 25px rgba(0,0,0,.5);
+.frequency-display {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 20px;
 }
 
-.noteDisplay{
-    text-align:center;
-    font-size:110px;
-    font-weight:900;
-    color:#f1c40f;
-    text-shadow:0 0 20px rgba(241,196,15,.35);
+.status {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    display: inline-block;
 }
 
-.freqDisplay{
-    text-align:center;
-    font-size:22px;
-    color:#aaa;
-    margin-bottom:25px;
+.inTune {
+    color: #27ae60;
+    background: rgba(39, 174, 96, 0.1);
+    border: 1px solid rgba(39, 174, 96, 0.3);
+    text-shadow: 0 0 10px rgba(39, 174, 96, 0.4);
 }
 
-.meter{
-    height:20px;
-    background:#111;
-    border:1px solid #333;
-    border-radius:20px;
-    overflow:hidden;
-    position:relative;
+.offTune {
+    color: #ff5500;
+    background: rgba(255, 85, 0, 0.1);
+    border: 1px solid rgba(255, 85, 0, 0.2);
 }
 
-.centerLine{
-    position:absolute;
-    left:50%;
-    top:0;
-    width:2px;
-    height:100%;
-    background:#f1c40f;
+/* VISUAL METER CANVAS */
+canvas {
+    background: #0b0b0b;
+    border-radius: 8px;
+    border: 1px solid #222;
+    width: 100%;
+    height: 80px;
+    margin-top: 25px;
 }
 
-.needle{
-    position:absolute;
-    top:0;
-    width:6px;
-    height:100%;
-    background:#fff;
-    transition:left .12s ease-out;
-    border-radius:4px;
+/* BUTTON STYLING */
+.btn {
+    padding: 12px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    background: #ff5500;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3);
 }
 
-.status{
-    text-align:center;
-    margin-top:18px;
-    font-size:20px;
-    font-weight:700;
+.btn:hover {
+    background: #ff7733;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 85, 0, 0.4);
 }
 
-.inTune{
-    color:#2ecc71;
-    text-shadow:0 0 12px rgba(46,204,113,.6);
+.btn:active {
+    transform: translateY(1px);
 }
 
-.offTune{
-    color:#e74c3c;
+.btn.active {
+    background: #c0392b;
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
 }
 
-.stringGuide{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:12px;
-    margin-top:30px;
-}
-
-.stringCard{
-    background:#202020;
-    border:1px solid #333;
-    border-radius:8px;
-    padding:16px;
-    text-align:center;
-    transition:.2s;
-}
-
-.stringCard.active{
-    border-color:#f1c40f;
-    box-shadow:0 0 18px rgba(241,196,15,.25);
-    color:#f1c40f;
-}
-
-.controls{
-    text-align:center;
-    margin-top:25px;
-}
-
-button.control{
-    background:#f1c40f;
-    color:#111;
-    border:none;
-    padding:12px 22px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:800;
-    font-size:15px;
-}
-
-button.control.active{
-    background:#e74c3c;
-    color:white;
+.btn:focus {
+    outline: none;
 }
 </style>
 </head>
-
 <body>
 
 <div class="titleBar">
     <div class="titleLeft">
-        <img src="guitar.png">
-        <h2>Lazzarus Prime Guitar Tuner</h2>
+        <h2>Lazzarus Prime Tuner</h2>
     </div>
 </div>
 
 <div class="topBar">
-    <button class="nav-btn" onclick="location.href='index.html'">🏠 Home</button>
-    <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
-    <button class="nav-btn">🎵 Tuner</button>
+    <button id="tunerBtn" class="btn" onclick="toggleTuner(event)">Start Tuner</button>
 </div>
 
-<div class="tunerWrap">
-    <div class="panel">
-        <div class="noteDisplay" id="note">--</div>
-        <div class="freqDisplay" id="freq">0.00 Hz</div>
-
-        <div class="meter">
-            <div class="centerLine"></div>
-            <div class="needle" id="needle"></div>
-        </div>
-
-        <div class="status offTune" id="status">Waiting...</div>
-
-        <div class="stringGuide" id="strings"></div>
-
-        <div class="controls">
-            <button id="tunerBtn" class="control" onclick="toggleTuner(event)">Start Tuner</button>
-        </div>
+<div class="tuner-container">
+    <div class="display-panel">
+        <div id="note" class="note-display">--</div>
+        <div id="frequency" class="frequency-display">0.00 Hz</div>
+        <div id="status" class="status offTune">Stopped</div>
+        
+        <canvas id="meterCanvas"></canvas>
     </div>
 </div>
 
 <script>
-const strings = [
-    {note:'E2',freq:82.41},
-    {note:'A2',freq:110.00},
-    {note:'D3',freq:146.83},
-    {note:'G3',freq:196.00},
-    {note:'B3',freq:246.94},
-    {note:'E4',freq:329.63}
-];
+    let audioCtx = null;
+    let analyser = null;
+    let filterNode = null;
+    let stream = null;
+    let source = null;
+    let buffer = null;
+    let isRunning = false;
+    let rafId = null;
 
-const noteEl = document.getElementById('note');
-const freqEl = document.getElementById('freq');
-const needle = document.getElementById('needle');
-const statusEl = document.getElementById('status');
-const btn = document.getElementById('tunerBtn');
+    // Visual Meter Jitter Dampening Variables
+    let smoothedCents = 0;
+    const smoothingFactor = 0.15; // Lower values = smoother needle tracking
 
-let isRunning = false;
-let audioCtx = null;
-let analyser = null;
-let stream = null;
-let source = null;
-let buffer = null;
-let rafId = null;
+    const btn = document.getElementById("tunerBtn");
+    const noteEl = document.getElementById("note");
+    const freqEl = document.getElementById("frequency");
+    const statusEl = document.getElementById("status");
+    const canvas = document.getElementById("meterCanvas");
+    const ctx = canvas.getContext("2d");
 
-function renderStrings(active){
-    const wrap=document.getElementById('strings');
-    wrap.innerHTML='';
-    strings.forEach(s=>{
-        const d=document.createElement('div');
-        d.className='stringCard'+(s.note===active?' active':'');
-        d.innerHTML=`<strong>${s.note}</strong><br>${s.freq} Hz`;
-        wrap.appendChild(d);
-    });
-}
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
-renderStrings();
+    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-function nearestString(freq){
-    return strings.reduce((a,b)=>
-        Math.abs(b.freq-freq)<Math.abs(a.freq-freq)?b:a
-    );
-}
-
-function detect(){
-    analyser.getFloatTimeDomainData(buffer);
-
-    let crossings=0;
-    for(let i=1;i<buffer.length;i++){
-        if(buffer[i-1]<0 && buffer[i]>=0) crossings++;
+    function getNoteAndCents(frequency) {
+        const noteNum = 12 * (Math.log2(frequency / 440)) + 69;
+        const roundedNoteNum = Math.round(noteNum);
+        const cents = Math.round((noteNum - roundedNoteNum) * 100);
+        const noteName = notes[((roundedNoteNum % 12) + 12) % 12];
+        return { noteName, cents };
     }
 
-    const freq = crossings * audioCtx.sampleRate / buffer.length;
+    function autoCorrelate(buffer, sampleRate) {
+        let SIZE = buffer.length;
+        let rms = 0;
 
-    if(freq>60 && freq<400){
-        const target=nearestString(freq);
-        const cents=1200*Math.log2(freq/target.freq);
+        for (let i = 0; i < SIZE; i++) {
+            let val = buffer[i];
+            rms += val * val;
+        }
+        rms = Math.sqrt(rms / SIZE);
+        
+        // Strict baseline audio thresholding to ignore random ambient room hums
+        if (rms < 0.015) return -1; 
 
-        noteEl.textContent=target.note;
-        freqEl.textContent=freq.toFixed(2)+" Hz";
+        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+        for (let i = 0; i < SIZE / 2; i++) {
+            if (Math.abs(buffer[i]) < thres) { r1 = i; break; }
+        }
+        for (let i = SIZE - 1; i >= SIZE / 2; i--) {
+            if (Math.abs(buffer[i]) < thres) { r2 = i; break; }
+        }
 
-        const pos=Math.max(0,Math.min(100,50+(cents*1.5)));
-        needle.style.left=pos+"%";
+        buffer = buffer.slice(r1, r2);
+        SIZE = buffer.length;
 
-        renderStrings(target.note);
+        let c = new Float32Array(SIZE);
+        for (let i = 0; i < SIZE; i++) {
+            for (let j = 0; j < SIZE - i; j++) {
+                c[i] = c[i] + buffer[j] * buffer[j + i];
+            }
+        }
 
-        if(Math.abs(cents)<5){
-            statusEl.textContent="IN TUNE";
-            statusEl.className="status inTune";
-        } else {
-            statusEl.textContent=cents>0?"Sharp":"Flat";
-            statusEl.className="status offTune";
+        let d = 0;
+        while (c[d] > c[d + 1]) d++;
+        let maxval = -1, maxpos = -1;
+        for (let i = d; i < SIZE; i++) {
+            if (c[i] > maxval) {
+                maxval = c[i];
+                maxpos = i;
+            }
+        }
+        let T0 = maxpos;
+
+        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+        let a = (x1 + x3 - 2 * x2) / 2;
+        let b = (x3 - x1) / 2;
+        if (a) T0 = T0 - b / (2 * a);
+
+        return sampleRate / T0;
+    }
+
+    function drawMeter(cents, inTune) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const midX = canvas.width / 2;
+        
+        // Render static center reference lanes
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(midX, 0);
+        ctx.lineTo(midX, canvas.height);
+        ctx.stroke();
+
+        // Render calibration marks
+        ctx.fillStyle = "#444";
+        for(let i = -50; i <= 50; i += 10) {
+            const x = midX + (i * (canvas.width / 120));
+            ctx.fillRect(x, canvas.height - 10, 2, 10);
+        }
+
+        if (isRunning && cents !== null) {
+            // Hysteresis algorithm processing to smoothly pan needle changes
+            smoothedCents += (cents - smoothedCents) * smoothingFactor;
+
+            const targetX = midX + (smoothedCents * (canvas.width / 120));
+            
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = inTune ? "#27ae60" : "#ff5500";
+            ctx.strokeStyle = inTune ? "#27ae60" : "#ff5500";
+            ctx.lineWidth = 4;
+            
+            ctx.beginPath();
+            ctx.moveTo(targetX, 5);
+            ctx.lineTo(targetX, canvas.height - 5);
+            ctx.stroke();
+            
+            ctx.shadowBlur = 0;
         }
     }
 
-    rafId = requestAnimationFrame(detect);
-}
+    function detect() {
+        if (!analyser) return;
+        analyser.getFloatTimeDomainData(buffer);
+        const ac = autoCorrelate(buffer, audioCtx.sampleRate);
 
-async function start(){
-    stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    audioCtx = new AudioContext();
+        if (ac !== -1 && ac > 25 && ac < 1200) {
+            freqEl.textContent = ac.toFixed(2) + " Hz";
+            const { noteName, cents } = getNoteAndCents(ac);
+            noteEl.textContent = noteName;
 
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048;
+            const inTune = Math.abs(cents) <= 3;
+            if (inTune) {
+                statusEl.textContent = "IN TUNE";
+                statusEl.className = "status inTune";
+                noteEl.style.color = "#27ae60";
+            } else {
+                statusEl.textContent = cents > 0 ? `+${cents} Sharp` : `${cents} Flat`;
+                statusEl.className = "status offTune";
+                noteEl.style.color = "#fff";
+            }
+            drawMeter(cents, inTune);
+        } else {
+            if (ac === -1) {
+                noteEl.style.color = "rgba(255,255,255,0.3)";
+            }
+            drawMeter(null, false);
+        }
 
-    source = audioCtx.createMediaStreamSource(stream);
-    source.connect(analyser);
-
-    buffer = new Float32Array(analyser.fftSize);
-
-    detect();
-}
-
-function stop(){
-    if(rafId) cancelAnimationFrame(rafId);
-
-    if(stream){
-        stream.getTracks().forEach(t=>t.stop());
+        rafId = requestAnimationFrame(detect);
     }
 
-    if(audioCtx){
-        audioCtx.close();
+    async function start() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: { 
+                    echoCancellation: false, 
+                    noiseSuppression: false,
+                    autoGainControl: false
+                } 
+            });
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Build an explicit high-performance low-pass filter node to catch low notes
+            filterNode = audioCtx.createBiquadFilter();
+            filterNode.type = "lowpass";
+            filterNode.frequency.setValueAtTime(350, audioCtx.currentTime); // Strips room overtones completely
+
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+
+            source = audioCtx.createMediaStreamSource(stream);
+            
+            // Pipe connection routing chain
+            source.connect(filterNode);
+            filterNode.connect(analyser);
+            
+            buffer = new Float32Array(analyser.fftSize);
+
+            detect();
+        } catch (err) {
+            alert("Could not open media capture streams: " + err.message);
+            stop();
+        }
     }
 
-    stream = null;
-    audioCtx = null;
-    analyser = null;
-    source = null;
-    buffer = null;
-}
+    function stop() {
+        if (rafId) cancelAnimationFrame(rafId);
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        if (audioCtx) audioCtx.close();
 
-async function toggleTuner(e){
-    e.target.blur(); // FIX: removes stuck highlight
+        stream = null;
+        audioCtx = null;
+        filterNode = null;
+        analyser = null;
+        source = null;
+        buffer = null;
+        isRunning = false;
 
-    if(!isRunning){
-        await start();
-        btn.textContent = "Stop Tuner";
-        btn.classList.add("active");
-        isRunning = true;
-    } else {
-        stop();
         btn.textContent = "Start Tuner";
         btn.classList.remove("active");
         statusEl.textContent = "Stopped";
         statusEl.className = "status offTune";
         noteEl.textContent = "--";
+        noteEl.style.color = "#fff";
         freqEl.textContent = "0.00 Hz";
-        needle.style.left = "50%";
-        isRunning = false;
+        smoothedCents = 0;
+        drawMeter(null, false);
     }
-}
-</script>
 
+    async function toggleTuner(e) {
+        e.target.blur();
+
+        if (!isRunning) {
+            isRunning = true;
+            btn.textContent = "Stop Tuner";
+            btn.classList.add("active");
+            await start();
+        } else {
+            stop();
+        }
+    }
+</script>
 </body>
 </html>
