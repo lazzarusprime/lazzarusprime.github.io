@@ -3,794 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Precision Tuner</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>Lazzarus Prime Guitar Tuner</title>
 
 <style>
-body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }
-.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
-.titleLeft{ display:flex; align-items:center; gap:10px; }
+body{
+    font-family:Segoe UI,Arial;
+    background:#0f0f0f;
+    color:white;
+    margin:0;
+}
+
+.titleBar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#141414;
+    padding:12px;
+    border-bottom:2px solid #222;
+    flex-wrap:wrap;
+}
+
+.titleLeft{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
 .titleBar img{ width:40px; }
 
-/* METALLIC HEADER TEXT */
-.titleLeft h2 { 
-  margin: 0; 
-  font-weight: 900; 
-  text-transform: uppercase; 
-  background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
+.titleLeft h2{
+    margin:0;
+    font-weight:900;
+    text-transform:uppercase;
+    background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 5px rgba(241,196,15,.6));
 }
 
-.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
-.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
-.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
-
-.topBar{ display:flex; gap:8px; padding:12px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; align-items:center; border-bottom: 1px solid #333; }
-
-.nav-btn { 
-  background:#2a2a2a; 
-  color:white; 
-  border:1px solid #444; 
-  padding:10px 18px; 
-  border-radius:6px; 
-  cursor:pointer; 
-  font-weight: 700; 
-  text-transform: uppercase;
-  font-size: 13px;
-  transition: .2s;
-}
-.nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
-
-.action-btn {
-  background:#ff5500;
-  color:white;
-  border:none;
-  padding:10px 18px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
-  text-transform:uppercase;
-  font-size:13px;
-  transition:.2s;
-}
-.action-btn:hover { background:#ff7733; }
-.action-btn.active { background:#c0392b; box-shadow:0 0 10px rgba(192,57,43,0.5); }
-
-.menu-row {
-    display: flex;
-    gap: 15px;
-    background: #141414;
-    padding: 12px 20px;
-    justify-content: center;
-    border-bottom: 1px solid #222;
-    flex-wrap: wrap;
+.topBar{
+    display:flex;
+    gap:8px;
+    padding:12px;
+    background:#181818;
+    position:sticky;
+    top:0;
+    z-index:100;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-bottom:1px solid #333;
 }
 
-.menu-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.nav-btn{
+    background:#2a2a2a;
+    color:white;
+    border:1px solid #444;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:13px;
+    transition:.2s;
 }
 
-.menu-group label {
-    font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #888;
+.nav-btn:hover{
+    background:#444;
+    border-color:#f1c40f;
+    color:#f1c40f;
 }
 
-select {
-    background: #222;
-    color: white;
-    border: 1px solid #444;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    min-width: 170px;
-    transition: border-color 0.15s ease;
-}
-select:focus { outline: none; border-color: #f1c40f; }
-
-/* DUAL PANEL APP WORKSPACE LAYOUT */
-.app-workspace {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 30px;
-    max-width: 1000px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-    gap: 25px;
+.tunerWrap{
+    max-width:900px;
+    margin:40px auto;
+    padding:25px;
 }
 
-.tuner-container {
-    flex: 1;
-    min-width: 320px;
-    max-width: 650px;
-    width: 100%;
-    box-sizing: border-box;
+.panel{
+    background:#181818;
+    border:1px solid #222;
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 0 25px rgba(0,0,0,.5);
 }
 
-.display-panel {
-    background: #141414;
-    border: 1px solid #222;
-    border-radius: 12px;
-    padding: 35px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    box-sizing: border-box;
+.noteDisplay{
+    text-align:center;
+    font-size:110px;
+    font-weight:900;
+    color:#f1c40f;
+    text-shadow:0 0 20px rgba(241,196,15,.35);
 }
 
-/* SIDE LEGEND REFERENCE CONTAINER */
-.legend-panel {
-    width: 260px;
-    background: #141414;
-    border: 1px solid #222;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    box-sizing: border-box;
+.freqDisplay{
+    text-align:center;
+    font-size:22px;
+    color:#aaa;
+    margin-bottom:25px;
 }
 
-.legend-title {
-    font-size: 12px;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: #f1c40f;
-    letter-spacing: 1px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 10px;
-    margin-bottom: 12px;
-    text-align: center;
+.meter{
+    height:20px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
 }
 
-.legend-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.centerLine{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:2px;
+    height:100%;
+    background:#f1c40f;
 }
 
-.legend-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #1d1d1d;
-    padding: 10px 14px;
-    border-radius: 6px;
-    border: 1px solid #262626;
-    font-size: 14px;
-    font-weight: 600;
-    color: #aaa;
-    transition: all 0.2s ease;
+.needle{
+    position:absolute;
+    top:0;
+    width:6px;
+    height:100%;
+    background:#fff;
+    transition:left .12s ease-out;
+    border-radius:4px;
 }
 
-.legend-row .string-lbl {
-    font-weight: 700;
-    color: #fff;
-    background: #2a2a2a;
-    padding: 2px 8px;
-    border-radius: 4px;
-    min-width: 20px;
-    text-align: center;
+.status{
+    text-align:center;
+    margin-top:18px;
+    font-size:20px;
+    font-weight:700;
 }
 
-.legend-row .hz-lbl {
-    font-family: monospace;
-    font-size: 13px;
+.inTune{
+    color:#2ecc71;
+    text-shadow:0 0 12px rgba(46,204,113,.6);
 }
 
-/* Active Legend row lighting */
-.legend-row.active-match {
-    border-color: #ff5500;
-    background: rgba(255, 85, 0, 0.1);
-    color: #ff7733;
-    box-shadow: 0 0 10px rgba(255, 85, 0, 0.15);
-}
-.legend-row.active-match .string-lbl {
-    background: #ff5500;
-    color: #fff;
+.offTune{
+    color:#e74c3c;
 }
 
-.legend-row.active-match.intune-match {
-    border-color: #27ae60;
-    background: rgba(39, 174, 96, 0.1);
-    color: #2ecc71;
-    box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
-}
-.legend-row.active-match.intune-match .string-lbl {
-    background: #27ae60;
-    color: #fff;
+.stringGuide{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+    margin-top:30px;
 }
 
-.string-picker {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-}
-
-.string-note {
-    background: #222;
-    border: 1px solid #333;
-    color: #666;
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 15px;
-    transition: all 0.2s ease;
-    min-width: 45px;
-    text-align: center;
-    pointer-events: none;
-}
-
-.string-note.selected {
-    background: #ff5500;
-    color: #fff;
-    border-color: #ff7733;
-    box-shadow: 0 0 15px rgba(255, 85, 0, 0.4);
-}
-
-.string-note.selected.matched-intune {
-    background: #27ae60;
-    color: #fff;
-    border-color: #2ecc71;
-    box-shadow: 0 0 15px rgba(39, 174, 96, 0.6);
-}
-
-.note-display {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 130px;
-    line-height: 1;
-    color: #fff;
-    margin: 15px 0;
-    transition: color 0.15s ease, filter 0.1s ease;
-}
-
-.note-display.flaming {
-    animation: flamePulse 0.6s infinite alternate ease-in-out;
-}
-
-.note-display.glow-intune {
-    color: #27ae60 !important;
-    animation: intuneLaser 0.4s infinite alternate ease-in-out;
-}
-
-@keyframes flamePulse {
-    0% { filter: drop-shadow(0 0 8px #ff3300) drop-shadow(0 0 20px #ff7700); text-shadow: 0 0 5px #fff; }
-    100% { filter: drop-shadow(0 0 14px #ff5500) drop-shadow(0 0 32px #ffaa00); text-shadow: 0 0 10px #f1c40f; }
-}
-
-@keyframes intuneLaser {
-    0% { filter: drop-shadow(0 0 10px #27ae60) drop-shadow(0 0 25px #2ecc71); }
-    100% { filter: drop-shadow(0 0 18px #2ecc71) drop-shadow(0 0 45px #a3e4d7); }
-}
-
-.frequency-display {
-    font-size: 16px;
-    color: #888;
-    margin-bottom: 20px;
-}
-
-.status {
-    font-size: 18px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 6px 16px;
-    border-radius: 6px;
-    display: inline-block;
-}
-
-.inTune {
-    color: #27ae60;
-    background: rgba(39, 174, 96, 0.1);
-    border: 1px solid rgba(39, 174, 96, 0.3);
-}
-
-.offTune {
-    color: #ff5500;
-    background: rgba(255, 85, 0, 0.1);
-    border: 1px solid rgba(255, 85, 0, 0.2);
-}
-
-canvas {
-    background: #0b0b0b;
-    border-radius: 8px;
-    border: 1px solid #222;
-    width: 100%;
-    height: 85px;
-    margin-top: 25px;
-}
-</style>
-</head>
-<body>
-
-<div class="titleBar">
-  <div class="titleLeft">
-    <img src="guitar.png">
-    <h2>Lazzarus Prime Tuner</h2>
-  </div>
-  <div class="socialLinks">
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
-  </div>
-</div>
-
-<div class="topBar">
-  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
-  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button>
-</div>
-
-<div class="menu-row">
-    <div class="menu-group">
-        <label>Instrument</label>
-        <select id="instrumentSelect" onchange="buildMenuHierarchy()">
-            <option value="bass">Bass Guitar</option>
-            <option value="guitar">Guitar</option>
-        </select>
-    </div>
-    
-    <div class="menu-group" id="stringCountGroup">
-        <label>Strings</label>
-        <select id="stringCountSelect" onchange="buildMenuHierarchy()">
-            <option value="4">4-String</option>
-            <option value="5">5-String</option>
-            <option value="6">6-String</option>
-        </select>
-    </div>
-
-    <div class="menu-group">
-        <label>Tuning Profile</label>
-        <select id="tuningProfileSelect" onchange="updateTargetStrings()">
-            </select>
-    </div>
-</div>
-
-<div class="app-workspace">
-    <div class="tuner-container">
-        <div class="display-panel">
-            <div id="stringPicker" class="string-picker"></div>
-
-            <div id="note" class="note-display">--</div>
-            <div id="frequency" class="frequency-display">0.00 Hz</div>
-            <div id="status" class="status offTune">Stopped</div>
-            
-            <canvas id="meterCanvas"></canvas>
-        </div>
-    </div>
-
-    <div class="legend-panel">
-        <div class="legend-title" id="legendTitle">Target Reference Freq</div>
-        <div class="legend-list" id="legendList"></div>
-    </div>
-</div>
-
-<script>
-    const tuningMatrix = {
-        bass: {
-            4: {
-                "Standard (E)": ["E", "A", "D", "G"],
-                "Drop D": ["D", "A", "D", "G"],
-                "Half-Step Down": ["D#", "G#", "C#", "F#"],
-                "Full-Step Down": ["D", "G", "C", "F"],
-                "Drop C": ["C", "G", "C", "F"],
-                "Drop B": ["B", "F#", "B", "E"],
-                "Drop A": ["A", "E", "A", "D"],
-                "Open D": ["D", "A", "D", "F#"]
-            },
-            5: {
-                "Standard (B)": ["B", "E", "A", "D", "G"],
-                "Tenor Standard": ["E", "A", "D", "G", "C"],
-                "Drop A": ["A", "E", "A", "D", "G"],
-                "Half-Step Down": ["A#", "D#", "G#", "C#", "F#"],
-                "Full-Step Down": ["A", "D", "G", "C", "F"]
-            },
-            6: {
-                "Standard (B-C)": ["B", "E", "A", "D", "G", "C"],
-                "Drop A Variant": ["A", "E", "A", "D", "G", "C"]
-            }
-        },
-        guitar: {
-            6: {
-                "Standard (E)": ["E", "A", "D", "G", "B", "E"],
-                "Drop D": ["D", "A", "D", "G", "B", "E"],
-                "Half-Step Down": ["D#", "G#", "C#", "F#", "A#", "D#"],
-                "Full-Step Down": ["D", "G", "C", "F", "A", "D"],
-                "Drop C": ["C", "G", "C", "F", "A", "D"],
-                "Drop B": ["B", "F#", "B", "E", "G#", "C#"],
-                "Drop A": ["A", "E", "A", "D", "F#", "B"],
-                "Open G": ["D", "G", "D", "G", "B", "D"],
-                "Open D": ["D", "A", "D", "F#", "A", "D"],
-                "DADGAD": ["D", "A", "D", "G", "A", "D"]
-            }
-        }
-    };
-
-    // Mapping table containing standard scientific base octaves frequencies
-    const noteFrequencies = {
-        "C": 16.35, "C#": 17.32, "D": 18.35, "D#": 19.45, "E": 20.60, "F": 21.83,
-        "F#": 23.12, "G": 24.50, "G#": 25.96, "A": 27.50, "A#": 29.14, "B": 30.87
-    };
-
-    // Explicit structural mappings to accurately render octaves for Guitar vs Bass profiles
-    const instrumentOctaveOffsets = {
-        bass: { "B": 0, "C": 1, "C#": 1, "D": 1, "D#": 1, "E": 1, "F": 1, "F#": 1, "G": 1, "G#": 1, "A": 1, "A#": 1 },
-        guitar: { "C": 2, "C#": 2, "D": 2, "D#": 2, "E": 2, "F": 2, "F#": 2, "G": 2, "G#": 2, "A": 2, "A#": 2, "B": 2 }
-    };
-
-    let audioCtx = null, analyser = null, stream = null, source = null, buffer = null;
-    let isRunning = false, rafId = null;
-
-    let smoothedCents = 0;
-    let smoothedFrequency = 0;
-    const freqSmoothingFactor = 0.35; 
-    const needleSmoothingFactor = 0.08; 
-    
-    let currentAutoDetectedStringIdx = -1;
-    let activeTargetNotes = [];
-    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-
-    const btn = document.getElementById("tunerBtn");
-    const noteEl = document.getElementById("note");
-    const freqEl = document.getElementById("frequency");
-    const statusEl = document.getElementById("status");
-    const pickerContainer = document.getElementById("stringPicker");
-    const legendListContainer = document.getElementById("legendList");
-    const legendTitleEl = document.getElementById("legendTitle");
-    const canvas = document.getElementById("meterCanvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    function buildMenuHierarchy() {
-        const inst = document.getElementById("instrumentSelect").value;
-        const stringGroup = document.getElementById("stringCountGroup");
-        const stringSelect = document.getElementById("stringCountSelect");
-        const profileSelect = document.getElementById("tuningProfileSelect");
-
-        if (inst === "guitar") {
-            stringGroup.style.display = "none";
-            stringSelect.value = "6"; 
-        } else {
-            stringGroup.style.display = "flex";
-        }
-
-        profileSelect.innerHTML = "";
-        const availableProfiles = tuningMatrix[inst][stringSelect.value];
-        if (availableProfiles) {
-            Object.keys(availableProfiles).forEach(profileName => {
-                let opt = document.createElement("option");
-                opt.value = profileName;
-                opt.textContent = profileName;
-                profileSelect.appendChild(opt);
-            });
-        }
-        updateTargetStrings();
-    }
-
-    function updateTargetStrings() {
-        const inst = document.getElementById("instrumentSelect").value;
-        const strings = document.getElementById("stringCountSelect").value;
-        const profile = document.getElementById("tuningProfileSelect").value;
-
-        if (tuningMatrix[inst] && tuningMatrix[inst][strings] && tuningMatrix[inst][strings][profile]) {
-            activeTargetNotes = tuningMatrix[inst][strings][profile];
-        } else {
-            activeTargetNotes = [];
-        }
-        
-        pickerContainer.innerHTML = "";
-        legendListContainer.innerHTML = "";
-        currentAutoDetectedStringIdx = -1;
-        
-        legendTitleEl.textContent = `${profile} Reference`;
-
-        // Calculate explicit target octaves sequentially to build the reference list
-        let currentOctaveTracker = inst === "bass" ? 1 : 2; 
-        let lastNoteValue = -1;
-
-        activeTargetNotes.forEach((note, index) => {
-            // Main Top Bar block nodes
-            let block = document.createElement("div");
-            block.className = "string-note";
-            block.textContent = note;
-            pickerContainer.appendChild(block);
-
-            // Establish exact string octave context layout
-            const noteValue = notes.indexOf(note);
-            if (index > 0 && noteValue <= lastNoteValue) {
-                currentOctaveTracker++;
-            }
-            lastNoteValue = noteValue;
-
-            const finalHz = noteFrequencies[note] * Math.pow(2, currentOctaveTracker);
-
-            // Generate row for Side Legend panel
-            let legendRow = document.createElement("div");
-            legendRow.className = "legend-row";
-            legendRow.id = `legend-row-${index}`;
-            legendRow.innerHTML = `
-                <span class="string-lbl">${note}</span>
-                <span>String ${index + 1}</span>
-                <span class="hz-lbl">${finalHz.toFixed(2)} Hz</span>
-            `;
-            legendListContainer.appendChild(legendRow);
-        });
-    }
-
-    function getAbsoluteNoteValue(noteName, baseFreq) {
-        let minDiff = Infinity;
-        let targetPitch = baseFreq;
-        for (let octave = 0; octave <= 6; octave++) {
-            let freq = baseFreq * Math.pow(2, octave);
-            let diff = Math.abs(freq - smoothedFrequency);
-            if (diff < minDiff) {
-                minDiff = diff;
-                targetPitch = freq;
-            }
-        }
-        return targetPitch;
-    }
-
-    function findClosestStringIndex(detectedFreq) {
-        if (!activeTargetNotes.length) return -1;
-        let closestIdx = -1;
-        let minCentsDiff = Infinity;
-
-        activeTargetNotes.forEach((noteName, idx) => {
-            const baseFreq = noteFrequencies[noteName];
-            const targetOctaveFreq = getAbsoluteNoteValue(noteName, baseFreq);
-            
-            const centsDiff = Math.abs(1200 * Math.log2(detectedFreq / targetOctaveFreq));
-            if (centsDiff < minCentsDiff) {
-                minCentsDiff = centsDiff;
-                closestIdx = idx;
-            }
-        });
-
-        return minCentsDiff < 350 ? closestIdx : -1;
-    }
-
-    function getNoteAndCents(frequency) {
-        const noteNum = 12 * (Math.log2(frequency / 440)) + 69;
-        const roundedNoteNum = Math.round(noteNum);
-        const cents = (noteNum - roundedNoteNum) * 100;
-        const noteName = notes[((roundedNoteNum % 12) + 12) % 12];
-        return { noteName, cents };
-    }
-
-    function detectPitchYIN(buffer, sampleRate) {
-        const size = buffer.length;
-        const halfSize = Math.floor(size / 2);
-        
-        let rms = 0;
-        for (let i = 0; i < size; i++) rms += buffer[i] * buffer[i];
-        rms = Math.sqrt(rms / size);
-        if (rms < 0.012) return -1; 
-
-        const yinBuffer = new Float32Array(halfSize);
-        for (let tau = 0; tau < halfSize; tau++) {
-            for (let i = 0; i < halfSize; i++) {
-                const delta = buffer[i] - buffer[i + tau];
-                yinBuffer[tau] += delta * delta;
-            }
-        }
-
-        yinBuffer[0] = 1;
-        let runningSum = 0;
-        for (let tau = 1; tau < halfSize; tau++) {
-            runningSum += yinBuffer[tau];
-            yinBuffer[tau] *= tau / runningSum;
-        }
-
-        const threshold = 0.15;
-        let tauEstimate = -1;
-        for (let tau = 1; tau < halfSize; tau++) {
-            if (yinBuffer[tau] < threshold) {
-                while (tau + 1 < halfSize && yinBuffer[tau + 1] < yinBuffer[tau]) tau++;
-                tauEstimate = tau;
-                break;
-            }
-        }
-
-        if (tauEstimate === -1) {
-            let minVal = 1;
-            for (let tau = 1; tau < halfSize; tau++) {
-                if (yinBuffer[tau] < minVal) {
-                    minVal = yinBuffer[tau];
-                    tauEstimate = tau;
-                }
-            }
-        }
-
-        if (tauEstimate > 0 && tauEstimate < halfSize - 1) {
-            const alpha = yinBuffer[tauEstimate - 1];
-            const beta = yinBuffer[tauEstimate];
-            const gamma = yinBuffer[tauEstimate + 1];
-            const denominator = 2.0 * (alpha - 2.0 * beta + gamma);
-            if (denominator !== 0) {
-                return sampleRate / (tauEstimate + (alpha - gamma) / denominator);
-            }
-        }
-        return sampleRate / tauEstimate;
-    }
-
-    function drawMeter(targetCents, inTune) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const midX = canvas.width / 2;
-        
-        ctx.strokeStyle = "#262626";
-        ctx.lineWidth = 1.5;
-        for(let i = -50; i <= 50; i += 10) {
-            const x = midX + (i * (canvas.width / 110));
-            ctx.beginPath();
-            ctx.moveTo(x, canvas.height);
-            ctx.lineTo(x, canvas.height - (i === 0 ? 16 : 8));
-            ctx.stroke();
-        }
-
-        ctx.strokeStyle = "#444";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(midX, 0);
-        ctx.lineTo(midX, canvas.height);
-        ctx.stroke();
-
-        if (isRunning && targetCents !== null) {
-            smoothedCents += (targetCents - smoothedCents) * needleSmoothingFactor;
-            const targetX = midX + (smoothedCents * (canvas.width / 110));
-            const pulseColor = inTune ? "#27ae60" : "#ff5500";
-            
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = pulseColor;
-            ctx.strokeStyle = pulseColor;
-            ctx.lineWidth = 4;
-            
-            ctx.beginPath();
-            ctx.moveTo(targetX, 4);
-            ctx.lineTo(targetX, canvas.height - 4);
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-        }
-    }
-
-    function detect() {
-        if (!analyser || !isRunning) return;
-        analyser.getFloatTimeDomainData(buffer);
-        
-        const rawPitch = detectPitchYIN(buffer, audioCtx.sampleRate);
-
-        if (rawPitch !== -1 && rawPitch > 20 && rawPitch < 1200) {
-            smoothedFrequency = smoothedFrequency === 0 ? rawPitch : smoothedFrequency + (rawPitch - smoothedFrequency) * freqSmoothingFactor;
-            freqEl.textContent = smoothedFrequency.toFixed(2) + " Hz";
-            
-            const { noteName, cents } = getNoteAndCents(smoothedFrequency);
-            
-            const detectedStringIdx = findClosestStringIndex(smoothedFrequency);
-            const blocks = document.querySelectorAll(".string-note");
-            const legendRows = document.querySelectorAll(".legend-row");
-            
-            blocks.forEach((b, i) => {
-                b.classList.remove("selected", "matched-intune");
-                if (legendRows[i]) legendRows[i].className = "legend-row";
-                
-                if (i === detectedStringIdx) {
-                    b.classList.add("selected");
-                    if (legendRows[i]) legendRows[i].classList.add("active-match");
-                }
-            });
-
-            if (detectedStringIdx !== -1) {
-                currentAutoDetectedStringIdx = detectedStringIdx;
-                const targetNoteName = activeTargetNotes[currentAutoDetectedStringIdx];
-                const inTune = Math.abs(cents) <= 2.5; 
-                
-                noteEl.textContent = noteName;
-                
-                if (inTune) {
-                    statusEl.textContent = "IN TUNE";
-                    statusEl.className = "status inTune";
-                    noteEl.className = "note-display glow-intune";
-                    blocks[currentAutoDetectedStringIdx].classList.add("matched-intune");
-                    if (legendRows[currentAutoDetectedStringIdx]) {
-                        legendRows[currentAutoDetectedStringIdx].classList.add("intune-match");
-                    }
-                } else {
-                    statusEl.textContent = cents > 0 ? `+${Math.round(cents)} Sharp` : `${Math.round(cents)} Flat`;
-                    statusEl.className = "status offTune";
-                    noteEl.className = "note-display flaming";
-                }
-                drawMeter(cents, inTune);
-            } else {
-                noteEl.textContent = noteName;
-                noteEl.className = "note-display flaming";
-                statusEl.textContent = "Detecting...";
-                statusEl.className = "status offTune";
-                drawMeter(cents > 0 ? 48 : -48, false);
-            }
-        } else {
-            if (rawPitch === -1) {
-                noteEl.className = "note-display";
-            }
-            drawMeter(null, false);
-        }
-        rafId = requestAnimationFrame(detect);
-    }
-
-    async function start() {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } 
-            });
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048; 
-
-            source = audioCtx.createMediaStreamSource(stream);
-            source.connect(analyser);
-            buffer = new Float32Array(analyser.fftSize);
-            
-            smoothedFrequency = 0;
-            isRunning = true;
-            detect();
-        } catch (err) {
-            alert("Audio device capture failed: " + err.message);
-            stop();
-        }
-    }
-
-    function stop() {
-        isRunning = false;
-        if (rafId) cancelAnimationFrame(rafId);
-        if (stream) stream.getTracks().forEach(t => t.stop());
-        if (audioCtx) audioCtx.close();
-
-        stream = null; audioCtx = null; analyser = null; source = null; buffer = null;
-
-        btn.textContent = "Start Tuner";
-        btn.classList.remove("active");
-        statusEl.textContent = "Stopped";
-        statusEl.className = "status offTune";
-        noteEl.textContent = "--";
-        noteEl.className = "note-display";
-        freqEl.textContent = "0.00 Hz";
-        smoothedCents = 0;
-        smoothedFrequency = 0;
-        
-        document.querySelectorAll(".string-note").forEach(b => b.className = "string-note");
-        document.querySelectorAll(".legend-row").forEach(r => r.className = "legend-row");
-        drawMeter(null, false);
-    }
-
-    async function toggleTuner(e) {
-        e.target.blur();
-        if (!isRunning) {
-            btn.textContent = "Stop Tuner";
-            btn.classList.add("active");
-            await start();
-        } else {
-            stop();
-        }
-    }
-
-    buildMenuHierarchy();
-</script>
-</body>
-</html>
+.stringCard{
+    background:#202020;
+    border:1px solid #333;
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+    transition
