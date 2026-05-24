@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lazzarus Prime Precision Tuner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }.titleLeft{ display:flex; align-items:center; gap:10px; }.titleBar img{ width:40px; }/* METALLIC HEADER TEXT */.titleLeft h2 { 
   margin: 0; 
@@ -328,10 +329,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         "F#": 23.12, "G": 24.50, "G#": 25.96, "A": 27.50, "A#": 29.14, "B": 30.87
     };
 
-    const instrumentOctaveOffsets = {
-        bass: { "B": 0, "C": 1, "C#": 1, "D": 1, "D#": 1, "E": 1, "F": 1, "F#": 1, "G": 1, "G#": 1, "A": 1, "A#": 1 },
-        guitar: { "C": 2, "C#": 2, "D": 2, "D#": 2, "E": 2, "F": 2, "F#": 2, "G": 2, "G#": 2, "A": 2, "A#": 2, "B": 2 }
-    };
+    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     let audioCtx = null, analyser = null, stream = null, source = null, buffer = null;
     let isRunning = false, rafId = null;
@@ -343,7 +341,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     
     let currentAutoDetectedStringIdx = -1;
     let activeTargetNotes = [];
-    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    let activeTargetFrequencies = []; // Pre-cached real frequencies generated dynamically per setup
 
     const btn = document.getElementById("tunerBtn");
     const noteEl = document.getElementById("note");
@@ -354,9 +352,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     const legendTitleEl = document.getElementById("legendTitle");
     const canvas = document.getElementById("meterCanvas");
     const ctx = canvas.getContext("2d");
-
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
 
     function buildMenuHierarchy() {
         const inst = document.getElementById("instrumentSelect").value;
@@ -397,6 +392,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         
         pickerContainer.innerHTML = "";
         legendListContainer.innerHTML = "";
+        activeTargetFrequencies = [];
         currentAutoDetectedStringIdx = -1;
         
         legendTitleEl.textContent = `${profile} Reference`;
@@ -417,6 +413,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
             lastNoteValue = noteValue;
 
             const finalHz = noteFrequencies[note] * Math.pow(2, currentOctaveTracker);
+            activeTargetFrequencies.push(finalHz);
 
             let legendRow = document.createElement("div");
             legendRow.className = "legend-row";
@@ -430,30 +427,13 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         });
     }
 
-    function getAbsoluteNoteValue(noteName, baseFreq) {
-        let minDiff = Infinity;
-        let targetPitch = baseFreq;
-        for (let octave = 0; octave <= 6; octave++) {
-            let freq = baseFreq * Math.pow(2, octave);
-            let diff = Math.abs(freq - smoothedFrequency);
-            if (diff < minDiff) {
-                minDiff = diff;
-                targetPitch = freq;
-            }
-        }
-        return targetPitch;
-    }
-
     function findClosestStringIndex(detectedFreq) {
-        if (!activeTargetNotes.length) return -1;
+        if (!activeTargetFrequencies.length) return -1;
         let closestIdx = -1;
         let minCentsDiff = Infinity;
 
-        activeTargetNotes.forEach((noteName, idx) => {
-            const baseFreq = noteFrequencies[noteName];
-            const targetOctaveFreq = getAbsoluteNoteValue(noteName, baseFreq);
-            
-            const centsDiff = Math.abs(1200 * Math.log2(detectedFreq / targetOctaveFreq));
+        activeTargetFrequencies.forEach((targetHz, idx) => {
+            const centsDiff = Math.abs(1200 * Math.log2(detectedFreq / targetHz));
             if (centsDiff < minCentsDiff) {
                 minCentsDiff = centsDiff;
                 closestIdx = idx;
@@ -471,80 +451,78 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         return { noteName, cents };
     }
 
-    // Improved YIN Engine handling low-register audio buffers cleanly
-    function detectPitchYIN(workingBuffer, sampleRate) {
-        let size = workingBuffer.length;
-        
-        // Decimation Optimization Pass: Downsample 2x if tracking sub-90Hz profiles
-        // This doubles the timeline window width inside the 2048 array constraint to grab slow waves cleanly
-        const instMode = document.getElementById("instrumentSelect").value;
-        let activeSampleRate = sampleRate;
-        let srcBuffer = workingBuffer;
-
-        if (instMode === "bass" || (activeTargetNotes[0] === "E" || activeTargetNotes[0] === "D")) {
-            size = Math.floor(workingBuffer.length / 2);
-            activeSampleRate = sampleRate / 2;
-            srcBuffer = new Float32Array(size);
-            for (let i = 0; i < size; i++) {
-                srcBuffer[i] = (workingBuffer[i * 2] + workingBuffer[i * 2 + 1]) / 2;
-            }
-        }
-
-        const halfSize = Math.floor(size / 2);
+    // High-Density Autocorrelation Pitch Tracker Optimization
+    function detectPitchAutocorrelation(timeDomainBuffer, sampleRate) {
+        const bufferSize = timeDomainBuffer.length;
         let rms = 0;
-        for (let i = 0; i < size; i++) rms += srcBuffer[i] * srcBuffer[i];
-        rms = Math.sqrt(rms / size);
-        if (rms < 0.008) return -1; // Dynamic threshold floor adjustment
 
-        const yinBuffer = new Float32Array(halfSize);
-        for (let tau = 0; tau < halfSize; tau++) {
-            for (let i = 0; i < halfSize; i++) {
-                const delta = srcBuffer[i] - srcBuffer[i + tau];
-                yinBuffer[tau] += delta * delta;
+        for (let i = 0; i < bufferSize; i++) {
+            const val = timeDomainBuffer[i];
+            rms += val * val;
+        }
+        rms = Math.sqrt(rms / bufferSize);
+        if (rms < 0.01) return -1; // Ignore ambient noise floor components completely
+
+        // Trim tracking frame limits dynamically to optimize cycle isolation
+        let r1 = 0; 
+        let r2 = bufferSize - 1;
+        const thres = 0.2;
+        for (let i = 0; i < bufferSize / 2; i++) {
+            if (Math.abs(timeDomainBuffer[i]) < thres) { r1 = i; break; }
+        }
+        for (let i = bufferSize - 1; i >= bufferSize / 2; i--) {
+            if (Math.abs(timeDomainBuffer[i]) < thres) { r2 = i; break; }
+        }
+
+        const trimmed = timeDomainBuffer.slice(r1, r2);
+        const len = trimmed.length;
+
+        // Perform clear cross-correlation operations across workspace arrays
+        const correlationValues = new Float32Array(len);
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len - i; j++) {
+                correlationValues[i] = correlationValues[i] + trimmed[j] * trimmed[j + i];
             }
         }
 
-        yinBuffer[0] = 1;
-        let runningSum = 0;
-        for (let tau = 1; tau < halfSize; tau++) {
-            runningSum += yinBuffer[tau];
-            yinBuffer[tau] *= tau / runningSum;
-        }
-
-        // Expanded candidate window to lock onto fundamental wavelengths without dropouts
-        const threshold = 0.35;
-        let tauEstimate = -1;
-        for (let tau = 1; tau < halfSize; tau++) {
-            if (yinBuffer[tau] < threshold) {
-                while (tau + 1 < halfSize && yinBuffer[tau + 1] < yinBuffer[tau]) tau++;
-                tauEstimate = tau;
-                break;
+        // Find primary maximum displacement cutoff
+        let d = 0;
+        while (correlationValues[d] > correlationValues[d + 1]) d++;
+        
+        let maxValue = -1; 
+        let maxPosition = -1;
+        for (let i = d; i < len; i++) {
+            if (correlationValues[i] > maxValue) {
+                maxValue = correlationValues[i];
+                maxPosition = i;
             }
         }
 
-        if (tauEstimate === -1) {
-            let minVal = 1;
-            for (let tau = 1; tau < halfSize; tau++) {
-                if (yinBuffer[tau] < minVal) {
-                    minVal = yinBuffer[tau];
-                    tauEstimate = tau;
-                }
-            }
-        }
+        let periodSamples = maxPosition;
 
-        if (tauEstimate > 0 && tauEstimate < halfSize - 1) {
-            const alpha = yinBuffer[tauEstimate - 1];
-            const beta = yinBuffer[tauEstimate];
-            const gamma = yinBuffer[tauEstimate + 1];
-            const denominator = 2.0 * (alpha - 2.0 * beta + gamma);
+        // Use parabolic interpolation to refine frequency accuracy
+        if (periodSamples > 0 && periodSamples < len - 1) {
+            const alpha = correlationValues[periodSamples - 1];
+            const beta = correlationValues[periodSamples];
+            const gamma = correlationValues[periodSamples + 1];
+            const denominator = 2 * (alpha - 2 * beta + gamma);
             if (denominator !== 0) {
-                return activeSampleRate / (tauEstimate + (alpha - gamma) / denominator);
+                periodSamples = periodSamples + (alpha - gamma) / denominator;
             }
         }
-        return activeSampleRate / tauEstimate;
+
+        if (periodSamples !== -1 && periodSamples > 0) {
+            return sampleRate / periodSamples;
+        }
+        return -1;
     }
 
     function drawMeter(targetCents, inTune) {
+        if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const midX = canvas.width / 2;
         
@@ -587,13 +565,12 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         if (!analyser || !isRunning) return;
         analyser.getFloatTimeDomainData(buffer);
         
-        const rawPitch = detectPitchYIN(buffer, audioCtx.sampleRate);
+        // Execute the highly optimized autocorrelation processing engine
+        const rawPitch = detectPitchAutocorrelation(buffer, audioCtx.sampleRate);
 
-        if (rawPitch !== -1 && rawPitch > 20 && rawPitch < 1200) {
+        if (rawPitch !== -1 && rawPitch > 25 && rawPitch < 1100) {
             smoothedFrequency = smoothedFrequency === 0 ? rawPitch : smoothedFrequency + (rawPitch - smoothedFrequency) * freqSmoothingFactor;
             freqEl.textContent = smoothedFrequency.toFixed(2) + " Hz";
-            
-            const { noteName, cents } = getNoteAndCents(smoothedFrequency);
             
             const detectedStringIdx = findClosestStringIndex(smoothedFrequency);
             const blocks = document.querySelectorAll(".string-note");
@@ -611,8 +588,12 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
 
             if (detectedStringIdx !== -1) {
                 currentAutoDetectedStringIdx = detectedStringIdx;
-                const targetNoteName = activeTargetNotes[currentAutoDetectedStringIdx];
-                const inTune = Math.abs(cents) <= 2.5; 
+                const targetHz = activeTargetFrequencies[currentAutoDetectedStringIdx];
+                
+                // Calculate precise error metrics utilizing target reference profiles directly
+                const calculatedCents = 1200 * Math.log2(smoothedFrequency / targetHz);
+                const { noteName } = getNoteAndCents(smoothedFrequency);
+                const inTune = Math.abs(calculatedCents) <= 2.5; 
                 
                 noteEl.textContent = noteName;
                 
@@ -625,12 +606,13 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
                         legendRows[currentAutoDetectedStringIdx].classList.add("intune-match");
                     }
                 } else {
-                    statusEl.textContent = cents > 0 ? `+${Math.round(cents)} Sharp` : `${Math.round(cents)} Flat`;
+                    statusEl.textContent = calculatedCents > 0 ? `+${Math.round(calculatedCents)} Sharp` : `${Math.round(calculatedCents)} Flat`;
                     statusEl.className = "status offTune";
                     noteEl.className = "note-display flaming";
                 }
-                drawMeter(cents, inTune);
+                drawMeter(calculatedCents, inTune);
             } else {
+                const { noteName, cents } = getNoteAndCents(smoothedFrequency);
                 noteEl.textContent = noteName;
                 noteEl.className = "note-display flaming";
                 statusEl.textContent = "Detecting...";
