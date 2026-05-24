@@ -16,7 +16,13 @@ body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; ma
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
-}.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }.topBar{ display:flex; gap:8px; padding:12px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; align-items:center; border-bottom: 1px solid #333; }.nav-btn { 
+}.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+
+/* UPDATED TOPBAR STYLES */
+.topBar{ display:flex; padding:12px; background:#181818; position:sticky; top:0; z-index:100; align-items:center; border-bottom: 1px solid #333; justify-content:center; position: relative; }
+.nav-left { position: absolute; left: 15px; display: flex; gap: 8px; }
+
+.nav-btn { 
   background:#2a2a2a; 
   color:white; 
   border:1px solid #444; 
@@ -237,15 +243,22 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     <h2>Lazzarus Prime Tuner</h2>
   </div>
   <div class="socialLinks">
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
-  </div></div><div class="topBar">
-  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
-  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button></div><div class="menu-row">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">Donations</a>
+  </div></div>
+
+<div class="topBar">
+  <div class="nav-left">
+    <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
+    <button class="nav-btn" onclick="window.location.href='artists.html'">Artists</button>
+  </div>
+  <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button>
+</div>
+
+<div class="menu-row">
     <div class="menu-group">
         <label>Instrument</label>
         <select id="instrumentSelect" onchange="buildMenuHierarchy(); updateFilterSettings();">
