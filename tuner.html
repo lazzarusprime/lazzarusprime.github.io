@@ -98,15 +98,25 @@ select {
 }
 select:focus { outline: none; border-color: #f1c40f; }
 
-.tuner-container {
+/* DUAL PANEL APP WORKSPACE LAYOUT */
+.app-workspace {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
     justify-content: center;
     padding: 30px;
-    max-width: 650px;
+    max-width: 1000px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 25px;
+}
+
+.tuner-container {
+    flex: 1;
+    min-width: 320px;
+    max-width: 650px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -119,8 +129,88 @@ select:focus { outline: none; border-color: #f1c40f; }
     width: 100%;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    margin-bottom: 25px;
     box-sizing: border-box;
+}
+
+/* SIDE LEGEND REFERENCE CONTAINER */
+.legend-panel {
+    width: 260px;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
+
+.legend-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #f1c40f;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.legend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1d1d1d;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #262626;
+    font-size: 14px;
+    font-weight: 600;
+    color: #aaa;
+    transition: all 0.2s ease;
+}
+
+.legend-row .string-lbl {
+    font-weight: 700;
+    color: #fff;
+    background: #2a2a2a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.legend-row .hz-lbl {
+    font-family: monospace;
+    font-size: 13px;
+}
+
+/* Active Legend row lighting */
+.legend-row.active-match {
+    border-color: #ff5500;
+    background: rgba(255, 85, 0, 0.1);
+    color: #ff7733;
+    box-shadow: 0 0 10px rgba(255, 85, 0, 0.15);
+}
+.legend-row.active-match .string-lbl {
+    background: #ff5500;
+    color: #fff;
+}
+
+.legend-row.active-match.intune-match {
+    border-color: #27ae60;
+    background: rgba(39, 174, 96, 0.1);
+    color: #2ecc71;
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
+}
+.legend-row.active-match.intune-match .string-lbl {
+    background: #27ae60;
+    color: #fff;
 }
 
 .string-picker {
@@ -142,7 +232,7 @@ select:focus { outline: none; border-color: #f1c40f; }
     transition: all 0.2s ease;
     min-width: 45px;
     text-align: center;
-    pointer-events: none; /* Auto-detection driven */
+    pointer-events: none;
 }
 
 .string-note.selected {
@@ -159,7 +249,6 @@ select:focus { outline: none; border-color: #f1c40f; }
     box-shadow: 0 0 15px rgba(39, 174, 96, 0.6);
 }
 
-/* FLAME GLOW ENGINE ANIMATIONS */
 .note-display {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 130px;
@@ -169,12 +258,10 @@ select:focus { outline: none; border-color: #f1c40f; }
     transition: color 0.15s ease, filter 0.1s ease;
 }
 
-/* Live Note detected flame aura */
 .note-display.flaming {
     animation: flamePulse 0.6s infinite alternate ease-in-out;
 }
 
-/* Locked standard in-tune green radioactive glare */
 .note-display.glow-intune {
     color: #27ae60 !important;
     animation: intuneLaser 0.4s infinite alternate ease-in-out;
@@ -275,15 +362,22 @@ canvas {
     </div>
 </div>
 
-<div class="tuner-container">
-    <div class="display-panel">
-        <div id="stringPicker" class="string-picker"></div>
+<div class="app-workspace">
+    <div class="tuner-container">
+        <div class="display-panel">
+            <div id="stringPicker" class="string-picker"></div>
 
-        <div id="note" class="note-display">--</div>
-        <div id="frequency" class="frequency-display">0.00 Hz</div>
-        <div id="status" class="status offTune">Stopped</div>
-        
-        <canvas id="meterCanvas"></canvas>
+            <div id="note" class="note-display">--</div>
+            <div id="frequency" class="frequency-display">0.00 Hz</div>
+            <div id="status" class="status offTune">Stopped</div>
+            
+            <canvas id="meterCanvas"></canvas>
+        </div>
+    </div>
+
+    <div class="legend-panel">
+        <div class="legend-title" id="legendTitle">Target Reference Freq</div>
+        <div class="legend-list" id="legendList"></div>
     </div>
 </div>
 
@@ -328,10 +422,16 @@ canvas {
         }
     };
 
-    // Scientific standard pitch frequencies assignment table
+    // Mapping table containing standard scientific base octaves frequencies
     const noteFrequencies = {
         "C": 16.35, "C#": 17.32, "D": 18.35, "D#": 19.45, "E": 20.60, "F": 21.83,
         "F#": 23.12, "G": 24.50, "G#": 25.96, "A": 27.50, "A#": 29.14, "B": 30.87
+    };
+
+    // Explicit structural mappings to accurately render octaves for Guitar vs Bass profiles
+    const instrumentOctaveOffsets = {
+        bass: { "B": 0, "C": 1, "C#": 1, "D": 1, "D#": 1, "E": 1, "F": 1, "F#": 1, "G": 1, "G#": 1, "A": 1, "A#": 1 },
+        guitar: { "C": 2, "C#": 2, "D": 2, "D#": 2, "E": 2, "F": 2, "F#": 2, "G": 2, "G#": 2, "A": 2, "A#": 2, "B": 2 }
     };
 
     let audioCtx = null, analyser = null, stream = null, source = null, buffer = null;
@@ -340,7 +440,7 @@ canvas {
     let smoothedCents = 0;
     let smoothedFrequency = 0;
     const freqSmoothingFactor = 0.35; 
-    const needleSmoothingFactor = 0.08; // Super fluid dampening loop 
+    const needleSmoothingFactor = 0.08; 
     
     let currentAutoDetectedStringIdx = -1;
     let activeTargetNotes = [];
@@ -351,6 +451,8 @@ canvas {
     const freqEl = document.getElementById("frequency");
     const statusEl = document.getElementById("status");
     const pickerContainer = document.getElementById("stringPicker");
+    const legendListContainer = document.getElementById("legendList");
+    const legendTitleEl = document.getElementById("legendTitle");
     const canvas = document.getElementById("meterCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -395,17 +497,44 @@ canvas {
         }
         
         pickerContainer.innerHTML = "";
+        legendListContainer.innerHTML = "";
         currentAutoDetectedStringIdx = -1;
+        
+        legendTitleEl.textContent = `${profile} Reference`;
 
-        activeTargetNotes.forEach((note) => {
+        // Calculate explicit target octaves sequentially to build the reference list
+        let currentOctaveTracker = inst === "bass" ? 1 : 2; 
+        let lastNoteValue = -1;
+
+        activeTargetNotes.forEach((note, index) => {
+            // Main Top Bar block nodes
             let block = document.createElement("div");
             block.className = "string-note";
             block.textContent = note;
             pickerContainer.appendChild(block);
+
+            // Establish exact string octave context layout
+            const noteValue = notes.indexOf(note);
+            if (index > 0 && noteValue <= lastNoteValue) {
+                currentOctaveTracker++;
+            }
+            lastNoteValue = noteValue;
+
+            const finalHz = noteFrequencies[note] * Math.pow(2, currentOctaveTracker);
+
+            // Generate row for Side Legend panel
+            let legendRow = document.createElement("div");
+            legendRow.className = "legend-row";
+            legendRow.id = `legend-row-${index}`;
+            legendRow.innerHTML = `
+                <span class="string-lbl">${note}</span>
+                <span>String ${index + 1}</span>
+                <span class="hz-lbl">${finalHz.toFixed(2)} Hz</span>
+            `;
+            legendListContainer.appendChild(legendRow);
         });
     }
 
-    // Identifies target pitch standard string matches by proximity matrix 
     function getAbsoluteNoteValue(noteName, baseFreq) {
         let minDiff = Infinity;
         let targetPitch = baseFreq;
@@ -429,7 +558,6 @@ canvas {
             const baseFreq = noteFrequencies[noteName];
             const targetOctaveFreq = getAbsoluteNoteValue(noteName, baseFreq);
             
-            // Convert numerical frequency gap parameter to logarithmic cents space
             const centsDiff = Math.abs(1200 * Math.log2(detectedFreq / targetOctaveFreq));
             if (centsDiff < minCentsDiff) {
                 minCentsDiff = centsDiff;
@@ -437,7 +565,6 @@ canvas {
             }
         });
 
-        // Ignore tracking noise anomalies over 3.5 semitones wide
         return minCentsDiff < 350 ? closestIdx : -1;
     }
 
@@ -556,13 +683,18 @@ canvas {
             
             const { noteName, cents } = getNoteAndCents(smoothedFrequency);
             
-            // RUN AUTOMATIC SELECTION CORE
             const detectedStringIdx = findClosestStringIndex(smoothedFrequency);
             const blocks = document.querySelectorAll(".string-note");
+            const legendRows = document.querySelectorAll(".legend-row");
             
             blocks.forEach((b, i) => {
                 b.classList.remove("selected", "matched-intune");
-                if (i === detectedStringIdx) b.classList.add("selected");
+                if (legendRows[i]) legendRows[i].className = "legend-row";
+                
+                if (i === detectedStringIdx) {
+                    b.classList.add("selected");
+                    if (legendRows[i]) legendRows[i].classList.add("active-match");
+                }
             });
 
             if (detectedStringIdx !== -1) {
@@ -575,10 +707,11 @@ canvas {
                 if (inTune) {
                     statusEl.textContent = "IN TUNE";
                     statusEl.className = "status inTune";
-                    
-                    // Activate glow visual wrappers
                     noteEl.className = "note-display glow-intune";
                     blocks[currentAutoDetectedStringIdx].classList.add("matched-intune");
+                    if (legendRows[currentAutoDetectedStringIdx]) {
+                        legendRows[currentAutoDetectedStringIdx].classList.add("intune-match");
+                    }
                 } else {
                     statusEl.textContent = cents > 0 ? `+${Math.round(cents)} Sharp` : `${Math.round(cents)} Flat`;
                     statusEl.className = "status offTune";
@@ -586,7 +719,6 @@ canvas {
                 }
                 drawMeter(cents, inTune);
             } else {
-                // Tracking signal found, but out of configuration boundaries
                 noteEl.textContent = noteName;
                 noteEl.className = "note-display flaming";
                 statusEl.textContent = "Detecting...";
@@ -643,6 +775,7 @@ canvas {
         smoothedFrequency = 0;
         
         document.querySelectorAll(".string-note").forEach(b => b.className = "string-note");
+        document.querySelectorAll(".legend-row").forEach(r => r.className = "legend-row");
         drawMeter(null, false);
     }
 
