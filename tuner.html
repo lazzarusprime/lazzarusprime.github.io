@@ -208,7 +208,7 @@ canvas {
     border-radius: 8px;
     border: 1px solid #222;
     width: 100%;
-    height: 75px;
+    height: 85px;
     margin-top: 25px;
 }
 </style>
@@ -273,7 +273,6 @@ canvas {
 </div>
 
 <script>
-    // Expanded Precision Matrix Mapping target profile lists to absolute reference notes
     const tuningMatrix = {
         bass: {
             4: {
@@ -304,15 +303,18 @@ canvas {
 
     let audioCtx = null;
     let analyser = null;
-    let filterNode = null;
     let stream = null;
     let source = null;
     let buffer = null;
     let isRunning = false;
     let rafId = null;
 
+    // Advanced Precision & Smoothing Variables
     let smoothedCents = 0;
-    const smoothingFactor = 0.15; 
+    let smoothedFrequency = 0;
+    const freqSmoothingFactor = 0.25; // Filters micro-jitter on input stream frequencies
+    const needleSmoothingFactor = 0.12; // Controls visual inertia of the tuning graphic
+    
     let currentSelectedStringIdx = 0;
     let activeTargetNotes = [];
 
@@ -329,7 +331,6 @@ canvas {
 
     const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-    // Handles the select visibility states and maps configuration variables dynamically
     function buildMenuHierarchy() {
         const inst = document.getElementById("instrumentSelect").value;
         const stringGroup = document.getElementById("stringCountGroup");
@@ -355,11 +356,9 @@ canvas {
                 profileSelect.appendChild(opt);
             });
         }
-
         updateTargetStrings();
     }
 
-    // Maps selected profile entries instantly to screen blocks
     function updateTargetStrings() {
         const inst = document.getElementById("instrumentSelect").value;
         const strings = document.getElementById("stringCountSelect").value;
@@ -390,88 +389,120 @@ canvas {
     function getNoteAndCents(frequency) {
         const noteNum = 12 * (Math.log2(frequency / 440)) + 69;
         const roundedNoteNum = Math.round(noteNum);
-        const cents = Math.round((noteNum - roundedNoteNum) * 100);
+        const cents = (noteNum - roundedNoteNum) * 100;
         const noteName = notes[((roundedNoteNum % 12) + 12) % 12];
         return { noteName, cents };
     }
 
-    function autoCorrelate(buffer, sampleRate) {
-        let SIZE = buffer.length;
+    // High Precision Pitch Tracking: YIN-Style Difference Engine
+    function detectPitchYIN(buffer, sampleRate) {
+        const size = buffer.length;
+        const halfSize = Math.floor(size / 2);
+        
+        // Step 1: Calculate Root Mean Square (RMS) for absolute noise gate filtering
         let rms = 0;
-
-        for (let i = 0; i < SIZE; i++) {
-            let val = buffer[i];
-            rms += val * val;
+        for (let i = 0; i < size; i++) {
+            rms += buffer[i] * buffer[i];
         }
-        rms = Math.sqrt(rms / SIZE);
-        if (rms < 0.015) return -1; 
+        rms = Math.sqrt(rms / size);
+        if (rms < 0.012) return -1; // Ignore background static ambient air signatures
 
-        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
-        for (let i = 0; i < SIZE / 2; i++) {
-            if (Math.abs(buffer[i]) < thres) { r1 = i; break; }
-        }
-        for (let i = SIZE - 1; i >= SIZE / 2; i--) {
-            if (Math.abs(buffer[i]) < thres) { r2 = i; break; }
-        }
-
-        buffer = buffer.slice(r1, r2);
-        SIZE = buffer.length;
-
-        let c = new Float32Array(SIZE);
-        for (let i = 0; i < SIZE; i++) {
-            for (let j = 0; j < SIZE - i; j++) {
-                c[i] = c[i] + buffer[j] * buffer[j + i];
+        // Step 2: Build Difference Equation Array
+        const yinBuffer = new Float32Array(halfSize);
+        for (let tau = 0; tau < halfSize; tau++) {
+            for (let i = 0; i < halfSize; i++) {
+                const delta = buffer[i] - buffer[i + tau];
+                yinBuffer[tau] += delta * delta;
             }
         }
 
-        let d = 0;
-        while (c[d] > c[d + 1]) d++;
-        let maxval = -1, maxpos = -1;
-        for (let i = d; i < SIZE; i++) {
-            if (c[i] > maxval) {
-                maxval = c[i];
-                maxpos = i;
+        // Step 3: Cumulative Mean Normalized Difference Function
+        yinBuffer[0] = 1;
+        let runningSum = 0;
+        for (let tau = 1; tau < halfSize; tau++) {
+            runningSum += yinBuffer[tau];
+            yinBuffer[tau] *= tau / runningSum;
+        }
+
+        // Step 4: Absolute Threshold Local Minimum Isolation
+        const threshold = 0.15;
+        let tauEstimate = -1;
+        for (let tau = 1; tau < halfSize; tau++) {
+            if (yinBuffer[tau] < threshold) {
+                while (tau + 1 < halfSize && yinBuffer[tau + 1] < yinBuffer[tau]) {
+                    tau++;
+                }
+                tauEstimate = tau;
+                break;
             }
         }
-        let T0 = maxpos;
 
-        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-        let a = (x1 + x3 - 2 * x2) / 2;
-        let b = (x3 - x1) / 2;
-        if (a) T0 = T0 - b / (2 * a);
+        // Fallback to absolute global minimum if signal fails local criteria bounds
+        if (tauEstimate === -1) {
+            let minVal = 1;
+            for (let tau = 1; tau < halfSize; tau++) {
+                if (yinBuffer[tau] < minVal) {
+                    minVal = yinBuffer[tau];
+                    tauEstimate = tau;
+                }
+            }
+        }
 
-        return sampleRate / T0;
+        // Step 5: Parabolic Interpolation for Sub-Sample Pitch Cent Precision
+        if (tauEstimate > 0 && tauEstimate < halfSize - 1) {
+            const alpha = yinBuffer[tauEstimate - 1];
+            const beta = yinBuffer[tauEstimate];
+            const gamma = yinBuffer[tauEstimate + 1];
+            const denominator = 2.0 * (alpha - 2.0 * beta + gamma);
+            if (denominator !== 0) {
+                const p = (alpha - gamma) / denominator;
+                const preciseTau = tauEstimate + p;
+                return sampleRate / preciseTau;
+            }
+        }
+
+        return sampleRate / tauEstimate;
     }
 
-    function drawMeter(cents, inTune) {
+    function drawMeter(targetCents, inTune) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const midX = canvas.width / 2;
         
-        ctx.strokeStyle = "#333";
+        // Draw ticks background grid
+        ctx.strokeStyle = "#262626";
+        ctx.lineWidth = 1.5;
+        for(let i = -50; i <= 50; i += 10) {
+            const x = midX + (i * (canvas.width / 110));
+            ctx.beginPath();
+            ctx.moveTo(x, canvas.height);
+            ctx.lineTo(x, canvas.height - (i === 0 ? 16 : 8));
+            ctx.stroke();
+        }
+
+        // Main Center Calibration Axis Line
+        ctx.strokeStyle = "#444";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(midX, 0);
         ctx.lineTo(midX, canvas.height);
         ctx.stroke();
 
-        ctx.fillStyle = "#444";
-        for(let i = -50; i <= 50; i += 10) {
-            const x = midX + (i * (canvas.width / 120));
-            ctx.fillRect(x, canvas.height - 10, 2, 10);
-        }
-
-        if (isRunning && cents !== null) {
-            smoothedCents += (cents - smoothedCents) * smoothingFactor;
-            const targetX = midX + (smoothedCents * (canvas.width / 120));
+        if (isRunning && targetCents !== null) {
+            // Apply visual inertia dampening filter to needle kinematics
+            smoothedCents += (targetCents - smoothedCents) * needleSmoothingFactor;
+            const targetX = midX + (smoothedCents * (canvas.width / 110));
+            
+            // Dynamic UI Feedback coloring 
+            const pulseColor = inTune ? "#27ae60" : "#ff5500";
             
             ctx.shadowBlur = 15;
-            ctx.shadowColor = inTune ? "#27ae60" : "#ff5500";
-            ctx.strokeStyle = inTune ? "#27ae60" : "#ff5500";
+            ctx.shadowColor = pulseColor;
+            ctx.strokeStyle = pulseColor;
             ctx.lineWidth = 4;
             
             ctx.beginPath();
-            ctx.moveTo(targetX, 5);
-            ctx.lineTo(targetX, canvas.height - 5);
+            ctx.moveTo(targetX, 4);
+            ctx.lineTo(targetX, canvas.height - 4);
             ctx.stroke();
             
             ctx.shadowBlur = 0;
@@ -481,23 +512,31 @@ canvas {
     function detect() {
         if (!analyser || !isRunning) return;
         analyser.getFloatTimeDomainData(buffer);
-        const ac = autoCorrelate(buffer, audioCtx.sampleRate);
+        
+        const rawPitch = detectPitchYIN(buffer, audioCtx.sampleRate);
 
-        if (ac !== -1 && ac > 20 && ac < 1200) {
-            freqEl.textContent = ac.toFixed(2) + " Hz";
-            const { noteName, cents } = getNoteAndCents(ac);
+        // Sanity check frequency spectrum windows (20Hz to 1200Hz limits)
+        if (rawPitch !== -1 && rawPitch > 20 && rawPitch < 1200) {
+            if (smoothedFrequency === 0) {
+                smoothedFrequency = rawPitch;
+            } else {
+                smoothedFrequency += (rawPitch - smoothedFrequency) * freqSmoothingFactor;
+            }
+
+            freqEl.textContent = smoothedFrequency.toFixed(2) + " Hz";
+            const { noteName, cents } = getNoteAndCents(smoothedFrequency);
             noteEl.textContent = noteName;
 
             const targetNoteName = activeTargetNotes[currentSelectedStringIdx];
             
             if (targetNoteName && noteName === targetNoteName) {
-                const inTune = Math.abs(cents) <= 3;
+                const inTune = Math.abs(cents) <= 2.5; // +/- 2.5 cents precision ceiling window
                 if (inTune) {
                     statusEl.textContent = "IN TUNE";
                     statusEl.className = "status inTune";
                     noteEl.style.color = "#27ae60";
                 } else {
-                    statusEl.textContent = cents > 0 ? `+${cents} Sharp` : `${cents} Flat`;
+                    statusEl.textContent = cents > 0 ? `+${Math.round(cents)} Sharp` : `${Math.round(cents)} Flat`;
                     statusEl.className = "status offTune";
                     noteEl.style.color = "#fff";
                 }
@@ -506,10 +545,11 @@ canvas {
                 statusEl.textContent = targetNoteName ? `Target: ${targetNoteName}` : "Detecting...";
                 statusEl.className = "status offTune";
                 noteEl.style.color = "rgba(255,255,255,0.6)";
-                drawMeter(cents > 0 ? 45 : -45, false);
+                drawMeter(cents > 0 ? 48 : -48, false);
             }
         } else {
-            if (ac === -1) {
+            // Gradually decay pitch signal cleanly if input strings go completely silent
+            if (rawPitch === -1) {
                 noteEl.style.color = "rgba(255,255,255,0.3)";
             }
             drawMeter(null, false);
@@ -520,25 +560,19 @@ canvas {
 
     async function start() {
         try {
-            const inst = document.getElementById("instrumentSelect").value;
-            
             stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } 
             });
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
-            filterNode = audioCtx.createBiquadFilter();
-            filterNode.type = "lowpass";
-            filterNode.frequency.setValueAtTime(inst === "bass" ? 220 : 450, audioCtx.currentTime);
-
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048;
+            analyser.fftSize = 2048; // Large buffer size window guarantees excellent sub-frequency scaling 
 
             source = audioCtx.createMediaStreamSource(stream);
-            source.connect(filterNode);
-            filterNode.connect(analyser);
+            source.connect(analyser);
             
             buffer = new Float32Array(analyser.fftSize);
+            smoothedFrequency = 0;
 
             isRunning = true;
             detect();
@@ -556,7 +590,6 @@ canvas {
 
         stream = null;
         audioCtx = null;
-        filterNode = null;
         analyser = null;
         source = null;
         buffer = null;
@@ -569,6 +602,7 @@ canvas {
         noteEl.style.color = "#fff";
         freqEl.textContent = "0.00 Hz";
         smoothedCents = 0;
+        smoothedFrequency = 0;
         drawMeter(null, false);
     }
 
@@ -583,7 +617,6 @@ canvas {
         }
     }
 
-    // Initialize layout elements
     buildMenuHierarchy();
 </script>
 </body>
