@@ -19,7 +19,7 @@ body {
     min-height: 100vh;
 }
 
-/* METALLIC UNIFIED NAVIGATION HEADER */
+/* UNIFIED GLOBAL HEADER STYLES */
 .titleBar {
     display: flex;
     justify-content: space-between;
@@ -71,7 +71,6 @@ body {
     color: #ff5500;
 }
 
-/* SUB NAVIGATION BAR */
 .topBar {
     display: flex;
     gap: 10px;
@@ -82,7 +81,50 @@ body {
     flex-wrap: wrap;
 }
 
-/* TUNER CONTAINMENT ARCHITECTURE */
+/* HIERARCHICAL SELECT MENU CONTAINER */
+.menu-row {
+    display: flex;
+    gap: 15px;
+    background: #141414;
+    padding: 12px 20px;
+    justify-content: center;
+    border-bottom: 1px solid #222;
+    flex-wrap: wrap;
+}
+
+.menu-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-group label {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+select {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 140px;
+    transition: border-color 0.15s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #ff5500;
+}
+
+/* TUNER CONTENT LAYOUT */
 .tuner-container {
     flex: 1;
     display: flex;
@@ -90,7 +132,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 30px;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
@@ -100,11 +142,47 @@ body {
     background: #141414;
     border: 1px solid #262626;
     border-radius: 12px;
-    padding: 40px;
+    padding: 35px;
     width: 100%;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     margin-bottom: 25px;
+    box-sizing: border-box;
+}
+
+/* INTERACTIVE TARGET STRING SELECTORS */
+.string-picker {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.string-note {
+    background: #222;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 45px;
+    text-align: center;
+}
+
+.string-note:hover {
+    border-color: #ff5500;
+    color: #fff;
+}
+
+.string-note.selected {
+    background: #ff5500;
+    color: white;
+    border-color: #ff5500;
+    box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3);
 }
 
 .note-display {
@@ -114,7 +192,6 @@ body {
     color: #fff;
     margin: 10px 0;
     text-shadow: 0 0 20px rgba(255,255,255,0.1);
-    transition: color 0.15s ease;
 }
 
 .frequency-display {
@@ -124,7 +201,7 @@ body {
 }
 
 .status {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -137,7 +214,6 @@ body {
     color: #27ae60;
     background: rgba(39, 174, 96, 0.1);
     border: 1px solid rgba(39, 174, 96, 0.3);
-    text-shadow: 0 0 10px rgba(39, 174, 96, 0.4);
 }
 
 .offTune {
@@ -146,17 +222,16 @@ body {
     border: 1px solid rgba(255, 85, 0, 0.2);
 }
 
-/* VISUAL METER CANVAS */
 canvas {
     background: #0b0b0b;
     border-radius: 8px;
     border: 1px solid #222;
     width: 100%;
-    height: 80px;
+    height: 75px;
     margin-top: 25px;
 }
 
-/* ACTION BUTTON STYLING */
+/* GENERIC BUTTON CONFIGURATIONS */
 .btn {
     padding: 8px 16px;
     font-family: 'Inter', sans-serif;
@@ -207,8 +282,35 @@ canvas {
     <button id="tunerBtn" class="btn" onclick="toggleTuner(event)">Start Tuner</button>
 </div>
 
+<div class="menu-row">
+    <div class="menu-group">
+        <label>Instrument</label>
+        <select id="instrumentSelect" onchange="buildMenuHierarchy()">
+            <option value="bass">Bass Guitar</option>
+            <option value="guitar">Guitar</option>
+        </select>
+    </div>
+    
+    <div class="menu-group" id="stringCountGroup">
+        <label>Strings</label>
+        <select id="stringCountSelect" onchange="buildMenuHierarchy()">
+            <option value="4">4-String</option>
+            <option value="5">5-String</option>
+            <option value="6">6-String</option>
+        </select>
+    </div>
+
+    <div class="menu-group">
+        <label>Tuning Profile</label>
+        <select id="tuningProfileSelect" onchange="updateTargetStrings()">
+            </select>
+    </div>
+</div>
+
 <div class="tuner-container">
     <div class="display-panel">
+        <div id="stringPicker" class="string-picker"></div>
+
         <div id="note" class="note-display">--</div>
         <div id="frequency" class="frequency-display">0.00 Hz</div>
         <div id="status" class="status offTune">Stopped</div>
@@ -218,222 +320,11 @@ canvas {
 </div>
 
 <script>
-    let audioCtx = null;
-    let analyser = null;
-    let filterNode = null;
-    let stream = null;
-    let source = null;
-    let buffer = null;
-    let isRunning = false;
-    let rafId = null;
-
-    // Visual tracking dampening variables
-    let smoothedCents = 0;
-    const smoothingFactor = 0.15; 
-
-    const btn = document.getElementById("tunerBtn");
-    const noteEl = document.getElementById("note");
-    const freqEl = document.getElementById("frequency");
-    const statusEl = document.getElementById("status");
-    const canvas = document.getElementById("meterCanvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-
-    function getNoteAndCents(frequency) {
-        const noteNum = 12 * (Math.log2(frequency / 440)) + 69;
-        const roundedNoteNum = Math.round(noteNum);
-        const cents = Math.round((noteNum - roundedNoteNum) * 100);
-        const noteName = notes[((roundedNoteNum % 12) + 12) % 12];
-        return { noteName, cents };
-    }
-
-    function autoCorrelate(buffer, sampleRate) {
-        let SIZE = buffer.length;
-        let rms = 0;
-
-        for (let i = 0; i < SIZE; i++) {
-            let val = buffer[i];
-            rms += val * val;
-        }
-        rms = Math.sqrt(rms / SIZE);
-        
-        if (rms < 0.015) return -1; 
-
-        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
-        for (let i = 0; i < SIZE / 2; i++) {
-            if (Math.abs(buffer[i]) < thres) { r1 = i; break; }
-        }
-        for (let i = SIZE - 1; i >= SIZE / 2; i--) {
-            if (Math.abs(buffer[i]) < thres) { r2 = i; break; }
-        }
-
-        buffer = buffer.slice(r1, r2);
-        SIZE = buffer.length;
-
-        let c = new Float32Array(SIZE);
-        for (let i = 0; i < SIZE; i++) {
-            for (let j = 0; j < SIZE - i; j++) {
-                c[i] = c[i] + buffer[j] * buffer[j + i];
-            }
-        }
-
-        let d = 0;
-        while (c[d] > c[d + 1]) d++;
-        let maxval = -1, maxpos = -1;
-        for (let i = d; i < SIZE; i++) {
-            if (c[i] > maxval) {
-                maxval = c[i];
-                maxpos = i;
-            }
-        }
-        let T0 = maxpos;
-
-        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-        let a = (x1 + x3 - 2 * x2) / 2;
-        let b = (x3 - x1) / 2;
-        if (a) T0 = T0 - b / (2 * a);
-
-        return sampleRate / T0;
-    }
-
-    function drawMeter(cents, inTune) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const midX = canvas.width / 2;
-        
-        ctx.strokeStyle = "#333";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(midX, 0);
-        ctx.lineTo(midX, canvas.height);
-        ctx.stroke();
-
-        ctx.fillStyle = "#444";
-        for(let i = -50; i <= 50; i += 10) {
-            const x = midX + (i * (canvas.width / 120));
-            ctx.fillRect(x, canvas.height - 10, 2, 10);
-        }
-
-        if (isRunning && cents !== null) {
-            smoothedCents += (cents - smoothedCents) * smoothingFactor;
-            const targetX = midX + (smoothedCents * (canvas.width / 120));
-            
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = inTune ? "#27ae60" : "#ff5500";
-            ctx.strokeStyle = inTune ? "#27ae60" : "#ff5500";
-            ctx.lineWidth = 4;
-            
-            ctx.beginPath();
-            ctx.moveTo(targetX, 5);
-            ctx.lineTo(targetX, canvas.height - 5);
-            ctx.stroke();
-            
-            ctx.shadowBlur = 0;
-        }
-    }
-
-    function detect() {
-        if (!analyser) return;
-        analyser.getFloatTimeDomainData(buffer);
-        const ac = autoCorrelate(buffer, audioCtx.sampleRate);
-
-        if (ac !== -1 && ac > 25 && ac < 1200) {
-            freqEl.textContent = ac.toFixed(2) + " Hz";
-            const { noteName, cents } = getNoteAndCents(ac);
-            noteEl.textContent = noteName;
-
-            const inTune = Math.abs(cents) <= 3;
-            if (inTune) {
-                statusEl.textContent = "IN TUNE";
-                statusEl.className = "status inTune";
-                noteEl.style.color = "#27ae60";
-            } else {
-                statusEl.textContent = cents > 0 ? `+${cents} Sharp` : `${cents} Flat`;
-                statusEl.className = "status offTune";
-                noteEl.style.color = "#fff";
-            }
-            drawMeter(cents, inTune);
-        } else {
-            if (ac === -1) {
-                noteEl.style.color = "rgba(255,255,255,0.3)";
-            }
-            drawMeter(null, false);
-        }
-
-        rafId = requestAnimationFrame(detect);
-    }
-
-    async function start() {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: { 
-                    echoCancellation: false, 
-                    noiseSuppression: false,
-                    autoGainControl: false
-                } 
-            });
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            filterNode = audioCtx.createBiquadFilter();
-            filterNode.type = "lowpass";
-            filterNode.frequency.setValueAtTime(350, audioCtx.currentTime);
-
-            analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048;
-
-            source = audioCtx.createMediaStreamSource(stream);
-            source.connect(filterNode);
-            filterNode.connect(analyser);
-            
-            buffer = new Float32Array(analyser.fftSize);
-
-            detect();
-        } catch (err) {
-            alert("Could not open media capture streams: " + err.message);
-            stop();
-        }
-    }
-
-    function stop() {
-        if (rafId) cancelAnimationFrame(rafId);
-        if (stream) stream.getTracks().forEach(t => t.stop());
-        if (audioCtx) audioCtx.close();
-
-        stream = null;
-        audioCtx = null;
-        filterNode = null;
-        analyser = null;
-        source = null;
-        buffer = null;
-        isRunning = false;
-
-        btn.textContent = "Start Tuner";
-        btn.classList.remove("active");
-        statusEl.textContent = "Stopped";
-        statusEl.className = "status offTune";
-        noteEl.textContent = "--";
-        noteEl.style.color = "#fff";
-        freqEl.textContent = "0.00 Hz";
-        smoothedCents = 0;
-        drawMeter(null, false);
-    }
-
-    async function toggleTuner(e) {
-        e.target.blur();
-
-        if (!isRunning) {
-            isRunning = true;
-            btn.textContent = "Stop Tuner";
-            btn.classList.add("active");
-            await start();
-        } else {
-            stop();
-        }
-    }
-</script>
-</body>
-</html>
+    // Comprehensive Tuning Profile Matrix Definition
+    const tuningMatrix = {
+        bass: {
+            4: {
+                "Standard (E)": ["E", "A", "D", "G"],
+                "Drop D": ["D", "A", "D", "G"],
+                "Half-Step Down": ["D#", "G#", "C#", "F#"],
+                "Full
