@@ -269,7 +269,7 @@ function nearestString(freq){
     );
 }
 
-// Upgraded Autocorrelation algorithm for resilient low pitch tracking
+// Autocorrelation Pitch Detection
 function autoCorrelate(buffer, sampleRate) {
     let bufferSize = buffer.length;
     let rms = 0;
@@ -279,7 +279,7 @@ function autoCorrelate(buffer, sampleRate) {
         rms += val * val;
     }
     rms = Math.sqrt(rms / bufferSize);
-    if (rms < 0.01) return -1; // Ignore baseline channel silence
+    if (rms < 0.008) return -1; // Volume gate threshold
 
     let r1 = 0, r2 = bufferSize - 1;
     let thres = 0.2;
@@ -312,7 +312,7 @@ function autoCorrelate(buffer, sampleRate) {
 
     let T0 = maxpos;
 
-    // Parabolic interpolation for fine tuning sub-Hz notes
+    // Sub-pixel parabolic interpolation for highly accurate cents calibration
     let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
     let a = (x1 + x3 - 2 * x2) / 2;
     let b = (x3 - x1) / 2;
@@ -326,7 +326,7 @@ function detect(){
 
     const freq = autoCorrelate(buffer, audioCtx.sampleRate);
 
-    // Floor expanded down to 35 Hz to track shaky fundamental notes safely
+    // Floor lowered to 35 Hz to comfortably track low strings
     if(freq>35 && freq<400){
         const target=nearestString(freq);
         const cents=1200*Math.log2(freq/target.freq);
