@@ -19,13 +19,13 @@ body {
     min-height: 100vh;
 }
 
-/* METALLIC HEADER STYLE */
+/* METALLIC UNIFIED NAVIGATION HEADER */
 .titleBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #141414;
-    padding: 15px 20px;
+    padding: 12px 20px;
     border-bottom: 2px solid #222;
     flex-wrap: wrap;
 }
@@ -33,7 +33,12 @@ body {
 .titleLeft {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
+}
+
+.titleBar img {
+    width: 40px;
+    height: auto;
 }
 
 .titleLeft h2 {
@@ -46,9 +51,27 @@ body {
     background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.4));
+    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
 }
 
+.socialLinks {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.socialLinks a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 14px;
+    transition: .15s;
+}
+
+.socialLinks a:hover {
+    color: #ff5500;
+}
+
+/* SUB NAVIGATION BAR */
 .topBar {
     display: flex;
     gap: 10px;
@@ -56,9 +79,10 @@ body {
     background: #181818;
     justify-content: center;
     border-bottom: 1px solid #262626;
+    flex-wrap: wrap;
 }
 
-/* TUNER APP CONTAINER */
+/* TUNER CONTAINMENT ARCHITECTURE */
 .tuner-container {
     flex: 1;
     display: flex;
@@ -132,34 +156,29 @@ canvas {
     margin-top: 25px;
 }
 
-/* BUTTON STYLING */
+/* ACTION BUTTON STYLING */
 .btn {
-    padding: 12px 28px;
+    padding: 8px 16px;
     font-family: 'Inter', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     background: #ff5500;
     border: none;
     color: white;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: all 0.15s ease;
-    box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .btn:hover {
     background: #ff7733;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(255, 85, 0, 0.4);
-}
-
-.btn:active {
-    transform: translateY(1px);
 }
 
 .btn.active {
     background: #c0392b;
-    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
 }
 
 .btn:focus {
@@ -171,11 +190,20 @@ canvas {
 
 <div class="titleBar">
     <div class="titleLeft">
+        <img src="guitar.png" alt="Logo">
         <h2>Lazzarus Prime Tuner</h2>
+    </div>
+    <div class="socialLinks">
+        <a href="https://twitch.tv/lazzarusprime" target="_blank">Twitch</a>
+        <a href="https://youtube.com/" target="_blank">YouTube</a>
+        <a href="https://instagram.com/" target="_blank">Instagram</a>
+        <a href="https://discord.gg/" target="_blank">Discord</a>
     </div>
 </div>
 
 <div class="topBar">
+    <a href="index.html" class="btn" style="background:#222;">Home</a>
+    <a href="artists.html" class="btn" style="background:#222;">Artists</a>
     <button id="tunerBtn" class="btn" onclick="toggleTuner(event)">Start Tuner</button>
 </div>
 
@@ -199,9 +227,9 @@ canvas {
     let isRunning = false;
     let rafId = null;
 
-    // Visual Meter Jitter Dampening Variables
+    // Visual tracking dampening variables
     let smoothedCents = 0;
-    const smoothingFactor = 0.15; // Lower values = smoother needle tracking
+    const smoothingFactor = 0.15; 
 
     const btn = document.getElementById("tunerBtn");
     const noteEl = document.getElementById("note");
@@ -233,7 +261,6 @@ canvas {
         }
         rms = Math.sqrt(rms / SIZE);
         
-        // Strict baseline audio thresholding to ignore random ambient room hums
         if (rms < 0.015) return -1; 
 
         let r1 = 0, r2 = SIZE - 1, thres = 0.2;
@@ -278,7 +305,6 @@ canvas {
         
         const midX = canvas.width / 2;
         
-        // Render static center reference lanes
         ctx.strokeStyle = "#333";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -286,7 +312,6 @@ canvas {
         ctx.lineTo(midX, canvas.height);
         ctx.stroke();
 
-        // Render calibration marks
         ctx.fillStyle = "#444";
         for(let i = -50; i <= 50; i += 10) {
             const x = midX + (i * (canvas.width / 120));
@@ -294,9 +319,7 @@ canvas {
         }
 
         if (isRunning && cents !== null) {
-            // Hysteresis algorithm processing to smoothly pan needle changes
             smoothedCents += (cents - smoothedCents) * smoothingFactor;
-
             const targetX = midX + (smoothedCents * (canvas.width / 120));
             
             ctx.shadowBlur = 15;
@@ -355,17 +378,14 @@ canvas {
             });
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Build an explicit high-performance low-pass filter node to catch low notes
             filterNode = audioCtx.createBiquadFilter();
             filterNode.type = "lowpass";
-            filterNode.frequency.setValueAtTime(350, audioCtx.currentTime); // Strips room overtones completely
+            filterNode.frequency.setValueAtTime(350, audioCtx.currentTime);
 
             analyser = audioCtx.createAnalyser();
             analyser.fftSize = 2048;
 
             source = audioCtx.createMediaStreamSource(stream);
-            
-            // Pipe connection routing chain
             source.connect(filterNode);
             filterNode.connect(analyser);
             
