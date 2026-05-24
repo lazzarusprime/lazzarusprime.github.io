@@ -1,16 +1,3 @@
-To lock down the low E string detection perfectly on both Bass (approx. 41.20 Hz) and Guitar (approx. 82.41 Hz), we can address the common bottlenecks of the standard YIN pitch algorithm on low-register notes.
-
-Thick strings produce heavy sub-harmonics and complex early wave cycles. If the sample buffer isn't processed carefully, the algorithm detects a octave drop or misses the fundamental frequency peak entirely during the initial pick attack.
-
-To fix this cleanly without replacing or altering your dual-panel workspace architecture, layout, or design, we can implement two targeted enhancements within the detectPitchYIN function:
-
-Downsampling / Decimation Pre-pass: We can add a rapid 2x average downsampling block when processing low-frequency profiles. This halves the effective sample rate for the math tracker, doubling the duration captured in your 2048 size array, which gives the YIN engine clean, complete low-frequency cycles to work with.
-
-Absolute Threshold Scaling: Low notes create deep absolute difference dips in the YIN buffer that easily bypass strict threshold settings. We can use a dynamic validation pass to reliably catch the fundamental peak.
-
-Here is the updated, complete code with your exact UI, panels, layout styles, and configuration states preserved intact:
-
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
