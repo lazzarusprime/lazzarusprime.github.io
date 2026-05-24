@@ -96,7 +96,7 @@ select {
     font-family: 'Segoe UI', Arial, sans-serif;
     font-size: 14px;
     cursor: pointer;
-    min-width: 155px;
+    min-width: 170px;
     transition: border-color 0.15s ease;
 }
 
@@ -218,7 +218,7 @@ canvas {
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
-    <h2>Lazzarus Prime Rocksmith Tuner</h2>
+    <h2>Lazzarus Prime Tuner</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -273,18 +273,25 @@ canvas {
 </div>
 
 <script>
+    // Max-Expanded Pitch Mapping Matrix Array Definitions
     const tuningMatrix = {
         bass: {
             4: {
                 "Standard (E)": ["E", "A", "D", "G"],
                 "Drop D": ["D", "A", "D", "G"],
                 "Half-Step Down": ["D#", "G#", "C#", "F#"],
-                "Full-Step Down": ["D", "G", "C", "F"]
+                "Full-Step Down": ["D", "G", "C", "F"],
+                "Drop C": ["C", "G", "C", "F"],
+                "Drop B": ["B", "F#", "B", "E"],
+                "Drop A": ["A", "E", "A", "D"],
+                "Open D": ["D", "A", "D", "F#"]
             },
             5: {
                 "Standard (B)": ["B", "E", "A", "D", "G"],
                 "Tenor Standard": ["E", "A", "D", "G", "C"],
-                "Drop A": ["A", "E", "A", "D", "G"]
+                "Drop A": ["A", "E", "A", "D", "G"],
+                "Half-Step Down": ["A#", "D#", "G#", "C#", "F#"],
+                "Full-Step Down": ["A", "D", "G", "C", "F"]
             },
             6: {
                 "Standard (B-C)": ["B", "E", "A", "D", "G", "C"],
@@ -296,7 +303,13 @@ canvas {
                 "Standard (E)": ["E", "A", "D", "G", "B", "E"],
                 "Drop D": ["D", "A", "D", "G", "B", "E"],
                 "Half-Step Down": ["D#", "G#", "C#", "F#", "A#", "D#"],
-                "Drop C": ["C", "G", "C", "F", "A", "D"]
+                "Full-Step Down": ["D", "G", "C", "F", "A", "D"],
+                "Drop C": ["C", "G", "C", "F", "A", "D"],
+                "Drop B": ["B", "F#", "B", "E", "G#", "C#"],
+                "Drop A": ["A", "E", "A", "D", "F#", "B"],
+                "Open G": ["D", "G", "D", "G", "B", "D"],
+                "Open D": ["D", "A", "D", "F#", "A", "D"],
+                "DADGAD": ["D", "A", "D", "G", "A", "D"]
             }
         }
     };
@@ -309,11 +322,10 @@ canvas {
     let isRunning = false;
     let rafId = null;
 
-    // Advanced Precision & Smoothing Variables
     let smoothedCents = 0;
     let smoothedFrequency = 0;
-    const freqSmoothingFactor = 0.25; // Filters micro-jitter on input stream frequencies
-    const needleSmoothingFactor = 0.12; // Controls visual inertia of the tuning graphic
+    const freqSmoothingFactor = 0.25; 
+    const needleSmoothingFactor = 0.12; 
     
     let currentSelectedStringIdx = 0;
     let activeTargetNotes = [];
@@ -394,20 +406,17 @@ canvas {
         return { noteName, cents };
     }
 
-    // High Precision Pitch Tracking: YIN-Style Difference Engine
     function detectPitchYIN(buffer, sampleRate) {
         const size = buffer.length;
         const halfSize = Math.floor(size / 2);
         
-        // Step 1: Calculate Root Mean Square (RMS) for absolute noise gate filtering
         let rms = 0;
         for (let i = 0; i < size; i++) {
             rms += buffer[i] * buffer[i];
         }
         rms = Math.sqrt(rms / size);
-        if (rms < 0.012) return -1; // Ignore background static ambient air signatures
+        if (rms < 0.012) return -1; 
 
-        // Step 2: Build Difference Equation Array
         const yinBuffer = new Float32Array(halfSize);
         for (let tau = 0; tau < halfSize; tau++) {
             for (let i = 0; i < halfSize; i++) {
@@ -416,7 +425,6 @@ canvas {
             }
         }
 
-        // Step 3: Cumulative Mean Normalized Difference Function
         yinBuffer[0] = 1;
         let runningSum = 0;
         for (let tau = 1; tau < halfSize; tau++) {
@@ -424,7 +432,6 @@ canvas {
             yinBuffer[tau] *= tau / runningSum;
         }
 
-        // Step 4: Absolute Threshold Local Minimum Isolation
         const threshold = 0.15;
         let tauEstimate = -1;
         for (let tau = 1; tau < halfSize; tau++) {
@@ -437,7 +444,6 @@ canvas {
             }
         }
 
-        // Fallback to absolute global minimum if signal fails local criteria bounds
         if (tauEstimate === -1) {
             let minVal = 1;
             for (let tau = 1; tau < halfSize; tau++) {
@@ -448,7 +454,6 @@ canvas {
             }
         }
 
-        // Step 5: Parabolic Interpolation for Sub-Sample Pitch Cent Precision
         if (tauEstimate > 0 && tauEstimate < halfSize - 1) {
             const alpha = yinBuffer[tauEstimate - 1];
             const beta = yinBuffer[tauEstimate];
@@ -460,7 +465,6 @@ canvas {
                 return sampleRate / preciseTau;
             }
         }
-
         return sampleRate / tauEstimate;
     }
 
@@ -468,7 +472,6 @@ canvas {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const midX = canvas.width / 2;
         
-        // Draw ticks background grid
         ctx.strokeStyle = "#262626";
         ctx.lineWidth = 1.5;
         for(let i = -50; i <= 50; i += 10) {
@@ -479,7 +482,6 @@ canvas {
             ctx.stroke();
         }
 
-        // Main Center Calibration Axis Line
         ctx.strokeStyle = "#444";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -488,11 +490,8 @@ canvas {
         ctx.stroke();
 
         if (isRunning && targetCents !== null) {
-            // Apply visual inertia dampening filter to needle kinematics
             smoothedCents += (targetCents - smoothedCents) * needleSmoothingFactor;
             const targetX = midX + (smoothedCents * (canvas.width / 110));
-            
-            // Dynamic UI Feedback coloring 
             const pulseColor = inTune ? "#27ae60" : "#ff5500";
             
             ctx.shadowBlur = 15;
@@ -515,7 +514,6 @@ canvas {
         
         const rawPitch = detectPitchYIN(buffer, audioCtx.sampleRate);
 
-        // Sanity check frequency spectrum windows (20Hz to 1200Hz limits)
         if (rawPitch !== -1 && rawPitch > 20 && rawPitch < 1200) {
             if (smoothedFrequency === 0) {
                 smoothedFrequency = rawPitch;
@@ -530,7 +528,7 @@ canvas {
             const targetNoteName = activeTargetNotes[currentSelectedStringIdx];
             
             if (targetNoteName && noteName === targetNoteName) {
-                const inTune = Math.abs(cents) <= 2.5; // +/- 2.5 cents precision ceiling window
+                const inTune = Math.abs(cents) <= 2.5; 
                 if (inTune) {
                     statusEl.textContent = "IN TUNE";
                     statusEl.className = "status inTune";
@@ -548,13 +546,11 @@ canvas {
                 drawMeter(cents > 0 ? 48 : -48, false);
             }
         } else {
-            // Gradually decay pitch signal cleanly if input strings go completely silent
             if (rawPitch === -1) {
                 noteEl.style.color = "rgba(255,255,255,0.3)";
             }
             drawMeter(null, false);
         }
-
         rafId = requestAnimationFrame(detect);
     }
 
@@ -566,7 +562,7 @@ canvas {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048; // Large buffer size window guarantees excellent sub-frequency scaling 
+            analyser.fftSize = 2048; 
 
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
@@ -577,7 +573,7 @@ canvas {
             isRunning = true;
             detect();
         } catch (err) {
-            alert("Could not access stream context capture modules: " + err.message);
+            alert("Could not access audio device: " + err.message);
             stop();
         }
     }
