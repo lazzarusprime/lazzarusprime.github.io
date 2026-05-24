@@ -248,7 +248,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
   <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button></div><div class="menu-row">
     <div class="menu-group">
         <label>Instrument</label>
-        <select id="instrumentSelect" onchange="buildMenuHierarchy()">
+        <select id="instrumentSelect" onchange="buildMenuHierarchy(); updateFilterSettings();">
             <option value="bass">Bass Guitar</option>
             <option value="guitar">Guitar</option>
         </select>
@@ -256,7 +256,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     
     <div class="menu-group" id="stringCountGroup">
         <label>Strings</label>
-        <select id="stringCountSelect" onchange="buildMenuHierarchy()">
+        <select id="stringCountSelect" onchange="buildMenuHierarchy(); updateFilterSettings();">
             <option value="4">4-String</option>
             <option value="5">5-String</option>
             <option value="6">6-String</option>
@@ -265,7 +265,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
 
     <div class="menu-group">
         <label>Tuning Profile</label>
-        <select id="tuningProfileSelect" onchange="updateTargetStrings()">
+        <select id="tuningProfileSelect" onchange="updateTargetStrings(); updateFilterSettings();">
             </select>
     </div></div><div class="app-workspace">
     <div class="tuner-container">
@@ -331,7 +331,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
 
     const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-    let audioCtx = null, analyser = null, stream = null, source = null, buffer = null;
+    let audioCtx = null, analyser = null, biquadFilter = null, stream = null, source = null, buffer = null;
     let isRunning = false, rafId = null;
 
     let smoothedCents = 0;
@@ -341,7 +341,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     
     let currentAutoDetectedStringIdx = -1;
     let activeTargetNotes = [];
-    let activeTargetFrequencies = []; // Pre-cached real frequencies generated dynamically per setup
+    let activeTargetFrequencies = [];
 
     const btn = document.getElementById("tunerBtn");
     const noteEl = document.getElementById("note");
@@ -427,6 +427,18 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         });
     }
 
+    function updateFilterSettings() {
+        if (!biquadFilter || !audioCtx) return;
+        const inst = document.getElementById("instrumentSelect").value;
+        
+        // Dynamically alter low-pass brickwall based on setup parameters
+        if (inst === "bass") {
+            biquadFilter.frequency.setValueAtTime(140, audioCtx.currentTime); // Hard cut overtones for bass fundamental
+        } else {
+            biquadFilter.frequency.setValueAtTime(380, audioCtx.currentTime); // Higher pass limit for standard guitar
+        }
+    }
+
     function findClosestStringIndex(detectedFreq) {
         if (!activeTargetFrequencies.length) return -1;
         let closestIdx = -1;
@@ -451,47 +463,60 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         return { noteName, cents };
     }
 
-    // High-Density Autocorrelation Pitch Tracker Optimization
-    function detectPitchAutocorrelation(timeDomainBuffer, sampleRate) {
-        const bufferSize = timeDomainBuffer.length;
+    // Autocorrelation Pitch Tracker + Center Clipping & Dynamic Downsampling
+    function detectPitchAdvanced(timeDomainBuffer, sampleRate) {
+        let workingBuffer = timeDomainBuffer;
+        let workingSampleRate = sampleRate;
+        const inst = document.getElementById("instrumentSelect").value;
+
+        // ADVANCED PASS 1: Dynamic 2x Downsampling for Ultra-Low Frequencies
+        if (inst === "bass") {
+            const downsampledSize = Math.floor(timeDomainBuffer.length / 2);
+            const downsampledBuffer = new Float32Array(downsampledSize);
+            for (let i = 0; i < downsampledSize; i++) {
+                downsampledBuffer[i] = (timeDomainBuffer[i * 2] + timeDomainBuffer[i * 2 + 1]) / 2;
+            }
+            workingBuffer = downsampledBuffer;
+            workingSampleRate = sampleRate / 2;
+        }
+
+        const bufferSize = workingBuffer.length;
+        let maxVal = 0;
         let rms = 0;
 
         for (let i = 0; i < bufferSize; i++) {
-            const val = timeDomainBuffer[i];
+            const val = workingBuffer[i];
             rms += val * val;
+            if (Math.abs(val) > maxVal) maxVal = Math.abs(val);
         }
         rms = Math.sqrt(rms / bufferSize);
-        if (rms < 0.01) return -1; // Ignore ambient noise floor components completely
+        if (rms < 0.01) return -1; 
 
-        // Trim tracking frame limits dynamically to optimize cycle isolation
-        let r1 = 0; 
-        let r2 = bufferSize - 1;
-        const thres = 0.2;
-        for (let i = 0; i < bufferSize / 2; i++) {
-            if (Math.abs(timeDomainBuffer[i]) < thres) { r1 = i; break; }
-        }
-        for (let i = bufferSize - 1; i >= bufferSize / 2; i--) {
-            if (Math.abs(timeDomainBuffer[i]) < thres) { r2 = i; break; }
-        }
-
-        const trimmed = timeDomainBuffer.slice(r1, r2);
-        const len = trimmed.length;
-
-        // Perform clear cross-correlation operations across workspace arrays
-        const correlationValues = new Float32Array(len);
-        for (let i = 0; i < len; i++) {
-            for (let j = 0; j < len - i; j++) {
-                correlationValues[i] = correlationValues[i] + trimmed[j] * trimmed[j + i];
+        // ADVANCED PASS 2: Time-Domain Center Clipping (Removes low-amplitude harmonic ripple)
+        const clipThreshold = maxVal * 0.25; 
+        const clippedBuffer = new Float32Array(bufferSize);
+        for (let i = 0; i < bufferSize; i++) {
+            if (Math.abs(workingBuffer[i]) > clipThreshold) {
+                clippedBuffer[i] = workingBuffer[i] > 0 ? workingBuffer[i] - clipThreshold : workingBuffer[i] + clipThreshold;
+            } else {
+                clippedBuffer[i] = 0;
             }
         }
 
-        // Find primary maximum displacement cutoff
+        // Run Autocorrelation Cross-Multiplication Pass
+        const correlationValues = new Float32Array(bufferSize);
+        for (let i = 0; i < bufferSize; i++) {
+            for (let j = 0; j < bufferSize - i; j++) {
+                correlationValues[i] += clippedBuffer[j] * clippedBuffer[j + i];
+            }
+        }
+
         let d = 0;
         while (correlationValues[d] > correlationValues[d + 1]) d++;
         
         let maxValue = -1; 
         let maxPosition = -1;
-        for (let i = d; i < len; i++) {
+        for (let i = d; i < bufferSize; i++) {
             if (correlationValues[i] > maxValue) {
                 maxValue = correlationValues[i];
                 maxPosition = i;
@@ -500,8 +525,8 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
 
         let periodSamples = maxPosition;
 
-        // Use parabolic interpolation to refine frequency accuracy
-        if (periodSamples > 0 && periodSamples < len - 1) {
+        // ADVANCED PASS 3: Parabolic Interpolation Curve Fitting
+        if (periodSamples > 0 && periodSamples < bufferSize - 1) {
             const alpha = correlationValues[periodSamples - 1];
             const beta = correlationValues[periodSamples];
             const gamma = correlationValues[periodSamples + 1];
@@ -512,7 +537,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         }
 
         if (periodSamples !== -1 && periodSamples > 0) {
-            return sampleRate / periodSamples;
+            return workingSampleRate / periodSamples;
         }
         return -1;
     }
@@ -565,8 +590,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         if (!analyser || !isRunning) return;
         analyser.getFloatTimeDomainData(buffer);
         
-        // Execute the highly optimized autocorrelation processing engine
-        const rawPitch = detectPitchAutocorrelation(buffer, audioCtx.sampleRate);
+        const rawPitch = detectPitchAdvanced(buffer, audioCtx.sampleRate);
 
         if (rawPitch !== -1 && rawPitch > 25 && rawPitch < 1100) {
             smoothedFrequency = smoothedFrequency === 0 ? rawPitch : smoothedFrequency + (rawPitch - smoothedFrequency) * freqSmoothingFactor;
@@ -590,7 +614,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
                 currentAutoDetectedStringIdx = detectedStringIdx;
                 const targetHz = activeTargetFrequencies[currentAutoDetectedStringIdx];
                 
-                // Calculate precise error metrics utilizing target reference profiles directly
                 const calculatedCents = 1200 * Math.log2(smoothedFrequency / targetHz);
                 const { noteName } = getNoteAndCents(smoothedFrequency);
                 const inTune = Math.abs(calculatedCents) <= 2.5; 
@@ -637,8 +660,17 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
             analyser = audioCtx.createAnalyser();
             analyser.fftSize = 2048; 
 
+            // Initialize Hardware Low-Pass Filter Link
+            biquadFilter = audioCtx.createBiquadFilter();
+            biquadFilter.type = "lowpass";
+            updateFilterSettings();
+
             source = audioCtx.createMediaStreamSource(stream);
-            source.connect(analyser);
+            
+            // Route through filter cleanly to drop overtone interference
+            source.connect(biquadFilter);
+            biquadFilter.connect(analyser);
+            
             buffer = new Float32Array(analyser.fftSize);
             
             smoothedFrequency = 0;
@@ -656,7 +688,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         if (stream) stream.getTracks().forEach(t => t.stop());
         if (audioCtx) audioCtx.close();
 
-        stream = null; audioCtx = null; analyser = null; source = null; buffer = null;
+        stream = null; audioCtx = null; biquadFilter = null; analyser = null; source = null; buffer = null;
 
         btn.textContent = "Start Tuner";
         btn.classList.remove("active");
