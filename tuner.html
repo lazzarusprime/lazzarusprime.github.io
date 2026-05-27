@@ -8,7 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }.titleLeft{ display:flex; align-items:center; gap:10px; }.titleBar img{ width:40px; }/* METALLIC HEADER TEXT */.titleLeft h2 { 
+body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+.titleLeft{ display:flex; align-items:center; gap:10px; }
+.titleBar img{ width:40px; }
+
+/* METALLIC HEADER TEXT */
+.titleLeft h2 { 
   margin: 0; 
   font-weight: 900; 
   text-transform: uppercase; 
@@ -16,7 +22,29 @@ body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; ma
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
-}.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }.topBar{ display:flex; gap:8px; padding:12px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; align-items:center; border-bottom: 1px solid #333; }.nav-btn { 
+}
+
+.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+
+/* TOP BAR — left-aligned nav group + action button */
+.topBar{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  background:#181818;
+  position:sticky;
+  top:0;
+  z-index:100;
+  flex-wrap:wrap;
+  align-items:center;
+  border-bottom: 1px solid #333;
+}
+.topBar-nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.topBar-action { margin-left: auto; }
+
+.nav-btn { 
   background:#2a2a2a; 
   color:white; 
   border:1px solid #444; 
@@ -27,7 +55,10 @@ body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; ma
   text-transform: uppercase;
   font-size: 13px;
   transition: .2s;
-}.nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }.action-btn {
+}
+.nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
+
+.action-btn {
   background:#ff5500;
   color:white;
   border:none;
@@ -38,7 +69,11 @@ body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; ma
   text-transform:uppercase;
   font-size:13px;
   transition:.2s;
-}.action-btn:hover { background:#ff7733; }.action-btn.active { background:#c0392b; box-shadow:0 0 10px rgba(192,57,43,0.5); }.menu-row {
+}
+.action-btn:hover { background:#ff7733; }
+.action-btn.active { background:#c0392b; box-shadow:0 0 10px rgba(192,57,43,0.5); }
+
+.menu-row {
     display: flex;
     gap: 15px;
     background: #141414;
@@ -46,11 +81,13 @@ body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; ma
     justify-content: center;
     border-bottom: 1px solid #222;
     flex-wrap: wrap;
-}.menu-group {
+}
+.menu-group {
     display: flex;
     flex-direction: column;
     gap: 5px;
-}.menu-group label {
+}
+.menu-group label {
     font-size: 11px;
     font-weight: 900;
     text-transform: uppercase;
@@ -70,7 +107,10 @@ select {
     min-width: 170px;
     transition: border-color 0.15s ease;
 }
-select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPACE LAYOUT */.app-workspace {
+select:focus { outline: none; border-color: #f1c40f; }
+
+/* DUAL PANEL APP WORKSPACE LAYOUT */
+.app-workspace {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
@@ -82,13 +122,15 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     width: 100%;
     box-sizing: border-box;
     gap: 25px;
-}.tuner-container {
+}
+.tuner-container {
     flex: 1;
     min-width: 320px;
     max-width: 650px;
     width: 100%;
     box-sizing: border-box;
-}.display-panel {
+}
+.display-panel {
     background: #141414;
     border: 1px solid #222;
     border-radius: 12px;
@@ -97,7 +139,10 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     box-sizing: border-box;
-}/* SIDE LEGEND REFERENCE CONTAINER */.legend-panel {
+}
+
+/* SIDE LEGEND REFERENCE CONTAINER */
+.legend-panel {
     width: 260px;
     background: #141414;
     border: 1px solid #222;
@@ -105,7 +150,8 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     padding: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     box-sizing: border-box;
-}.legend-title {
+}
+.legend-title {
     font-size: 12px;
     font-weight: 900;
     text-transform: uppercase;
@@ -115,11 +161,13 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     padding-bottom: 10px;
     margin-bottom: 12px;
     text-align: center;
-}.legend-list {
+}
+.legend-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
-}.legend-row {
+}
+.legend-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -131,7 +179,8 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     font-weight: 600;
     color: #aaa;
     transition: all 0.2s ease;
-}.legend-row .string-lbl {
+}
+.legend-row .string-lbl {
     font-weight: 700;
     color: #fff;
     background: #2a2a2a;
@@ -139,32 +188,42 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     border-radius: 4px;
     min-width: 20px;
     text-align: center;
-}.legend-row .hz-lbl {
+}
+.legend-row .hz-lbl {
     font-family: monospace;
     font-size: 13px;
-}/* Active Legend row lighting */.legend-row.active-match {
+}
+
+/* Active Legend row lighting */
+.legend-row.active-match {
     border-color: #ff5500;
     background: rgba(255, 85, 0, 0.1);
     color: #ff7733;
     box-shadow: 0 0 10px rgba(255, 85, 0, 0.15);
-}.legend-row.active-match .string-lbl {
+}
+.legend-row.active-match .string-lbl {
     background: #ff5500;
     color: #fff;
-}.legend-row.active-match.intune-match {
+}
+.legend-row.active-match.intune-match {
     border-color: #27ae60;
     background: rgba(39, 174, 96, 0.1);
     color: #2ecc71;
     box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
-}.legend-row.active-match.intune-match .string-lbl {
+}
+.legend-row.active-match.intune-match .string-lbl {
     background: #27ae60;
     color: #fff;
-}.string-picker {
+}
+
+.string-picker {
     display: flex;
     gap: 8px;
     justify-content: center;
     margin-bottom: 25px;
     flex-wrap: wrap;
-}.string-note {
+}
+.string-note {
     background: #222;
     border: 1px solid #333;
     color: #666;
@@ -176,39 +235,51 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     min-width: 45px;
     text-align: center;
     pointer-events: none;
-}.string-note.selected {
+}
+.string-note.selected {
     background: #ff5500;
     color: #fff;
     border-color: #ff7733;
     box-shadow: 0 0 15px rgba(255, 85, 0, 0.4);
-}.string-note.selected.matched-intune {
+}
+.string-note.selected.matched-intune {
     background: #27ae60;
     color: #fff;
     border-color: #2ecc71;
     box-shadow: 0 0 15px rgba(39, 174, 96, 0.6);
-}.note-display {
+}
+
+.note-display {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 130px;
     line-height: 1;
     color: #fff;
     margin: 15px 0;
     transition: color 0.15s ease, filter 0.1s ease;
-}.note-display.flaming {
+}
+.note-display.flaming {
     animation: flamePulse 0.6s infinite alternate ease-in-out;
-}.note-display.glow-intune {
+}
+.note-display.glow-intune {
     color: #27ae60 !important;
     animation: intuneLaser 0.4s infinite alternate ease-in-out;
-}@keyframes flamePulse {
+}
+
+@keyframes flamePulse {
     0% { filter: drop-shadow(0 0 8px #ff3300) drop-shadow(0 0 20px #ff7700); text-shadow: 0 0 5px #fff; }
     100% { filter: drop-shadow(0 0 14px #ff5500) drop-shadow(0 0 32px #ffaa00); text-shadow: 0 0 10px #f1c40f; }
-}@keyframes intuneLaser {
+}
+@keyframes intuneLaser {
     0% { filter: drop-shadow(0 0 10px #27ae60) drop-shadow(0 0 25px #2ecc71); }
     100% { filter: drop-shadow(0 0 18px #2ecc71) drop-shadow(0 0 45px #a3e4d7); }
-}.frequency-display {
+}
+
+.frequency-display {
     font-size: 16px;
     color: #888;
     margin-bottom: 20px;
-}.status {
+}
+.status {
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
@@ -216,22 +287,31 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     padding: 6px 16px;
     border-radius: 6px;
     display: inline-block;
-}.inTune {
+}
+.inTune {
     color: #27ae60;
     background: rgba(39, 174, 96, 0.1);
     border: 1px solid rgba(39, 174, 96, 0.3);
-}.offTune {
+}
+.offTune {
     color: #ff5500;
     background: rgba(255, 85, 0, 0.1);
     border: 1px solid rgba(255, 85, 0, 0.2);
-}canvas {
+}
+
+canvas {
     background: #0b0b0b;
     border-radius: 8px;
     border: 1px solid #222;
     width: 100%;
     height: 85px;
     margin-top: 25px;
-}</style></head><body><div class="titleBar">
+}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png">
     <h2>Lazzarus Prime Tuner</h2>
@@ -242,10 +322,20 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
     <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
     <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
-  </div></div><div class="topBar">
-  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
-  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button></div><div class="menu-row">
+  </div>
+</div>
+
+<div class="topBar">
+  <div class="topBar-nav">
+    <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+    <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
+  </div>
+  <div class="topBar-action">
+    <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button>
+  </div>
+</div>
+
+<div class="menu-row">
     <div class="menu-group">
         <label>Instrument</label>
         <select id="instrumentSelect" onchange="buildMenuHierarchy()">
@@ -266,8 +356,11 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     <div class="menu-group">
         <label>Tuning Profile</label>
         <select id="tuningProfileSelect" onchange="updateTargetStrings()">
-            </select>
-    </div></div><div class="app-workspace">
+        </select>
+    </div>
+</div>
+
+<div class="app-workspace">
     <div class="tuner-container">
         <div class="display-panel">
             <div id="stringPicker" class="string-picker"></div>
@@ -283,7 +376,10 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     <div class="legend-panel">
         <div class="legend-title" id="legendTitle">Target Reference Freq</div>
         <div class="legend-list" id="legendList"></div>
-    </div></div><script>
+    </div>
+</div>
+
+<script>
     const tuningMatrix = {
         bass: {
             4: {
@@ -341,7 +437,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
     
     let currentAutoDetectedStringIdx = -1;
     let activeTargetNotes = [];
-    let activeTargetFrequencies = []; // Pre-cached real frequencies generated dynamically per setup
+    let activeTargetFrequencies = [];
 
     const btn = document.getElementById("tunerBtn");
     const noteEl = document.getElementById("note");
@@ -389,31 +485,36 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         } else {
             activeTargetNotes = [];
         }
-        
+
         pickerContainer.innerHTML = "";
         legendListContainer.innerHTML = "";
         activeTargetFrequencies = [];
         currentAutoDetectedStringIdx = -1;
-        
+
         legendTitleEl.textContent = `${profile} Reference`;
 
-        let currentOctaveTracker = inst === "bass" ? 1 : 2; 
-        let lastNoteValue = -1;
+        // Correct octave tracking: bass strings start at octave 1, guitar at octave 2.
+        // Bump octave when note index goes UP or stays same (ascending within octave);
+        // the natural chromatic wrap-around (e.g. A=9 -> D=2) signals the next octave.
+        const baseOctave = inst === "bass" ? 1 : 2;
+        let octave = baseOctave;
+        let prevNoteIdx = -1;
 
         activeTargetNotes.forEach((note, index) => {
+            const noteIdx = notes.indexOf(note);
+
+            if (index > 0 && noteIdx >= prevNoteIdx) {
+                octave++;
+            }
+            prevNoteIdx = noteIdx;
+
+            const finalHz = noteFrequencies[note] * Math.pow(2, octave);
+            activeTargetFrequencies.push(finalHz);
+
             let block = document.createElement("div");
             block.className = "string-note";
             block.textContent = note;
             pickerContainer.appendChild(block);
-
-            const noteValue = notes.indexOf(note);
-            if (index > 0 && noteValue <= lastNoteValue) {
-                currentOctaveTracker++;
-            }
-            lastNoteValue = noteValue;
-
-            const finalHz = noteFrequencies[note] * Math.pow(2, currentOctaveTracker);
-            activeTargetFrequencies.push(finalHz);
 
             let legendRow = document.createElement("div");
             legendRow.className = "legend-row";
@@ -451,7 +552,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         return { noteName, cents };
     }
 
-    // High-Density Autocorrelation Pitch Tracker Optimization
     function detectPitchAutocorrelation(timeDomainBuffer, sampleRate) {
         const bufferSize = timeDomainBuffer.length;
         let rms = 0;
@@ -461,9 +561,8 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
             rms += val * val;
         }
         rms = Math.sqrt(rms / bufferSize);
-        if (rms < 0.01) return -1; // Ignore ambient noise floor components completely
+        if (rms < 0.01) return -1;
 
-        // Trim tracking frame limits dynamically to optimize cycle isolation
         let r1 = 0; 
         let r2 = bufferSize - 1;
         const thres = 0.2;
@@ -477,7 +576,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         const trimmed = timeDomainBuffer.slice(r1, r2);
         const len = trimmed.length;
 
-        // Perform clear cross-correlation operations across workspace arrays
         const correlationValues = new Float32Array(len);
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - i; j++) {
@@ -485,7 +583,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
             }
         }
 
-        // Find primary maximum displacement cutoff
         let d = 0;
         while (correlationValues[d] > correlationValues[d + 1]) d++;
         
@@ -500,7 +597,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
 
         let periodSamples = maxPosition;
 
-        // Use parabolic interpolation to refine frequency accuracy
         if (periodSamples > 0 && periodSamples < len - 1) {
             const alpha = correlationValues[periodSamples - 1];
             const beta = correlationValues[periodSamples];
@@ -565,7 +661,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
         if (!analyser || !isRunning) return;
         analyser.getFloatTimeDomainData(buffer);
         
-        // Execute the highly optimized autocorrelation processing engine
         const rawPitch = detectPitchAutocorrelation(buffer, audioCtx.sampleRate);
 
         if (rawPitch !== -1 && rawPitch > 25 && rawPitch < 1100) {
@@ -590,7 +685,6 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
                 currentAutoDetectedStringIdx = detectedStringIdx;
                 const targetHz = activeTargetFrequencies[currentAutoDetectedStringIdx];
                 
-                // Calculate precise error metrics utilizing target reference profiles directly
                 const calculatedCents = 1200 * Math.log2(smoothedFrequency / targetHz);
                 const { noteName } = getNoteAndCents(smoothedFrequency);
                 const inTune = Math.abs(calculatedCents) <= 2.5; 
@@ -635,7 +729,7 @@ select:focus { outline: none; border-color: #f1c40f; }/* DUAL PANEL APP WORKSPAC
             });
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048; 
+            analyser.fftSize = 4096;
 
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
