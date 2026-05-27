@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lazzarus Prime Precision Tuner</title>
-    <style>
-        body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }
-        .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; }
-        .action-btn { background:#ff5500; color:white; border:none; padding:10px 18px; border-radius:6px; cursor:pointer; font-weight:700; text-transform:uppercase; transition:.2s; }
-        .action-btn.active { background:#c0392b; }
-        .app-workspace { flex: 1; display: flex; justify-content: center; padding: 30px; gap: 25px; }
-        .display-panel { background:#141414; border:1px solid #222; border-radius:12px; padding:35px; text-align:center; width: 100%; max-width: 600px; }
-        .note-display { font-size: 100px; font-weight: bold; margin: 20px 0; color: #fff; }
-        .frequency-display { font-size: 18px; color: #888; }
-        canvas { width: 100%; height: 100px; background: #0b0b0b; border: 1px solid #333; margin-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime Precision Tuner</title>
+<style>
+    body{ font-family:Segoe UI,Arial,sans-serif; background:#0f0f0f; color:white; margin:0; display: flex; flex-direction: column; min-height: 100vh; }
+    .titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; }
+    .action-btn { background:#ff5500; color:white; border:none; padding:10px 18px; border-radius:6px; cursor:pointer; font-weight:700; transition:.2s; }
+    .action-btn.active { background:#c0392b; }
+    .app-workspace { flex: 1; display: flex; justify-content: center; padding: 30px; gap: 25px; }
+    .display-panel { background:#141414; border:1px solid #222; border-radius:12px; padding:35px; text-align:center; width: 100%; max-width: 600px; }
+    .note-display { font-size: 100px; font-weight: bold; margin: 20px 0; color: #fff; }
+    .frequency-display { font-size: 18px; color: #888; }
+    .status { font-weight: bold; margin-top: 10px; }
+    canvas { width: 100%; height: 80px; background: #0b0b0b; border: 1px solid #333; margin-top: 20px; }
+</style>
 </head>
 <body>
     <div class="titleBar">
-        <h2>Lazzarus Prime Tuner</h2>
+        <h2>Lazzarus Prime Precision Tuner</h2>
         <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">Start Tuner</button>
     </div>
+
     <div class="app-workspace">
         <div class="display-panel">
             <div id="note" class="note-display">--</div>
             <div id="frequency" class="frequency-display">0.00 Hz</div>
-            <div id="status">Stopped</div>
+            <div id="status" class="status">Stopped</div>
             <canvas id="meterCanvas"></canvas>
         </div>
     </div>
@@ -34,12 +36,12 @@
     let audioCtx, analyser, stream, buffer;
     let isRunning = false, rafId = null;
 
-    // Optimized pitch detection using YIN-inspired peak finding
+    // Optimized pitch detection
     function detectPitch(buffer, sampleRate) {
         const SIZE = buffer.length;
         let rms = 0;
         for (let i = 0; i < SIZE; i++) rms += buffer[i] * buffer[i];
-        if (Math.sqrt(rms / SIZE) < 0.01) return -1;
+        if (Math.sqrt(rms / SIZE) < 0.02) return -1; // Higher threshold for interface noise
 
         const c = new Float32Array(SIZE / 2);
         for (let lag = 0; lag < SIZE / 2; lag++) {
@@ -50,7 +52,7 @@
 
         let peakLag = -1;
         for (let lag = 1; lag < c.length - 1; lag++) {
-            if (c[lag] > c[lag - 1] && c[lag] > c[lag + 1] && c[lag] > c[0] * 0.3) {
+            if (c[lag] > c[lag - 1] && c[lag] > c[lag + 1] && c[lag] > c[0] * 0.2) {
                 peakLag = lag;
                 break;
             }
@@ -60,11 +62,12 @@
 
     async function start() {
         try {
-            stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
-            // Set 48kHz to match most Audio Interfaces
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } 
+            });
             audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 8192; // Increased buffer for better Bass detection
+            analyser.fftSize = 8192; 
             
             const source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
@@ -73,7 +76,7 @@
             isRunning = true;
             loop();
         } catch (err) {
-            alert("Error: " + err.message);
+            alert("Mic access denied or unavailable. Check interface settings.");
         }
     }
 
@@ -82,13 +85,14 @@
         analyser.getFloatTimeDomainData(buffer);
         const pitch = detectPitch(buffer, audioCtx.sampleRate);
         
-        if (pitch > 20 && pitch < 1000) {
+        if (pitch > 20 && pitch < 1200) {
             document.getElementById("frequency").textContent = pitch.toFixed(2) + " Hz";
-            // Simple note calculation
             const noteNum = 12 * (Math.log2(pitch / 440)) + 69;
             const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             document.getElementById("note").textContent = noteNames[Math.round(noteNum) % 12];
-            document.getElementById("status").textContent = "Tracking...";
+            document.getElementById("status").textContent = "Detecting Signal...";
+        } else {
+            document.getElementById("status").textContent = "Play a note...";
         }
         rafId = requestAnimationFrame(loop);
     }
