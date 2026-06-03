@@ -6,54 +6,46 @@
 <title>Lazzarus Prime Rocksmith Artists</title>
 <style>
 body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
-.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; gap:8px; }
 .titleLeft{ display:flex; align-items:center; gap:10px; }
 .titleBar img{ width:40px; }
-
-/* METALLIC HEADER STYLE */
 .titleLeft h2 { 
-  margin: 0; 
-  font-weight: 900; 
-  text-transform: uppercase; 
+  margin: 0; font-weight: 900; text-transform: uppercase; 
   background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
 }
-
 .socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
 .socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
 .socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
 
 .topBar{ display:flex; gap:8px; padding:12px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; align-items:center; border-bottom: 1px solid #333; }
 .topBar input{ flex:1; padding:10px; border-radius:6px; border:none; min-width:180px; background: white; color: black; font-size: 14px; }
-
-/* PROMINENT NAVIGATION BUTTONS */
 .nav-btn { 
-  background:#2a2a2a; 
-  color:white; 
-  border:1px solid #444; 
-  padding:10px 18px; 
-  border-radius:6px; 
-  cursor:pointer; 
-  font-weight: 700; 
-  text-transform: uppercase;
-  font-size: 13px;
-  transition: .2s;
+  background:#2a2a2a; color:white; border:1px solid #444; padding:10px 18px; 
+  border-radius:6px; cursor:pointer; font-weight: 700; text-transform: uppercase;
+  font-size: 13px; transition: .2s; white-space: nowrap;
 }
 .nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
 
-/* ALPHABET BAR */
+/* Genre filter bar */
+#genreBar { display:flex; flex-wrap:wrap; gap:6px; padding:10px 12px; background:#141414; border-bottom:1px solid #222; justify-content:center; }
+.genre-btn {
+  background:#1e1e1e; color:#ccc; border:1px solid #333; padding:6px 14px;
+  border-radius:20px; cursor:pointer; font-size:12px; font-weight:600; transition:.2s;
+  text-transform:uppercase; letter-spacing:0.5px;
+}
+.genre-btn:hover { border-color:#f1c40f; color:#f1c40f; }
+.genre-btn.active { background:#f1c40f22; border-color:#f1c40f; color:#f1c40f; }
+
 #alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
 
-/* ARTIST STATS & FLAME ANIMATION */
-#artistStats{ margin: 10px 0; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
+#artistStats{ margin: 0; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
 #artistToggle{ cursor:pointer; margin:0; padding: 10px; }
 #artistList{ display:none; padding: 10px; border-top: 1px solid #222; animation: slideDown 0.3s ease-out; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 #artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
 #artistList div:hover{ color:#f1c40f; padding-left: 5px; }
-
 .flame-effect { animation: warmPulse 0.6s ease-out; }
 @keyframes warmPulse {
   0% { box-shadow: 0 0 0px transparent; }
@@ -61,40 +53,34 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
   100% { box-shadow: 0 0 0px transparent; }
 }
 
-.artistContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-  padding: 20px;
-}
+.artistContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; padding: 20px; }
 .artistCard {
-  padding: 20px;
-  background: #181818;
-  border: 1px solid #222;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .15s;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
+  padding: 20px; background: #181818; border: 1px solid #222; border-radius: 8px;
+  cursor: pointer; transition: .15s; text-align: center; display: flex; flex-direction: column;
 }
-.artistCard:hover {
-  background: #222;
-  color: #f1c40f;
-  border-color: #f1c40f;
-  transform: translateY(-2px);
-}
+.artistCard:hover { background: #222; color: #f1c40f; border-color: #f1c40f; transform: translateY(-2px); }
 .artistName { font-weight: bold; font-size: 16px; margin-bottom: 6px; }
 .artistCount { font-size: 12px; color: #888; font-weight: bold; }
+.artistGenre { font-size: 11px; color: #555; margin-top: 4px; }
+.artistCard:hover .artistGenre { color: #a88a00; }
 
 .pagination { padding: 20px; text-align: center; background: #111; }
+
+#activeFilters { display:none; padding:8px 12px; background:#181818; border-bottom:1px solid #222; font-size:13px; color:#888; text-align:center; }
+#activeFilters span { color:#f1c40f; }
+#activeFilters button { background:transparent; color:#888; border:1px solid #444; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:12px; margin-left:8px; }
+#activeFilters button:hover { color:#fff; border-color:#888; }
+
+.section-header { display:flex; justify-content:space-between; align-items:center; padding:8px 20px; border-bottom:1px solid #1a1a1a; }
+.section-header h3 { margin:0; font-size:14px; color:#888; }
+.results-count { font-size:12px; color:#555; }
 </style>
 </head>
 <body>
 
 <div class="titleBar">
   <div class="titleLeft">
-    <img src="guitar.png">
+    <img src="guitar.png" alt="Guitar">
     <h2>Lazzarus Prime Rocksmith Artists</h2>
   </div>
   <div class="socialLinks">
@@ -109,9 +95,15 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 <div class="topBar">
   <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="window.location.href='tuner.html'">🎯 Tuner</button>
   <button class="nav-btn" onclick="randomArtistRedirect()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearchInput()">
+</div>
+
+<div id="genreBar"></div>
+
+<div id="activeFilters">
+  Showing: <span id="filterLabel"></span>
+  <button onclick="clearAll()">✖ Clear</button>
 </div>
 
 <div id="alphabet"></div>
@@ -123,62 +115,245 @@ body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
 
 <div id="paginationTop" class="pagination"></div>
 
-<h3 style="padding:10px">All Artists (Alphabetical)</h3>
+<div class="section-header">
+  <h3>ALL ARTISTS (ALPHABETICAL)</h3>
+  <span id="resultsCount" class="results-count"></span>
+</div>
 <div class="artistContainer" id="allArtists"></div>
 
 <div id="paginationBottom" class="pagination"></div>
 
 <script>
-let allUniqueArtists = []; 
+// ── Genre Map (shared with index.html) ────────────────────────────────────────
+const GENRE_MAP = {
+  "🤘 Metal": [
+    "Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne",
+    "Judas Priest","Anthrax","Sepultura","Tool","TOOL","System of A Down","Slipknot","Korn",
+    "Disturbed","Avenged Sevenfold","Five Finger Death Punch","Killswitch Engage","Lamb of God",
+    "Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio",
+    "Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Motley Crue",
+    "White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains",
+    "Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback",
+    "Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Puddle of Mud",
+    "Mudvayne","Crossfade","Default","Trapt","Nonpoint","Taproot","Spineshank",
+    "Cradle of Filth","Death","Cryptopsy","Necrophagist","Born of Osiris","Archspire",
+    "Ne Obliviscaris","Intronaut","Periphery","Animals As Leaders","Galneryus","DragonForce",
+    "Electric Wizard","Kyuss","Queens of the Stone Age","Queens Of The Stone Age",
+    "Them Crooked Vultures","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons",
+    "Helmet","Danzig","Rollins Band","L7","Kittie","Hole","Suicidal Tendencies",
+    "Rage Against The Machine","Prophets of Rage","Warlock","Axel Rudi Pell","Avantasia",
+    "Alcest","Leprous","Soen","Porcupine Tree","Riverside","King Crimson",
+    "Muse","Bush","Fuel","Chevelle","Filter","Seven Mary Three","The Tea Party","The Cult",
+    "Blue Oyster Cult","Styx","Kansas","Boston","Rush","Steppenwolf",
+    "Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus",
+    "Finger Eleven","Our Lady Peace","Theory of A Deadman",
+    "Five Finger Death Punch","Shinedown","Sick Puppies","Hinder",
+    "P.O.D.","POD","Ice Nine Kills","Pierce The Veil","Sleeping With Sirens",
+    "Rise Against","NoFX","Pennywise","Bad Religion","Rancid","Flatliners",
+    "Simple Plan","Sum 41","Billy Talent","Paramore"
+  ],
+  "🎸 Classic Rock": [
+    "Led Zeppelin","The Rolling Stones","Rolling Stones","The Who","Pink Floyd",
+    "Aerosmith","Eagles","Fleetwood Mac","The Doors","Doors","Jimi Hendrix",
+    "Cream","Eric Clapton","Jeff Beck","Peter Frampton","Boston","Foreigner","Journey",
+    "Kansas","Styx","REO Speedwagon","Heart","Cheap Trick","Tom Petty",
+    "The Allman Brothers Band","Allman Brothers Band","Lynyrd Skynyrd","ZZ Top",
+    "Van Halen","Queen","AC/DC","ACDC","The Beatles","Beatles","David Bowie",
+    "Rod Stewart","Elton John","Bruce Springsteen","Bruc Springsteen","Bob Dylan","Neil Young",
+    "Paul Simon","Simon & Garfunkel","The Beach Boys","Beach Boys",
+    "The Animals","Kinks","The Kinks","T. Rex","T-Rex","Thin Lizzy","Bad Company",
+    "Steve Winwood","Genesis","Peter Gabriel","Phil Collins","Rush","Triumph",
+    "Bachman Turner Overdrive","April Wine","The Guess Who","Guess Who","Trooper",
+    "Loverboy","Kim Mitchell","Chilliwack","Sloan","Bryan Adams","Blue Rodeo",
+    "Tragically Hip","The Tragically Hip","I Mother Earth","Matthew Good Band","Moist",
+    "Glorious Sons","The Sheepdogs","Sass Jordan","Big Wreck","Jeff Healey",
+    "Santana","Steve Miller Band","The Steve Miller Band","Steely Dan","Toto",
+    "Chicago","Electric Light Orchestra","Alan Parsons Project","Golden Earring"
+  ],
+  "🎤 Pop": [
+    "Taylor Swift","Katy Perry","Ariana Grande","Lady Gaga","Beyonce","Rihanna","Rihana",
+    "Madonna","Michael Jackson","Britney Spears","Justin Timberlake","Justin Beiber",
+    "Ed Sheeran","Adele","Dua Lipa","Harry Styles","Olivia Rodrigo","Billie Eilish",
+    "Camila Cabello","Halsey","Shawn Mendes","Charlie Puth","Miley Cyrus","Sia",
+    "Ellie Goulding","Natasha Bedingfield","Alanis Morissette","Avril Lavigne",
+    "Kelly Clarkson","Kesha","Fergie","Gwen Stefani","No Doubt","Pink","P!nk",
+    "Christina Aguilera","Celine Dion","Whitney Houston","Mariah Carey","Tina Turner",
+    "Cyndi Lauper","A-Ha","Wham","Duran Duran","INXS","Roxette","Ace of Base",
+    "Backstreet Boys","NSYNC","One Direction","5 Seconds of Summer","Carly Rae Jepsen",
+    "Lorde","Vance Joy","Train","Matchbox Twenty","OneRepublic","Coldplay",
+    "Arcade Fire","Metric","City and Colour","Lumineers","The Lumineers",
+    "Counting Crows","Gin Blossoms","Green Day","The Offspring","Blink 182",
+    "BLACKPINK","Blackpink","YOASOBI","Yoasobi","LiSA","Kenshi Yonezu"
+  ],
+  "🎵 R&B / Soul": [
+    "Marvin Gaye","Stevie Wonder","Aretha Franklin","James Brown","Otis Redding",
+    "Sam Cooke","Al Green","Ray Charles","Curtis Mayfield","Wilson Pickett","Isaac Hayes",
+    "Sly & The Family Stone","Sly and The Family Stone","Earth Wind and Fire",
+    "Kool & The Gang","Average White Band","Tower of Power","Isley Brothers","The Isley Brothers",
+    "Four Tops","The Four Tops","Temptations","The Temptations","Commodores","Lionel Richie",
+    "Diana Ross","Gladys Knight","Tina Turner","Sam & Dave","Jackie Wilson",
+    "Mary J Blidge","Alicia Keys","Beyonce","John Legend","Bruno Mars","Anderson Paak",
+    "Thundercat","Vulfpeck","Khruangbin","Thee Sacred Souls","Charles Bradley",
+    "Amy Winehouse","Amy Whinehouse","Sade","Lauryn Hill","Fugees","TLC","Janet Jackson"
+  ],
+  "🎤 Hip-Hop / Rap": [
+    "Eminem","Jay-Z","Jay Z","Kendrick Lamar","Kanye West","Drake","Lil Nas X",
+    "Post Malone","Travis Scott","Cardi B","Megan Thee Stallion","Wiz Khalifa","Mac Miller",
+    "2Pac","NWA","Ice Cube","Dr Dre","Dr. Dre","Snoop Dogg","Nas","Wu Tang Clan","Beastie Boys",
+    "Run DMC","Grandmaster Flash","Public Enemy","LL Cool J","MC Hammer","Vanilla Ice",
+    "Cypress Hill","Puff Daddy","DMX","Busta Rhymes","50 Cent","Fort Minor",
+    "Afroman","Coolio","Kris Kross","Young MC","Tone Loc","DJ Jazzy Jeff","Will Smith",
+    "Childish Gambino","Talib Kkwali","Nujabes","LMFAO","Flo Rida","The Roots"
+  ],
+  "🟡 Blues": [
+    "BB King","B.B. King","Albert King","Muddy Waters","Howlin Wolf","Robert Johnson",
+    "Elmore James","John Lee Hooker","Eric Clapton","Jeff Beck","Stevie Ray Vaughn",
+    "Jonny Lang","Johny Lang","Kenny Wayne Shepherd","Buddy Guy","Joe Cocker",
+    "George Thorogood","The Blues Brothers","Blues Brothers","Jack White","The White Stripes",
+    "The Black Keys","Black Keys","Ben Harper","John Mayer","Bonnie Raitt"
+  ],
+  "🌎 Country": [
+    "Johnny Cash","Dolly Parton","Willie Nelson","Waylon Jennings","Garth Brooks",
+    "Alan Jackson","George Strait","Kenny Rogers","Hank Williams","Patsy Cline",
+    "Loretta Lynn","Glen Campbell","Alabama","Chris Stapleton","Kacey Musgraves",
+    "Luke Combs","Carrie Underwood","Rascal Flatts","Lady Antebellum","Dixie Chicks",
+    "Brooks & Dunn","Shania Twain","Zac Brown Band","Sturgill Simpson",
+    "Gordon Lightfoot","Jim Croce","John Denver","Lumineers","The Lumineers"
+  ],
+  "🎷 Jazz / Classical": [
+    "Frank Sinatra","Louis Armstrong","Jaco Pastorius","Les Claypool","Tommy Emmanuel",
+    "Beethoven","Ludwig von Beethoven","Mozart","Wolfgang Amadeus Mozart","Bach",
+    "Johann Sebastian Bach","Chopin","Frederic Chopin","Henry Mancini","Quincy Jones",
+    "Danny Elfman","John Williams","Trans Siberian Orchestra","Aristocrats"
+  ],
+  "🕺 Funk / Disco": [
+    "James Brown","Sly & The Family Stone","Sly and The Family Stone","Earth Wind and Fire",
+    "Kool & The Gang","Parliament","Funkadelic","Prince","Rick James","Ohio Players",
+    "Tower of Power","Average White Band","War","Commodores","Donna Summer","Gloria Gaynor",
+    "Bee Gees","KC and The Sunshine Band","Daft Punk","Jamiroquai","Bruno Mars","Mark Ronson",
+    "Anderson Paak","Vulfpeck","Khruangbin","Fatboy Slim","Gorillaz"
+  ],
+  "🌿 Indie / Alt": [
+    "Radiohead","Pixies","Sonic Youth","Husker Du","Modest Mouse","The Shins",
+    "Arcade Fire","Tame Impala","Mac DeMarco","Clairo","Faye Webster","Courtney Barnett",
+    "Stella Donnelly","PJ Harvey","St Vincent","St. Vincent","Fiona Apple","Interpol",
+    "Bloc Party","Franz Ferdinand","The Strokes","Strokes","The Hives","Yeah Yeah Yeahs",
+    "Cage The Elephant","Foster the People","MGMT","Imagine Dragons","Twenty-One Pilots",
+    "Gorillaz","Beck","Bjork","Massive Attack","Portishead","Gorillaz",
+    "American Football","Hot Mulligan","The Wonder Years","Retirement Party"
+  ],
+  "🎙️ Punk": [
+    "Ramones","The Clash","Sex Pistols","Dead Kennedys","Black Flag","Misfits","Germs",
+    "Husker Du","Green Day","The Offspring","Blink 182","Menzingers","NOFX","NoFX",
+    "Bad Religion","Pennywise","Rancid","Operation Ivy","Rise Against",
+    "The Flatliners","Flatliners","Sum 41","Simple Plan","Billy Talent"
+  ],
+  "🌴 Reggae": [
+    "Bob Marley","Jimmy Cliff","Steel Pulse","UB40","Sublime","311","No Doubt",
+    "Gipsy Kings","Manu Chao","Ska-P","The Interrupters","Interrupters","Reel Big Fish"
+  ]
+};
+
+const artistGenreCache = {};
+function getArtistGenre(artist) {
+  if (artistGenreCache[artist] !== undefined) return artistGenreCache[artist];
+  const lower = artist.toLowerCase();
+  for (const [genre, list] of Object.entries(GENRE_MAP)) {
+    if (list.some(a => lower.includes(a.toLowerCase()) || a.toLowerCase().includes(lower))) {
+      artistGenreCache[artist] = genre;
+      return genre;
+    }
+  }
+  artistGenreCache[artist] = null;
+  return null;
+}
+
+let allUniqueArtists = [];
 let filteredArtists = [];
 let currentPage = 1;
 const artistsPerPage = 60;
+let activeGenre = null;
 
 async function init() {
   try {
     const response = await fetch("songs.json");
     const songs = await response.json();
     const map = {};
-    songs.forEach(s => { if(!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
+    songs.forEach(s => { if (!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
     
     allUniqueArtists = Object.keys(map)
-      .sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}))
-      .map(name => ({ name: name, count: map[name] }));
-      
+      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+      .map(name => ({ name, count: map[name], genre: getArtistGenre(name) }));
+    
     filteredArtists = [...allUniqueArtists];
+    buildGenreBar();
     buildAlphabet();
     buildArtistStats(map);
     renderArtists();
   } catch (e) { console.error("Error:", e); }
 }
 
-function buildAlphabet(){
-  const div=document.getElementById("alphabet")
-  div.innerHTML=""
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter=>{
-    let b=document.createElement("button")
-    b.innerText=letter
-    b.className = "nav-btn";
-    b.style.padding = "6px 10px";
-    b.style.fontSize = "11px";
-    b.onclick=()=>jumpToLetter(letter)
-    div.appendChild(b)
-  })
+function buildGenreBar() {
+  const bar = document.getElementById("genreBar");
+  bar.innerHTML = "";
+  for (const genre of Object.keys(GENRE_MAP)) {
+    const btn = document.createElement("button");
+    btn.className = "genre-btn";
+    btn.textContent = genre;
+    btn.onclick = () => toggleGenre(genre, btn);
+    bar.appendChild(btn);
+  }
 }
 
-function jumpToLetter(letter){
-  // Clear any existing search filters
-  document.getElementById("searchBox").value = "";
-  filteredArtists = [...allUniqueArtists];
-  
-  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
-  if (idx === -1) {
-    renderArtists();
+function toggleGenre(genre, btn) {
+  if (activeGenre === genre) {
+    activeGenre = null;
+    document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+    clearAll();
     return;
   }
+  activeGenre = genre;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById("searchBox").value = "";
+  
+  const genreArtists = GENRE_MAP[genre].map(a => a.toLowerCase());
+  filteredArtists = allUniqueArtists.filter(a => {
+    const lower = a.name.toLowerCase();
+    return genreArtists.some(g => lower.includes(g) || g.includes(lower));
+  });
+  currentPage = 1;
+  
+  const af = document.getElementById("activeFilters");
+  af.style.display = "block";
+  document.getElementById("filterLabel").textContent = `${genre} (${filteredArtists.length} artists)`;
+  
+  renderArtists();
+}
+
+function buildAlphabet() {
+  const div = document.getElementById("alphabet");
+  div.innerHTML = "";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+    let b = document.createElement("button");
+    b.innerText = letter; b.className = "nav-btn"; b.style.padding = "6px 10px"; b.style.fontSize = "11px";
+    b.onclick = () => jumpToLetter(letter);
+    div.appendChild(b);
+  });
+}
+
+function jumpToLetter(letter) {
+  document.getElementById("searchBox").value = "";
+  filteredArtists = [...allUniqueArtists];
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
+  
+  const idx = filteredArtists.findIndex(a => a.name.toLowerCase().startsWith(letter.toLowerCase()));
+  if (idx === -1) { renderArtists(); return; }
   currentPage = Math.floor(idx / artistsPerPage) + 1;
   renderArtists();
-  window.scrollTo({top:0, behavior: 'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function buildArtistStats(map) {
@@ -192,15 +367,11 @@ function buildArtistStats(map) {
     row.onclick = () => selectArtist(artist);
     listDiv.appendChild(row);
   });
-  
   document.getElementById("artistToggle").onclick = () => {
     const isHidden = listDiv.style.display === "none" || listDiv.style.display === "";
-    
-    // Trigger Flame Animation
     statsContainer.classList.remove("flame-effect");
-    void statsContainer.offsetWidth; 
+    void statsContainer.offsetWidth;
     statsContainer.classList.add("flame-effect");
-    
     listDiv.style.display = isHidden ? "block" : "none";
     document.getElementById("artistToggle").querySelector('span:last-child').innerText = isHidden ? "▼" : "▶";
   };
@@ -211,31 +382,38 @@ function renderArtists() {
   container.innerHTML = "";
   const start = (currentPage - 1) * artistsPerPage;
   const pageArtists = filteredArtists.slice(start, start + artistsPerPage);
+  
+  document.getElementById("resultsCount").textContent = 
+    filteredArtists.length !== allUniqueArtists.length
+      ? `${filteredArtists.length} artists`
+      : `${allUniqueArtists.length} artists total`;
+  
   pageArtists.forEach(artist => {
     const div = document.createElement("div");
     div.className = "artistCard";
     div.onclick = () => selectArtist(artist.name);
     div.innerHTML = `
-      <span class="artistName">${artist.name}</span>
+      <span class="artistName">${escapeHtml(artist.name)}</span>
       <span class="artistCount">${artist.count} ${artist.count === 1 ? 'SONG' : 'SONGS'}</span>
+      ${artist.genre ? `<span class="artistGenre">${artist.genre}</span>` : ''}
     `;
     container.appendChild(div);
   });
   renderPagination();
 }
 
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function renderPagination() {
   const totalPages = Math.ceil(filteredArtists.length / artistsPerPage) || 1;
-  const top = document.getElementById("paginationTop");
-  const bottom = document.getElementById("paginationBottom");
-  [top, bottom].forEach(container => {
+  [document.getElementById("paginationTop"), document.getElementById("paginationBottom")].forEach(container => {
     container.innerHTML = "";
     if (currentPage > 1) {
       let prev = document.createElement("button");
-      prev.innerText = "◀ Prev";
-      prev.className = "nav-btn";
-      prev.style.padding = "6px 12px";
-      prev.onclick = () => { currentPage--; renderArtists(); window.scrollTo(0,0); };
+      prev.innerText = "◀ Prev"; prev.className = "nav-btn"; prev.style.padding = "6px 12px";
+      prev.onclick = () => { currentPage--; renderArtists(); window.scrollTo(0, 0); };
       container.appendChild(prev);
     }
     let label = document.createElement("span");
@@ -243,10 +421,8 @@ function renderPagination() {
     container.appendChild(label);
     if (currentPage < totalPages) {
       let next = document.createElement("button");
-      next.innerText = "Next ▶";
-      next.className = "nav-btn";
-      next.style.padding = "6px 12px";
-      next.onclick = () => { currentPage++; renderArtists(); window.scrollTo(0,0); };
+      next.innerText = "Next ▶"; next.className = "nav-btn"; next.style.padding = "6px 12px";
+      next.onclick = () => { currentPage++; renderArtists(); window.scrollTo(0, 0); };
       container.appendChild(next);
     }
   });
@@ -254,7 +430,20 @@ function renderPagination() {
 
 function handleSearchInput() {
   const q = document.getElementById("searchBox").value.toLowerCase();
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
   filteredArtists = allUniqueArtists.filter(a => a.name.toLowerCase().includes(q));
+  currentPage = 1;
+  renderArtists();
+}
+
+function clearAll() {
+  document.getElementById("searchBox").value = "";
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
+  filteredArtists = [...allUniqueArtists];
   currentPage = 1;
   renderArtists();
 }
@@ -264,8 +453,8 @@ function selectArtist(artistName) {
 }
 
 function randomArtistRedirect() {
-  if(!allUniqueArtists.length) return;
-  const random = allUniqueArtists[Math.floor(Math.random()*allUniqueArtists.length)];
+  if (!allUniqueArtists.length) return;
+  const random = allUniqueArtists[Math.floor(Math.random() * allUniqueArtists.length)];
   selectArtist(random.name);
 }
 
