@@ -13,19 +13,11 @@ body { background: #111; color: white; font-family: 'Segoe UI', Arial, sans-seri
 .owned { background: #27ae60; color: #fff; }
 .not-owned { background: #e74c3c; color: #fff; }
 
-/* REUSED APP STYLES FOR THE CONTROL TOPBAR OVERLAY */
 .topBar { display: flex; gap: 8px; padding: 12px; background: #181818; justify-content: center; align-items: center; border-bottom: 1px solid #333; margin-bottom: 20px; margin-top: 15px; border-radius: 8px; }
 .nav-btn { 
-  background: #2a2a2a; 
-  color: white; 
-  border: 1px solid #444; 
-  padding: 10px 18px; 
-  border-radius: 6px; 
-  cursor: pointer; 
-  font-weight: 700; 
-  text-transform: uppercase;
-  font-size: 13px;
-  transition: .2s;
+  background: #2a2a2a; color: white; border: 1px solid #444; padding: 10px 18px; 
+  border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase;
+  font-size: 13px; transition: .2s;
 }
 .nav-btn:hover { background: #444; border-color: #f1c40f; color: #f1c40f; }
 
@@ -46,7 +38,6 @@ h1, h2 { color: #f1c40f; margin-bottom: 15px; }
 <div class="topBar">
   <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="window.location.href='tuner.html'">🎯 Tuner</button>
 </div>
 
 <div id="login-box">
@@ -112,7 +103,6 @@ function initAuth() {
             loginBox.style.display = "none";
             adminPanel.style.display = "block";
 
-            // Listen for queue changes and auto-update
             firebase.database().ref("/queue").orderByChild("timestamp").on("value", snap => {
                 queueDiv.innerHTML = "";
                 const data = snap.val();
@@ -120,9 +110,7 @@ function initAuth() {
                     queueDiv.innerHTML = "<p style='color:#666'>Queue is currently empty.</p>";
                     return;
                 }
-
-                const entries = Object.entries(data).sort((a,b) => a[1].timestamp - b[1].timestamp);
-
+                const entries = Object.entries(data).sort((a, b) => a[1].timestamp - b[1].timestamp);
                 entries.forEach(([key, s], i) => {
                     const statusClass = s.owned ? "owned" : "not-owned";
                     const statusText = s.owned ? "Owned" : "Not Owned";
@@ -133,7 +121,6 @@ function initAuth() {
                     queueDiv.appendChild(item);
                 });
             });
-
         } else {
             loginBox.style.display = "inline-block";
             adminPanel.style.display = "none";
@@ -146,13 +133,12 @@ window.login = () => {
     const p = document.getElementById("password").value;
     firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
 };
-
 window.logout = () => firebase.auth().signOut();
 window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
-window.clearQueue = () => { if(confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
+window.clearQueue = () => { if (confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
 window.nextSong = () => {
     firebase.database().ref("/queue").orderByChild("timestamp").limitToFirst(1).once("value", s => {
-        if(s.exists()) {
+        if (s.exists()) {
             const key = Object.keys(s.val())[0];
             firebase.database().ref("/queue/" + key).remove();
         }
