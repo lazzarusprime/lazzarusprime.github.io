@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime Rocksmith Requests</title>
+<style>
+body{ font-family:Segoe UI,Arial; background:#0f0f0f; color:white; margin:0; }
+.titleBar{ display:flex; justify-content:space-between; align-items:center; background:#141414; padding:12px; border-bottom:2px solid #222; flex-wrap:wrap; gap:8px; }
+.titleLeft{ display:flex; align-items:center; gap:10px; }
+.titleBar img{ width:40px; }
+.titleLeft h2 { 
+  margin: 0; 
+  font-weight: 900; 
+  text-transform: uppercase; 
+  background: linear-gradient(to bottom, #fff 20%, #f1c40f 45%, #b8860b 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.6));
+}
+.socialLinks{ display:flex; gap:15px; flex-wrap:wrap; }
+.socialLinks a{ color:#aaa; text-decoration:none; font-size:14px; transition:.15s; }
+.socialLinks a:hover{ color:#f1c40f; text-shadow:0 0 5px #f1c40f; }
+
+.topBar{ display:flex; gap:8px; padding:12px; background:#181818; position:sticky; top:0; z-index:100; flex-wrap:wrap; justify-content:center; align-items:center; border-bottom: 1px solid #333; }
+.topBar input{ flex:1; padding:10px; border-radius:6px; border:none; min-width:180px; background: white; color: black; font-size: 14px; }
+.nav-btn { 
+  background:#2a2a2a; color:white; border:1px solid #444; padding:10px 18px; 
+  border-radius:6px; cursor:pointer; font-weight: 700; text-transform: uppercase;
+  font-size: 13px; transition: .2s; white-space: nowrap;
+}
+.nav-btn:hover { background:#444; border-color: #f1c40f; color: #f1c40f; }
+.nav-btn.active { background:#333; border-color: #f1c40f; color: #f1c40f; }
+
+button{ background:#272727; color:white; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; }
+button:hover{ background:#444; }
+
+/* Genre filter bar */
+#genreBar { display:flex; flex-wrap:wrap; gap:6px; padding:10px 12px; background:#141414; border-bottom:1px solid #222; justify-content:center; }
+.genre-btn {
+  background:#1e1e1e; color:#ccc; border:1px solid #333; padding:6px 14px;
+  border-radius:20px; cursor:pointer; font-size:12px; font-weight:600; transition:.2s;
+  text-transform:uppercase; letter-spacing:0.5px;
+}
+.genre-btn:hover { border-color:#f1c40f; color:#f1c40f; }
+.genre-btn.active { background:#f1c40f22; border-color:#f1c40f; color:#f1c40f; }
+
+#alphabet{ display:flex; flex-wrap:wrap; gap:5px; padding:10px; justify-content:center; }
+
+#artistStats{ margin: 0; background:#151515; border-top:1px solid #222; border-bottom:1px solid #222; transition: 0.3s; }
+#artistToggle{ cursor:pointer; margin:0; padding: 10px; }
+#artistList{ display:none; padding: 10px; border-top: 1px solid #222; animation: slideDown 0.3s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+#artistList div{ padding:4px 0; cursor:pointer; transition:.15s; }
+#artistList div:hover{ color:#f1c40f; padding-left: 5px; }
+.flame-effect { animation: warmPulse 0.6s ease-out; }
+@keyframes warmPulse {
+  0% { box-shadow: 0 0 0px transparent; }
+  50% { box-shadow: inset 0 0 30px rgba(241, 196, 15, 0.15); border-color: #f1c40f; }
+  100% { box-shadow: 0 0 0px transparent; }
+}
+
+.song{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #222; transition:.15s; gap:10px; }
+.songInfo{ display:flex; flex-direction:column; flex:1; min-width:0; }
+.songTitle{ font-weight:700; font-size:15px; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.songArtist{ font-size:13px; font-weight:600; color:#f1c40f; cursor:pointer; transition:.15s; margin-top:2px; }
+.songArtist:hover{ text-shadow:0 0 4px #f1c40f; }
+.song.highlight{ background:#1a1a1a; box-shadow:0 0 6px rgba(241,196,15,.4); }
+.songMeta { font-size:11px; color:#555; margin-top:2px; }
+
+.req-btn { background:#1a3a1a; color:#4caf50; border:1px solid #2d5a2d; padding:7px 14px; border-radius:6px; cursor:pointer; font-weight:700; font-size:12px; transition:.2s; white-space:nowrap; }
+.req-btn:hover { background:#2d5a2d; color:#7ddd80; border-color:#4caf50; }
+
+.pagination{ padding:15px; text-align:center; background: #111; border-bottom: 1px solid #222; }
+.clearBtn{ display:none; background:#333; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; }
+
+#activeFilters { display:none; padding:8px 12px; background:#181818; border-bottom:1px solid #222; font-size:13px; color:#888; text-align:center; }
+#activeFilters span { color:#f1c40f; }
+#activeFilters button { background:transparent; color:#888; border:1px solid #444; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:12px; margin-left:8px; }
+#activeFilters button:hover { color:#fff; border-color:#888; }
+
+.results-count { padding:6px 12px; font-size:12px; color:#666; }
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img src="guitar.png" alt="Guitar">
+    <h2>Lazzarus Prime Rocksmith Requests</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donations</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="goHome()">🏠 Home</button>
+  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="randomArtistFilter()">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
+  <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✖</button>
+</div>
+
+<div id="genreBar"></div>
+
+<div id="activeFilters">
+  Showing: <span id="filterLabel"></span>
+  <button onclick="clearSearch()">✖ Clear</button>
+</div>
+
+<div id="alphabet"></div>
+
+<div id="artistStats">
+  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+  <div id="artistList"></div>
+</div>
+
+<div id="paginationTop" class="pagination"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #1a1a1a;">
+  <h3 style="margin:0;font-size:14px;color:#888;">SONG LIBRARY</h3>
+  <span id="resultsCount" class="results-count"></span>
+</div>
+<div id="songList"></div>
+<div id="paginationBottom" class="pagination"></div>
+
+<script>
+// ── Genre Map ─────────────────────────────────────────────────────────────────
+// Maps genre labels → arrays of artist name substrings (case-insensitive match)
+const GENRE_MAP = {
+  "🤘 Metal": [
+    "Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne",
+    "Judas Priest","Anthrax","Sepultura","Tool","TOOL","System of A Down","Slipknot","Korn",
+    "Disturbed","Avenged Sevenfold","Five Finger Death Punch","Killswitch Engage","Lamb of God",
+    "Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio",
+    "Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Warrant",
+    "Motley Crue","Dokken","Dokken","Extreme","Mr. Big","Winger","Tesla","Scorpions",
+    "The Scorpions","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains",
+    "Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback",
+    "Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Puddle of Mud",
+    "Mudvayne","Crossfade","Default","Trapt","Nonpoint","Taproot","Spineshank","Crossfade",
+    "Cradle of Filth","Death","Cryptopsy","Necrophagist","Born of Osiris","Archspire",
+    "Ne Obliviscaris","Intronaut","Periphery","Animals As Leaders","Galneryus","DragonForce",
+    "Electric Wizard","Kyuss","Queens of the Stone Age","Queens Of The Stone Age","QOTSA",
+    "Them Crooked Vultures","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons",
+    "Helment","Helmet","Mad Season","Myles Kennedy","Alter Bridge","Danzig","Rollins Band",
+    "L7","Kittie","Hole","Suicidal Tendencies","Rage","Rage Against The Machine",
+    "Prophets of Rage","Warlock","Axel Rudi Pell","Avantasia","Alcest","Leprous",
+    "Soen","Porcupine Tree","Riverside","King Crimson","Emerson Lake & Palmer",
+    "Muse","Bush","Fuel","Chevelle","Cold War Kids","Filter","Seven Mary Three",
+    "The Tea Party","The Cult","Days of The New","Monster Magnet","Budgie","Grand Funk Railroad",
+    "Mott The Hoople","Mountain","Ted Nugent","Blue Oyster Cult","Styx","Kansas","Boston",
+    "Rush","Triumph","Steppenwolf","Foghat","Bachman Turner Overdrive",
+    "Godsmack","Papa Roach","Linkin Park","Limp Bizkit","KoRn","Deftones","Incubus",
+    "Finger Eleven","Our Lady Peace","Finger Eleven","Theory of A Deadman","Default",
+    "Five Finger Death Punch","Shinedown","Sick Puppies","Hinder","Red Jumpsuit Apparatus",
+    "Hoobastank","Drowning Pool","Framing Hanley","Evans Blue","Saving Abel",
+    "P.O.D.","POD","Nonpoint","Crossfade","Taproot","Spineshank",
+    "Ice Nine Kills","Pierce The Veil","Sleeping With Sirens","Asking Alexandria",
+    "Devil Wears Prada","Hot Mulligan","The Wonder Years","The Menzingers","Menzingers",
+    "Rise Against","NoFX","Pennywise","Bad Religion","Rancid","The Flatliners","Flatliners",
+    "Operation Ivy","Germs","Husker Du","Descendents","Suicidal Tendencies",
+    "Refused","The Lawrence Arms","Yellowcard","Simple Plan","Sum 41","Billy Talent",
+    "Bowling for Soup","All Time Low","Paramore"
+  ],
+  "🎸 Classic Rock": [
+    "Led Zeppelin","The Rolling Stones","Rolling Stones","The Who","Pink Floyd",
+    "Aerosmith","Eagles","Fleetwood Mac","The Doors","Doors","Jimi Hendrix",
+    "Cream","Derek and the Dominos","Eric Clapton","Jeff Beck","Peter Frampton",
+    "Boston","Foreigner","Journey","Kansas","Styx","REO Speedwagon","Heart",
+    "Cheap Trick","Tom Petty","The Allman Brothers Band","Allman Brothers Band",
+    "Lynyrd Skynyrd","Marshall Tucker Band","Doobie Brothers","The Doobie Brothers",
+    "Creedence Clearwater Revival","CCR","ZZ Top","Van Halen","Queen","AC/DC","ACDC",
+    "The Beatles","Beatles","David Bowie","Rod Stewart","Elton John","Bruce Springsteen",
+    "Bruc Springsteen","Bob Dylan","Neil Young","Crosby Stills","Paul Simon","Simon & Garfunkel",
+    "The Beach Boys","Beach Boys","Mamas And The Papas","Mamas and The Papas",
+    "The Animals","Animals","Kinks","The Kinks","The Byrds","Byrds","Buffalo Springfield",
+    "The Band","Velvet Underground","The Velvet Underground","Lou Reed","Iggy Pop",
+    "T. Rex","T-Rex","Bowie","Thin Lizzy","Bad Company","Free","Faces","Small Faces",
+    "The Spencer Davis Group","Spencer Davis Group","Traffic","Steve Winwood","Jethro Tull",
+    "Genesis","Peter Gabriel","Phil Collins","Yes","King Crimson","Emerson Lake & Palmer",
+    "Deep Purple","Rainbow","Whitesnake","Dio","Black Sabbath","Ozzy","Uriah Heep","Budgie",
+    "Grand Funk Railroad","Mott The Hoople","Mountain","Ted Nugent","Blue Oyster Cult",
+    "Foghat","Bachman Turner Overdrive","BTO","April Wine","The Guess Who","Guess Who",
+    "Trooper","Loverboy","Kim Mitchell","Chilliwack","Northern Pikes","Sloan",
+    "Bryan Adams","Loverboy","Glass Tiger","The Headstones","Headstones","Big Wreck",
+    "Our Lady Peace","Tragically Hip","The Tragically Hip","I Mother Earth","Matthew Good Band",
+    "Moist","The Trews","Glorious Sons","The Sheepdogs","Sass Jordan","Big Sugar",
+    "Jeff Healey","Jeff Healey Band","Blue Rodeo",
+    "Santana","Carlos Santana","Steve Miller Band","The Steve Miller Band",
+    "Joe Walsh","James Gang","Poco","America","Steely Dan","Toto","Chicago",
+    "Supertramp","10cc","Electric Light Orchestra","ELO","Alan Parsons Project",
+    "The Alan Parsons Project","Manfred Mann","Golden Earring","Argent"
+  ],
+  "🎤 Pop": [
+    "Taylor Swift","Katy Perry","Ariana Grande","Lady Gaga","Beyonce","Rihanna","Rihana",
+    "Madonna","Michael Jackson","Britney Spears","Justin Timberlake","Justin Beiber",
+    "Ed Sheeran","Adele","Dua Lipa","Harry Styles","Olivia Rodrigo","Billie Eilish",
+    "Camila Cabello","Halsey","Shawn Mendes","Charlie Puth","Meghan Trainor",
+    "Miley Cyrus","Selena","Selena Gomez","Cardi B","Lizzo","Sabrina Carpenter",
+    "Sia","Ellie Goulding","Natasha Bedingfield","Natalie Imbruglia","Alanis Morissette",
+    "Avril Lavigne","Kelly Clarkson","Kesha","Kelis","Fergie","Gwen Stefani","No Doubt",
+    "Pink","P!nk","Christina Aguilera","Celine Dion","Whitney Houston","Mariah Carey",
+    "Tina Turner","Diana Ross","Gloria Estefan","Cyndi Lauper","Belinda Carlisle",
+    "Pat Benatar","Melissa Etheridge","Sheryl Crow","Jewel","Norah Jones","Sara Bareilles",
+    "Joss Stone","Sade","Annie Lennox","Eurythmics","A-Ha","Wham","George Michael",
+    "Pet Shop Boys","Culture Club","Duran Duran","Erasure","INXS","Roxette","Ace of Base",
+    "Hanson","Backstreet Boys","NSYNC","N*SYNC","One Direction","5 Seconds of Summer",
+    "Carly Rae Jepsen","Lorde","Lana Del Ray","Clairo","Faye Webster","Mild Orange",
+    "Vance Joy","Train","Matchbox Twenty","One Republic","OneRepublic","Lifehouse",
+    "Gavin Degraw","Jason Mraz","Jack Johnson","James Blunt","Snow Patrol","Coldplay",
+    "Muse","Arcade Fire","Metric","City and Colour","Half Moon Run","Lumineers",
+    "The Lumineers","The Shins","Nada Surf","Wilco","Ben Folds","Ben Folds Five",
+    "Toad The Wet Sprocket","Counting Crows","Gin Blossoms","Better Than Ezra","Fastball",
+    "Spin Doctors","Blind Melon","Candlebox","Live","Collective Soul","Silverchair",
+    "Everclear","Everlast","Sugar Ray","Smash Mouth","Harvey Danger","Fuel",
+    "Spice Girls","TLC","Destiny's Child","En Vogue","Salt-n-Pepa","Bananarama",
+    "Bangles","The Bangles","Go-Gos","Blondie","Debbie Harry",
+    "BLACKPINK","Blackpink","BTS","BAND MAID","Band Maid","YOASOBI","Yoasobi",
+    "LiSA","Kenshi Yonezu","Yorushika","Hitsujibungaku","Oral Cigarettes"
+  ],
+  "🎵 R&B / Soul": [
+    "Marvin Gaye","Stevie Wonder","Aretha Franklin","James Brown","Otis Redding","Ottis Redding",
+    "Sam Cooke","Al Green","Ray Charles","Curtis Mayfield","Wilson Pickett","Isaac Hayes",
+    "Sly & The Family Stone","Sly and The Family Stone","Earth Wind and Fire","Kool & The Gang",
+    "Average White Band","Tower of Power","War","Dazz Band","Ohio Players","Isley Brothers",
+    "The Isley Brothers","Four Tops","The Four Tops","Temptations","The Temptations",
+    "Supremes","The Supremes","Jackson 5","The Jackson 5","Commodores","Lionel Richie",
+    "Diana Ross","Gladys Knight","Tina Turner","Ike & Tina Turner","Percy Sledge",
+    "Ben E King","Bobby Hebb","Sam & Dave","Sam and Dave","Jackie Wilson","Chuck Berry",
+    "Little Richard","Chubby Checker","Mary J Blidge","Alicia Keys","Beyonce",
+    "John Legend","Bruno Mars","Anderson Paak","Thundercat","Vulfpeck","Khruangbin",
+    "Thee Sacred Souls","Charles Bradley","Jon Batiste","Jorja Smith","Joss Stone",
+    "Amy Winehouse","Amy Whinehouse","Adele","Duffy","Corinne Bailey Rae",
+    "Donna Summer","Barry White","Marvin Gaye","Sade","Maxwell","D'Angelo",
+    "Erykah Badu","Lauryn Hill","Fugees","Destiny's Child","TLC","Janet Jackson",
+    "Justin Timberlake","Ne-Yo","Chris Brown","Usher","R Kelly","Boyz II Men",
+    "Bell Biv DeVoe","New Edition","DeBarge","Tevin Campbell","Tony Toni Toné",
+    "Daft Punk","Jamiroquai","Incognito","Jungle","Jungle"
+  ],
+  "🎤 Hip-Hop / Rap": [
+    "Eminem","Jay-Z","Jay Z","Kendrick Lamar","Kanye West","Drake","Lil Nas X",
+    "Post Malone","Travis Scott","Cardi B","Megan Thee Stallion","Nicki Minaj",
+    "Wiz Khalifa","Mac Miller","Kid Rock","Limp Bizkit","Kid Rock",
+    "2Pac","Tupac","NWA","Ice Cube","Dr Dre","Dr. Dre","Snoop Dogg",
+    "Nas","Biggie","The Notorious B.I.G","Wu Tang Clan","Beastie Boys",
+    "Run DMC","Grandmaster Flash","Grandmaster Flash and the Furious Five",
+    "Public Enemy","LL Cool J","MC Hammer","Vanilla Ice","Salt-n-Pepa",
+    "TLC","Missy Elliott","Lauryn Hill","Fugees","Outkast","Outcast",
+    "Tribe Called Quest","A Tribe Called Quest","De La Soul","Arrested Development",
+    "Naughty by Nature","Cypress Hill","House of Pain","Everlast",
+    "Puff Daddy","Diddy","DMX","Ja Rule","Busta Rhymes","Nate Dogg",
+    "Warren G","Nate Dogg","Snoop","50 Cent","Fort Minor","Linkin Park",
+    "Rage Against The Machine","Prophets of Rage","Afroman","Coolio",
+    "Kris Kross","Young MC","Tone Loc","DJ Jazzy Jeff","Fresh Prince","Will Smith",
+    "Childish Gambino","Donald Glover","Anderson Paak","Chance The Rapper",
+    "Kendrick","J. Cole","Big K.R.I.T.","Logic","G-Eazy","Wale",
+    "Macklemore","Yelawolf","Tech N9ne","Hopsin","Watsky",
+    "Talib Kwali","Talib Kkwali","Mos Def","Yasiin Bey","Common",
+    "Nujabes","DJ Khalid","DJ Snake","Marshmello","Skrillex",
+    "LMFAO","Flo Rida","Pitbull","Jason Derulo","Marky Mark",
+    "Pras","The Roots","Black Star"
+  ],
+  "🟡 Blues": [
+    "BB King","B.B. King","B.B. King & Eric Clapton","Albert King","Freddie King",
+    "Muddy Waters","Howlin Wolf","Robert Johnson","Elmore James","John Lee Hooker",
+    "Eric Clapton","Jeff Beck","Stevie Ray Vaughn","Stevie Ray Vaughan","Jonny Lang","Johny Lang",
+    "Kenny Wayne Shepherd","Kenny Wayne Shepherd Band","Buddy Guy","Buddy Holly",
+    "Joe Cocker","George Thorogood","The Blues Brothers","Blues Brothers",
+    "Jack White","The White Stripes","The Black Keys","Black Keys","Gary Clark Jr.",
+    "Ben Harper","Taj Mahal","Keb Mo","Derek Trucks","Susan Tedeschi",
+    "Bonnie Raitt","Jackson Browne","John Mayer","John_Mayer","Joe Walsh",
+    "Bobby Blue Band","Everlast","Canned Heat","Caanned Heat","Big Mama Thornton",
+    "Bobby McFerrin","Joe Louis Walker"
+  ],
+  "🌎 Country": [
+    "Johnny Cash","Dolly Parton","Willie Nelson","Waylon Jennings","Garth Brooks",
+    "Alan Jackson","George Strait","Kenny Rogers","Hank Williams","Patsy Cline",
+    "Loretta Lynn","Conway Twitty","Merle Haggard","Buck Owens","Glen Campbell",
+    "Alabama","The Charlie Daniels Band","Charlie Daniels","Marshall Tucker Band",
+    "Nitty Gritty Dirt Band","Zac Brown Band","Chris Stapleton","Kacey Musgraves",
+    "Luke Combs","Carrie Underwood","Miranda Lambert","Brad Paisley","Keith Urban",
+    "Tim McGraw","Faith Hill","Rascal Flatts","Lady Antebellum","Dixie Chicks",
+    "Brooks & Dunn","Lonestar","Diamond Rio","Sawyer Brown","Confederate Railroad",
+    "John Denver","James Taylor","Gordon Lightfoot","Jim Croce","Paul Simon",
+    "Simon & Garfunkel","Neil Diamond","Glen Campbell","Bobby Bare","Mel Tillis",
+    "Billy Ray Cyrus","Shania Twain","Bryan Adams","Trisha Yearwood",
+    "George Jones","Dwight Yoakam","Randy Travis","Travis Tritt","Clint Black",
+    "Sturgill Simpson","Chris Isaak","Steve Earle","Lucinda Williams",
+    "Neko Case","Jason Isbell","The Felice Brothers","Lumineers","The Lumineers",
+    "Mumford and Sons","Avett Brothers","Old Crow Medicine Show","Punch Brothers",
+    "Ryan Adams","Wilco","Whiskeytown"
+  ],
+  "🎷 Jazz / Classical": [
+    "Miles Davis","John Coltrane","Charlie Parker","Thelonious Monk","Duke Ellington",
+    "Louis Armstrong","Ella Fitzgerald","Frank Sinatra","Nat King Cole","Tony Bennett",
+    "Dave Brubeck","Herbie Hancock","Chick Corea","Pat Metheny","Joe Pass",
+    "Jaco Pastorius","Les Claypool","Victor Wooten","Vulfpeck","Snarky Puppy",
+    "MonoNeon","Thundercat","Omnific","Aristocrats","Tommy Emmanuel",
+    "Beethoven","Ludwig von Beethoven","Mozart","Wolfgang Amadeus Mozart",
+    "Bach","Johann Sebastian Bach","Chopin","Frederic Chopin","Schubert","Franz Schubert",
+    "Strauss","Johan Strauss","Henry Mancini","Quincy Jones","Danny Elfman",
+    "John Williams","David Wise","Nobuo Uematsu","Koji Kondo",
+    "Trans Siberian Orchestra","Mannheim Steamroller","André Rieu"
+  ],
+  "🕺 Funk / Disco": [
+    "James Brown","Sly & The Family Stone","Sly and The Family Stone","Earth Wind and Fire",
+    "Kool & The Gang","Parliament","Funkadelic","P-Funk","Prince","Prince and the Revolution",
+    "Rick James","Ohio Players","Tower of Power","Average White Band","War","Dazz Band",
+    "Gap Band","Zapp","Roger","Commodores","Isley Brothers","Bootsy Collins",
+    "Donna Summer","Gloria Gaynor","Bee Gees","Chic","Village People","ABBA",
+    "KC and The Sunshine Band","Daft Punk","Jamiroquai","Bruno Mars","Mark Ronson",
+    "Anderson Paak","Vulfpeck","Khruangbin","Jungle","Fatboy Slim","Moby",
+    "Chemical Brothers","The Chemical Brothers","Prodigy","The Prodigy",
+    "MGMT","Tame Impala","LCD Soundsystem","Phoenix","Cut Copy","Hot Chip",
+    "Gorillaz","Beck","Outkast","D'Angelo","Thundercat","Cory Henry"
+  ],
+  "🌿 Indie / Alt": [
+    "Radiohead","Pixies","Sonic Youth","Pavement","Guided By Voices","Yo La Tengo",
+    "The Replacements","Husker Du","Dinosaur Jr.","Built to Spill","Modest Mouse",
+    "The Shins","Death Cab for Cutie","Iron & Wine","Sufjan Stevens","Fleet Foxes",
+    "Bon Iver","Arcade Fire","Neutral Milk Hotel","Animal Collective","Grizzly Bear",
+    "Vampire Weekend","Foals","Alt-J","Tame Impala","Mac DeMarco","Rex Orange County",
+    "Clairo","Faye Webster","Snail Mail","Japanese Breakfast","Mitski","Soccer Mommy",
+    "Courtney Barnett","Stella Donnelly","Marika Hackman","PJ Harvey","St Vincent","St. Vincent",
+    "Fiona Apple","Liz Phair","Sheryl Crow","Alanis Morissette","Hole","Veruca Salt",
+    "Alternative Ladybug","Belly","Juliana Hatfield","Throwing Muses","Dinosaur Jr",
+    "Interpol","Bloc Party","Franz Ferdinand","The Strokes","Strokes","The Hives",
+    "The Vines","Yeah Yeah Yeahs","LCD Soundsystem","Postal Service","Bright Eyes",
+    "Conor Oberst","The National","Spoon","Wilco","Calexico","Iron & Wine",
+    "Mazzy Star","Beach House","Warpaint","The xx","Wild Nothing","Real Estate",
+    "American Football","Braid","Mineral","The Promise Ring","Sunny Day Real Estate",
+    "Jawbreaker","The Get Up Kids","Saves the Day","Brand New","Taking Back Sunday",
+    "Thursday","Thrice","Hawthorne Heights","My Chemical Romance","Fall Out Boy",
+    "Panic at the Disco","Panic! at the Disco","Pete Wentz","Cobra Starship",
+    "Cage The Elephant","Foster the People","MGMT","Phoenix","Vampire Weekend",
+    "Two Door Cinema Club","The 1975","Bastille","Imagine Dragons","Twenty-One Pilots",
+    "Lorde","Lana Del Ray","Lana Del Rey","Halsey","Sigrid","Billie Eilish",
+    "Gorillaz","Beck","Bjork","Massive Attack","Portishead","Sneaker Pimps",
+    "Moby","Chemical Brothers","Prodigy","Fatboy Slim","Boards of Canada",
+    "Hot Mulligan","The Wonder Years","Retirement Party","Ratboys","Camp Cope",
+    "Jeff Rosenstock","PUP","The Flatliners","Pkew Pkew Pkew"
+  ],
+  "🎙️ Punk": [
+    "Ramones","The Clash","Sex Pistols","Dead Kennedys","Black Flag","Misfits","Germs",
+    "Bad Brains","Minor Threat","Fugazi","Circle Jerks","Dead Milkmen","Descendents",
+    "Husker Du","Replacements","Meat Puppets","Pixies","Sonic Youth","Mudhoney",
+    "Green Day","The Offspring","Offspring","Blink 182","Blink-182","The Menzingers","Menzingers",
+    "NOFX","NoFX","Bad Religion","Pennywise","Rancid","Operation Ivy","Lagwagon",
+    "Strung Out","Face to Face","Guttermouth","Millencolin","Propagandhi","Anti-Flag",
+    "Against Me","The Gaslight Anthem","Social Distortion","The Bouncing Souls",
+    "Flogging Molly","Dropkick Murphys","Less Than Jake","Streetlight Manifesto",
+    "Catch 22","The Suicide Machines","Reel Big Fish","Save Ferris","Goldfinger",
+    "Sum 41","Simple Plan","Good Charlotte","New Found Glory","Story of the Year",
+    "Atreyu","From First to Last","Hawthorne Heights","Senses Fail","The Used",
+    "Rise Against","The Lawrence Arms","Flatliners","The Flatliners","Banner Pilot",
+    "Dillinger Four","Leatherface","Jawbreaker","Hot Water Music","Chuck Ragan"
+  ],
+  "🌴 Reggae": [
+    "Bob Marley","Ziggy Marley","Damian Marley","Peter Tosh","Toots and the Maytals",
+    "Jimmy Cliff","Steel Pulse","UB40","The Clash","Police","The Police","Sublime",
+    "311","No Doubt","Gwen Stefani","Slightly Stoopid","Rebelution","Stick Figure",
+    "Iration","Pepper","Big Mountain","Expendables","Fortunate Youth","Tribal Seeds",
+    "The Expendables","Gipsy Kings","Cultura Profetica","Manu Chao","Raimundos",
+    "Juan Luis Guerra","Ska-P","The Interrupters","Interrupters","Reel Big Fish",
+    "Less Than Jake","Streetlight Manifesto","Catch 22","Suicide Machines"
+  ]
+};
+
+// ── Song name cleaner ─────────────────────────────────────────────────────────
+function cleanSongName(raw) {
+  // Handle format: Artist_Song-Name_v1_p or "Song Name (variant)_p"
+  const str = raw.replace(/\.(cdlc|rs2014|psarc)$/i, '');
+  
+  // If it looks like "Song Name (BLR)_p" with no underscored-artist prefix
+  if (/^\w[^_]+ \([A-Z]+\)_p$/.test(str)) {
+    return str.replace(/_p$/, '').replace(/\s*\([^)]+\)\s*$/, '').trim();
+  }
+  
+  const parts = str.split('_');
+  if (parts.length < 2) return str.replace(/-/g, ' ');
+  
+  // Skip first part (artist slug), gather song name parts until version/metadata
+  let songParts = [];
+  for (let i = 1; i < parts.length; i++) {
+    const p = parts[i];
+    // Stop at version markers or known metadata tokens
+    if (/^v\d/i.test(p) || /^(DD|p|bass|lead|rhythm|BL|BR|BLR|BLRV|BV|LV|LR|TS|syvaa|Syvaa|altamont|Altamont|SlickWilly|LtP)$/i.test(p)) break;
+    if (/^\d+$/.test(p) && i > 1) break; // bare number like _0_ _1_
+    songParts.push(p);
+  }
+  
+  let name = songParts.join(' ').replace(/-/g, ' ');
+  // Clean trailing/leading parens artifacts
+  name = name.replace(/\s*\([A-Z]{1,4}\)\s*$/, '').trim();
+  // Clean up orphan punctuation
+  name = name.replace(/\s+/g, ' ').trim();
+  
+  return name || raw;
+}
+
+// ── Genre lookup ──────────────────────────────────────────────────────────────
+const artistGenreCache = {};
+function getArtistGenre(artist) {
+  if (artistGenreCache[artist] !== undefined) return artistGenreCache[artist];
+  const lower = artist.toLowerCase();
+  for (const [genre, list] of Object.entries(GENRE_MAP)) {
+    if (list.some(a => lower.includes(a.toLowerCase()) || a.toLowerCase().includes(lower))) {
+      artistGenreCache[artist] = genre;
+      return genre;
+    }
+  }
+  artistGenreCache[artist] = null;
+  return null;
+}
+
+// ── App State ─────────────────────────────────────────────────────────────────
+let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40;
+let activeGenre = null;
+
+async function init() {
+  try {
+    const response = await fetch("songs.json");
+    songs = await response.json();
+    // Pre-clean all song names
+    songs = songs.map(s => ({ ...s, displayName: cleanSongName(s.song) }));
+    filteredSongs = songs;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const artistSearch = urlParams.get('search');
+    if (artistSearch) {
+      document.getElementById("searchBox").value = artistSearch;
+      filteredSongs = songs.filter(s => s.artist === artistSearch);
+      toggleClearButton();
+    }
+
+    buildGenreBar();
+    buildAlphabet();
+    buildArtistStats();
+    renderSongs();
+  } catch(e) { console.error("Load error:", e); }
+}
+
+function buildGenreBar() {
+  const bar = document.getElementById("genreBar");
+  bar.innerHTML = "";
+  for (const genre of Object.keys(GENRE_MAP)) {
+    const btn = document.createElement("button");
+    btn.className = "genre-btn";
+    btn.textContent = genre;
+    btn.onclick = () => toggleGenre(genre, btn);
+    bar.appendChild(btn);
+  }
+}
+
+function toggleGenre(genre, btn) {
+  if (activeGenre === genre) {
+    // Deactivate
+    activeGenre = null;
+    document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+    clearSearch();
+    return;
+  }
+  activeGenre = genre;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById("searchBox").value = "";
+  
+  const genreArtists = GENRE_MAP[genre].map(a => a.toLowerCase());
+  filteredSongs = songs.filter(s => {
+    const lower = s.artist.toLowerCase();
+    return genreArtists.some(g => lower.includes(g) || g.includes(lower));
+  });
+  currentPage = 1;
+  
+  // Show filter label
+  const af = document.getElementById("activeFilters");
+  af.style.display = "block";
+  document.getElementById("filterLabel").textContent = `${genre} (${filteredSongs.length} songs)`;
+  
+  renderSongs();
+  toggleClearButton();
+}
+
+function renderSongs() {
+  const list = document.getElementById("songList");
+  list.innerHTML = "";
+  const start = (currentPage - 1) * songsPerPage;
+  const pageSongs = filteredSongs.slice(start, start + songsPerPage);
+  
+  document.getElementById("resultsCount").textContent = 
+    filteredSongs.length !== songs.length ? `${filteredSongs.length.toLocaleString()} results` : `${songs.length.toLocaleString()} songs`;
+  
+  pageSongs.forEach(song => {
+    const div = document.createElement("div");
+    div.className = "song";
+    div.dataset.artist = song.artist;
+    const safeArtist = song.artist.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safeSong = song.song.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    div.innerHTML = `
+      <div class="songInfo">
+        <div class="songTitle">${escapeHtml(song.displayName)}</div>
+        <div class="songArtist" onclick="filterArtist('${safeArtist}')">${escapeHtml(song.artist)}</div>
+      </div>
+      <button class="req-btn" onclick="requestSong('${safeArtist}','${safeSong}')">Request</button>
+    `;
+    list.appendChild(div);
+  });
+  renderPagination();
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function highlightArtist(artist) {
+  document.querySelectorAll(".song").forEach(s => { if (s.dataset.artist === artist) s.classList.add("highlight"); });
+}
+function clearHighlight() {
+  document.querySelectorAll(".song").forEach(s => s.classList.remove("highlight"));
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filteredSongs.length / songsPerPage) || 1;
+  [document.getElementById("paginationTop"), document.getElementById("paginationBottom")].forEach(container => {
+    container.innerHTML = "";
+    if (currentPage > 1) {
+      let prev = document.createElement("button");
+      prev.innerText = "◀ Prev"; prev.className = "nav-btn"; prev.style.padding = "6px 12px";
+      prev.onclick = () => { currentPage--; renderSongs(); window.scrollTo(0, 0); };
+      container.appendChild(prev);
+    }
+    let label = document.createElement("span");
+    label.innerText = ` Page ${currentPage} / ${totalPages} `;
+    container.appendChild(label);
+    if (currentPage < totalPages) {
+      let next = document.createElement("button");
+      next.innerText = "Next ▶"; next.className = "nav-btn"; next.style.padding = "6px 12px";
+      next.onclick = () => { currentPage++; renderSongs(); window.scrollTo(0, 0); };
+      container.appendChild(next);
+    }
+  });
+}
+
+function handleSearchInput() {
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
+  const q = document.getElementById("searchBox").value.toLowerCase();
+  filteredSongs = songs.filter(s => s.artist.toLowerCase().includes(q) || s.displayName.toLowerCase().includes(q) || s.song.toLowerCase().includes(q));
+  currentPage = 1;
+  renderSongs();
+  toggleClearButton();
+}
+
+function toggleClearButton() {
+  const hasSearch = document.getElementById("searchBox").value || activeGenre;
+  document.getElementById("clearBtn").style.display = hasSearch ? "inline-block" : "none";
+}
+
+function clearSearch() {
+  document.getElementById("searchBox").value = "";
+  filteredSongs = songs;
+  currentPage = 1;
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
+  renderSongs();
+  toggleClearButton();
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
+
+function filterArtist(artist) {
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById("activeFilters").style.display = "none";
+  document.getElementById("searchBox").value = artist;
+  filteredSongs = songs.filter(s => s.artist === artist);
+  currentPage = 1;
+  renderSongs();
+  toggleClearButton();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildAlphabet() {
+  const div = document.getElementById("alphabet");
+  div.innerHTML = "";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+    let b = document.createElement("button");
+    b.innerText = letter; b.className = "nav-btn"; b.style.padding = "6px 10px"; b.style.fontSize = "11px";
+    b.onclick = () => jumpToLetter(letter);
+    div.appendChild(b);
+  });
+}
+
+function jumpToLetter(letter) {
+  clearSearch();
+  const idx = filteredSongs.findIndex(s => s.artist.toLowerCase().startsWith(letter.toLowerCase()));
+  if (idx === -1) return;
+  currentPage = Math.floor(idx / songsPerPage) + 1;
+  renderSongs();
+}
+
+function buildArtistStats() {
+  const map = {};
+  songs.forEach(s => { if (!map[s.artist]) map[s.artist] = 0; map[s.artist]++; });
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const list = document.getElementById("artistList");
+  const statsContainer = document.getElementById("artistStats");
+  list.innerHTML = "";
+  sorted.forEach(([artist, count]) => {
+    let row = document.createElement("div");
+    row.innerText = `${artist} (${count})`;
+    row.onclick = () => filterArtist(artist);
+    list.appendChild(row);
+  });
+  document.getElementById("artistToggle").onclick = () => {
+    const isHidden = list.style.display === "none" || list.style.display === "";
+    statsContainer.classList.remove("flame-effect");
+    void statsContainer.offsetWidth;
+    statsContainer.classList.add("flame-effect");
+    list.style.display = isHidden ? "block" : "none";
+    document.getElementById("artistToggle").querySelector('span:last-child').innerText = isHidden ? "▼" : "▶";
+  };
+}
+
+async function requestSong(artist, song) {
+  const command = `!request "${artist}" "${song}"`;
+  try {
+    await navigator.clipboard.writeText(command);
+    alert("Copied to clipboard!\n\nPaste in Twitch chat:\n" + command);
+  } catch {
+    alert("Type in chat:\n" + command);
+  }
+}
+
+function randomArtistFilter() {
+  if (!songs.length) return;
+  const uniqueArtists = [...new Set(songs.map(s => s.artist))];
+  const random = uniqueArtists[Math.floor(Math.random() * uniqueArtists.length)];
+  filterArtist(random);
+}
+
+function goHome() { clearSearch(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+init();
+</script>
+</body>
+</html>
