@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Rocksmith Artists</title>
+<title>Lazzarus Prime - Artists</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
@@ -84,7 +84,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png" alt="Guitar">
-    <h2>Lazzarus Prime Rocksmith Artists</h2>
+    <h2>Lazzarus Prime - Artists</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -276,36 +276,9 @@ function clearAll() {
 }
 
 function randomArtist() {
-  const list = filteredArtists;
-  if (!list.length) return;
-  
-  // 1. Roll a random choice out of whatever is currently on display (genres, search, or all)
-  const randomIdx = Math.floor(Math.random() * list.length);
-  const artist = list[randomIdx];
-  
-  // 2. Jump pagination to the accurate page containing this item index
-  currentPage = Math.floor(randomIdx / perPage) + 1;
-  renderGrid(); 
-  
-  // 3. Find its rendered grid offset on that page
-  const indexOnPage = randomIdx % perPage;
-  
-  // A tiny timeout makes sure the browser finishes printing the elements
-  // so scrollIntoView and layout reflow target an actual visible card
-  setTimeout(() => {
-    const cards = document.querySelectorAll('.artistCard');
-    const targetCard = cards[indexOnPage];
-    
-    if (targetCard) {
-      // Centers the randomly chosen card perfectly on screen
-      targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Clear and force the flame-effect pulse instantly on frame 1
-      targetCard.classList.remove('flame-effect');
-      void targetCard.offsetWidth; // Clear rendering thread cache
-      targetCard.classList.add('flame-effect');
-    }
-  }, 60);
+  if(!allArtists.length) return;
+  const a=allArtists[Math.floor(Math.random()*allArtists.length)];
+  location.href="index.html?search="+encodeURIComponent(a.name);
 }
 
 init();
