@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime Rocksmith Artists</title>
+<title>Lazzarus Prime - Artists</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
@@ -84,7 +84,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png" alt="Guitar">
-    <h2>Lazzarus Prime Rocksmith Artists</h2>
+    <h2>Lazzarus Prime - Artists</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -98,7 +98,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div class="topBar">
   <button class="nav-btn" onclick="location.href='index.html'">🏠 Home</button>
   <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="randomArtist(this)">🎲 Random</button>
+  <button class="nav-btn" onclick="randomArtist()">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist..." oninput="handleSearch()">
 </div>
 
@@ -275,19 +275,10 @@ function clearAll() {
   filteredArtists=[...allArtists]; currentPage=1; renderGrid();
 }
 
-function randomArtist(btn) {
+function randomArtist() {
   if(!allArtists.length) return;
   const a=allArtists[Math.floor(Math.random()*allArtists.length)];
-  
-  if (btn) {
-    btn.classList.remove("flame-effect");
-    void btn.offsetWidth;
-    btn.classList.add("flame-effect");
-  }
-  
-  setTimeout(() => {
-    location.href="index.html?search="+encodeURIComponent(a.name);
-  }, 350);
+  location.href="index.html?search="+encodeURIComponent(a.name);
 }
 
 init();
