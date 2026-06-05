@@ -3,117 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime - Songs Requests</title>
+<title>Lazzarus Prime Rocksmith Requests</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
-
-/* ── RETRO ARCADE & SCANLINE GLOBAL OVERLAYS ── */
-body::before {
-  content: " ";
-  display: block;
-  position: fixed;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-  z-index: 99999;
-  background-size: 100% 4px, 6px 100%;
-  pointer-events: none;
-}
-
-/* Flame Particle Action Feedback */
-.flame-particle {
-  position: fixed;
-  pointer-events: none;
-  width: 8px;
-  height: 8px;
-  background: radial-gradient(circle, #fff, #ff5500, #ffaa00);
-  border-radius: 50%;
-  box-shadow: 0 0 8px #ff5500, 0 0 15px #ffaa00;
-  z-index: 10000;
-  animation: flyAndFade 0.6s ease-out forwards;
-}
-
-@keyframes flyAndFade {
-  0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--mx), var(--my)) scale(0.2); opacity: 0; }
-}
-
-/* Arcade Cabinet Roulette Modal */
-.arcade-modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-}
-
-.arcade-cabinet {
-  background: #111;
-  border: 4px solid #ff5500;
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  text-align: center;
-  box-shadow: 0 0 30px rgba(255, 85, 0, 0.5), inset 0 0 20px rgba(0,0,0,0.9);
-  position: relative;
-}
-
-.arcade-screen {
-  background: #050505;
-  border: 3px solid #333;
-  padding: 40px 20px;
-  margin: 20px 0;
-  border-radius: 6px;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: inset 0 0 15px rgba(0,255,255,0.2), 0 0 10px rgba(255,85,0,0.2);
-}
-
-.arcade-title {
-  font-family: Segoe UI, Arial, sans-serif;
-  font-weight: 900;
-  font-size: 24px;
-  color: #f1c40f;
-  letter-spacing: 2px;
-  text-shadow: 0 0 5px rgba(241,196,15,0.5);
-}
-
-.roulette-display {
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.roulette-display.winner {
-  color: #ff5500;
-  animation: winnerFlash 0.15s ease-in-out infinite alternate;
-}
-
-@keyframes winnerFlash {
-  from { text-shadow: 0 0 5px #fff, 0 0 10px #ff5500; transform: scale(1); }
-  to { text-shadow: 0 0 15px #ff5500, 0 0 30px #ffaa00; transform: scale(1.03); }
-}
 
 /* ── TITLE BAR ── */
 .titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:10px}
 .titleBar img{width:36px;height:36px}
-.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6));animation:neonPulse 2s infinite alternate;}
-
-@keyframes neonPulse {
-  from { filter: drop-shadow(0 0 4px rgba(241,196,15,0.6)); }
-  to { filter: drop-shadow(0 0 12px rgba(255,85,0,0.9)); }
-}
-
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
 .socialLinks{display:flex;gap:10px;flex-wrap:wrap}
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap}
 .socialLinks a:hover{color:#f1c40f;text-shadow:0 0 5px #f1c40f}
@@ -194,20 +93,10 @@ body::before {
 </head>
 <body>
 
-<div id="arcadeModal" class="arcade-modal">
-  <div class="arcade-cabinet">
-    <div class="arcade-title">🎰 SELECTING TRACK 🎰</div>
-    <div class="arcade-screen">
-      <div id="rouletteText" class="roulette-display">READY PLAYER ONE</div>
-    </div>
-    <button class="nav-btn" onclick="closeArcadeModal()" style="font-size:11px; padding:6px 12px;">CLOSE DISPLAY</button>
-  </div>
-</div>
-
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png" alt="Guitar">
-    <h2>Lazzarus Prime - Songs Requests</h2>
+    <h2>Lazzarus Prime Rocksmith Requests</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -253,8 +142,9 @@ let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGe
 let artistArtMap = {};   // artist -> art url
 let artistGenreMap = {}; // artist -> genre label
 
+// Genre map - artist name matching
 const GENRE_MAP = {
-  "Metal": ["Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne","Judas Priest","Anthrax","Sepultura","Tool","System of A Down","Slipknot","Korn","Disturbed","Avenged Fold","Five Finger Death Punch","Killswitch Engage","Lamb of God","Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio","Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Motley Crue","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains","Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback","Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Mudvayne","Crossfade","Trapt","Nonpoint","Taproot","Cradle of Filth","Periphery","Animals As Leaders","DragonForce","Queens of the Stone Age","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons","Helmet","Alter Bridge","Danzig","Rage Against The Machine","Prophets of Rage","Muse","Bush","Fuel","Chevelle","Filter","The Tea Party","The Cult","Blue Oyster Cult","Rush","Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus","Finger Eleven","Our Lady Peace","Theory of A Deadman","Shinedown","Hinder","Drowning Pool","P.O.D.","Rise Against","Pennywise","Bad Religion","Rancid","Sum 41","Billy Talent","Paramore","My Chemical Romance","Asking Alexandria","Ice Nine Kills","Suicidal Tendencies","Helmet","Primus","Alice Cooper","Warrant","Tesla","Extreme","Mr. Big","Winger","Dokken","Scorpions","Triumph","Kansas","Boston","Styx","Foghat","Bachman Turner Overdrive","Grand Funk Railroad","Mountain","Ted Nugent","Hoobastank","Shinedown","Sick Puppies","Saving Abel","Framing Hanley","Evans Blue","The Flatliners","Flatliners","NoFX","Operation Ivy","Husker Du","Descendents","Green Day","Offspring"],
+  "Metal": ["Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne","Judas Priest","Anthrax","Sepultura","Tool","System of A Down","Slipknot","Korn","Disturbed","Avenged Sevenfold","Five Finger Death Punch","Killswitch Engage","Lamb of God","Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio","Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Motley Crue","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains","Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback","Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Mudvayne","Crossfade","Trapt","Nonpoint","Taproot","Cradle of Filth","Periphery","Animals As Leaders","DragonForce","Queens of the Stone Age","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons","Helmet","Alter Bridge","Danzig","Rage Against The Machine","Prophets of Rage","Muse","Bush","Fuel","Chevelle","Filter","The Tea Party","The Cult","Blue Oyster Cult","Rush","Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus","Finger Eleven","Our Lady Peace","Theory of A Deadman","Shinedown","Hinder","Drowning Pool","P.O.D.","Rise Against","Pennywise","Bad Religion","Rancid","Sum 41","Billy Talent","Paramore","My Chemical Romance","Asking Alexandria","Ice Nine Kills","Suicidal Tendencies","Helmet","Primus","Alice Cooper","Warrant","Tesla","Extreme","Mr. Big","Winger","Dokken","Scorpions","Triumph","Kansas","Boston","Styx","Foghat","Bachman Turner Overdrive","Grand Funk Railroad","Mountain","Ted Nugent","Hoobastank","Shinedown","Sick Puppies","Saving Abel","Framing Hanley","Evans Blue","The Flatliners","Flatliners","NoFX","Operation Ivy","Husker Du","Descendents","Green Day","Offspring"],
   "Classic Rock": ["Led Zeppelin","The Rolling Stones","Rolling Stones","The Who","Pink Floyd","Aerosmith","Eagles","Fleetwood Mac","The Doors","Doors","Jimi Hendrix","Cream","Eric Clapton","Jeff Beck","Peter Frampton","Foreigner","Journey","REO Speedwagon","Heart","Cheap Trick","Tom Petty","Allman Brothers","Lynyrd Skynyrd","ZZ Top","Van Halen","Queen","AC/DC","ACDC","The Beatles","Beatles","David Bowie","Rod Stewart","Elton John","Bruce Springsteen","Bob Dylan","Neil Young","Paul Simon","Beach Boys","The Kinks","Kinks","T. Rex","Thin Lizzy","Bad Company","Free","Traffic","Steve Winwood","Genesis","Peter Gabriel","Phil Collins","Yes","King Crimson","Emerson Lake","Black Sabbath","Deep Purple","Rainbow","Whitesnake","Dio","Budgie","Mountain","Ted Nugent","Blue Oyster Cult","Styx","Kansas","Boston","Rush","Triumph","Steppenwolf","Foghat","Bachman Turner Overdrive","April Wine","Guess Who","Trooper","Loverboy","Kim Mitchell","Chilliwack","Sloan","Bryan Adams","Blue Rodeo","Tragically Hip","Matthew Good","Moist","Glorious Sons","Sheepdogs","Sass Jordan","Big Wreck","Jeff Healey","Santana","Steve Miller Band","Steely Dan","Toto","Chicago","Electric Light Orchestra","ELO","Golden Earring","Small Faces","Faces","Spencer Davis","Jethro Tull","Uriah Heep","Supertramp","Crosby Stills","Eagles","America","Jackson Browne","James Taylor","Gordon Lightfoot","Jim Croce","Simon Garfunkel"],
   "Pop": ["Taylor Swift","Katy Perry","Ariana Grande","Lady Gaga","Beyonce","Rihanna","Madonna","Michael Jackson","Britney Spears","Justin Timberlake","Ed Sheeran","Adele","Dua Lipa","Harry Styles","Olivia Rodrigo","Billie Eilish","Camila Cabello","Halsey","Shawn Mendes","Miley Cyrus","Sia","Ellie Goulding","Natasha Bedingfield","Alanis Morissette","Avril Lavigne","Kelly Clarkson","Kesha","Gwen Stefani","No Doubt","Pink","Christina Aguilera","Celine Dion","Whitney Houston","Mariah Carey","Cyndi Lauper","Duran Duran","INXS","Roxette","Backstreet Boys","One Direction","5 Seconds of Summer","Carly Rae Jepsen","Lorde","Vance Joy","Train","Matchbox Twenty","OneRepublic","Coldplay","Arcade Fire","Metric","City and Colour","Lumineers","Counting Crows","Gin Blossoms","BLACKPINK","BTS","YOASOBI","Lana Del Rey","Lana Del Ray","MGMT","Foster the People","Imagine Dragons","Twenty One Pilots","Gorillaz","Beck"],
   "R&B Soul": ["Marvin Gaye","Stevie Wonder","Aretha Franklin","James Brown","Otis Redding","Sam Cooke","Al Green","Ray Charles","Curtis Mayfield","Wilson Pickett","Isaac Hayes","Sly and The Family Stone","Earth Wind and Fire","Kool and The Gang","Tower of Power","Isley Brothers","Four Tops","Temptations","Commodores","Lionel Richie","Diana Ross","Gladys Knight","Tina Turner","Mary J Blige","Alicia Keys","John Legend","Bruno Mars","Anderson Paak","Thundercat","Vulfpeck","Khruangbin","Amy Winehouse","Sade","Lauryn Hill","Fugees","TLC","Janet Jackson","Donna Summer","Gloria Gaynor","Bee Gees"],
@@ -284,11 +174,13 @@ async function init() {
     const resp = await fetch("songs.json");
     const raw = await resp.json();
 
+    // Build artist art + genre maps from first occurrence per artist
     const seen = new Set();
     raw.forEach(s => {
       if (!seen.has(s.artist)) {
         seen.add(s.artist);
         if (s.art) artistArtMap[s.artist] = s.art;
+        // Use genre from JSON if present, else derive from name
         artistGenreMap[s.artist] = s.genre || assignGenre(s.artist);
       }
     });
@@ -373,7 +265,7 @@ function renderSongs() {
         <div class="songArtist" onclick="filterArtist('${safeArtist}')">${esc(song.artist)}</div>
         ${genre ? `<div class="songGenre">${emoji} ${genre}</div>` : ""}
       </div>
-      <button class="req-btn" onclick="requestSong('${safeArtist}','${safeSong}', event)">Request</button>
+      <button class="req-btn" onclick="requestSong('${safeArtist}','${safeSong}')">Request</button>
     `;
     list.appendChild(div);
   });
@@ -469,79 +361,16 @@ function buildArtistStats() {
   };
 }
 
-// ── FLAME BURST FEEDBACK ENGINE ──
-function triggerFlameBurst(e) {
-  const numParticles = 30;
-  const x = e ? e.clientX : window.innerWidth / 2;
-  const y = e ? e.clientY : window.innerHeight / 2;
-
-  for (let i = 0; i < numParticles; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'flame-particle';
-    particle.style.left = `${x}px`;
-    particle.style.top = `${y}px`;
-
-    const angle = Math.random() * Math.PI * 2;
-    const velocity = Math.random() * 90 + 30;
-    const mx = Math.cos(angle) * velocity;
-    const my = Math.sin(angle) * velocity - 40;
-
-    particle.style.setProperty('--mx', `${mx}px`);
-    particle.style.setProperty('--my', `${my}px`);
-
-    document.body.appendChild(particle);
-    setTimeout(() => particle.remove(), 600);
-  }
-}
-
-async function requestSong(artist, song, event) {
-  if (event) triggerFlameBurst(event);
+async function requestSong(artist, song) {
   const cmd = `!request "${artist}" "${song}"`;
-  try { 
-    await navigator.clipboard.writeText(cmd); 
-    console.log("Copied command: " + cmd);
-  } catch { 
-    console.log("Clipboard error for: " + cmd); 
-  }
-}
-
-// ── RETRO ARCADE CAB ROULETTE RUNNER ──
-function runSongRoulette() {
-  if (!songs || !songs.length) return;
-  
-  const modal = document.getElementById("arcadeModal");
-  const display = document.getElementById("rouletteText");
-  modal.style.display = "flex";
-  display.classList.remove("winner");
-
-  let currentTick = 0;
-  const totalTicks = 25; 
-  let speed = 40; 
-
-  function spin() {
-    currentTick++;
-    const randomTrack = songs[Math.floor(Math.random() * songs.length)];
-    display.textContent = `${randomTrack.artist} - ${randomTrack.song}`;
-
-    if (currentTick < totalTicks) {
-      speed += currentTick * 0.8;
-      setTimeout(spin, speed);
-    } else {
-      display.classList.add("winner");
-      const safeArtist = randomTrack.artist.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      const safeSong = randomTrack.song.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      requestSong(safeArtist, safeSong, null);
-    }
-  }
-  spin();
-}
-
-function closeArcadeModal() {
-  document.getElementById("arcadeModal").style.display = "none";
+  try { await navigator.clipboard.writeText(cmd); alert("Copied!\n\nPaste in Twitch chat:\n" + cmd); }
+  catch { alert("Type in chat:\n" + cmd); }
 }
 
 function randomArtistFilter() {
-  runSongRoulette();
+  if (!songs.length) return;
+  const artists = [...new Set(songs.map(s=>s.artist))];
+  filterArtist(artists[Math.floor(Math.random()*artists.length)]);
 }
 
 function goHome() { clearSearch(); window.scrollTo({top:0,behavior:"smooth"}); }
