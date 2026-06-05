@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime - Artists</title>
+<title>Lazzarus Prime Rocksmith Artists</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
@@ -84,7 +84,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div class="titleBar">
   <div class="titleLeft">
     <img src="guitar.png" alt="Guitar">
-    <h2>Lazzarus Prime - Artists</h2>
+    <h2>Lazzarus Prime Rocksmith Artists</h2>
   </div>
   <div class="socialLinks">
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎸 Twitch</a>
@@ -112,7 +112,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div id="alphabet"></div>
 
 <div id="artistStats">
-  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▼</span></h3>
   <div id="artistList"></div>
 </div>
 
@@ -128,6 +128,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 let allArtists = [], filteredArtists = [], currentPage = 1;
 const perPage = 80;
 let activeGenre = null;
+let isSpinning = false;
 
 const GENRE_MAP = {
   "Metal": ["Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne","Judas Priest","Anthrax","Sepultura","Tool","System of A Down","Slipknot","Korn","Disturbed","Avenged Sevenfold","Five Finger Death Punch","Killswitch Engage","Lamb of God","Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio","Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Motley Crue","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains","Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback","Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Mudvayne","Crossfade","Trapt","Nonpoint","Taproot","Cradle of Filth","Periphery","Animals As Leaders","DragonForce","Queens of the Stone Age","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons","Helmet","Alter Bridge","Danzig","Rage Against The Machine","Prophets of Rage","Muse","Bush","Fuel","Chevelle","Filter","The Tea Party","The Cult","Blue Oyster Cult","Rush","Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus","Finger Eleven","Our Lady Peace","Theory of A Deadman","Shinedown","Hinder","Drowning Pool","P.O.D.","Rise Against","Pennywise","Bad Religion","Rancid","Sum 41","Billy Talent","Paramore","My Chemical Romance","Asking Alexandria","Ice Nine Kills","Suicidal Tendencies","Primus","Alice Cooper","Warrant","Tesla","Extreme","Mr. Big","Winger","Dokken","Scorpions","Triumph","Kansas","Boston","Styx","Foghat","Bachman Turner Overdrive","Grand Funk Railroad","Mountain","Ted Nugent","Hoobastank","Sick Puppies","Green Day","Offspring"],
@@ -137,7 +138,7 @@ const GENRE_MAP = {
   "Hip Hop": ["Eminem","Jay-Z","Jay Z","Kendrick Lamar","Kanye West","Drake","Post Malone","2Pac","NWA","Ice Cube","Dr. Dre","Snoop Dogg","Nas","Biggie","Wu Tang Clan","Beastie Boys","Run DMC","Public Enemy","LL Cool J","Cypress Hill","DMX","Busta Rhymes","50 Cent","Fort Minor","Afroman","Coolio","Childish Gambino","Anderson Paak","Wiz Khalifa","Mac Miller","Cardi B","Limp Bizkit","Kid Rock","LMFAO","Flo Rida","Pitbull"],
   "Blues": ["BB King","B.B. King","Albert King","Muddy Waters","Howlin Wolf","Robert Johnson","John Lee Hooker","Eric Clapton","Jeff Beck","Stevie Ray Vaughan","Stevie Ray Vaughn","Jonny Lang","Kenny Wayne Shepherd","Buddy Guy","Joe Cocker","George Thorogood","Blues Brothers","Jack White","White Stripes","Black Keys","Ben Harper","John Mayer","Bonnie Raitt","Gary Clark Jr.","Derek Trucks"],
   "Country": ["Johnny Cash","Dolly Parton","Willie Nelson","Waylon Jennings","Garth Brooks","Alan Jackson","George Strait","Kenny Rogers","Hank Williams","Patsy Cline","Loretta Lynn","Glen Campbell","Alabama","Chris Stapleton","Kacey Musgraves","Luke Combs","Carrie Underwood","Rascal Flatts","Dixie Chicks","Brooks and Dunn","Shania Twain","Zac Brown Band","Sturgill Simpson","Gordon Lightfoot","Jim Croce","John Denver","Lumineers","Mumford and Sons"],
-  "Funk Disco": ["James Brown","Sly and The Family Stone","Earth Wind and Fire","Kool and The Gang","Parliament","Funkadelic","Prince","Rick James","Ohio Players","Tower of Power","War","Commodores","Donna Summer","Gloria Gaynor","Bee Gees","KC and The Sunshine Band","Daft Punk","Jamiroquai","Bruno Mars","Mark Ronson","Vulfpeck","Khruangbin","Fatboy Slim"],
+  "Funk Disco": ["James Brown","Sly and The Family Stone","Earth Wind and Fire","Kool and The Gang","Parliament","Funkadelic","Prince","Rick James","Ohio Players","Tower of Power","War","Commodores","Donna Summer","Gloria Gaynor","Bee Gees","KC and Sunshine Band","Daft Punk","Jamiroquai","Bruno Mars","Mark Ronson","Vulfpeck","Khruangbin","Fatboy Slim"],
   "Indie Alt": ["Radiohead","Pixies","Sonic Youth","Modest Mouse","The Shins","Arcade Fire","Tame Impala","Mac DeMarco","Courtney Barnett","PJ Harvey","St. Vincent","Fiona Apple","Interpol","Bloc Party","Franz Ferdinand","The Strokes","Yeah Yeah Yeahs","Cage The Elephant","MGMT","Foster the People","Lorde","Gorillaz","Beck","Massive Attack","Portishead","American Football","Hot Mulligan","The Wonder Years","Death Cab for Cutie","Fleet Foxes","Bon Iver","Vampire Weekend","Foals","Alt-J","Royal Blood"],
   "Punk": ["Ramones","The Clash","Sex Pistols","Dead Kennedys","Black Flag","Misfits","Husker Du","Green Day","The Offspring","Blink 182","Menzingers","NOFX","NoFX","Bad Religion","Pennywise","Rancid","Operation Ivy","Rise Against","Sum 41","Simple Plan","Billy Talent","The Flatliners","Hot Water Music","Propagandhi","Anti-Flag","Social Distortion","Dropkick Murphys","Flogging Molly"],
   "Reggae": ["Bob Marley","Jimmy Cliff","Steel Pulse","UB40","Sublime","311","No Doubt","Ska-P","The Interrupters","Reel Big Fish","Less Than Jake","Streetlight Manifesto"]
@@ -276,9 +277,56 @@ function clearAll() {
 }
 
 function randomArtist() {
-  if(!allArtists.length) return;
-  const a=allArtists[Math.floor(Math.random()*allArtists.length)];
-  location.href="index.html?search="+encodeURIComponent(a.name);
+  if (!allArtists.length || isSpinning) return;
+  isSpinning = true;
+
+  const cards = document.querySelectorAll('.artistCard');
+  const duration = 1000;      // Spin duration in milliseconds
+  const intervalTime = 70;    // Speed of shuffle flashes
+  let elapsed = 0;
+  let lastCard = null;
+
+  // Fallback if there are no cards rendered on screen
+  if (!cards.length) {
+    const a = allArtists[Math.floor(Math.random() * allArtists.length)];
+    location.href = "index.html?search=" + encodeURIComponent(a.name);
+    return;
+  }
+
+  const timer = setInterval(() => {
+    // Reset previous card's flash styling
+    if (lastCard) {
+      lastCard.style.borderColor = '';
+      lastCard.style.boxShadow = '';
+      lastCard.style.transform = '';
+    }
+    
+    // Choose a random visible card on the current page to flash
+    const randomIdx = Math.floor(Math.random() * cards.length);
+    lastCard = cards[randomIdx];
+    
+    // Apply temporary vivid gold flame pulse styling during the shuffle
+    lastCard.style.borderColor = '#f1c40f';
+    lastCard.style.boxShadow = '0 0 20px rgba(241, 196, 15, 0.6)';
+    lastCard.style.transform = 'scale(1.02) translateY(-2px)';
+    
+    elapsed += intervalTime;
+    
+    if (elapsed >= duration) {
+      clearInterval(timer);
+      
+      // Clear final styles before unloading the page
+      if (lastCard) {
+        lastCard.style.borderColor = '';
+        lastCard.style.boxShadow = '';
+        lastCard.style.transform = '';
+      }
+      
+      // Roll the final selection out of all available library artists
+      const a = allArtists[Math.floor(Math.random() * allArtists.length)];
+      location.href = "index.html?search=" + encodeURIComponent(a.name);
+    }
+  }, intervalTime);
 }
 
 init();
