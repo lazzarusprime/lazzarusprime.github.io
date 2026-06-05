@@ -71,6 +71,60 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 .req-btn{background:#1a3a1a;color:#4caf50;border:1px solid #2d5a2d;padding:7px 13px;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;transition:.2s;white-space:nowrap;flex-shrink:0}
 .req-btn:hover,.req-btn:active{background:#2d5a2d;color:#7ddd80;border-color:#4caf50}
 
+/* Request Button Click Animation Override */
+.req-btn.copied {
+  background: #4caf50 !important;
+  color: #fff !important;
+  border-color: #7ddd80 !important;
+  animation: buttonPulse 0.35s ease-out;
+}
+@keyframes buttonPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ── TOAST NOTIFICATION ── */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #141414;
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.toast-notification.fade-out {
+  animation: toastOut 0.25s ease-in forwards;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-15px); }
+}
+.toast-cmd {
+  color: #f1c40f;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  background: #1e1e1e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+  border: 1px solid #333;
+  word-break: break-all;
+}
+
 /* ── PAGINATION ── */
 .pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
 
@@ -88,6 +142,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
   .req-btn{padding:6px 10px;font-size:11px}
   #alphabet{gap:2px;padding:6px}
   #alphabet .nav-btn{padding:5px 7px;font-size:10px}
+  .toast-notification{left:20px;right:20px;bottom:15px;text-align:center;align-items:center}
 }
 </style>
 </head>
@@ -144,7 +199,7 @@ let artistGenreMap = {}; // artist -> genre label
 
 // Genre map - artist name matching
 const GENRE_MAP = {
-  "Metal": ["Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne","Judas Priest","Anthrax","Sepultura","Tool","System of A Down","Slipknot","Korn","Disturbed","Avenged Sevenfold","Five Finger Death Punch","Killswitch Engage","Lamb of God","Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio","Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Motley Crue","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains","Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback","Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Mudvayne","Crossfade","Trapt","Nonpoint","Taproot","Cradle of Filth","Periphery","Animals As Leaders","DragonForce","Queens of the Stone Age","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons","Helmet","Alter Bridge","Danzig","Rage Against The Machine","Prophets of Rage","Muse","Bush","Fuel","Chevelle","Filter","The Tea Party","The Cult","Blue Oyster Cult","Rush","Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus","Finger Eleven","Our Lady Peace","Theory of A Deadman","Shinedown","Hinder","Drowning Pool","P.O.D.","Rise Against","Pennywise","Bad Religion","Rancid","Sum 41","Billy Talent","Paramore","My Chemical Romance","Asking Alexandria","Ice Nine Kills","Suicidal Tendencies","Helmet","Primus","Alice Cooper","Warrant","Tesla","Extreme","Mr. Big","Winger","Dokken","Scorpions","Triumph","Kansas","Boston","Styx","Foghat","Bachman Turner Overdrive","Grand Funk Railroad","Mountain","Ted Nugent","Hoobastank","Shinedown","Sick Puppies","Saving Abel","Framing Hanley","Evans Blue","The Flatliners","Flatliners","NoFX","Operation Ivy","Husker Du","Descendents","Green Day","Offspring"],
+  "Metal": ["Metallica","Megadeth","Slayer","Pantera","Iron Maiden","Black Sabbath","Ozzy Osbourne","Judas Priest","Anthrax","Sepultura","Tool","System of A Down","Slipknot","Korn","Disturbed","Avenged Sevenfold","Five Finger Device Punch","Killswitch Engage","Lamb of God","Gojira","Opeth","Dream Theater","Queensryche","Accept","Motorhead","Whitesnake","Dio","Rainbow","Deep Purple","Twisted Sister","Skid Row","Poison","Ratt","Motley Crue","White Zombie","Rob Zombie","Marilyn Manson","Alice in Chains","Soundgarden","Stone Temple Pilots","Audioslave","Velvet Revolver","Creed","Nickelback","Breaking Benjamin","Three Days Grace","Seether","Staind","Puddle Of Mudd","Mudvayne","Crossfade","Trapt","Nonpoint","Taproot","Cradle of Filth","Periphery","Animals As Leaders","DragonForce","Queens of the Stone Age","Royal Blood","Ghost","Volbeat","Airbourne","Rival Sons","Helmet","Alter Bridge","Danzig","Rage Against The Machine","Prophets of Rage","Muse","Bush","Fuel","Chevelle","Filter","The Tea Party","The Cult","Blue Oyster Cult","Rush","Godsmack","Papa Roach","Linkin Park","Limp Bizkit","Deftones","Incubus","Finger Eleven","Our Lady Peace","Theory of A Deadman","Shinedown","Hinder","Drowning Pool","P.O.D.","Rise Against","Pennywise","Bad Religion","Rancid","Sum 41","Billy Talent","Paramore","My Chemical Romance","Asking Alexandria","Ice Nine Kills","Suicidal Tendencies","Helmet","Primus","Alice Cooper","Warrant","Tesla","Extreme","Mr. Big","Winger","Dokken","Scorpions","Triumph","Kansas","Boston","Styx","Foghat","Bachman Turner Overdrive","Grand Funk Railroad","Mountain","Ted Nugent","Hoobastank","Shinedown","Sick Puppies","Saving Abel","Framing Hanley","Evans Blue","The Flatliners","Flatliners","NoFX","Operation Ivy","Husker Du","Descendents","Green Day","Offspring"],
   "Classic Rock": ["Led Zeppelin","The Rolling Stones","Rolling Stones","The Who","Pink Floyd","Aerosmith","Eagles","Fleetwood Mac","The Doors","Doors","Jimi Hendrix","Cream","Eric Clapton","Jeff Beck","Peter Frampton","Foreigner","Journey","REO Speedwagon","Heart","Cheap Trick","Tom Petty","Allman Brothers","Lynyrd Skynyrd","ZZ Top","Van Halen","Queen","AC/DC","ACDC","The Beatles","Beatles","David Bowie","Rod Stewart","Elton John","Bruce Springsteen","Bob Dylan","Neil Young","Paul Simon","Beach Boys","The Kinks","Kinks","T. Rex","Thin Lizzy","Bad Company","Free","Traffic","Steve Winwood","Genesis","Peter Gabriel","Phil Collins","Yes","King Crimson","Emerson Lake","Black Sabbath","Deep Purple","Rainbow","Whitesnake","Dio","Budgie","Mountain","Ted Nugent","Blue Oyster Cult","Styx","Kansas","Boston","Rush","Triumph","Steppenwolf","Foghat","Bachman Turner Overdrive","April Wine","Guess Who","Trooper","Loverboy","Kim Mitchell","Chilliwack","Sloan","Bryan Adams","Blue Rodeo","Tragically Hip","Matthew Good","Moist","Glorious Sons","Sheepdogs","Sass Jordan","Big Wreck","Jeff Healey","Santana","Steve Miller Band","Steely Dan","Toto","Chicago","Electric Light Orchestra","ELO","Golden Earring","Small Faces","Faces","Spencer Davis","Jethro Tull","Uriah Heep","Supertramp","Crosby Stills","Eagles","America","Jackson Browne","James Taylor","Gordon Lightfoot","Jim Croce","Simon Garfunkel"],
   "Pop": ["Taylor Swift","Katy Perry","Ariana Grande","Lady Gaga","Beyonce","Rihanna","Madonna","Michael Jackson","Britney Spears","Justin Timberlake","Ed Sheeran","Adele","Dua Lipa","Harry Styles","Olivia Rodrigo","Billie Eilish","Camila Cabello","Halsey","Shawn Mendes","Miley Cyrus","Sia","Ellie Goulding","Natasha Bedingfield","Alanis Morissette","Avril Lavigne","Kelly Clarkson","Kesha","Gwen Stefani","No Doubt","Pink","Christina Aguilera","Celine Dion","Whitney Houston","Mariah Carey","Cyndi Lauper","Duran Duran","INXS","Roxette","Backstreet Boys","One Direction","5 Seconds of Summer","Carly Rae Jepsen","Lorde","Vance Joy","Train","Matchbox Twenty","OneRepublic","Coldplay","Arcade Fire","Metric","City and Colour","Lumineers","Counting Crows","Gin Blossoms","BLACKPINK","BTS","YOASOBI","Lana Del Rey","Lana Del Ray","MGMT","Foster the People","Imagine Dragons","Twenty One Pilots","Gorillaz","Beck"],
   "R&B Soul": ["Marvin Gaye","Stevie Wonder","Aretha Franklin","James Brown","Otis Redding","Sam Cooke","Al Green","Ray Charles","Curtis Mayfield","Wilson Pickett","Isaac Hayes","Sly and The Family Stone","Earth Wind and Fire","Kool and The Gang","Tower of Power","Isley Brothers","Four Tops","Temptations","Commodores","Lionel Richie","Diana Ross","Gladys Knight","Tina Turner","Mary J Blige","Alicia Keys","John Legend","Bruno Mars","Anderson Paak","Thundercat","Vulfpeck","Khruangbin","Amy Winehouse","Sade","Lauryn Hill","Fugees","TLC","Janet Jackson","Donna Summer","Gloria Gaynor","Bee Gees"],
@@ -265,7 +320,7 @@ function renderSongs() {
         <div class="songArtist" onclick="filterArtist('${safeArtist}')">${esc(song.artist)}</div>
         ${genre ? `<div class="songGenre">${emoji} ${genre}</div>` : ""}
       </div>
-      <button class="req-btn" onclick="requestSong('${safeArtist}','${safeSong}')">Request</button>
+      <button class="req-btn" onclick="requestSong('${safeArtist}','${safeSong}', this)">Request</button>
     `;
     list.appendChild(div);
   });
@@ -361,10 +416,51 @@ function buildArtistStats() {
   };
 }
 
-async function requestSong(artist, song) {
+async function requestSong(artist, song, btn) {
   const cmd = `!request "${artist}" "${song}"`;
-  try { await navigator.clipboard.writeText(cmd); alert("Copied!\n\nPaste in Twitch chat:\n" + cmd); }
-  catch { alert("Type in chat:\n" + cmd); }
+  try { 
+    await navigator.clipboard.writeText(cmd); 
+    
+    // Trigger button micro-animation & temporary text update
+    if (btn) {
+      const originalText = btn.textContent;
+      btn.textContent = "Copied! 🤘";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove("copied");
+      }, 1500);
+    }
+    
+    // Show smooth, non-blocking toast notification overlay
+    showToast(cmd);
+  }
+  catch { 
+    alert("Type in chat:\n" + cmd); 
+  }
+}
+
+function showToast(cmd) {
+  const existingToast = document.getElementById("requestToast");
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement("div");
+  toast.id = "requestToast";
+  toast.className = "toast-notification";
+  toast.innerHTML = `
+    <div style="font-weight: 800; color: #4caf50; display: flex; align-items: center; gap: 4px;">
+      <span>✅ COPIED TO CLIPBOARD!</span>
+    </div>
+    <div style="color: #aaa; font-size: 11px;">Paste this command into Twitch chat:</div>
+    <div class="toast-cmd">${esc(cmd)}</div>
+  `;
+  document.body.appendChild(toast);
+
+  // Smooth fade out and removal after 4 seconds
+  setTimeout(() => {
+    toast.classList.add("fade-out");
+    toast.addEventListener("animationend", () => toast.remove());
+  }, 4000);
 }
 
 function randomArtistFilter() {
