@@ -24,6 +24,20 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
 
+/* Random Button Slot Machine Animation */
+.random-spinning {
+  background: #141414 !important;
+  color: #f1c40f !important;
+  border-color: #f1c40f !important;
+  animation: slotBlur 0.12s infinite linear;
+  cursor: default;
+}
+@keyframes slotBlur {
+  0% { transform: translateY(0) scale(1); filter: blur(0px); }
+  50% { transform: translateY(-2px) scale(0.97); filter: blur(1px); }
+  100% { transform: translateY(2px) scale(1); filter: blur(0px); }
+}
+
 /* ── GENRE BAR ── */
 #genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:#141414;border-bottom:1px solid #222;justify-content:center}
 .genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
@@ -165,7 +179,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 <div class="topBar">
   <button class="nav-btn" onclick="goHome()">🏠 Home</button>
   <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="randomArtistFilter()">🎲 Random</button>
+  <button class="nav-btn" onclick="randomArtistFilter(this)">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist or song..." oninput="handleSearchInput()">
   <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✕</button>
 </div>
@@ -196,6 +210,7 @@ body{font-family:Segoe UI,Arial;background:#0f0f0f;color:white;margin:0}
 let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGenre = null;
 let artistArtMap = {};   // artist -> art url
 let artistGenreMap = {}; // artist -> genre label
+let isSpinning = false;  // lock state for random button slot machine
 
 // Genre map - artist name matching
 const GENRE_MAP = {
@@ -229,13 +244,11 @@ async function init() {
     const resp = await fetch("songs.json");
     const raw = await resp.json();
 
-    // Build artist art + genre maps from first occurrence per artist
     const seen = new Set();
     raw.forEach(s => {
       if (!seen.has(s.artist)) {
         seen.add(s.artist);
         if (s.art) artistArtMap[s.artist] = s.art;
-        // Use genre from JSON if present, else derive from name
         artistGenreMap[s.artist] = s.genre || assignGenre(s.artist);
       }
     });
@@ -421,7 +434,6 @@ async function requestSong(artist, song, btn) {
   try { 
     await navigator.clipboard.writeText(cmd); 
     
-    // Trigger button micro-animation & temporary text update
     if (btn) {
       const originalText = btn.textContent;
       btn.textContent = "Copied! 🤘";
@@ -432,7 +444,6 @@ async function requestSong(artist, song, btn) {
       }, 1500);
     }
     
-    // Show smooth, non-blocking toast notification overlay
     showToast(cmd);
   }
   catch { 
@@ -456,17 +467,38 @@ function showToast(cmd) {
   `;
   document.body.appendChild(toast);
 
-  // Smooth fade out and removal after 4 seconds
   setTimeout(() => {
     toast.classList.add("fade-out");
     toast.addEventListener("animationend", () => toast.remove());
   }, 4000);
 }
 
-function randomArtistFilter() {
-  if (!songs.length) return;
-  const artists = [...new Set(songs.map(s=>s.artist))];
-  filterArtist(artists[Math.floor(Math.random()*artists.length)]);
+function randomArtistFilter(btn) {
+  if (isSpinning || !songs.length) return;
+  isSpinning = true;
+
+  const slotSymbols = ["🎰", "🍒", "🍋", "💎", "7️⃣", "🎸", "🤘", "👑"];
+  let spinCounter = 0;
+  btn.classList.add("random-spinning");
+
+  // Cycle symbols rapidly to simulate slot machine wheels turning
+  const spinInterval = setInterval(() => {
+    btn.innerHTML = `${slotSymbols[spinCounter % slotSymbols.length]} Spinning...`;
+    spinCounter++;
+  }, 75);
+
+  setTimeout(() => {
+    clearInterval(spinInterval);
+    btn.classList.remove("random-spinning");
+    btn.innerHTML = "🎲 Random";
+    isSpinning = false;
+
+    // Proceed to select the random artist after animation concludes
+    const artists = [...new Set(songs.map(s => s.artist))];
+    if (artists.length) {
+      filterArtist(artists[Math.floor(Math.random() * artists.length)]);
+    }
+  }, 800); // 800ms of spinning animation
 }
 
 function goHome() { clearSearch(); window.scrollTo({top:0,behavior:"smooth"}); }
