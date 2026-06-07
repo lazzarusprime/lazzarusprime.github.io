@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Cavernous Malformation Awareness Month</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2;margin-top:40px}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.titleBar .site-logo{width:36px;height:36px}}
+
+/* ── CHARITY PAGE STYLES ── */
+.page-wrap{max-width:860px;margin:0 auto;padding:24px 16px}
+
+.charity-hero{text-align:center;padding:40px 20px;background:linear-gradient(180deg,#0f0010 0%,#0f0f0f 100%);border-bottom:1px solid #1e1e1e;position:relative;overflow:hidden}
+.charity-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center top,rgba(160,0,200,.12) 0%,transparent 70%);pointer-events:none}
+.charity-ribbon{font-size:48px;margin-bottom:12px;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.charity-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,7vw,64px);letter-spacing:4px;margin:0;color:#fff;line-height:1}
+.charity-month{font-family:'Bebas Neue',sans-serif;font-size:clamp(16px,4vw,28px);letter-spacing:6px;color:#a000c8;margin-top:4px;text-shadow:0 0 20px rgba(160,0,200,.5)}
+.charity-tagline{color:#666;font-size:14px;letter-spacing:1px;margin-top:14px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ── DONATE BUTTON ── */
+.donate-section{text-align:center;padding:30px 20px;border-bottom:1px solid #1a1a1a}
+.donate-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#7b00aa,#a000c8);color:#fff;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;padding:18px 36px;border-radius:10px;transition:.2s;box-shadow:0 4px 20px rgba(160,0,200,.4);border:1px solid #c030e8}
+.donate-btn:hover{background:linear-gradient(135deg,#9200cc,#c040e0);box-shadow:0 6px 30px rgba(160,0,200,.6);transform:translateY(-2px)}
+.donate-btn:active{transform:translateY(0)}
+.donate-note{color:#444;font-size:12px;margin-top:10px;letter-spacing:.5px}
+.donate-note a{color:#7b00aa;text-decoration:none}
+.donate-note a:hover{color:#c040e0}
+
+/* ── WHAT IS ── */
+.section{margin:36px 0}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:#a000c8;border-bottom:1px solid #1e1e1e;padding-bottom:8px;margin-bottom:16px}
+.prose{font-size:15px;color:#999;line-height:1.8}
+.prose strong{color:#ccc}
+.prose a{color:#a060d0;text-decoration:none}
+.prose a:hover{color:#c090e0}
+
+/* ── STATS CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}
+.stat-card{background:#141414;border:1px solid #2a0040;border-radius:10px;padding:18px;text-align:center;transition:.2s}
+.stat-card:hover{border-color:#7b00aa33;transform:translateY(-2px)}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#a000c8;line-height:1;text-shadow:0 0 16px rgba(160,0,200,.4)}
+.stat-label{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-top:4px}
+
+/* ── FACT CARDS ── */
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:500px){.fact-grid{grid-template-columns:1fr}}
+.fact-card{background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:14px;border-left:3px solid #7b00aa}
+.fact-icon{font-size:22px;margin-bottom:6px}
+.fact-text{font-size:13px;color:#888;line-height:1.6}
+.fact-text strong{color:#bbb}
+
+/* ── HOW TO HELP ── */
+.help-list{list-style:none;padding:0;margin:0}
+.help-list li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #1a1a1a;font-size:14px;color:#888;line-height:1.6}
+.help-list li:last-child{border-bottom:none}
+.help-list li .help-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;margin-top:2px}
+.help-list li strong{color:#ccc;display:block;margin-bottom:2px}
+.help-list a{color:#a060d0;text-decoration:none}
+.help-list a:hover{color:#c090e0}
+
+/* ── PERSONAL NOTE ── */
+.personal-note{background:linear-gradient(135deg,#0f000f,#170017);border:1px solid #2a0040;border-radius:12px;padding:24px;margin:30px 0;position:relative}
+.personal-note::before{content:'"';font-family:'Bebas Neue',sans-serif;font-size:120px;color:#2a0040;position:absolute;top:-20px;left:16px;line-height:1;pointer-events:none}
+.personal-note-text{font-size:15px;color:#aaa;line-height:1.8;font-style:italic;position:relative;z-index:1;padding-left:20px}
+.personal-note-sig{font-size:13px;color:#7b00aa;font-weight:700;margin-top:12px;position:relative;z-index:1;padding-left:20px}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='charity.html'">❤️ CMAM</button>
+</div>
+
+<div class="charity-hero">
+  <div class="charity-ribbon">🎗️</div>
+  <div class="charity-title">Cavernous Malformation</div>
+  <div class="charity-month">Awareness Month</div>
+  <div class="charity-tagline">Every stream, every request, every note played is a chance to raise awareness and support the people living with cavernous malformations.</div>
+</div>
+
+<div class="donate-section">
+  <a class="donate-btn" href="https://www.twitch.tv/lazzarus_prime" target="_blank">
+    🎗️ Donate via Twitch
+  </a>
+  <div class="donate-note">Donations go through the charity link on the Twitch channel. Thank you for every dollar. &nbsp;<a href="https://www.twitch.tv/lazzarus_prime" target="_blank">twitch.tv/lazzarus_prime</a></div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="section">
+    <div class="section-title">What Is a Cavernous Malformation?</div>
+    <div class="prose">
+      <p>A <strong>cerebral cavernous malformation (CCM)</strong> — also called a cavernoma or cavernous angioma — is an abnormal cluster of blood vessels in the brain or spinal cord. These clusters, sometimes called "mulberry-like" lesions, have thin walls that can leak blood into surrounding tissue.</p>
+      <p>Unlike typical blood vessels, these malformations lack normal capillary tissue between arteries and veins, making them fragile and prone to bleeding. They can occur anywhere in the central nervous system and range from a few millimeters to several centimeters in size.</p>
+      <p>CCMs can be <strong>sporadic</strong> (appearing randomly) or <strong>familial</strong> (inherited). The familial form follows an autosomal dominant inheritance pattern — meaning one copy of an altered gene is enough to cause the disorder.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num">1in500</div><div class="stat-label">People are affected</div></div>
+    <div class="stat-card"><div class="stat-num">25%</div><div class="stat-label">Are familial / inherited</div></div>
+    <div class="stat-card"><div class="stat-num">~16M</div><div class="stat-label">People worldwide</div></div>
+    <div class="stat-card"><div class="stat-num">❓</div><div class="stat-label">No cure yet exists</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Symptoms & Impact</div>
+    <div class="fact-grid">
+      <div class="fact-card"><div class="fact-icon">🧠</div><div class="fact-text"><strong>Headaches</strong> — Often the first sign, ranging from mild to severe, sometimes sudden and intense.</div></div>
+      <div class="fact-card"><div class="fact-icon">⚡</div><div class="fact-text"><strong>Seizures</strong> — One of the most common presentations, occurring in up to 50% of symptomatic patients.</div></div>
+      <div class="fact-card"><div class="fact-icon">🦾</div><div class="fact-text"><strong>Weakness or numbness</strong> — Neurological deficits depending on lesion location in the brain or spinal cord.</div></div>
+      <div class="fact-card"><div class="fact-icon">👁️</div><div class="fact-text"><strong>Vision / balance issues</strong> — Brainstem lesions can cause double vision, balance problems, and facial weakness.</div></div>
+      <div class="fact-card"><div class="fact-icon">🩸</div><div class="fact-text"><strong>Bleeding episodes</strong> — Each bleed can cause new or worsening neurological symptoms depending on where it occurs.</div></div>
+      <div class="fact-card"><div class="fact-icon">😔</div><div class="fact-text"><strong>Invisible illness</strong> — Many people look completely healthy on the outside while managing serious neurological challenges daily.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Treatment & Research</div>
+    <div class="prose">
+      <p>Currently, there is <strong>no medication that can cure or shrink cavernous malformations</strong>. Treatment options are limited:</p>
+      <ul style="color:#888;line-height:2;padding-left:20px">
+        <li><strong style="color:#bbb">Observation</strong> — For asymptomatic cases, watchful waiting with regular MRI scans is common.</li>
+        <li><strong style="color:#bbb">Surgery</strong> — Surgical resection is considered when lesions are accessible and causing significant symptoms.</li>
+        <li><strong style="color:#bbb">Stereotactic radiosurgery</strong> — Sometimes used for deep or surgically inaccessible lesions, though effectiveness is debated.</li>
+        <li><strong style="color:#bbb">Clinical trials</strong> — Researchers are actively investigating drug therapies, including some that show early promise in reducing lesion activity.</li>
+      </ul>
+      <p>Research funding is critical. Organizations like the <a href="https://www.cavernoma.org.uk/" target="_blank">Cavernoma Alliance UK</a> and the <a href="https://www.angioma.org/" target="_blank">Angioma Alliance</a> are leading the charge. Every dollar donated helps move treatments closer to reality.</p>
+    </div>
+  </div>
+
+  <div class="personal-note">
+    <div class="personal-note-text">This cause matters to me personally. During streams I raise awareness and fundraise because the more people know about CCM, the sooner we can push for better treatments, better support, and eventually a cure. If you've ever thrown a request in or shown up to a stream — you're part of that.</div>
+    <div class="personal-note-sig">— Lazzarus Prime 🎸</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">How You Can Help</div>
+    <ul class="help-list">
+      <li><div class="help-icon">💜</div><div><strong>Donate through Twitch</strong> Use the charity donation link on the Twitch channel. Every dollar directly supports cavernous malformation research and patient support.<br><a href="https://www.twitch.tv/lazzarus_prime" target="_blank">→ twitch.tv/lazzarus_prime</a></div></li>
+      <li><div class="help-icon">📢</div><div><strong>Spread the word</strong> Share this page. Talk about CCM. Awareness is the first step toward change.</div></li>
+      <li><div class="help-icon">🎸</div><div><strong>Watch &amp; request songs</strong> Showing up to streams, requesting songs, and engaging with the community all help grow the reach of this fundraising effort.</div></li>
+      <li><div class="help-icon">🔬</div><div><strong>Support research orgs directly</strong><br><a href="https://www.angioma.org/" target="_blank">Angioma Alliance</a> · <a href="https://www.cavernoma.org.uk/" target="_blank">Cavernoma Alliance UK</a> · <a href="https://www.cavernousmalformation.com/" target="_blank">Cavernous Malformation Foundation</a></div></li>
+    </ul>
+  </div>
+
+  <div style="text-align:center;padding:30px 0">
+    <a class="donate-btn" href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎗️ Donate via Twitch</a>
+    <div class="donate-note" style="margin-top:12px">Thank you. Every bit helps. 💜</div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="charity.html">❤️ CMAM</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+</body>
+</html>

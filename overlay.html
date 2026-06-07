@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@700;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: transparent;
+      overflow: hidden;
+      font-family: 'Inter', Arial, sans-serif;
+      padding: 10px;
+    }
+
+    /* ── Main overlay card ── */
+    #nowPlayingCard {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(10,10,10,0.82);
+      border: 1px solid rgba(241,196,15,0.25);
+      border-left: 3px solid #f1c40f;
+      border-radius: 8px;
+      padding: 10px 16px;
+      backdrop-filter: blur(6px);
+      min-width: 280px;
+      max-width: 500px;
+      animation: slideIn .4s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .overlay-icon { font-size: 22px; flex-shrink: 0; }
+
+    .overlay-text { flex: 1; min-width: 0; }
+    .overlay-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #f1c40f;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .overlay-song {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: #fff;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.1;
+      text-shadow: 0 0 12px rgba(241,196,15,.3);
+    }
+    .overlay-artist {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f1c40f;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .overlay-queue {
+      font-size: 10px;
+      color: #555;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* Slopsmith mode indicator */
+    #slopIndicator {
+      display: none;
+      margin-top: 4px;
+      font-size: 10px;
+      color: #ff7733;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Empty state */
+    #emptyCard {
+      display: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px #000;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="nowPlayingCard">
+    <div class="overlay-icon">🎸</div>
+    <div class="overlay-text">
+      <div class="overlay-label">▶ Now Requested</div>
+      <div class="overlay-song" id="songName">Waiting...</div>
+      <div class="overlay-artist" id="artistName">—</div>
+      <div class="overlay-queue" id="queueCount"></div>
+      <div id="slopIndicator">🤘 SLOPSMITH MODE</div>
+    </div>
+  </div>
+  <div id="emptyCard">No requests in queue</div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
+      authDomain: "rocksmith-requests.firebaseapp.com",
+      databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
+      projectId: "rocksmith-requests"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Watch queue
+    db.ref("queue").orderByChild("timestamp").on("value", snap => {
+      const data = snap.val();
+      const card = document.getElementById("nowPlayingCard");
+      const empty = document.getElementById("emptyCard");
+
+      if (!data) {
+        card.style.display = "none";
+        empty.style.display = "block";
+        return;
+      }
+
+      const entries = Object.values(data).sort((a,b)=>a.timestamp-b.timestamp);
+      const first = entries[0];
+      card.style.display = "inline-flex";
+      empty.style.display = "none";
+      document.getElementById("songName").textContent = first.song;
+      document.getElementById("artistName").textContent = first.artist;
+      document.getElementById("queueCount").textContent =
+        entries.length > 1 ? `+${entries.length - 1} more in queue` : "1 song in queue";
+    });
+
+    // Watch slopsmith flag
+    db.ref("slopsmith").on("value", snap => {
+      document.getElementById("slopIndicator").style.display = snap.val() ? "block" : "none";
+    });
+  </script>
+</body>
+</html>
