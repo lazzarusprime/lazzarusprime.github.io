@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Library Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="shared.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2;margin-top:30px}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.titleBar .site-logo{width:36px;height:36px}}
+
+.stats-container{max-width:960px;margin:0 auto;padding:20px 14px}
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.hero-card{background:#141414;border:1px solid #222;border-radius:10px;padding:18px 14px;text-align:center;transition:.2s}
+.hero-card:hover{border-color:#f1c40f33;transform:translateY(-2px)}
+.hero-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#f1c40f;line-height:1;filter:drop-shadow(0 0 8px rgba(241,196,15,.4))}
+.hero-label{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-top:4px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#f1c40f;letter-spacing:2px;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid #222}
+
+/* Chart panels */
+.chart-panel{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:20px}
+.chart-panel canvas{display:block}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:640px){.chart-row{grid-template-columns:1fr}}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.donut-legend{display:flex;flex-direction:column;gap:8px;width:100%}
+.donut-legend-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.donut-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+.top-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:500px){.top-list{grid-template-columns:1fr}}
+.top-item{background:#141414;border:1px solid #1e1e1e;border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}
+.top-item:hover{border-color:#f1c40f33;background:#181818}
+.top-rank{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#333;width:28px;flex-shrink:0;text-align:center}
+.top-rank.gold{color:#f1c40f}.top-rank.silver{color:#aaa}.top-rank.bronze{color:#cd7f32}
+.top-art{width:40px;height:40px;border-radius:4px;object-fit:cover;background:#222;flex-shrink:0}
+.top-art-placeholder{width:40px;height:40px;border-radius:4px;background:#1e1e1e;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.top-info{flex:1;min-width:0}
+.top-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-count{font-size:11px;color:#555;font-weight:600;margin-top:2px}
+.az-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px}
+.az-cell{background:#141414;border:1px solid #1e1e1e;border-radius:6px;padding:8px;text-align:center;cursor:pointer;transition:.2s}
+.az-cell:hover{border-color:#f1c40f55;background:#181818}
+.az-letter{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f1c40f;line-height:1}
+.az-count{font-size:10px;color:#555;font-weight:700}
+.depth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.depth-card{background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.depth-icon{font-size:28px;flex-shrink:0}
+.depth-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#f1c40f;line-height:1}
+.depth-label{font-size:11px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.facts-grid{grid-template-columns:1fr}}
+.fact-card{background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:14px;transition:.2s}
+.fact-card:hover{border-color:#f1c40f22}
+.fact-label{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px}
+.fact-value{font-size:14px;color:#ccc;font-weight:700;line-height:1.3}
+.fact-sub{font-size:11px;color:#444;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Library Stats</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn active-page" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='charity.html'">❤️ CMAM</button>
+  <button class="nav-btn" onclick="randomSong(this)">🎲 Random</button>
+</div>
+
+<div class="stats-container">
+  <div class="hero-grid">
+    <div class="hero-card"><div class="hero-num" id="heroSongs">—</div><div class="hero-label">Total Songs</div></div>
+    <div class="hero-card"><div class="hero-num" id="heroArtists">—</div><div class="hero-label">Artists</div></div>
+    <div class="hero-card"><div class="hero-num" id="heroGenres">—</div><div class="hero-label">Genres Covered</div></div>
+    <div class="hero-card"><div class="hero-num" id="heroAvg">—</div><div class="hero-label">Avg Songs / Artist</div></div>
+  </div>
+
+  <!-- Two-column chart row -->
+  <div class="chart-row">
+    <div class="chart-panel">
+      <div class="section-title" style="margin-top:0">🎸 Genre Breakdown</div>
+      <canvas id="genreChart" height="320"></canvas>
+    </div>
+    <div class="chart-panel">
+      <div class="section-title" style="margin-top:0">🎯 Owned vs Not Owned</div>
+      <div class="donut-wrap">
+        <canvas id="ownedChart" style="max-width:220px;max-height:220px"></canvas>
+        <div class="donut-legend" id="ownedLegend"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">🏆 Top 20 Artists by Song Count</div>
+  <div class="top-list" id="topList"></div>
+
+  <div class="section-title">🔤 Artists by Starting Letter</div>
+  <div class="az-grid" id="azGrid"></div>
+
+  <div class="section-title">📚 Library Depth</div>
+  <div class="depth-grid">
+    <div class="depth-card"><div class="depth-icon">🎯</div><div><div class="depth-num" id="depthDeep">—</div><div class="depth-label">Artists with 10+ songs</div></div></div>
+    <div class="depth-card"><div class="depth-icon">🎵</div><div><div class="depth-num" id="depthMid">—</div><div class="depth-label">Artists with 5–9 songs</div></div></div>
+    <div class="depth-card"><div class="depth-icon">👋</div><div><div class="depth-num" id="depthSolo">—</div><div class="depth-label">One-song artists</div></div></div>
+    <div class="depth-card"><div class="depth-icon">🖼️</div><div><div class="depth-num" id="depthArt">—</div><div class="depth-label">Songs with album art</div></div></div>
+  </div>
+
+  <div class="section-title">🎲 Fun Facts</div>
+  <div class="facts-grid">
+    <div class="fact-card"><div class="fact-label">Most Songs by One Artist</div><div class="fact-value" id="factTopArtist">—</div><div class="fact-sub" id="factTopArtistSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Shortest Song Title</div><div class="fact-value" id="factShortest">—</div><div class="fact-sub" id="factShortestSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Longest Song Title</div><div class="fact-value" id="factLongest">—</div><div class="fact-sub" id="factLongestSub"></div></div>
+    <div class="fact-card"><div class="fact-label">"The …" Artists</div><div class="fact-value" id="factThe">—</div><div class="fact-sub" id="factTheSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Biggest Genre</div><div class="fact-value" id="factBigGenre">—</div><div class="fact-sub" id="factBigGenreSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Smallest Genre</div><div class="fact-value" id="factSmallGenre">—</div><div class="fact-sub" id="factSmallGenreSub"></div></div>
+  </div>
+
+  <div class="section-title">🔢 Song Title Trivia</div>
+  <div class="facts-grid">
+    <div class="fact-card"><div class="fact-label">Songs with Numbers in Title</div><div class="fact-value" id="factNums">—</div><div class="fact-sub" id="factNumsSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Live Versions in Library</div><div class="fact-value" id="factLive">—</div><div class="fact-sub">Titles containing "Live"</div></div>
+    <div class="fact-card"><div class="fact-label">Avg Song Title Length</div><div class="fact-value" id="factAvgLen">—</div><div class="fact-sub">Characters per title</div></div>
+    <div class="fact-card"><div class="fact-label">Most Common Title Word</div><div class="fact-value" id="factWord">—</div><div class="fact-sub" id="factWordSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Most Song Titles Start With</div><div class="fact-value" id="factLetter">—</div><div class="fact-sub" id="factLetterSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Acoustic Versions</div><div class="fact-value" id="factAcoustic">—</div><div class="fact-sub">Titles containing "Acoustic"</div></div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="charity.html">❤️ CMAM</a><span class="footer-sep">·</span>
+  <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<script>
+let _allArtists=[];
+
+function slotSpin(btn,onDone){const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];let i=0;btn.classList.add('spinning');const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);}
+function randomSong(btn){if(!_allArtists.length)return;const pick=_allArtists[Math.floor(Math.random()*_allArtists.length)];if(btn){slotSpin(btn,()=>{location.href='index.html?nosplash=1&search='+encodeURIComponent(pick);});}else{location.href='index.html?nosplash=1&search='+encodeURIComponent(pick);}}
+
+const GENRE_COLORS = [
+  '#f1c40f','#e74c3c','#3498db','#2ecc71','#9b59b6',
+  '#e67e22','#1abc9c','#e91e63','#00bcd4','#8bc34a','#ff5722'
+];
+
+async function init() {
+  const data = await (await fetch('songs.json')).json();
+  const artistMap={}, genreCounts={}, azCounts={};
+  let ownedCount=0, notOwnedCount=0;
+
+  data.forEach(s=>{
+    if(!artistMap[s.artist]) artistMap[s.artist]={name:s.artist,count:0,art:s.art||null};
+    artistMap[s.artist].count++;
+    if(!artistMap[s.artist].art && s.art) artistMap[s.artist].art=s.art;
+    const genre=s.genre||assignGenre(s.artist)||'Other';
+    genreCounts[genre]=(genreCounts[genre]||0)+1;
+    const letter=s.artist.replace(/^the\s/i,'')[0].toUpperCase();
+    if(/[A-Z]/.test(letter)) azCounts[letter]=(azCounts[letter]||0)+1; else azCounts['#']=(azCounts['#']||0)+1;
+    if(s.owned===false) notOwnedCount++; else ownedCount++;
+  });
+
+  const artistArr=Object.values(artistMap);
+  _allArtists=artistArr.map(a=>a.name);
+  const totalSongs=data.length, totalArtists=artistArr.length;
+
+  document.getElementById('heroSongs').textContent=totalSongs.toLocaleString();
+  document.getElementById('heroArtists').textContent=totalArtists.toLocaleString();
+  document.getElementById('heroGenres').textContent=Object.keys(genreCounts).length;
+  document.getElementById('heroAvg').textContent=(totalSongs/totalArtists).toFixed(1);
+
+  // ── Genre Chart (horizontal bar) ──
+  const sortedGenres=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]);
+  const genreCtx=document.getElementById('genreChart').getContext('2d');
+  new Chart(genreCtx,{
+    type:'bar',
+    data:{
+      labels:sortedGenres.map(([g])=>(GENRE_EMOJI[g]||'')+' '+g),
+      datasets:[{
+        data:sortedGenres.map(([,c])=>c),
+        backgroundColor:sortedGenres.map((_,i)=>GENRE_COLORS[i%GENRE_COLORS.length]+'cc'),
+        borderColor:sortedGenres.map((_,i)=>GENRE_COLORS[i%GENRE_COLORS.length]),
+        borderWidth:1,borderRadius:4
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,
+      onClick:(_,els)=>{if(els.length){const g=sortedGenres[els[0].index][0];location.href='index.html?nosplash=1&genre='+encodeURIComponent(g);}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw.toLocaleString()+' songs'}}},
+      scales:{x:{ticks:{color:'#666',font:{size:11}},grid:{color:'#1e1e1e'}},y:{ticks:{color:'#ccc',font:{size:12}},grid:{display:false}}}
+    }
+  });
+
+  // ── Owned/Not-Owned Donut ──
+  const ownedCtx=document.getElementById('ownedChart').getContext('2d');
+  // Since songs.json has no owned field, all are treated as owned
+  // The chart still renders correctly and will show real data when owned field added
+  const ownedPct=Math.round((ownedCount/totalSongs)*100);
+  const notOwnedPct=100-ownedPct;
+  new Chart(ownedCtx,{
+    type:'doughnut',
+    data:{
+      labels:['Owned','Not Owned'],
+      datasets:[{
+        data:[ownedCount, notOwnedCount||0],
+        backgroundColor:['#27ae60cc','#e74c3ccc'],
+        borderColor:['#27ae60','#e74c3c'],
+        borderWidth:2,hoverOffset:8
+      }]
+    },
+    options:{
+      responsive:true,cutout:'72%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw.toLocaleString()+' songs ('+Math.round(ctx.raw/totalSongs*100)+'%)'}}
+      }
+    }
+  });
+  document.getElementById('ownedLegend').innerHTML=`
+    <div class="donut-legend-item"><div class="donut-swatch" style="background:#27ae60"></div><span style="color:#ccc;font-weight:700">${ownedCount.toLocaleString()} Owned</span><span style="color:#555;margin-left:auto">${ownedPct}%</span></div>
+    <div class="donut-legend-item"><div class="donut-swatch" style="background:#e74c3c"></div><span style="color:#ccc;font-weight:700">${notOwnedCount.toLocaleString()} Not Owned</span><span style="color:#555;margin-left:auto">${notOwnedPct}%</span></div>
+    <div style="font-size:11px;color:#444;margin-top:6px;line-height:1.4">${notOwnedCount===0?'Add an <code style="color:#666">owned</code> field to songs.json to track this.':''}</div>`;
+
+  // ── Top 20 ──
+  const top20=[...artistArr].sort((a,b)=>b.count-a.count).slice(0,20);
+  const topDiv=document.getElementById('topList');
+  const rankClass=i=>i===0?'gold':i===1?'silver':i===2?'bronze':'';
+  top20.forEach((a,i)=>{
+    const artHtml=a.art?`<img class="top-art" src="${a.art}" loading="lazy" alt="" onerror="this.style.display='none'">`:`<div class="top-art-placeholder">🎵</div>`;
+    topDiv.innerHTML+=`<div class="top-item" onclick="location.href='index.html?nosplash=1&search=${encodeURIComponent(a.name)}'"><div class="top-rank ${rankClass(i)}">${i+1}</div>${artHtml}<div class="top-info"><div class="top-name">${esc(a.name)}</div><div class="top-count">${a.count} songs</div></div></div>`;
+  });
+
+  // ── A-Z ──
+  const azDiv=document.getElementById('azGrid');
+  '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letter=>{
+    const count=azCounts[letter]||0;
+    azDiv.innerHTML+=`<div class="az-cell" onclick="location.href='artists.html?letter=${letter}'" title="${count} artists"><div class="az-letter">${letter}</div><div class="az-count">${count}</div></div>`;
+  });
+
+  // ── Depth ──
+  const counts=artistArr.map(a=>a.count);
+  document.getElementById('depthDeep').textContent=counts.filter(c=>c>=10).length.toLocaleString();
+  document.getElementById('depthMid').textContent=counts.filter(c=>c>=5&&c<10).length.toLocaleString();
+  document.getElementById('depthSolo').textContent=counts.filter(c=>c===1).length.toLocaleString();
+  document.getElementById('depthArt').textContent=Math.round((data.filter(s=>s.art).length/totalSongs)*100)+'%';
+
+  // ── Fun facts ──
+  const topArtist=[...artistArr].sort((a,b)=>b.count-a.count)[0];
+  document.getElementById('factTopArtist').textContent=topArtist.name;
+  document.getElementById('factTopArtistSub').textContent=topArtist.count+' songs in the library';
+  const byLen=[...data].sort((a,b)=>a.song.length-b.song.length);
+  document.getElementById('factShortest').textContent='"'+byLen[0].song+'"';
+  document.getElementById('factShortestSub').textContent=byLen[0].artist;
+  const longest=byLen[byLen.length-1];
+  document.getElementById('factLongest').textContent='"'+longest.song.slice(0,55)+(longest.song.length>55?'…':'')+'"';
+  document.getElementById('factLongestSub').textContent=longest.artist+' · '+longest.song.length+' chars';
+  const theArtists=[...new Set(data.filter(s=>s.artist.toLowerCase().startsWith('the ')).map(s=>s.artist))];
+  const theSongs=data.filter(s=>s.artist.toLowerCase().startsWith('the ')).length;
+  document.getElementById('factThe').textContent=theArtists.length+' artists';
+  document.getElementById('factTheSub').textContent=theSongs.toLocaleString()+' total songs';
+  document.getElementById('factBigGenre').textContent=(GENRE_EMOJI[sortedGenres[0][0]]||'')+' '+sortedGenres[0][0];
+  document.getElementById('factBigGenreSub').textContent=sortedGenres[0][1].toLocaleString()+' songs · '+Math.round((sortedGenres[0][1]/totalSongs)*100)+'% of library';
+  const sg=sortedGenres[sortedGenres.length-1];
+  document.getElementById('factSmallGenre').textContent=(GENRE_EMOJI[sg[0]]||'')+' '+sg[0];
+  document.getElementById('factSmallGenreSub').textContent=sg[1].toLocaleString()+' songs · '+Math.round((sg[1]/totalSongs)*100)+'% of library';
+
+  // ── Title trivia ──
+  const numS=data.filter(s=>/\d/.test(s.song)).length;
+  document.getElementById('factNums').textContent=numS.toLocaleString();
+  document.getElementById('factNumsSub').textContent=Math.round((numS/totalSongs)*100)+'% of the library';
+  document.getElementById('factLive').textContent=data.filter(s=>s.song.toLowerCase().includes('live')).length.toLocaleString();
+  document.getElementById('factAvgLen').textContent=(data.reduce((s,x)=>s+x.song.length,0)/totalSongs).toFixed(1);
+  const stop=new Set(['the','a','an','of','in','on','at','to','for','and','or','but','my','me','you','your','i','is','it','be','do','no','so','if','as','we','he','she','they','that','this','with','all','by','up','out','not','get','got']);
+  const wc={};
+  data.forEach(s=>s.song.toLowerCase().split(/\s+/).forEach(w=>{const c=w.replace(/[^a-z]/g,'');if(c.length>2&&!stop.has(c))wc[c]=(wc[c]||0)+1;}));
+  const tw=Object.entries(wc).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('factWord').textContent=tw?'"'+tw[0]+'"':'—';
+  document.getElementById('factWordSub').textContent=tw?tw[1].toLocaleString()+' titles contain it':'';
+  const lc={};
+  data.forEach(s=>{if(s.song){const l=s.song[0].toUpperCase();if(/[A-Z]/.test(l))lc[l]=(lc[l]||0)+1;}});
+  const tl=Object.entries(lc).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('factLetter').textContent=tl?'"'+tl[0]+'"':'—';
+  document.getElementById('factLetterSub').textContent=tl?tl[1].toLocaleString()+' songs start with '+tl[0]:'';
+  document.getElementById('factAcoustic').textContent=data.filter(s=>s.song.toLowerCase().includes('acoustic')).length.toLocaleString();
+}
+init();
+</script>
+</body>
+</html>
