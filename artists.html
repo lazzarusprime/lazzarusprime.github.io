@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Artists</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
+.topBar input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.artistGrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;gap:8px!important;padding:10px!important}}
+
+#genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:#141414;border-bottom:1px solid #222;justify-content:center}
+.genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.genre-btn:hover{border-color:#f1c40f;color:#f1c40f}
+.genre-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+#alphabet{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;justify-content:center}
+.alpha-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:11px;transition:.2s}
+.alpha-btn:hover{background:#444;border-color:#f1c40f;color:#f1c40f}
+.alpha-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+#artistStats{background:#151515;border-bottom:1px solid #222}
+#artistToggle{cursor:pointer;margin:0;padding:10px 14px;font-size:14px;font-weight:700;user-select:none}
+#artistList{display:none;padding:10px 14px;border-top:1px solid #222;animation:slideDown .3s ease-out;columns:2;gap:20px}
+@media(max-width:500px){#artistList{columns:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+#artistList div{padding:4px 0;cursor:pointer;transition:.15s;break-inside:avoid;font-size:13px}
+#artistList div:hover{color:#f1c40f;padding-left:4px}
+.flame-effect{animation:warmPulse .6s ease-out}
+@keyframes warmPulse{0%{box-shadow:0 0 0 transparent}50%{box-shadow:inset 0 0 30px rgba(241,196,15,.15)}100%{box-shadow:0 0 0 transparent}}
+#activeFilters{display:none;padding:7px 12px;background:#181818;border-bottom:1px solid #222;font-size:13px;color:#888;text-align:center}
+#activeFilters span{color:#f1c40f}
+#activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
+.listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a}
+.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#666;letter-spacing:.5px}
+.resultsCount{font-size:12px;color:#555}
+#sortBar{display:flex;gap:6px;padding:8px 12px;background:#141414;border-bottom:1px solid #222;align-items:center}
+#sortBar span{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.sort-btn{background:transparent;color:#666;border:1px solid #333;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;transition:.2s}
+.sort-btn:hover{border-color:#f1c40f;color:#f1c40f}
+.sort-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.artistGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:14px}
+.artistCard{background:#181818;border:1px solid #222;border-radius:8px;cursor:pointer;transition:.2s;overflow:hidden;display:flex;flex-direction:column}
+.artistCard:hover{border-color:#f1c40f;transform:translateY(-3px);box-shadow:0 6px 20px rgba(241,196,15,.12)}
+.artistCard:active{transform:translateY(0)}
+.artistCardArt{width:100%;aspect-ratio:1;object-fit:cover;background:#111;display:block}
+.artistCardArtPlaceholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1a1a1a,#222);display:flex;align-items:center;justify-content:center;font-size:36px;color:#333}
+.artistCardBody{padding:10px 10px 8px}
+.artistCardName{font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;line-height:1.2}
+.artistCardCount{font-size:11px;color:#888;font-weight:600}
+.artistCardGenre{font-size:10px;color:#555;margin-top:3px}
+/* owned ratio bar */
+.ownedBar{height:3px;background:#222;border-radius:2px;margin-top:6px;overflow:hidden}
+.ownedBarFill{height:100%;background:linear-gradient(90deg,#27ae60,#4caf50);border-radius:2px;transition:width .4s}
+.ownedBarFill.partial{background:linear-gradient(90deg,#f39c12,#f1c40f)}
+.ownedBarFill.none{background:#e74c3c}
+.pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
+
+/* ═══════════════════════════════
+   ARTIST DETAIL MODAL / FLYOUT
+   ═══════════════════════════════ */
+#artistModal{position:fixed;inset:0;z-index:500;pointer-events:none}
+#artistModalBg{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .3s;pointer-events:none}
+#artistModalPanel{position:absolute;bottom:0;left:0;right:0;background:#141414;border-top:2px solid #f1c40f44;border-radius:16px 16px 0 0;max-height:85vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,1,.2,1);overflow:hidden}
+#artistModal.open{pointer-events:all}
+#artistModal.open #artistModalBg{background:rgba(0,0,0,.7);pointer-events:all}
+#artistModal.open #artistModalPanel{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:#333;border-radius:2px;margin:12px auto 0}
+.modal-header{display:flex;align-items:center;gap:14px;padding:14px 16px 10px;border-bottom:1px solid #1e1e1e;flex-shrink:0}
+.modal-art{width:64px;height:64px;border-radius:8px;object-fit:cover;background:#222;flex-shrink:0}
+.modal-art-placeholder{width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;color:#444}
+.modal-title-block{flex:1;min-width:0}
+.modal-artist-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-meta{font-size:12px;color:#f1c40f;font-weight:700;margin-top:3px}
+.modal-close{background:transparent;border:1px solid #333;color:#666;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.modal-close:hover{border-color:#f1c40f;color:#f1c40f}
+.modal-actions{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid #1a1a1a;flex-shrink:0}
+.modal-action-btn{flex:1;padding:9px;border-radius:6px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;transition:.2s;border:none}
+.modal-action-btn.primary{background:#f1c40f;color:#111}
+.modal-action-btn.primary:hover{background:#ffe033}
+.modal-action-btn.secondary{background:#2a2a2a;color:#aaa;border:1px solid #444}
+.modal-action-btn.secondary:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1800}
+.modal-songs{overflow-y:auto;flex:1;padding:0}
+.modal-song-row{display:flex;align-items:center;padding:9px 16px;border-bottom:1px solid #1a1a1a;gap:10px;transition:.15s}
+.modal-song-row:hover{background:#1a1a1a}
+.modal-song-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#333;width:28px;flex-shrink:0;text-align:center}
+.modal-song-title{flex:1;font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-owned-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+.modal-owned-badge.owned{background:#1a3a1a;color:#4caf50;border:1px solid #2d5a2d}
+.modal-owned-badge.notowned{background:#3a1a1a;color:#e74c3c;border:1px solid #5a2d2d}
+.modal-req-btn{background:#1a3a1a;color:#4caf50;border:1px solid #2d5a2d;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:700;font-size:11px;transition:.2s;white-space:nowrap;flex-shrink:0}
+.modal-req-btn:hover{background:#2d5a2d;color:#7ddd80}
+/* Toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 18px;min-width:260px;max-width:90vw;z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toastIcon{font-size:20px;margin-bottom:4px}
+#toastTitle{font-weight:700;font-size:14px;color:#4caf50;margin-bottom:2px}
+#toastMsg{font-size:12px;color:#888;line-height:1.4}
+</style>
+</head>
+<body>
+
+<div id="toast"><div id="toastIcon">🔥</div><div id="toastTitle"></div><div id="toastMsg"></div></div>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Artists</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn active-page" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='charity.html'">❤️ CMAM</button>
+  <button class="nav-btn" onclick="randomArtist(this)">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist…" oninput="handleSearch()" autocomplete="off">
+</div>
+
+<div id="genreBar"></div>
+<div id="activeFilters">Showing: <span id="filterLabel"></span><button onclick="clearAll()">✕ Clear</button></div>
+<div id="alphabet"></div>
+<div id="artistStats">
+  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+  <div id="artistList"></div>
+</div>
+<div id="sortBar">
+  <span>Sort:</span>
+  <button class="sort-btn active" id="sortAlpha" onclick="setSort('alpha')">A–Z</button>
+  <button class="sort-btn" id="sortCount" onclick="setSort('count')">Most Songs</button>
+</div>
+<div id="paginationTop" class="pagination"></div>
+<div class="listHeader"><h3>ALL ARTISTS</h3><span id="resultsCount" class="resultsCount"></span></div>
+<div class="artistGrid" id="artistGrid"></div>
+<div id="paginationBottom" class="pagination"></div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="charity.html">❤️ CMAM</a><span class="footer-sep">·</span>
+  <a href="#" onclick="randomArtist();return false;">🎲 Random</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<!-- Artist detail modal -->
+<div id="artistModal">
+  <div id="artistModalBg" onclick="closeModal()"></div>
+  <div id="artistModalPanel">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div id="modalArtImg" class="modal-art-placeholder">🎵</div>
+      <div class="modal-title-block">
+        <div class="modal-artist-name" id="modalArtistName">Artist</div>
+        <div class="modal-meta" id="modalArtistMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-action-btn primary" id="modalBrowseBtn">🏠 Browse All Songs</button>
+      <button class="modal-action-btn secondary" id="modalRandomBtn">🎲 Random Song</button>
+    </div>
+    <div class="modal-songs" id="modalSongList"></div>
+  </div>
+</div>
+
+<script>
+let allArtists=[], filteredArtists=[], allSongs=[], currentPage=1;
+const perPage=80;
+let activeGenre=null, currentSort='alpha', activeAlphaLetter=null;
+let toastTimer=null;
+
+/* ── Firebase for request writing ── */
+let firebaseDb = null;
+function initFirebase() {
+  try {
+    if (typeof firebase !== 'undefined') {
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      firebaseDb = firebase.database();
+    }
+  } catch(e) {}
+}
+
+async function init(){
+  try{
+    allSongs = await(await fetch('songs.json')).json();
+    const artistMap={};
+    allSongs.forEach(s=>{
+      if(!artistMap[s.artist]) artistMap[s.artist]={name:s.artist,count:0,art:s.art||null,genre:s.genre||assignGenre(s.artist),ownedCount:0};
+      artistMap[s.artist].count++;
+      if(!artistMap[s.artist].art && s.art) artistMap[s.artist].art=s.art;
+      if(s.owned!==false) artistMap[s.artist].ownedCount++;
+    });
+    allArtists=Object.values(artistMap).sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'}));
+    filteredArtists=[...allArtists];
+    const urlParams=new URLSearchParams(window.location.search);
+    const letter=urlParams.get('letter');
+    if(letter) jumpToLetter(letter);
+    buildGenreBar();buildAlphabet();buildArtistStats();renderGrid();
+    initFirebase();
+  }catch(e){console.error(e);}
+}
+
+function setSort(type){
+  currentSort=type;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sort'+(type==='alpha'?'Alpha':'Count')).classList.add('active');
+  applySort(filteredArtists);currentPage=1;renderGrid();
+}
+function applySort(arr){
+  if(currentSort==='alpha') arr.sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'}));
+  else arr.sort((a,b)=>b.count-a.count);
+}
+function buildGenreBar(){
+  const bar=document.getElementById('genreBar');bar.innerHTML='';
+  for(const genre of Object.keys(GENRE_MAP)){
+    const btn=document.createElement('button');btn.className='genre-btn';btn.textContent=(GENRE_EMOJI[genre]||'')+' '+genre;btn.onclick=()=>toggleGenre(genre,btn);bar.appendChild(btn);
+  }
+}
+function toggleGenre(genre,btn){
+  if(activeGenre===genre){activeGenre=null;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));clearAll();return;}
+  activeGenre=genre;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('searchBox').value='';
+  const list=GENRE_MAP[genre].map(a=>a.toLowerCase());
+  filteredArtists=allArtists.filter(a=>{const l=a.name.toLowerCase();return list.some(g=>l===g||l.includes(g)||g.includes(l));});
+  applySort(filteredArtists);currentPage=1;
+  document.getElementById('activeFilters').style.display='block';
+  document.getElementById('filterLabel').textContent=(GENRE_EMOJI[genre]||'')+' '+genre+' ('+filteredArtists.length+' artists)';
+  renderGrid();
+}
+function renderGrid(){
+  const grid=document.getElementById('artistGrid');grid.innerHTML='';
+  const start=(currentPage-1)*perPage;const frag=document.createDocumentFragment();
+  filteredArtists.slice(start,start+perPage).forEach(a=>{
+    const card=document.createElement('div');card.className='artistCard';
+    card.onclick=()=>openModal(a.name);
+    const emoji=a.genre?(GENRE_EMOJI[a.genre]||'🎵'):'🎵';
+    const artHtml=a.art?`<img class="artistCardArt" src="${a.art}" alt="${esc(a.name)}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="artistCardArtPlaceholder" style="display:none">${emoji}</div>`:`<div class="artistCardArtPlaceholder">${emoji}</div>`;
+    // owned ratio
+    const ratio = a.ownedCount / a.count;
+    const barClass = ratio >= 1 ? '' : ratio > 0 ? 'partial' : 'none';
+    const barW = Math.round(ratio*100);
+    card.innerHTML=artHtml+`<div class="artistCardBody">
+      <div class="artistCardName">${esc(a.name)}</div>
+      <div class="artistCardCount">${a.count} ${a.count===1?'song':'songs'}</div>
+      ${a.genre?`<div class="artistCardGenre">${GENRE_EMOJI[a.genre]||''} ${a.genre}</div>`:''}
+      <div class="ownedBar"><div class="ownedBarFill ${barClass}" style="width:${barW}%"></div></div>
+    </div>`;
+    frag.appendChild(card);
+  });
+  grid.appendChild(frag);
+  document.getElementById('resultsCount').textContent=filteredArtists.length!==allArtists.length?filteredArtists.length+' artists':allArtists.length+' artists total';
+  renderPagination();
+}
+function renderPagination(){
+  const total=Math.ceil(filteredArtists.length/perPage)||1;
+  ['paginationTop','paginationBottom'].forEach(id=>{
+    const c=document.getElementById(id);c.innerHTML='';
+    if(currentPage>1){const b=document.createElement('button');b.textContent='◀ Prev';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
+    const l=document.createElement('span');l.textContent=` Page ${currentPage} / ${total} `;l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
+    if(currentPage<total){const b=document.createElement('button');b.textContent='Next ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
+  });
+}
+function buildAlphabet(){
+  const div=document.getElementById('alphabet');div.innerHTML='';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letter=>{
+    const b=document.createElement('button');b.textContent=letter;b.className='alpha-btn';b.dataset.letter=letter;
+    b.onclick=()=>jumpToLetter(letter,b);div.appendChild(b);
+  });
+}
+function jumpToLetter(letter,btn){
+  document.getElementById('searchBox').value='';activeGenre=null;
+  document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display='none';
+  filteredArtists=[...allArtists];applySort(filteredArtists);
+  const idx=filteredArtists.findIndex(a=>a.name.replace(/^the\s/i,'').toLowerCase().startsWith(letter.toLowerCase()));
+  if(idx===-1){renderGrid();return;}
+  currentPage=Math.floor(idx/perPage)+1;renderGrid();
+  document.querySelectorAll('.alpha-btn').forEach(b=>b.classList.remove('active'));
+  (btn||document.querySelector(`.alpha-btn[data-letter="${letter}"]`))?.classList.add('active');
+  activeAlphaLetter=letter;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function buildArtistStats(){
+  const sorted=[...allArtists].sort((a,b)=>b.count-a.count).slice(0,10);
+  const list=document.getElementById('artistList');const sc=document.getElementById('artistStats');list.innerHTML='';
+  sorted.forEach(a=>{const row=document.createElement('div');row.innerHTML=`${esc(a.name)} <span style="color:#555">(${a.count})</span>`;row.onclick=()=>openModal(a.name);list.appendChild(row);});
+  document.getElementById('artistToggle').onclick=()=>{
+    const hidden=list.style.display==='none'||list.style.display==='';
+    sc.classList.remove('flame-effect');void sc.offsetWidth;sc.classList.add('flame-effect');
+    list.style.display=hidden?'block':'none';
+    document.getElementById('artistToggle').querySelector('span:last-child').textContent=hidden?'▼':'▶';
+  };
+}
+function handleSearch(){
+  const q=document.getElementById('searchBox').value.toLowerCase();
+  activeGenre=null;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display='none';
+  filteredArtists=allArtists.filter(a=>a.name.toLowerCase().includes(q));
+  applySort(filteredArtists);currentPage=1;renderGrid();
+}
+function clearAll(){
+  document.getElementById('searchBox').value='';activeGenre=null;
+  document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.alpha-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display='none';
+  filteredArtists=[...allArtists];applySort(filteredArtists);currentPage=1;renderGrid();
+}
+
+/* ── ARTIST MODAL ── */
+function openModal(artistName) {
+  const artistSongs = allSongs.filter(s => s.artist === artistName);
+  const artistData = allArtists.find(a => a.name === artistName);
+  if (!artistData) return;
+
+  // header
+  const imgEl = document.getElementById('modalArtImg');
+  if (artistData.art) {
+    imgEl.outerHTML = `<img id="modalArtImg" class="modal-art" src="${artistData.art}" alt="${esc(artistName)}" onerror="this.outerHTML='<div id=\\'modalArtImg\\' class=\\'modal-art-placeholder\\'>🎵</div>'">`;
+  } else {
+    const ph = document.getElementById('modalArtImg');
+    ph.className = 'modal-art-placeholder';
+    ph.innerHTML = GENRE_EMOJI[artistData.genre] || '🎵';
+  }
+  document.getElementById('modalArtistName').textContent = artistName;
+  const ownedCount = artistSongs.filter(s => s.owned !== false).length;
+  const genre = artistData.genre || '';
+  document.getElementById('modalArtistMeta').textContent =
+    `${artistSongs.length} songs${genre?' · '+(GENRE_EMOJI[genre]||'')+' '+genre:''}`;
+
+  // actions
+  document.getElementById('modalBrowseBtn').onclick = () => {
+    location.href = `index.html?nosplash=1&search=${encodeURIComponent(artistName)}`;
+  };
+  document.getElementById('modalRandomBtn').onclick = () => {
+    const rand = artistSongs[Math.floor(Math.random()*artistSongs.length)];
+    if (rand) requestSongFromModal(artistName, rand.song);
+  };
+
+  // song list
+  const listEl = document.getElementById('modalSongList');
+  listEl.innerHTML = '';
+  artistSongs.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'modal-song-row';
+    const badgeHtml = s.owned === false
+      ? `<span class="modal-owned-badge notowned">Not Owned</span>`
+      : `<span class="modal-owned-badge owned">Owned</span>`;
+    row.innerHTML = `
+      <div class="modal-song-num">${i+1}</div>
+      <div class="modal-song-title">${esc(s.song)}</div>
+      ${badgeHtml}
+      <button class="modal-req-btn" onclick="requestSongFromModal('${s.artist.replace(/'/g,"\\'")}','${s.song.replace(/'/g,"\\'")}')">Request</button>`;
+    listEl.appendChild(row);
+  });
+
+  document.getElementById('artistModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('artistModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function requestSongFromModal(artist, song) {
+  const cmd = `!request "${artist}" "${song}"`;
+  try { await navigator.clipboard.writeText(cmd); } catch(e) {}
+  showToast('Copied! Paste into Twitch chat', artist+' — '+song, '🔥', '#4caf50');
+}
+
+function showToast(title,msg,icon,color){
+  const t=document.getElementById('toast');
+  document.getElementById('toastIcon').textContent=icon||'🔥';
+  document.getElementById('toastTitle').textContent=title;
+  document.getElementById('toastTitle').style.color=color||'#4caf50';
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function slotSpin(btn,onDone){
+  const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];let i=0;
+  btn.classList.add('spinning');
+  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);
+  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);
+}
+function randomArtist(btn){
+  if(!allArtists.length) return;
+  const pick=allArtists[Math.floor(Math.random()*allArtists.length)].name;
+  if(btn){slotSpin(btn,()=>{location.href='index.html?nosplash=1&search='+encodeURIComponent(pick);});}
+  else{location.href='index.html?nosplash=1&search='+encodeURIComponent(pick);}
+}
+document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('searchBox').focus();}if(e.key==='Escape'){closeModal();}});
+
+// Firebase script load
+const fbScript1=document.createElement('script');fbScript1.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+const fbScript2=document.createElement('script');fbScript2.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js';
+fbScript2.onload=()=>initFirebase();
+document.head.appendChild(fbScript1);fbScript1.onload=()=>document.head.appendChild(fbScript2);
+
+init();
+</script>
+</body>
+</html>
