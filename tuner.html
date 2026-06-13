@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime — Tuner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+
+/* ── TITLE BAR ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+
+/* ── TOP BAR ── */
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.topBar-action{margin-left:auto}
+.action-btn{background:#ff5500;color:white;border:none;padding:9px 18px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;font-family:'Inter',sans-serif}
+.action-btn:hover{background:#ff7733}
+.action-btn.active{background:#c0392b;box-shadow:0 0 12px rgba(192,57,43,.5);animation:btnPulse 2s ease-in-out infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 8px rgba(192,57,43,.5)}50%{box-shadow:0 0 18px rgba(192,57,43,.9)}}
+
+/* ── MENU ROW ── */
+.menu-row{display:flex;gap:12px;background:#141414;padding:10px 16px;justify-content:center;border-bottom:1px solid #222;flex-wrap:wrap;align-items:flex-end}
+.menu-group{display:flex;flex-direction:column;gap:4px}
+.menu-group label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#666}
+select{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;min-width:160px;transition:.15s}
+select:focus{outline:none;border-color:#f1c40f}
+
+/* ── WORKSPACE ── */
+.app-workspace{flex:1;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;padding:20px;max-width:1020px;margin:0 auto;width:100%;gap:20px}
+.tuner-container{flex:1;min-width:300px;max-width:620px}
+.display-panel{background:#141414;border:1px solid #222;border-radius:14px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+
+/* ── STRING PICKER CHIPS ── */
+.string-picker{display:flex;gap:8px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+.string-chip{background:#1e1e1e;border:1px solid #333;color:#555;padding:9px 16px;border-radius:8px;font-weight:700;font-size:15px;transition:.25s;min-width:48px;text-align:center;position:relative;cursor:default;user-select:none}
+.string-chip.active{background:#ff5500;color:#fff;border-color:#ff7733;box-shadow:0 0 16px rgba(255,85,0,.4)}
+.string-chip.in-tune{background:#27ae60;border-color:#2ecc71;color:#fff;box-shadow:0 0 18px rgba(39,174,96,.6)}
+.string-chip .ref-btn{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);background:#2a2a2a;border:1px solid #444;color:#666;font-size:8px;padding:2px 5px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:.15s;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.3px;display:none}
+.string-chip:hover .ref-btn{display:block}
+.string-chip .ref-btn:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1a1a}
+
+/* ── BIG NOTE DISPLAY ── */
+.note-display{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,18vw,140px);line-height:1;color:#fff;margin:10px 0 4px;transition:color .15s,filter .1s;letter-spacing:4px}
+.note-display.flaming{animation:flamePulse .6s infinite alternate ease-in-out}
+.note-display.glow-intune{color:#27ae60;animation:intuneLaser .4s infinite alternate ease-in-out}
+@keyframes flamePulse{0%{filter:drop-shadow(0 0 8px #ff3300) drop-shadow(0 0 20px #ff7700)}100%{filter:drop-shadow(0 0 14px #ff5500) drop-shadow(0 0 32px #ffaa00)}}
+@keyframes intuneLaser{0%{filter:drop-shadow(0 0 10px #27ae60) drop-shadow(0 0 25px #2ecc71)}100%{filter:drop-shadow(0 0 20px #2ecc71) drop-shadow(0 0 50px #a3e4d7)}}
+
+.freq-display{font-size:16px;color:#666;font-weight:600;font-family:monospace;margin-bottom:14px;letter-spacing:.5px}
+.status-pill{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:6px 20px;border-radius:20px;display:inline-block;transition:.2s}
+.status-pill.in-tune{color:#27ae60;background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3)}
+.status-pill.off-tune{color:#ff5500;background:rgba(255,85,0,.1);border:1px solid rgba(255,85,0,.2)}
+.status-pill.stopped{color:#444;background:#1a1a1a;border:1px solid #2a2a2a}
+
+/* ── SEMICIRCULAR ARC METER ── */
+.arc-meter-wrap{margin:20px auto 0;position:relative;width:100%;max-width:360px}
+#arcCanvas{display:block;width:100%;height:auto}
+.arc-cents-label{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;color:#555;font-weight:700;letter-spacing:1px;font-family:monospace;pointer-events:none}
+.arc-scale-left{position:absolute;left:0;bottom:10px;font-size:10px;color:#444;font-weight:700}
+.arc-scale-right{position:absolute;right:0;bottom:10px;font-size:10px;color:#444;font-weight:700}
+
+/* ── LEGEND PANEL ── */
+.legend-panel{width:240px;background:#141414;border:1px solid #222;border-radius:14px;padding:18px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.legend-title{font-size:11px;font-weight:900;text-transform:uppercase;color:#f1c40f;letter-spacing:1.5px;border-bottom:1px solid #222;padding-bottom:10px;margin-bottom:12px;text-align:center}
+.legend-list{display:flex;flex-direction:column;gap:7px}
+.legend-row{display:flex;justify-content:space-between;align-items:center;background:#1d1d1d;padding:9px 12px;border-radius:6px;border:1px solid #262626;font-size:13px;font-weight:600;color:#888;transition:.2s;gap:6px}
+.legend-row .s-lbl{font-weight:700;color:#fff;background:#2a2a2a;padding:2px 8px;border-radius:4px;min-width:26px;text-align:center;font-size:13px}
+.legend-row .hz-lbl{font-family:monospace;font-size:12px;color:#555}
+.legend-row.active-match{border-color:#ff5500;background:rgba(255,85,0,.1);color:#ff7733;box-shadow:0 0 10px rgba(255,85,0,.15)}
+.legend-row.active-match .s-lbl{background:#ff5500;color:#fff}
+.legend-row.in-tune-match{border-color:#27ae60;background:rgba(39,174,96,.1);color:#2ecc71;box-shadow:0 0 10px rgba(39,174,96,.2)}
+.legend-row.in-tune-match .s-lbl{background:#27ae60;color:#fff}
+.legend-row .play-tone{background:transparent;border:1px solid #333;color:#555;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0;font-family:'Inter',sans-serif}
+.legend-row .play-tone:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1a00}
+.legend-row .play-tone.playing{border-color:#f1c40f;color:#f1c40f;background:#2a2a00;animation:tonePulse 1s ease-in-out infinite}
+@keyframes tonePulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+
+@media(max-width:660px){.app-workspace{padding:12px;gap:14px}.legend-panel{width:100%}.display-panel{padding:20px 14px}.arc-meter-wrap{max-width:100%}.titleBar .site-logo{width:36px;height:36px}.socialLinks{display:none}.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}}
+/* ── DRAG PANELS ── */
+.drag-workspace{display:flex;flex-wrap:wrap;gap:16px;padding:16px;justify-content:flex-start;align-items:flex-start;max-width:1100px;margin:0 auto;width:100%}
+.drag-panel{background:#141414;border:1px solid #222;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s;position:relative}
+.drag-panel.dragging{opacity:.5;border-color:#f1c40f55}
+.drag-panel.drag-over{border-color:#f1c40f;box-shadow:0 0 0 2px #f1c40f55;background:#141410}
+.drag-handle{display:flex;align-items:center;gap:8px;padding:8px 14px 6px;cursor:grab;border-bottom:1px solid #1e1e1e;user-select:none;background:#181818;border-radius:12px 12px 0 0}
+.drag-handle:active{cursor:grabbing}
+.drag-handle-icon{color:#333;font-size:14px;letter-spacing:-2px;line-height:1}
+.drag-handle-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#f1c40f;flex:1}
+.drag-handle-hint{font-size:9px;color:#2a2a2a;font-weight:600}
+.drag-panel-body{padding:14px}
+.drag-panel.collapsed .drag-panel-body{display:none}
+.drag-panel.collapsed{border-radius:12px}
+.drag-panel.collapsed .drag-handle{border-bottom:none;border-radius:12px}
+.collapse-btn{background:transparent;border:none;color:#333;cursor:pointer;font-size:13px;padding:0 4px;transition:.15s;line-height:1}
+.collapse-btn:hover{color:#f1c40f}
+.w-xl{flex:1;min-width:340px} .w-lg{width:420px} .w-md{width:300px}
+@media(max-width:660px){.drag-panel,.w-xl,.w-lg,.w-md{width:100%!important;min-width:unset!important}}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Tuner</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn active-page">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+  <button class="nav-btn" onclick="location.href='charity.html'">❤️ CMAM</button>
+  <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+  <div class="topBar-action">
+    <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">🎙️ Start Tuner</button>
+  </div>
+</div>
+
+<div class="menu-row">
+  <div class="menu-group">
+    <label>Instrument</label>
+    <select id="instrumentSelect" onchange="buildMenuHierarchy()">
+      <option value="bass">Bass Guitar</option>
+      <option value="guitar">Guitar</option>
+    </select>
+  </div>
+  <div class="menu-group" id="stringCountGroup">
+    <label>Strings</label>
+    <select id="stringCountSelect" onchange="buildMenuHierarchy()">
+      <option value="4">4-String</option>
+      <option value="5">5-String</option>
+      <option value="6">6-String</option>
+    </select>
+  </div>
+  <div class="menu-group">
+    <label>Tuning Profile</label>
+    <select id="tuningProfileSelect" onchange="updateTargetStrings()"></select>
+  </div>
+</div>
+
+<div class="drag-workspace" id="dragWorkspace">
+
+  <!-- PANEL: Tuner display -->
+  <div class="drag-panel w-xl" id="dp-tuner" draggable="true">
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 Tuner Display</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-tuner')" title="Collapse">▾</button></div>
+    <div class="drag-panel-body" style="text-align:center">
+      <div id="stringPicker" class="string-picker"></div>
+      <div id="noteDisplay" class="note-display">—</div>
+      <div id="freqDisplay" class="freq-display">0.00 Hz</div>
+      <div id="statusPill" class="status-pill stopped">Stopped</div>
+      <div class="arc-meter-wrap">
+        <span class="arc-scale-left">−50¢</span>
+        <canvas id="arcCanvas"></canvas>
+        <span class="arc-scale-right">+50¢</span>
+        <span class="arc-cents-label" id="centsLabel"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Reference frequencies -->
+  <div class="drag-panel w-md" id="dp-reference" draggable="true">
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 Reference Frequencies</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-reference')" title="Collapse">▾</button></div>
+    <div class="drag-panel-body">
+      <div class="legend-title" id="legendTitle">Reference Frequencies</div>
+      <div class="legend-list" id="legendList"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="charity.html">❤️ CMAM</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   TUNING DATA
+══════════════════════════════════════════════ */
+const tuningMatrix = {
+  bass: {
+    4: {
+      "Standard (E)":      ["E","A","D","G"],
+      "Drop D":            ["D","A","D","G"],
+      "Half-Step Down":    ["D#","G#","C#","F#"],
+      "Full-Step Down":    ["D","G","C","F"],
+      "Drop C":            ["C","G","C","F"],
+      "Drop B":            ["B","F#","B","E"],
+      "Drop A":            ["A","E","A","D"],
+      "Open D":            ["D","A","D","F#"]
+    },
+    5: {
+      "Standard (B)":      ["B","E","A","D","G"],
+      "Tenor Standard":    ["E","A","D","G","C"],
+      "Drop A":            ["A","E","A","D","G"],
+      "Half-Step Down":    ["A#","D#","G#","C#","F#"],
+      "Full-Step Down":    ["A","D","G","C","F"]
+    },
+    6: {
+      "Standard (B-C)":    ["B","E","A","D","G","C"],
+      "Drop A Variant":    ["A","E","A","D","G","C"]
+    }
+  },
+  guitar: {
+    6: {
+      "Standard (E)":      ["E","A","D","G","B","E"],
+      "Drop D":            ["D","A","D","G","B","E"],
+      "Half-Step Down":    ["D#","G#","C#","F#","A#","D#"],
+      "Full-Step Down":    ["D","G","C","F","A","D"],
+      "Drop C":            ["C","G","C","F","A","D"],
+      "Drop B":            ["B","F#","B","E","G#","C#"],
+      "Open G":            ["D","G","D","G","B","D"],
+      "Open D":            ["D","A","D","F#","A","D"],
+      "DADGAD":            ["D","A","D","G","A","D"]
+    }
+  }
+};
+
+const NOTE_NAMES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const BASE_FREQS = { C:16.35,  "C#":17.32, D:18.35, "D#":19.45,
+                     E:20.60,  F:21.83,    "F#":23.12, G:24.50,
+                     "G#":25.96, A:27.50,  "A#":29.14, B:30.87 };
+
+/* ══════════════════════════════════════════════
+   AUDIO ENGINE
+══════════════════════════════════════════════ */
+let audioCtx=null, analyser=null, stream=null, source=null, floatBuf=null;
+let isRunning=false, rafId=null;
+let smoothedHz=0, smoothedCents=0;
+const FREQ_ALPHA=0.3, NEEDLE_ALPHA=0.1;
+
+let activeNotes=[], activeFreqs=[];
+
+/* ══════════════════════════════════════════════
+   REFERENCE TONE ENGINE
+══════════════════════════════════════════════ */
+let refCtx=null, refOsc=null, refGain=null, refPlayingIdx=-1;
+
+function playReferenceTone(idx) {
+  // Stop any playing tone
+  stopReferenceTone();
+  if (refPlayingIdx === idx) { refPlayingIdx=-1; updateRefBtnStates(); return; }
+
+  try {
+    refCtx = new (window.AudioContext||window.webkitAudioContext)();
+    refGain = refCtx.createGain();
+    refGain.gain.setValueAtTime(0, refCtx.currentTime);
+    refGain.gain.linearRampToValueAtTime(0.25, refCtx.currentTime+0.05);
+    // Soft 5s decay then stop
+    refGain.gain.linearRampToValueAtTime(0.25, refCtx.currentTime+4.5);
+    refGain.gain.linearRampToValueAtTime(0, refCtx.currentTime+5.0);
+
+    refOsc = refCtx.createOscillator();
+    refOsc.type = 'triangle';
+    refOsc.frequency.value = activeFreqs[idx];
+    refOsc.connect(refGain);
+    refGain.connect(refCtx.destination);
+    refOsc.start();
+    refOsc.stop(refCtx.currentTime+5.1);
+    refOsc.onended = () => { refPlayingIdx=-1; updateRefBtnStates(); };
+    refPlayingIdx = idx;
+    updateRefBtnStates();
+  } catch(e) { console.warn('Ref tone failed:', e); }
+}
+
+function stopReferenceTone() {
+  try { if(refOsc) refOsc.stop(); } catch(e){}
+  try { if(refCtx) refCtx.close(); } catch(e){}
+  refCtx=null; refOsc=null; refGain=null;
+}
+
+function updateRefBtnStates() {
+  document.querySelectorAll('.play-tone').forEach((btn,i)=>{
+    btn.classList.toggle('playing', i===refPlayingIdx);
+    btn.title = i===refPlayingIdx ? 'Stop tone' : 'Play reference tone';
+    btn.textContent = i===refPlayingIdx ? '■' : '♪';
+  });
+}
+
+/* ══════════════════════════════════════════════
+   SEMICIRCULAR ARC METER
+══════════════════════════════════════════════ */
+const arcCanvas = document.getElementById('arcCanvas');
+const arcCtx = arcCanvas.getContext('2d');
+let arcAnimVal = 0;  // smoothed needle angle position in cents
+
+function resizeArc() {
+  const w = arcCanvas.parentElement.clientWidth;
+  const h = Math.round(w * 0.52);
+  arcCanvas.width = w * window.devicePixelRatio;
+  arcCanvas.height = h * window.devicePixelRatio;
+  arcCanvas.style.width = w+'px';
+  arcCanvas.style.height = h+'px';
+  arcCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
+function drawArc(centsVal, inTune, active) {
+  const W = arcCanvas.width / window.devicePixelRatio;
+  const H = arcCanvas.height / window.devicePixelRatio;
+  arcCtx.clearRect(0,0,W,H);
+
+  const cx = W/2;
+  const cy = H - 10;
+  const R  = Math.min(W*0.46, H*0.92);
+
+  const startAngle = Math.PI; // left  = -50¢
+  const endAngle   = 2*Math.PI; // right = +50¢
+
+  // ── Background arc track ──
+  arcCtx.beginPath();
+  arcCtx.arc(cx, cy, R, startAngle, endAngle);
+  arcCtx.strokeStyle = '#1e1e1e';
+  arcCtx.lineWidth = 14;
+  arcCtx.lineCap = 'round';
+  arcCtx.stroke();
+
+  // ── Colored fill arc (from center toward needle) ──
+  if (active) {
+    const needleAngle = startAngle + ((centsVal + 50) / 100) * Math.PI;
+    const midAngle    = startAngle + 0.5 * Math.PI; // center = 0¢
+
+    arcCtx.beginPath();
+    if (needleAngle >= midAngle) {
+      arcCtx.arc(cx, cy, R, midAngle, needleAngle);
+    } else {
+      arcCtx.arc(cx, cy, R, needleAngle, midAngle);
+    }
+    arcCtx.strokeStyle = inTune ? '#27ae60' : '#ff5500';
+    arcCtx.lineWidth = 14;
+    arcCtx.lineCap = 'round';
+    arcCtx.shadowColor = inTune ? '#27ae60' : '#ff5500';
+    arcCtx.shadowBlur = 16;
+    arcCtx.stroke();
+    arcCtx.shadowBlur = 0;
+  }
+
+  // ── Tick marks ──
+  for (let c=-50; c<=50; c+=10) {
+    const angle = startAngle + ((c+50)/100)*Math.PI;
+    const isCenter = c===0;
+    const inner = R - (isCenter?20:12);
+    const outer = R + 1;
+    arcCtx.beginPath();
+    arcCtx.moveTo(cx + inner*Math.cos(angle), cy + inner*Math.sin(angle));
+    arcCtx.lineTo(cx + outer*Math.cos(angle), cy + outer*Math.sin(angle));
+    arcCtx.strokeStyle = isCenter ? '#f1c40f' : '#333';
+    arcCtx.lineWidth = isCenter ? 2.5 : 1;
+    arcCtx.stroke();
+
+    // Tick labels
+    if (c !== 0 && c % 20 === 0) {
+      const lx = cx + (inner-12)*Math.cos(angle);
+      const ly = cy + (inner-12)*Math.sin(angle);
+      arcCtx.font = '10px Inter,sans-serif';
+      arcCtx.fillStyle = '#444';
+      arcCtx.textAlign = 'center';
+      arcCtx.textBaseline = 'middle';
+      arcCtx.fillText((c>0?'+':'')+c, lx, ly);
+    }
+  }
+
+  // ── Center "0" label ──
+  arcCtx.font = 'bold 11px Inter,sans-serif';
+  arcCtx.fillStyle = '#666';
+  arcCtx.textAlign = 'center';
+  arcCtx.fillText('0¢', cx, cy - R + 20);
+
+  // ── Needle ──
+  if (active) {
+    const needleAngle = startAngle + ((arcAnimVal+50)/100)*Math.PI;
+    const nLen = R - 18;
+    const nx = cx + nLen*Math.cos(needleAngle);
+    const ny = cy + nLen*Math.sin(needleAngle);
+
+    // Needle shadow
+    arcCtx.beginPath();
+    arcCtx.moveTo(cx, cy);
+    arcCtx.lineTo(nx, ny);
+    arcCtx.strokeStyle = inTune ? 'rgba(39,174,96,.3)' : 'rgba(255,85,0,.3)';
+    arcCtx.lineWidth = 6;
+    arcCtx.lineCap = 'round';
+    arcCtx.stroke();
+
+    // Needle proper
+    arcCtx.beginPath();
+    arcCtx.moveTo(cx, cy);
+    arcCtx.lineTo(nx, ny);
+    arcCtx.strokeStyle = inTune ? '#2ecc71' : '#ff7733';
+    arcCtx.lineWidth = 2.5;
+    arcCtx.lineCap = 'round';
+    arcCtx.stroke();
+
+    // Pivot dot
+    arcCtx.beginPath();
+    arcCtx.arc(cx, cy, 6, 0, 2*Math.PI);
+    arcCtx.fillStyle = inTune ? '#27ae60' : '#ff5500';
+    arcCtx.fill();
+
+    // Needle tip dot
+    arcCtx.beginPath();
+    arcCtx.arc(nx, ny, 4, 0, 2*Math.PI);
+    arcCtx.fillStyle = inTune ? '#2ecc71' : '#ff7733';
+    arcCtx.fill();
+  } else {
+    // Resting pivot
+    arcCtx.beginPath();
+    arcCtx.arc(cx, cy, 5, 0, 2*Math.PI);
+    arcCtx.fillStyle = '#333';
+    arcCtx.fill();
+    // Needle at center resting
+    const restAngle = startAngle + 0.5*Math.PI;
+    arcCtx.beginPath();
+    arcCtx.moveTo(cx,cy);
+    arcCtx.lineTo(cx+(R-18)*Math.cos(restAngle), cy+(R-18)*Math.sin(restAngle));
+    arcCtx.strokeStyle='#333';arcCtx.lineWidth=2;arcCtx.stroke();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   PITCH DETECTION (autocorrelation, parabolic)
+══════════════════════════════════════════════ */
+function detectPitch(buf, sr) {
+  let rms=0;
+  for(let i=0;i<buf.length;i++) rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/buf.length);
+  if(rms<0.008) return -1;
+
+  let r1=0, r2=buf.length-1;
+  const th=0.2;
+  for(let i=0;i<buf.length/2;i++) if(Math.abs(buf[i])<th){r1=i;break;}
+  for(let i=buf.length-1;i>=buf.length/2;i--) if(Math.abs(buf[i])<th){r2=i;break;}
+  const trim=buf.slice(r1,r2);
+  const len=trim.length;
+  const corr=new Float32Array(len);
+  for(let i=0;i<len;i++) for(let j=0;j<len-i;j++) corr[i]+=trim[j]*trim[j+i];
+
+  let d=0;
+  while(corr[d]>corr[d+1]) d++;
+  let maxV=-1, maxP=-1;
+  for(let i=d;i<len;i++) if(corr[i]>maxV){maxV=corr[i];maxP=i;}
+  if(maxP<=0||maxP>=len-1) return -1;
+
+  // Parabolic interpolation for sub-sample accuracy
+  const a=corr[maxP-1], b=corr[maxP], c=corr[maxP+1];
+  const denom=2*(a-2*b+c);
+  const period=denom!==0 ? maxP+(a-c)/denom : maxP;
+  return period>0 ? sr/period : -1;
+}
+
+function getNoteAndCents(hz) {
+  const nn=12*(Math.log2(hz/440))+69;
+  const rnn=Math.round(nn);
+  const cents=(nn-rnn)*100;
+  const name=NOTE_NAMES[((rnn%12)+12)%12];
+  return {name, cents};
+}
+
+function closestStringIdx(hz) {
+  if(!activeFreqs.length) return -1;
+  let best=-1, bestCents=Infinity;
+  activeFreqs.forEach((f,i)=>{
+    const c=Math.abs(1200*Math.log2(hz/f));
+    if(c<bestCents){bestCents=c;best=i;}
+  });
+  return bestCents<550 ? best : -1;
+}
+
+/* ══════════════════════════════════════════════
+   DETECTION LOOP
+══════════════════════════════════════════════ */
+function detect() {
+  if(!analyser||!isRunning){rafId=null;return;}
+  analyser.getFloatTimeDomainData(floatBuf);
+  const raw=detectPitch(floatBuf,audioCtx.sampleRate);
+
+  const noteEl=document.getElementById('noteDisplay');
+  const freqEl=document.getElementById('freqDisplay');
+  const statusEl=document.getElementById('statusPill');
+  const centsLabel=document.getElementById('centsLabel');
+  const chips=document.querySelectorAll('.string-chip');
+  const rows=document.querySelectorAll('.legend-row');
+
+  if(raw>25 && raw<1200) {
+    smoothedHz = smoothedHz===0 ? raw : smoothedHz+(raw-smoothedHz)*FREQ_ALPHA;
+    freqEl.textContent = smoothedHz.toFixed(2)+' Hz';
+
+    const sidx=closestStringIdx(smoothedHz);
+    chips.forEach((c,i)=>{c.classList.remove('active','in-tune');rows[i]?.classList.remove('active-match','in-tune-match');});
+
+    if(sidx!==-1) {
+      const tgt=activeFreqs[sidx];
+      const calcCents=1200*Math.log2(smoothedHz/tgt);
+      const {name}=getNoteAndCents(smoothedHz);
+      const inTune=Math.abs(calcCents)<=2.5;
+
+      // Smooth needle
+      smoothedCents+=(calcCents-smoothedCents)*NEEDLE_ALPHA;
+      arcAnimVal=smoothedCents;
+
+      noteEl.textContent=name;
+      noteEl.className='note-display '+(inTune?'glow-intune':'flaming');
+
+      chips[sidx].classList.add(inTune?'in-tune':'active');
+      rows[sidx]?.classList.add(inTune?'in-tune-match':'active-match');
+
+      if(inTune) {
+        statusEl.textContent='✓ IN TUNE';
+        statusEl.className='status-pill in-tune';
+        centsLabel.textContent='';
+      } else {
+        const sign=calcCents>0?'+':'';
+        statusEl.textContent=calcCents>0?`+${Math.round(calcCents)}¢ Sharp`:`${Math.round(calcCents)}¢ Flat`;
+        statusEl.className='status-pill off-tune';
+        centsLabel.textContent=sign+Math.round(calcCents)+'¢';
+      }
+      drawArc(smoothedCents, inTune, true);
+    } else {
+      // Note detected but doesn't match any string
+      const {name,cents}=getNoteAndCents(smoothedHz);
+      noteEl.textContent=name; noteEl.className='note-display flaming';
+      statusEl.textContent='Detecting…'; statusEl.className='status-pill off-tune';
+      smoothedCents+=(cents-smoothedCents)*NEEDLE_ALPHA;
+      arcAnimVal=smoothedCents;
+      centsLabel.textContent='';
+      drawArc(smoothedCents,false,true);
+    }
+  } else {
+    noteEl.className='note-display';
+    drawArc(0,false,false);
+  }
+  rafId=requestAnimationFrame(detect);
+}
+
+/* ══════════════════════════════════════════════
+   START / STOP
+══════════════════════════════════════════════ */
+async function start() {
+  try {
+    stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=4096;
+    analyser.smoothingTimeConstant=0;
+    source=audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    floatBuf=new Float32Array(analyser.fftSize);
+    smoothedHz=0; smoothedCents=0; arcAnimVal=0;
+    isRunning=true;
+    detect();
+  } catch(err) {
+    alert('Microphone access denied or unavailable: '+err.message);
+    resetUI();
+  }
+}
+
+function stop() {
+  isRunning=false;
+  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  try{if(audioCtx)audioCtx.close();}catch(e){}
+  stream=null;audioCtx=null;analyser=null;source=null;floatBuf=null;
+  smoothedHz=0;smoothedCents=0;arcAnimVal=0;
+  stopReferenceTone();
+  resetUI();
+}
+
+function resetUI() {
+  const btn=document.getElementById('tunerBtn');
+  btn.textContent='🎙️ Start Tuner';btn.classList.remove('active');
+  document.getElementById('noteDisplay').textContent='—';
+  document.getElementById('noteDisplay').className='note-display';
+  document.getElementById('freqDisplay').textContent='0.00 Hz';
+  document.getElementById('statusPill').textContent='Stopped';
+  document.getElementById('statusPill').className='status-pill stopped';
+  document.getElementById('centsLabel').textContent='';
+  document.querySelectorAll('.string-chip').forEach(c=>c.classList.remove('active','in-tune'));
+  document.querySelectorAll('.legend-row').forEach(r=>r.classList.remove('active-match','in-tune-match'));
+  drawArc(0,false,false);
+}
+
+async function toggleTuner(e) {
+  e.target.blur();
+  if(!isRunning){
+    const btn=document.getElementById('tunerBtn');
+    btn.textContent='🎙️ Stop Tuner';btn.classList.add('active');
+    await start();
+  } else { stop(); }
+}
+
+/* ══════════════════════════════════════════════
+   MENU / STRING SETUP
+══════════════════════════════════════════════ */
+function buildMenuHierarchy() {
+  const inst=document.getElementById('instrumentSelect').value;
+  const scg=document.getElementById('stringCountGroup');
+  const ss=document.getElementById('stringCountSelect');
+  const ps=document.getElementById('tuningProfileSelect');
+
+  if(inst==='guitar'){scg.style.display='none';ss.value='6';}
+  else scg.style.display='flex';
+
+  ps.innerHTML='';
+  const profiles=tuningMatrix[inst]?.[ss.value]||{};
+  Object.keys(profiles).forEach(name=>{
+    const o=document.createElement('option');o.value=name;o.textContent=name;ps.appendChild(o);
+  });
+  updateTargetStrings();
+}
+
+function updateTargetStrings() {
+  const inst=document.getElementById('instrumentSelect').value;
+  const sc=document.getElementById('stringCountSelect').value;
+  const prof=document.getElementById('tuningProfileSelect').value;
+  activeNotes=tuningMatrix[inst]?.[sc]?.[prof]||[];
+
+  const picker=document.getElementById('stringPicker');
+  const legendList=document.getElementById('legendList');
+  picker.innerHTML='';legendList.innerHTML='';
+  activeFreqs=[];
+
+  document.getElementById('legendTitle').textContent=prof+' Reference';
+
+  const baseOctave=inst==='bass'?1:2;
+  let octave=baseOctave,prevIdx=-1;
+
+  activeNotes.forEach((note,i)=>{
+    const ni=NOTE_NAMES.indexOf(note);
+    if(i>0 && ni>=prevIdx) octave++;
+    prevIdx=ni;
+    const hz=BASE_FREQS[note]*Math.pow(2,octave);
+    activeFreqs.push(hz);
+
+    // Chip
+    const chip=document.createElement('div');
+    chip.className='string-chip';
+    chip.innerHTML=`${note}<button class="ref-btn" onclick="playReferenceTone(${i})" title="Play reference tone" style="display:block">♪</button>`;
+    picker.appendChild(chip);
+
+    // Legend row
+    const row=document.createElement('div');
+    row.className='legend-row';
+    row.id='lr'+i;
+    row.innerHTML=`<span class="s-lbl">${note}</span><span>String ${i+1}</span><span class="hz-lbl">${hz.toFixed(2)} Hz</span><button class="play-tone" onclick="event.stopPropagation();playReferenceTone(${i})" title="Play reference tone">♪</button>`;
+    legendList.appendChild(row);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   RANDOM SONG
+══════════════════════════════════════════════ */
+let _artists = [];
+async function loadArtists() {
+  try { const d = await (await fetch('songs.json')).json(); _artists = [...new Set(d.map(s => s.artist))]; } catch(e) {}
+}
+function slotSpinNav(btn, onDone) {
+  const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲']; let i=0;
+  btn.classList.add('spinning');
+  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);
+  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);
+}
+function randomSong(btn) {
+  if (!_artists.length) { location.href='index.html?nosplash=1'; return; }
+  const pick = _artists[Math.floor(Math.random()*_artists.length)];
+  if (btn) { slotSpinNav(btn, ()=>{ location.href='index.html?nosplash=1&search='+encodeURIComponent(pick); }); }
+  else { location.href='index.html?nosplash=1&search='+encodeURIComponent(pick); }
+}
+loadArtists();
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+window.addEventListener('resize',()=>{resizeArc();drawArc(0,false,false);});
+resizeArc();
+buildMenuHierarchy();
+drawArc(0,false,false);
+
+/* ═══════════════════════════════════════════════════════
+   DRAG-AND-DROP PANEL REORDERING
+═══════════════════════════════════════════════════════ */
+(function initDragPanels() {
+  const STORAGE_KEY = 'lp_tuner_panel_order';
+  const COLLAPSE_KEY = 'lp_tuner_collapsed';
+  const workspace = document.getElementById('dragWorkspace');
+
+  function restoreOrder() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      if (!saved.length) return;
+      saved.forEach(id => { const el=document.getElementById(id); if(el) workspace.appendChild(el); });
+    } catch(e) {}
+  }
+  function saveOrder() {
+    const ids = [...workspace.querySelectorAll('.drag-panel')].map(p=>p.id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+  }
+  function restoreCollapsed() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '[]');
+      saved.forEach(id => {
+        const el=document.getElementById(id);
+        if(el){ el.classList.add('collapsed'); const btn=el.querySelector('.collapse-btn'); if(btn) btn.textContent='▸'; }
+      });
+    } catch(e) {}
+  }
+  function saveCollapsed() {
+    const collapsed=[...workspace.querySelectorAll('.drag-panel.collapsed')].map(p=>p.id);
+    localStorage.setItem(COLLAPSE_KEY, JSON.stringify(collapsed));
+  }
+  window.toggleCollapse = function(id) {
+    const el=document.getElementById(id); if(!el) return;
+    const was=el.classList.toggle('collapsed');
+    const btn=el.querySelector('.collapse-btn'); if(btn) btn.textContent=was?'▸':'▾';
+    saveCollapsed();
+    // Resize arc canvas after expand
+    setTimeout(()=>{ resizeArc(); drawArc(0,false,false); }, 50);
+  };
+
+  let dragEl=null;
+  function onDragStart(e) {
+    if(!e.target.closest('.drag-handle')){e.preventDefault();return;}
+    dragEl=e.currentTarget; dragEl.classList.add('dragging');
+    e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',dragEl.id);
+  }
+  function onDragOver(e) {
+    e.preventDefault(); e.dataTransfer.dropEffect='move';
+    const target=e.target.closest('.drag-panel');
+    if(!target||target===dragEl) return;
+    workspace.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    target.classList.add('drag-over');
+  }
+  function onDrop(e) {
+    e.preventDefault();
+    const target=e.target.closest('.drag-panel');
+    workspace.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    if(!target||target===dragEl) return;
+    const rect=target.getBoundingClientRect();
+    e.clientY < rect.top+rect.height/2 ? workspace.insertBefore(dragEl,target) : workspace.insertBefore(dragEl,target.nextSibling);
+    saveOrder();
+    setTimeout(()=>{ resizeArc(); drawArc(0,false,false); }, 50);
+  }
+  function onDragEnd() {
+    if(dragEl) dragEl.classList.remove('dragging');
+    workspace.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    dragEl=null;
+  }
+  function bindPanels() {
+    workspace.querySelectorAll('.drag-panel').forEach(panel=>{
+      panel.addEventListener('dragstart',onDragStart);
+      panel.addEventListener('dragover',onDragOver);
+      panel.addEventListener('drop',onDrop);
+      panel.addEventListener('dragend',onDragEnd);
+    });
+  }
+  restoreOrder(); restoreCollapsed(); bindPanels();
+})();
+</script>
+</body>
+</html>
