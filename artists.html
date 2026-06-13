@@ -73,10 +73,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 .ownedBarFill.partial{background:linear-gradient(90deg,#f39c12,#f1c40f)}
 .ownedBarFill.none{background:#e74c3c}
 .pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
-
-/* ═══════════════════════════════
-   END MODAL — REMOVED
-   ═══════════════════════════════ */
 </style>
 </head>
 <body>
@@ -101,7 +97,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
   <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
   <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
-  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
   <button class="nav-btn" onclick="location.href='charity.html'">❤️ CMAM</button>
   <button class="nav-btn" onclick="randomArtist(this)">🎲 Random</button>
   <input id="searchBox" placeholder="Search artist…" oninput="handleSearch()" autocomplete="off">
@@ -139,7 +134,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
 </footer>
 
-
 <script>
 let allArtists=[], filteredArtists=[], allSongs=[], currentPage=1;
 const perPage=80;
@@ -161,7 +155,6 @@ async function init(){
     const letter=urlParams.get('letter');
     if(letter) jumpToLetter(letter);
     buildGenreBar();buildAlphabet();buildArtistStats();renderGrid();
-    initFirebase();
   }catch(e){console.error(e);}
 }
 
@@ -196,18 +189,25 @@ function renderGrid(){
   const start=(currentPage-1)*perPage;const frag=document.createDocumentFragment();
   filteredArtists.slice(start,start+perPage).forEach(a=>{
     const card=document.createElement('div');card.className='artistCard';
-    card.onclick=()=>location.href='index.html?nosplash=1&search='+encodeURIComponent(a.name);
+    // Clicking the card still filters by artist, except for the info button
+    card.onclick=(e)=>{
+      if(!e.target.classList.contains('info-btn')) {
+        location.href='index.html?nosplash=1&search='+encodeURIComponent(a.name);
+      }
+    };
     const emoji=a.genre?(GENRE_EMOJI[a.genre]||'🎵'):'🎵';
     const artHtml=a.art?`<img class="artistCardArt" src="${a.art}" alt="${esc(a.name)}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="artistCardArtPlaceholder" style="display:none">${emoji}</div>`:`<div class="artistCardArtPlaceholder">${emoji}</div>`;
-    // owned ratio
     const ratio = a.ownedCount / a.count;
     const barClass = ratio >= 1 ? '' : ratio > 0 ? 'partial' : 'none';
     const barW = Math.round(ratio*100);
+    const infoUrl = `https://musicbrainz.org/search?query=${encodeURIComponent(a.name)}&type=artist&method=indexed`;
+    
     card.innerHTML=artHtml+`<div class="artistCardBody">
       <div class="artistCardName">${esc(a.name)}</div>
       <div class="artistCardCount">${a.count} ${a.count===1?'song':'songs'}</div>
       ${a.genre?`<div class="artistCardGenre">${GENRE_EMOJI[a.genre]||''} ${a.genre}</div>`:''}
       <div class="ownedBar"><div class="ownedBarFill ${barClass}" style="width:${barW}%"></div></div>
+      <a href="${infoUrl}" target="_blank" class="info-btn" style="display:block; margin-top:8px; font-size:10px; color:#f1c40f; text-decoration:none; border:1px solid #333; padding:4px; text-align:center; border-radius:4px;">View Info ↗</a>
     </div>`;
     frag.appendChild(card);
   });
@@ -269,11 +269,6 @@ function clearAll(){
   document.getElementById('activeFilters').style.display='none';
   filteredArtists=[...allArtists];applySort(filteredArtists);currentPage=1;renderGrid();
 }
-
-/* ── ARTIST MODAL — REMOVED ── */
-
-function showToast(){}  // stub — toast removed with modal
-
 function slotSpin(btn,onDone){
   const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];let i=0;
   btn.classList.add('spinning');
@@ -290,8 +285,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('searchBox').focus();}
   if(e.key==='Escape'){document.getElementById('searchBox').value='';clearAll();}
 });
-
 init();
 </script>
 </body>
 </html>
+
+```
