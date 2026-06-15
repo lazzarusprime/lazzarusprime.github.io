@@ -109,8 +109,20 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 @keyframes slopPulse{0%,100%{border-color:#ff5500}50%{border-color:#ff8800;box-shadow:inset 0 0 20px rgba(255,100,0,.1)}}
 #slopBanner span{color:#ff7733;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-right:8px}
 
+/* ── SORT BAR ── */
+#sortBar{display:flex;gap:6px;padding:7px 10px;background:#141414;border-bottom:1px solid #222;align-items:center;flex-wrap:wrap}
+#sortBar span{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.5px;font-weight:700;white-space:nowrap}
+.sort-btn{background:transparent;color:#666;border:1px solid #2a2a2a;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;transition:.2s;white-space:nowrap;font-family:'Inter',sans-serif}
+.sort-btn:hover{border-color:#f1c40f55;color:#ccc}
+.sort-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
 /* ── PAGINATION ── */
-.pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
+.pagination{padding:10px 12px;text-align:center;background:#111;border-bottom:1px solid #222;display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap}
+.page-btn{background:#1e1e1e;color:#666;border:1px solid #2a2a2a;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;transition:.2s;min-width:34px;font-family:'Inter',sans-serif}
+.page-btn:hover{border-color:#f1c40f55;color:#f1c40f}
+.page-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.page-btn.nav{background:#2a2a2a;color:#aaa;border-color:#444}
+.page-btn.nav:hover{border-color:#f1c40f;color:#f1c40f}
+.page-ellipsis{color:#333;font-size:12px;padding:0 4px;line-height:30px}
 
 /* ── FOOTER ── */
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
@@ -171,6 +183,15 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
   <div id="artistList"></div>
 </div>
+<div id="sortBar">
+  <span>Sort:</span>
+  <button class="sort-btn active" id="srtAZ"     onclick="setSort('az')">A – Z</button>
+  <button class="sort-btn"        id="srtZA"     onclick="setSort('za')">Z – A</button>
+  <button class="sort-btn"        id="srtMost"   onclick="setSort('most')">Most Songs</button>
+  <button class="sort-btn"        id="srtFewest" onclick="setSort('fewest')">Fewest Songs</button>
+  <button class="sort-btn"        id="srtGenre"  onclick="setSort('genre')">Genre</button>
+  <button class="sort-btn"        id="srtRand"   onclick="setSort('random')">🎲 Shuffle</button>
+</div>
 <div id="paginationTop" class="pagination"></div>
 <div class="listHeader"><h3>SONG LIBRARY</h3><span id="resultsCount" class="resultsCount"></span></div>
 <div id="songList"></div>
@@ -201,7 +222,8 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGenre = null;
 let artistArtMap = {}, artistGenreMap = {};
 let activeAlphaLetter = null;
-let queuedSongs = new Set(); // songs currently in queue
+let currentSort = 'az';
+let queuedSongs = new Set();
 let firebaseDb = null;
 
 /* ── Splash ── */
@@ -280,17 +302,62 @@ async function init() {
   } catch(e) { console.error(e); hideSplash(); }
 }
 
+/* ── Sort ── */
+function setSort(type) {
+  currentSort = type;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  const ids = {az:'srtAZ',za:'srtZA',most:'srtMost',fewest:'srtFewest',genre:'srtGenre',random:'srtRand'};
+  if (ids[type]) document.getElementById(ids[type])?.classList.add('active');
+  currentPage = 1;
+  applySort();
+  renderSongs();
+}
+
+function applySort() {
+  switch(currentSort) {
+    case 'az':     filteredSongs.sort((a,b)=>a.artist.localeCompare(b.artist,undefined,{sensitivity:'base'})||a.displayName.localeCompare(b.displayName,undefined,{sensitivity:'base'})); break;
+    case 'za':     filteredSongs.sort((a,b)=>b.artist.localeCompare(a.artist,undefined,{sensitivity:'base'})); break;
+    case 'most': {
+      const cnt={}; songs.forEach(s=>cnt[s.artist]=(cnt[s.artist]||0)+1);
+      filteredSongs.sort((a,b)=>(cnt[b.artist]||0)-(cnt[a.artist]||0)||a.artist.localeCompare(b.artist));
+      break;
+    }
+    case 'fewest': {
+      const cnt={}; songs.forEach(s=>cnt[s.artist]=(cnt[s.artist]||0)+1);
+      filteredSongs.sort((a,b)=>(cnt[a.artist]||0)-(cnt[b.artist]||0)||a.artist.localeCompare(b.artist));
+      break;
+    }
+    case 'genre': {
+      const order = Object.keys(GENRE_MAP);
+      filteredSongs.sort((a,b)=>{
+        const ga = artistGenreMap[a.artist]||'zzz';
+        const gb = artistGenreMap[b.artist]||'zzz';
+        const ia = order.indexOf(ga); const ib = order.indexOf(gb);
+        const sa = ia===-1?999:ia; const sb = ib===-1?999:ib;
+        return sa-sb||a.artist.localeCompare(b.artist);
+      });
+      break;
+    }
+    case 'random': {
+      for(let i=filteredSongs.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [filteredSongs[i],filteredSongs[j]]=[filteredSongs[j],filteredSongs[i]];
+      }
+      break;
+    }
+  }
+}
+
 function applyFilters() {
   let base = songs;
-  // search
   const q = document.getElementById('searchBox').value.toLowerCase();
   if (q) base = base.filter(s => s.artist.toLowerCase().includes(q) || s.displayName.toLowerCase().includes(q));
-  // genre
   if (activeGenre) {
     const list = GENRE_MAP[activeGenre].map(a => a.toLowerCase());
     base = base.filter(s => { const l=s.artist.toLowerCase(); return list.some(g=>l===g||l.includes(g)||g.includes(l)); });
   }
   filteredSongs = base;
+  applySort();
   renderSongs();
 }
 
@@ -326,12 +393,74 @@ function renderSongs() {
 
 function renderPagination() {
   const total = Math.ceil(filteredSongs.length/songsPerPage)||1;
-  ['paginationTop','paginationBottom'].forEach(id => {
-    const c = document.getElementById(id); c.innerHTML = '';
-    if (currentPage>1){const b=document.createElement('button');b.textContent='◀ Prev';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
-    const l=document.createElement('span');l.textContent=` Page ${currentPage} / ${total} `;l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
-    if (currentPage<total){const b=document.createElement('button');b.textContent='Next ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
+
+  function buildPager(containerId) {
+    const c = document.getElementById(containerId);
+    c.innerHTML = '';
+    const go = (p) => { currentPage=p; renderSongs(); window.scrollTo(0,0); };
+
+    // Prev
+    const prev = document.createElement('button');
+    prev.textContent='◀'; prev.className='page-btn nav';
+    prev.disabled = currentPage===1;
+    prev.onclick=()=>go(currentPage-1);
+    c.appendChild(prev);
+
+    // Page number buttons with ellipsis
+    const pages = getPageRange(currentPage, total);
+    let lastWasEllipsis = false;
+    pages.forEach(p => {
+      if (p === '...') {
+        if (!lastWasEllipsis) {
+          const el = document.createElement('span');
+          el.className='page-ellipsis'; el.textContent='…';
+          c.appendChild(el);
+        }
+        lastWasEllipsis = true;
+        return;
+      }
+      lastWasEllipsis = false;
+      const btn = document.createElement('button');
+      btn.textContent = p;
+      btn.className = 'page-btn' + (p===currentPage?' active':'');
+      btn.onclick = ()=>go(p);
+      c.appendChild(btn);
+    });
+
+    // Next
+    const next = document.createElement('button');
+    next.textContent='▶'; next.className='page-btn nav';
+    next.disabled = currentPage===total;
+    next.onclick=()=>go(currentPage+1);
+    c.appendChild(next);
+
+    // Page count label
+    const lbl = document.createElement('span');
+    lbl.style.cssText='color:#444;font-size:11px;margin-left:6px;white-space:nowrap';
+    lbl.textContent = `${currentPage}/${total}`;
+    c.appendChild(lbl);
+  }
+
+  buildPager('paginationTop');
+  buildPager('paginationBottom');
+}
+
+function getPageRange(current, total) {
+  if (total <= 9) return Array.from({length:total},(_,i)=>i+1);
+  const pages = new Set([1, total]);
+  // Always show window around current
+  for (let i=Math.max(1,current-2); i<=Math.min(total,current+2); i++) pages.add(i);
+  // First/last cluster
+  [2,3].forEach(p=>p<=total&&pages.add(p));
+  [total-1,total-2].forEach(p=>p>0&&pages.add(p));
+  const sorted = [...pages].sort((a,b)=>a-b);
+  // Insert ellipsis where gaps > 1
+  const result = [];
+  sorted.forEach((p,i) => {
+    if (i>0 && p-sorted[i-1]>1) result.push('...');
+    result.push(p);
   });
+  return result;
 }
 
 /* ── Search / Filter helpers ── */

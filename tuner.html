@@ -110,8 +110,11 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 .drag-panel.collapsed .drag-handle{border-bottom:none;border-radius:12px}
 .collapse-btn{background:transparent;border:none;color:#333;cursor:pointer;font-size:13px;padding:0 4px;transition:.15s;line-height:1}
 .collapse-btn:hover{color:#f1c40f}
-.w-xl{flex:1;min-width:340px} .w-lg{width:420px} .w-md{width:300px}
-@media(max-width:660px){.drag-panel,.w-xl,.w-lg,.w-md{width:100%!important;min-width:unset!important}}
+.drag-panel{position:relative}
+.drop-before,.drop-after{position:absolute;pointer-events:none;opacity:0;height:3px;left:0;right:0;border-radius:2px;background:linear-gradient(90deg,transparent,#f1c40f44,transparent);transition:opacity .1s,background .1s;z-index:50}
+.drop-before{top:-9px}.drop-after{bottom:-9px}
+.drag-active .drag-handle{border-color:#f1c40f22}
+.drag-active .drag-panel:not(.dragging) .drag-handle:hover{background:#1a1800}
 </style>
 </head>
 <body>
@@ -810,14 +813,14 @@ drawArc(0,false,false);
     if (!panel) return;
     e.preventDefault();
 
-    // Capture rect BEFORE any DOM mutation
     const rect = panel.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
 
     dragging = panel;
     dragging.classList.add('dragging');
-
+    workspace.classList.add('drag-active');
+    showDropZones(panel);
     createPlaceholder(panel, rect);
     dragging.style.visibility = 'hidden';
     createGhost(panel, e.clientX, e.clientY, rect);
@@ -827,22 +830,44 @@ drawArc(0,false,false);
     document.addEventListener('pointercancel', onUp);
   });
 
+  function showDropZones(excludePanel) {
+    workspace.querySelectorAll(':scope > .drag-panel').forEach(p => {
+      if (p === excludePanel) return;
+      const zb = document.createElement('div'); zb.className = 'drop-before'; p.appendChild(zb);
+      const za = document.createElement('div'); za.className = 'drop-after';  p.appendChild(za);
+    });
+  }
+  function clearDropZones() {
+    workspace.querySelectorAll('.drop-before,.drop-after').forEach(z => z.remove());
+    workspace.classList.remove('drag-active');
+  }
+  function highlightDropTarget(target, isTop) {
+    workspace.querySelectorAll('.drop-before,.drop-after').forEach(z => {
+      z.style.opacity='0';
+      z.style.background='linear-gradient(90deg,transparent,#f1c40f44,transparent)';
+    });
+    if (!target) return;
+    const zone = target.querySelector(isTop ? '.drop-before' : '.drop-after');
+    if (zone) { zone.style.opacity='1'; zone.style.background='linear-gradient(90deg,transparent,#f1c40f,transparent)'; }
+  }
+
   function onMove(e) {
     e.preventDefault();
     if (!dragging) return;
     moveGhost(e.clientX, e.clientY);
     const target = getDropTarget(e.clientX, e.clientY);
-    if (!target || target === dragging || target === placeholder) return;
+    if (!target || target === dragging || target === placeholder) { highlightDropTarget(null,false); return; }
     const r = target.getBoundingClientRect();
-    e.clientY < r.top + r.height / 2
-      ? workspace.insertBefore(placeholder, target)
-      : workspace.insertBefore(placeholder, target.nextSibling);
+    const isTop = e.clientY < r.top + r.height / 2;
+    highlightDropTarget(target, isTop);
+    isTop ? workspace.insertBefore(placeholder, target) : workspace.insertBefore(placeholder, target.nextSibling);
   }
 
   function onUp() {
     document.removeEventListener('pointermove', onMove);
     document.removeEventListener('pointerup',   onUp);
     document.removeEventListener('pointercancel', onUp);
+    clearDropZones();
     if (!dragging) return;
     workspace.insertBefore(dragging, placeholder);
     removePlaceholder();
