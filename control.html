@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stream Queue Control — Lazzarus Prime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{background:#0e0e0e;color:white;font-family:'Inter',Segoe UI,Arial;text-align:center;padding:20px;margin:0}
+h1{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:3px;color:#f1c40f;margin-bottom:0;filter:drop-shadow(0 0 8px rgba(241,196,15,.4))}
+.sub{color:#555;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+
+.container{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-top:20px}
+.panel{flex:1;min-width:350px;max-width:600px;background:#141414;padding:20px;border-radius:10px;border:1px solid #222;display:none;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+
+.queueItem{background:#1a1a1a;padding:12px;margin:8px 0;border-radius:6px;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #f1c40f;text-align:left;transition:.2s}
+.queueItem:hover{background:#1e1e1e}
+.song-info{flex-grow:1;margin-right:10px}
+.song-title{font-weight:700;font-size:14px}
+.song-artist{font-size:12px;color:#f1c40f;margin-top:2px}
+.owned-badge{padding:2px 6px;border-radius:4px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;display:inline-block}
+.owned{background:#1a3a1a;color:#4caf50;border:1px solid #2d5a2d}
+.not-owned{background:#3a1a1a;color:#e74c3c;border:1px solid #5a2d2d}
+.queue-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#333;width:32px;flex-shrink:0;text-align:center}
+
+.topBar{display:flex;gap:8px;padding:12px;background:#111;justify-content:center;align-items:center;border-bottom:1px solid #222;margin-bottom:20px;border-radius:8px}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 16px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s}
+.nav-btn:hover{background:#444;border-color:#f1c40f;color:#f1c40f}
+
+button{background:#e74c3c;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:13px;transition:.2s;font-family:'Inter',sans-serif}
+button:hover{filter:brightness(1.2)}
+
+.next-btn{background:linear-gradient(135deg,#2ecc71,#27ae60);padding:14px 20px;font-size:16px;margin-bottom:15px;width:100%;border-radius:8px;letter-spacing:1px}
+.clear-btn{background:#333;width:100%;margin-top:10px;border:1px solid #444}
+.clear-btn:hover{background:#444;filter:none}
+
+h2{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#f1c40f;font-size:28px;margin-bottom:15px}
+
+/* ─── Slopsmith Toggle ─── */
+.slop-toggle-box{background:linear-gradient(135deg,#1a0a00,#2a1200);border:1px solid #ff5500;border-radius:8px;padding:14px;margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.slop-toggle-label{text-align:left}
+.slop-toggle-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff7733;letter-spacing:2px}
+.slop-toggle-sub{font-size:11px;color:#884422;margin-top:2px}
+.toggle-switch{position:relative;width:52px;height:28px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#333;border-radius:28px;cursor:pointer;transition:.3s;border:1px solid #444}
+.toggle-slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;bottom:3px;background:#666;border-radius:50%;transition:.3s}
+input:checked + .toggle-slider{background:#ff5500;border-color:#ff7700}
+input:checked + .toggle-slider:before{transform:translateX(24px);background:#fff}
+
+/* ─── Queue stats ─── */
+.queue-meta{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.q-stat{background:#1a1a1a;border:1px solid #222;border-radius:6px;padding:8px 12px;flex:1;text-align:center;min-width:80px}
+.q-stat-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#f1c40f}
+.q-stat-label{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.5px}
+
+#login-box{background:#141414;padding:30px;border-radius:12px;display:inline-block;margin-top:50px;border:1px solid #222;width:340px;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+#login-box input{display:block;width:100%;margin:10px 0;padding:12px;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;color:white;border-radius:6px;font-family:'Inter',sans-serif;font-size:14px}
+#login-box input:focus{outline:none;border-color:#f1c40f}
+#login-box button{width:100%;padding:12px;background:#f1c40f;color:#111;font-size:16px;font-weight:900;border-radius:6px;letter-spacing:1px}
+#login-box button:hover{background:#ffe033;filter:none}
+#status{color:#f1c40f;font-size:13px;margin-top:15px}
+</style>
+</head>
+<body>
+
+<h1>Stream Control</h1>
+<div class="sub">Lazzarus Prime — Queue Manager</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="window.location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="window.location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="window.location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="window.location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="window.location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="window.location.href='metronome.html'">🥁 Metro</button>
+</div>
+
+<div id="login-box">
+  <h2>Admin Login</h2>
+  <input type="email" id="email" placeholder="Email" autocomplete="username">
+  <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+  <button onclick="login()">Login</button>
+  <p id="status">Connecting...</p>
+</div>
+
+<div class="container">
+  <div id="admin-panel" class="panel">
+    <h2>Request Queue</h2>
+
+    <!-- Queue stats -->
+    <div class="queue-meta">
+      <div class="q-stat"><div class="q-stat-num" id="qTotal">0</div><div class="q-stat-label">In Queue</div></div>
+      <div class="q-stat"><div class="q-stat-num" id="qOwned">0</div><div class="q-stat-label">Owned</div></div>
+      <div class="q-stat"><div class="q-stat-num" id="qNotOwned">0</div><div class="q-stat-label">Not Owned</div></div>
+    </div>
+
+    <button class="next-btn" onclick="nextSong()">⏭️ Play Next Song</button>
+    <div id="queue">Loading queue...</div>
+    <button class="clear-btn" onclick="clearQueue()">🗑️ Clear All Requests</button>
+
+    <!-- Slopsmith toggle -->
+    <div class="slop-toggle-box">
+      <div class="slop-toggle-label">
+        <div class="slop-toggle-title">🤘 Slopsmith Mode</div>
+        <div class="slop-toggle-sub">Shows banner on website + overlay</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="slopToggle" onchange="toggleSlopsmith(this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <br>
+    <button onclick="logout()" style="background:transparent;color:#444;font-size:12px;border:1px solid #333;margin-top:10px">Logout</button>
+  </div>
+</div>
+
+<script>
+const libs = [
+  "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXBwLmpz",
+  "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtYXV0aC5qcw==",
+  "aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9maXJlYmFzZUA4LjEwLjEvZmlyZWJhc2UtZGF0YWJhc2UuanM="
+];
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCc7XBAOY4bCDAdKt-tKnNn8xo4Xfj5yw4",
+  authDomain: "rocksmith-requests.firebaseapp.com",
+  databaseURL: "https://rocksmith-requests-default-rtdb.firebaseio.com",
+  projectId: "rocksmith-requests"
+};
+
+async function start() {
+  try {
+    for (let b64 of libs) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = atob(b64); s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+    firebase.initializeApp(firebaseConfig);
+    document.getElementById("status").textContent = "Ready.";
+    document.getElementById("status").style.color = "#4caf50";
+    initAuth();
+  } catch (e) {
+    document.getElementById("status").textContent = "Firebase load failed.";
+    document.getElementById("status").style.color = "#e74c3c";
+  }
+}
+
+function initAuth() {
+  firebase.auth().onAuthStateChanged(user => {
+    const loginBox = document.getElementById("login-box");
+    const adminPanel = document.getElementById("admin-panel");
+
+    if (user && user.uid === 'IF6pmcBswAUEM87hr4uGJBeZeXR2') {
+      loginBox.style.display = "none";
+      adminPanel.style.display = "block";
+      loadQueue();
+      loadSlopState();
+    } else {
+      loginBox.style.display = "inline-block";
+      adminPanel.style.display = "none";
+    }
+  });
+}
+
+function loadQueue() {
+  const queueDiv = document.getElementById("queue");
+  firebase.database().ref("/queue").orderByChild("timestamp").on("value", snap => {
+    queueDiv.innerHTML = "";
+    const data = snap.val();
+
+    let totalCount = 0, ownedCount = 0, notOwnedCount = 0;
+
+    if (!data) {
+      queueDiv.innerHTML = "<p style='color:#444;padding:20px 0'>Queue is currently empty.</p>";
+      document.getElementById('qTotal').textContent = 0;
+      document.getElementById('qOwned').textContent = 0;
+      document.getElementById('qNotOwned').textContent = 0;
+      return;
+    }
+
+    const entries = Object.entries(data).sort((a, b) => a[1].timestamp - b[1].timestamp);
+    entries.forEach(([key, s], i) => {
+      totalCount++;
+      if (s.owned) ownedCount++; else notOwnedCount++;
+
+      const statusClass = s.owned ? "owned" : "not-owned";
+      const statusText  = s.owned ? "Owned" : "Not Owned";
+      const item = document.createElement("div");
+      item.className = "queueItem";
+      item.innerHTML = `
+        <div class="queue-num">${i+1}</div>
+        <div class="song-info">
+          <div class="song-title">${esc(s.song)}</div>
+          <div class="song-artist">${esc(s.artist)}</div>
+          <span class="owned-badge ${statusClass}">${statusText}</span>
+        </div>
+        <button onclick="removeItem('${key}')" style="background:#2a2a2a;border:1px solid #444;color:#888;padding:6px 10px;border-radius:4px">✕</button>`;
+      queueDiv.appendChild(item);
+    });
+
+    document.getElementById('qTotal').textContent = totalCount;
+    document.getElementById('qOwned').textContent = ownedCount;
+    document.getElementById('qNotOwned').textContent = notOwnedCount;
+  });
+}
+
+function loadSlopState() {
+  firebase.database().ref("/slopsmith").once("value", snap => {
+    if (snap.val()) document.getElementById('slopToggle').checked = true;
+  });
+}
+
+window.toggleSlopsmith = (enabled) => {
+  firebase.database().ref("/slopsmith").set(enabled);
+};
+
+function esc(s){return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''}
+
+window.login = () => {
+  const e = document.getElementById("email").value;
+  const p = document.getElementById("password").value;
+  firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+};
+window.logout = () => firebase.auth().signOut();
+window.removeItem = (k) => firebase.database().ref("/queue/" + k).remove();
+window.clearQueue = () => { if (confirm("Permanently delete ALL requests?")) firebase.database().ref("/queue").remove(); };
+window.nextSong = () => {
+  firebase.database().ref("/queue").orderByChild("timestamp").limitToFirst(1).once("value", s => {
+    if (s.exists()) {
+      const key = Object.keys(s.val())[0];
+      firebase.database().ref("/queue/" + key).remove();
+    }
+  });
+};
+
+start();
+</script>
+</body>
+</html>
