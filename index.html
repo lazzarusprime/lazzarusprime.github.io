@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Song Requests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;z-index:9999;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-guitar{width:110px;height:auto;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(241,196,15,.6));animation:splashFloat 2.4s ease-in-out infinite}
+@keyframes splashFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.splash-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,10vw,96px);letter-spacing:6px;margin:0;background:linear-gradient(to bottom,#fff 0%,#f1c40f 50%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1}
+.splash-sub{color:#666;font-size:15px;letter-spacing:4px;text-transform:uppercase;margin-top:10px;font-weight:600}
+.splash-bar{width:260px;height:3px;background:#1e1e1e;border-radius:2px;margin-top:36px;overflow:hidden}
+.splash-bar-fill{height:100%;background:linear-gradient(90deg,#b8860b,#f1c40f,#fff,#f1c40f,#b8860b);background-size:300%;animation:splashLoad 3s cubic-bezier(.4,0,.2,1) forwards,shimmer 1.8s linear infinite}
+@keyframes splashLoad{from{width:0}to{width:100%}}
+@keyframes shimmer{0%{background-position:300%}100%{background-position:-300%}}
+
+/* ── NAVIGATION ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2;margin-top:40px}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <img src="guitar.png" class="splash-guitar" alt="Bass">
+  <h1 class="splash-title">LAZZARUS PRIME</h1>
+  <div class="splash-sub">Song Requests</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <h2>Lazzarus Prime</h2>
+  </div>
+</div>
+
+<div class="topBar">
+  <a href="index.html" class="nav-btn active-page">🎸 Songs</a>
+  <a href="stats.html" class="nav-btn">📊 Stats</a>
+  <a href="gear.html" class="nav-btn">⚙️ Gear</a>
+  <a href="metronome.html" class="nav-btn">⏱️ Metro</a>
+  <a href="youtube.html" class="nav-btn">📺 Videos</a>
+</div>
+
+<footer>
+  <p>© 2026 Lazzarus Prime. All Rights Reserved.</p>
+  <a href="https://prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const s = document.getElementById('splash');
+    if(s) s.classList.add('hidden');
+  }, 1200);
+});
+</script>
+</body>
+</html>

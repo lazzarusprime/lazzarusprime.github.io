@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime — Metronome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.nav-btn:hover{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2;margin-top:auto}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <h2>Practice Metronome</h2>
+  </div>
+</div>
+
+<div class="topBar">
+  <a href="index.html" class="nav-btn">🎸 Songs</a>
+  <a href="stats.html" class="nav-btn">📊 Stats</a>
+  <a href="gear.html" class="nav-btn">⚙️ Gear</a>
+  <a href="metronome.html" class="nav-btn">⏱️ Metro</a>
+  <a href="youtube.html" class="nav-btn">📺 Videos</a>
+</div>
+
+<footer>
+  <p>© 2026 Lazzarus Prime. All Rights Reserved.</p>
+  <a href="https://prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+</body>
+</html>
