@@ -7,29 +7,48 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
+/* ── DYNAMIC CSS VARIABLES FOR CUSTOMIZATION ── */
+:root {
+  --theme-color: #f1c40f;
+  --theme-hover: #ffe033;
+  --theme-glow: rgba(241, 196, 15, 0.4);
+  --theme-glow-strong: rgba(241, 196, 15, 0.9);
+  --theme-bg-mix: #1a1800;
+  --theme-border-mix: rgba(241, 196, 15, 0.27);
+  
+  --bg-main: #0f0f0f;
+  --bg-card: #141414;
+  --bg-input: #1e1e1e;
+  --border-card: #222;
+  --border-element: #2a2a2a;
+  
+  --dot-radius: 50%;
+  --dot-width: 32px;
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-main);color:white;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;transition: background 0.3s ease}
 
 /* ── TITLE BAR ── */
-.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-card);padding:10px 14px;border-bottom:2px solid var(--border-card);flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
-.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
-.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px var(--theme-glow))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,var(--theme-color) 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px var(--theme-glow))}
 .socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
-.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+.socialLinks a:hover{color:var(--theme-color);border-color:#333;background:#1a1a1a}
 
 /* ── TOP BAR ── */
 .topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
-.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
-.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
-.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:var(--theme-color);color:var(--theme-color)}
+.nav-btn.active-page{border-color:var(--theme-border-mix);color:var(--theme-color);background:var(--theme-bg-mix)}
+.nav-btn.spinning{pointer-events:none;border-color:var(--theme-color);color:var(--theme-color);background:#444}
 .topBar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
 
 /* ── START/STOP ── */
-.start-btn{background:#f1c40f;color:#111;border:none;padding:10px 26px;border-radius:8px;cursor:pointer;font-weight:900;font-size:16px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;transition:.2s;box-shadow:0 0 0 transparent}
-.start-btn:hover{background:#ffe033;transform:scale(1.03)}
+.start-btn{background:var(--theme-color);color:#111;border:none;padding:10px 26px;border-radius:8px;cursor:pointer;font-weight:900;font-size:16px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;transition:.2s;box-shadow:0 0 0 transparent}
+.start-btn:hover{background:var(--theme-hover);transform:scale(1.03)}
 .start-btn.running{background:#c0392b;color:#fff;animation:startPulse 1s ease-in-out infinite}
 @keyframes startPulse{0%,100%{box-shadow:0 0 8px rgba(192,57,43,.4)}50%{box-shadow:0 0 20px rgba(192,57,43,.8)}}
 
@@ -40,41 +59,41 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;display:f
 .main-panel{flex:1;min-width:300px;max-width:560px;display:flex;flex-direction:column;gap:16px}
 
 /* ── BPM DISPLAY ── */
-.bpm-panel{background:#141414;border:1px solid #222;border-radius:14px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.bpm-panel{background:var(--bg-card);border:1px solid var(--border-card);border-radius:14px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.6)}
 .bpm-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:6px}
-.bpm-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,130px);line-height:1;color:#f1c40f;transition:color .1s;filter:drop-shadow(0 0 10px rgba(241,196,15,.3));cursor:default;user-select:none}
+.bpm-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,130px);line-height:1;color:var(--theme-color);transition:color .1s;filter:drop-shadow(0 0 10px var(--theme-glow));cursor:default;user-select:none}
 .bpm-big.beat-flash{animation:bpmFlash .08s ease-out}
 .bpm-big.accent-flash{animation:accentFlash .12s ease-out}
-@keyframes bpmFlash{0%{filter:drop-shadow(0 0 30px rgba(241,196,15,1)) brightness(1.5)}100%{filter:drop-shadow(0 0 10px rgba(241,196,15,.3))}}
-@keyframes accentFlash{0%{filter:drop-shadow(0 0 40px rgba(255,85,0,1)) brightness(2);color:#ff7733}100%{filter:drop-shadow(0 0 10px rgba(241,196,15,.3));color:#f1c40f}}
+@keyframes bpmFlash{0%{filter:drop-shadow(0 0 30px var(--theme-color)) brightness(1.5)}100%{filter:drop-shadow(0 0 10px var(--theme-glow))}}
+@keyframes accentFlash{0%{filter:drop-shadow(0 0 40px rgba(255,85,0,1)) brightness(2);color:#ff7733}100%{filter:drop-shadow(0 0 10px var(--theme-glow));color:var(--theme-color)}}
 .tempo-name{font-size:13px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-top:6px;height:20px}
 
 /* BPM Slider */
 .bpm-slider-wrap{position:relative;padding:4px 0 0}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;margin:0}
-input[type=range].bpm-slider{background:linear-gradient(to right,#f1c40f var(--pct,50%),#2a2a2a var(--pct,50%))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#f1c40f;border:3px solid #0f0f0f;box-shadow:0 0 8px rgba(241,196,15,.5);transition:transform .1s}
+input[type=range].bpm-slider{background:linear-gradient(to right,var(--theme-color) var(--pct,50%),#2a2a2a var(--pct,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--theme-color);border:3px solid #0f0f0f;box-shadow:0 0 8px var(--theme-glow);transition:transform .1s}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
-input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#f1c40f;border:3px solid #0f0f0f;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--theme-color);border:3px solid #0f0f0f;cursor:pointer}
 .slider-labels{display:flex;justify-content:space-between;font-size:10px;color:#444;font-weight:700;margin-top:4px}
 
 /* BPM Tap / nudge */
 .bpm-controls{display:flex;gap:8px;margin-top:12px;align-items:center}
-.nudge-btn{background:#1e1e1e;border:1px solid #333;color:#aaa;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:700;transition:.15s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.nudge-btn:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1800}
+.nudge-btn{background:var(--bg-input);border:1px solid #333;color:#aaa;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:700;transition:.15s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.nudge-btn:hover{border-color:var(--theme-color);color:var(--theme-color);background:var(--theme-bg-mix)}
 .nudge-btn:active{transform:scale(.92)}
 .tap-btn{flex:1;background:linear-gradient(135deg,#1a1a2a,#222233);border:1px solid #3a3a5a;color:#aaa;padding:10px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;transition:.15s;font-family:'Inter',sans-serif}
-.tap-btn:hover{border-color:#f1c40f;color:#f1c40f}
-.tap-btn:active{background:#1a1800;transform:scale(.97)}
+.tap-btn:hover{border-color:var(--theme-color);color:var(--theme-color)}
+.tap-btn:active{background:var(--theme-bg-mix);transform:scale(.97)}
 .bpm-input-wrap{display:flex;align-items:center;gap:6px}
-.bpm-number-input{background:#1e1e1e;border:1px solid #333;color:#f1c40f;width:68px;padding:9px 8px;border-radius:6px;font-size:16px;font-weight:900;text-align:center;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
-.bpm-number-input:focus{outline:none;border-color:#f1c40f}
+.bpm-number-input{background:var(--bg-input);border:1px solid #333;color:var(--theme-color);width:68px;padding:9px 8px;border-radius:6px;font-size:16px;font-weight:900;text-align:center;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.bpm-number-input:focus{outline:none;border-color:var(--theme-color)}
 
 /* ── BEAT VISUALISER ── */
-.beat-row{display:flex;gap:6px;justify-content:center;align-items:center;padding:16px;background:#141414;border:1px solid #222;border-radius:12px;flex-wrap:wrap;min-height:70px}
-.beat-dot{width:32px;height:32px;border-radius:50%;background:#1e1e1e;border:2px solid #2a2a2a;transition:.05s;flex-shrink:0;position:relative}
-.beat-dot.accent{border-color:#f1c40f44;background:#1a1800}
-.beat-dot.active{background:#f1c40f;border-color:#ffe033;box-shadow:0 0 18px rgba(241,196,15,.9);transform:scale(1.15)}
+.beat-row{display:flex;gap:8px;justify-content:center;align-items:center;padding:16px;background:var(--bg-card);border:1px solid var(--border-card);border-radius:12px;flex-wrap:wrap;min-height:70px}
+.beat-dot{width:var(--dot-width);height:32px;border-radius:var(--dot-radius);background:var(--bg-input);border:2px solid var(--border-element);transition:.05s;flex-shrink:0;position:relative}
+.beat-dot.accent{border-color:var(--theme-border-mix);background:var(--theme-bg-mix)}
+.beat-dot.active{background:var(--theme-color);border-color:var(--theme-hover);box-shadow:0 0 18px var(--theme-glow-strong);transform:scale(1.15)}
 .beat-dot.active.accent{background:#ff7733;border-color:#ff9933;box-shadow:0 0 22px rgba(255,119,51,.9)}
 .beat-dot.muted{background:#111;border-color:#1e1e1e;opacity:.4}
 
@@ -82,55 +101,65 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .side-panel{width:280px;display:flex;flex-direction:column;gap:14px}
 
 /* ── CARD ── */
-.card{background:#141414;border:1px solid #222;border-radius:12px;padding:16px}
-.card-title{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#f1c40f;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1e1e1e}
+.card{background:var(--bg-card);border:1px solid var(--border-card);border-radius:12px;padding:16px}
+.card-title{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--theme-color);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1e1e1e}
+
+/* Customizer controls style */
+.customizer-grid{display:flex;flex-direction:column;gap:10px}
+.custom-row{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:700;color:#666}
+.custom-row label{text-transform:uppercase;letter-spacing:.5px}
+.custom-options{display:flex;gap:4px;flex-wrap:wrap}
+.custom-opt-btn{flex:1;min-width:60px;background:var(--bg-input);border:1px solid var(--border-element);color:#888;padding:6px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;text-align:center;transition:.15s}
+.custom-opt-btn:hover{border-color:var(--theme-border-mix);color:#ccc}
+.custom-opt-btn.active{background:var(--theme-bg-mix);border-color:var(--theme-color);color:var(--theme-color)}
 
 /* Time signature */
 .timesig-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sig-btn{background:#1e1e1e;border:1px solid #2a2a2a;color:#888;padding:8px 0;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
-.sig-btn:hover{border-color:#f1c40f55;color:#ccc}
-.sig-btn.active{background:#1a1800;border-color:#f1c40f;color:#f1c40f}
+.sig-btn{background:var(--bg-input);border:1px solid var(--border-element);color:#888;padding:8px 0;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
+.sig-btn:hover{border-color:var(--theme-border-mix);color:#ccc}
+.sig-btn.active{background:var(--theme-bg-mix);border-color:var(--theme-color);color:var(--theme-color)}
 
 /* Subdivision */
 .subdiv-row{display:flex;flex-wrap:wrap;gap:6px}
-.subdiv-btn{flex:1;min-width:50px;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;padding:7px 4px;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;text-align:center;transition:.2s;font-family:'Inter',sans-serif;white-space:nowrap}
-.subdiv-btn:hover{border-color:#f1c40f55;color:#ccc}
-.subdiv-btn.active{background:#1a1800;border-color:#f1c40f;color:#f1c40f}
+.subdiv-btn{flex:1;min-width:50px;background:var(--bg-input);border:1px solid var(--border-element);color:#888;padding:7px 4px;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;text-align:center;transition:.2s;font-family:'Inter',sans-serif;white-space:nowrap}
+.subdiv-btn:hover{border-color:var(--theme-border-mix);color:#ccc}
+.subdiv-btn.active{background:var(--theme-bg-mix);border-color:var(--theme-color);color:var(--theme-color)}
 
 /* Sound picker */
 .sound-grid{display:flex;flex-direction:column;gap:6px}
 .sound-row{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#666}
 .sound-row label{min-width:60px;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-.sound-select{flex:1;background:#1e1e1e;color:#ccc;border:1px solid #2a2a2a;padding:6px 8px;border-radius:6px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer}
-.sound-select:focus{outline:none;border-color:#f1c40f}
+.sound-select{flex:1;background:var(--bg-input);color:#ccc;border:1px solid var(--border-element);padding:6px 8px;border-radius:6px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer}
+.sound-select:focus{outline:none;border-color:var(--theme-color)}
 .vol-row{display:flex;align-items:center;gap:8px;margin-top:6px}
 .vol-row label{font-size:11px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.5px;min-width:60px}
-input[type=range].vol-slider{flex:1;height:4px;background:linear-gradient(to right,#f1c40f var(--pct,80%),#2a2a2a var(--pct,80%))}
+input[type=range].vol-slider{flex:1;height:4px;background:linear-gradient(to right,var(--theme-color) var(--pct,80%),#2a2a2a var(--pct,80%))}
 
 /* Swing */
 .swing-wrap{display:flex;flex-direction:column;gap:6px}
-.swing-value{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f1c40f;text-align:center}
-input[type=range].swing-slider{height:4px;background:linear-gradient(to right,#2a2a2a var(--pct,0%),#f1c40f var(--pct,0%),#f1c40f 50%,#2a2a2a 50%)}
+.swing-value{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--theme-color);text-align:center}
+input[type=range].swing-slider{height:4px;background:linear-gradient(to right,#2a2a2a var(--pct,0%),var(--theme-color) var(--pct,0%),var(--theme-color) 50%,#2a2a2a 50%)}
 
 /* Preset tempos */
 .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.preset-btn{background:#1e1e1e;border:1px solid #222;color:#888;padding:7px 6px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif;line-height:1.3}
-.preset-btn:hover{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.preset-btn{background:var(--bg-input);border:1px solid var(--border-card);color:#888;padding:7px 6px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif;line-height:1.3}
+.preset-btn:hover{border-color:var(--theme-border-mix);color:var(--theme-color);background:var(--theme-bg-mix)}
 .preset-btn strong{display:block;font-size:13px;color:#ccc;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
 
 /* Accent editor */
 .accent-editor{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
-.accent-chip{width:34px;height:34px;border-radius:6px;border:2px solid #2a2a2a;background:#1e1e1e;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
-.accent-chip:hover{border-color:#f1c40f55}
+.accent-chip{width:34px;height:34px;border-radius:6px;border:2px solid var(--border-element);background:var(--bg-input);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.accent-chip:hover{border-color:var(--theme-border-mix)}
 .accent-chip.accent-strong{background:#1a0a00;border-color:#ff5500}
-.accent-chip.accent-medium{background:#1a1800;border-color:#f1c40f}
+.accent-chip.accent-medium{background:var(--theme-bg-mix);border-color:var(--theme-color)}
+.accent-chip.accent-weak{background:#001a1a;border-color:#00bcff}
 .accent-chip.accent-off{background:#111;border-color:#1a1a1a;opacity:.5}
 
 /* Visual mode toggle */
 .viz-row{display:flex;gap:6px}
-.viz-btn{flex:1;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;padding:7px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
-.viz-btn:hover{border-color:#f1c40f55;color:#ccc}
-.viz-btn.active{background:#1a1800;border-color:#f1c40f;color:#f1c40f}
+.viz-btn{flex:1;background:var(--bg-input);border:1px solid var(--border-element);color:#888;padding:7px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
+.viz-btn:hover{border-color:var(--theme-border-mix);color:#ccc}
+.viz-btn.active{background:var(--theme-bg-mix);border-color:var(--theme-color);color:var(--theme-color)}
 
 /* Pendulum canvas */
 #pendulumCanvas{display:block;width:100%;border-radius:10px;background:#0a0a0a;border:1px solid #1e1e1e}
@@ -138,17 +167,17 @@ input[type=range].swing-slider{height:4px;background:linear-gradient(to right,#2
 /* Practice tools */
 .practice-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .practice-row label{font-size:11px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.5px;min-width:80px}
-.practice-row input[type=number]{background:#1e1e1e;border:1px solid #2a2a2a;color:#f1c40f;width:64px;padding:6px 8px;border-radius:6px;font-size:14px;font-weight:700;text-align:center;font-family:'Bebas Neue',sans-serif}
-.practice-row input[type=number]:focus{outline:none;border-color:#f1c40f}
-.practice-toggle{flex:1;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;padding:7px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
-.practice-toggle:hover{border-color:#f1c40f55;color:#ccc}
+.practice-row input[type=number]{background:var(--bg-input);border:1px solid var(--border-element);color:var(--theme-color);width:64px;padding:6px 8px;border-radius:6px;font-size:14px;font-weight:700;text-align:center;font-family:'Bebas Neue',sans-serif}
+.practice-row input[type=number]:focus{outline:none;border-color:var(--theme-color)}
+.practice-toggle{flex:1;background:var(--bg-input);border:1px solid var(--border-element);color:#888;padding:7px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;transition:.2s;font-family:'Inter',sans-serif}
+.practice-toggle:hover{border-color:var(--theme-border-mix);color:#ccc}
 .practice-toggle.active{background:#1a3a1a;border-color:#27ae60;color:#2ecc71}
 .practice-status{font-size:11px;color:#444;text-align:center;min-height:16px;margin-top:2px}
 
 /* ── FOOTER ── */
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
 footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
-footer a:hover{color:#f1c40f;background:#1a1a1a}
+footer a:hover{color:var(--theme-color);background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
 
 @media(max-width:680px){
@@ -162,20 +191,20 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 }
 /* ── DRAG PANELS ── */
 .drag-workspace{display:flex;flex-wrap:wrap;gap:16px;padding:16px;justify-content:flex-start;align-items:flex-start;max-width:1200px;margin:0 auto;width:100%}
-.drag-panel{background:#141414;border:1px solid #222;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s;position:relative;min-width:260px}
-.drag-panel.dragging{opacity:.5;border-color:#f1c40f55;box-shadow:0 0 0 2px #f1c40f33}
-.drag-panel.drag-over{border-color:#f1c40f;box-shadow:0 0 0 2px #f1c40f55;background:#141410}
+.drag-panel{background:var(--bg-card);border:1px solid var(--border-card);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s, background 0.3s ease;position:relative;min-width:260px}
+.drag-panel.dragging{opacity:.5;border-color:var(--theme-border-mix);box-shadow:0 0 0 2px var(--theme-glow)}
+.drag-panel.drag-over{border-color:var(--theme-color);box-shadow:0 0 0 2px var(--theme-glow-strong);background:#141410}
 .drag-handle{display:flex;align-items:center;gap:8px;padding:8px 14px 6px;cursor:grab;border-bottom:1px solid #1e1e1e;user-select:none;background:#181818;border-radius:12px 12px 0 0}
 .drag-handle:active{cursor:grabbing}
 .drag-handle-icon{color:#333;font-size:14px;letter-spacing:-2px;line-height:1}
-.drag-handle-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#f1c40f;flex:1}
+.drag-handle-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--theme-color);flex:1}
 .drag-handle-hint{font-size:9px;color:#2a2a2a;font-weight:600}
 .drag-panel-body{padding:14px}
 .drag-panel.collapsed .drag-panel-body{display:none}
 .drag-panel.collapsed{border-radius:12px}
 .drag-panel.collapsed .drag-handle{border-bottom:none;border-radius:12px}
 .collapse-btn{background:transparent;border:none;color:#333;cursor:pointer;font-size:13px;padding:0 4px;transition:.15s;line-height:1}
-.collapse-btn:hover{color:#f1c40f}
+.collapse-btn:hover{color:var(--theme-color)}
 /* width presets */
 .w-sm{width:260px} .w-md{width:320px} .w-lg{width:420px} .w-xl{flex:1;min-width:340px} .w-full{width:100%}
 @media(max-width:600px){.drag-panel,.w-sm,.w-md,.w-lg,.w-xl{width:100%!important;min-width:unset!important}}
@@ -213,7 +242,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 
 <div class="drag-workspace" id="dragWorkspace">
 
-  <!-- PANEL: BPM -->
   <div class="drag-panel w-xl" id="dp-bpm">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🥁 Tempo / BPM</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-bpm')" title="Collapse">▾</button></div>
     <div class="drag-panel-body" style="text-align:center">
@@ -237,7 +265,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Beat Visualiser -->
   <div class="drag-panel w-xl" id="dp-beats">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔵 Beat Visualiser</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-beats')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -252,7 +279,39 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Time Signature -->
+  <div class="drag-panel w-md" id="dp-customizer">
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎨 Visual Customization</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-customizer')" title="Collapse">▾</button></div>
+    <div class="drag-panel-body">
+      <div class="customizer-grid">
+        <div class="custom-row">
+          <label>Theme Style</label>
+          <div class="custom-options">
+            <button class="custom-opt-btn active" id="th-gold" onclick="setTheme('gold')">Gold (Def)</button>
+            <button class="custom-opt-btn" id="th-cyan" onclick="setTheme('cyan')">Neon Cyan</button>
+            <button class="custom-opt-btn" id="th-flame" onclick="setTheme('flame')">Flame</button>
+            <button class="custom-opt-btn" id="th-green" onclick="setTheme('green')">Matrix</button>
+          </div>
+        </div>
+        <div class="custom-row">
+          <label>Beat Indicator Shape</label>
+          <div class="custom-options">
+            <button class="custom-opt-btn active" id="sh-circle" onclick="setShape('circle')">Circles</button>
+            <button class="custom-opt-btn" id="sh-square" onclick="setShape('square')">Squares</button>
+            <button class="custom-opt-btn" id="sh-pill" onclick="setShape('pill')">Pills</button>
+          </div>
+        </div>
+        <div class="custom-row">
+          <label>Workspace Darkness</label>
+          <div class="custom-options">
+            <button class="custom-opt-btn active" id="bg-charcoal" onclick="setDarkness('charcoal')">Charcoal</button>
+            <button class="custom-opt-btn" id="bg-pitch" onclick="setDarkness('pitch')">Pitch Black</button>
+            <button class="custom-opt-btn" id="bg-midnight" onclick="setDarkness('midnight')">Midnight</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="drag-panel w-md" id="dp-timesig">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">⏱ Time Signature</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-timesig')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -269,7 +328,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Subdivision -->
   <div class="drag-panel w-md" id="dp-subdiv">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 Subdivision</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-subdiv')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -283,16 +341,14 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Accents -->
   <div class="drag-panel w-md" id="dp-accents">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎯 Beat Accents</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-accents')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
-      <div style="font-size:10px;color:#444;margin-bottom:8px">Click chips to cycle: Strong → Medium → Off</div>
+      <div style="font-size:10px;color:#444;margin-bottom:8px">Click chips to cycle: Strong → Medium → Weak → Off</div>
       <div class="accent-editor" id="accentEditor"></div>
     </div>
   </div>
 
-  <!-- PANEL: Sound -->
   <div class="drag-panel w-md" id="dp-sound">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 Sound</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-sound')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -305,7 +361,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Swing -->
   <div class="drag-panel w-sm" id="dp-swing">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎷 Swing</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-swing')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -315,7 +370,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Presets -->
   <div class="drag-panel w-md" id="dp-presets">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">📖 Tempo Presets</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-presets')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -323,7 +377,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     </div>
   </div>
 
-  <!-- PANEL: Practice -->
   <div class="drag-panel w-lg" id="dp-practice">
     <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🏋️ Practice Tools</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-practice')" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
@@ -383,8 +436,13 @@ let volume = 0.80;
 let isRunning = false;
 let vizMode = 'pendulum';
 
-// Accent levels per beat: 2=strong, 1=medium, 0=off
-let accentLevels = [2,1,1,1];
+// Customization variables
+let currentTheme = 'gold';
+let currentShape = 'circle';
+let currentDarkness = 'charcoal';
+
+// Accent levels per beat: 3=strong, 2=medium, 1=weak, 0=off
+let accentLevels = [3,2,2,2];
 
 // Sound names
 let accentSoundName = 'woodblock_hi';
@@ -420,6 +478,95 @@ let lastBeatTime = 0;
 let beatProgress = 0;      // 0→1 between beats for smooth interpolation
 
 /* ═══════════════════════════════════════════════════════
+   VISUAL CUSTOMIZER HANDLERS
+═══════════════════════════════════════════════════════ */
+function setTheme(theme) {
+  currentTheme = theme;
+  document.querySelectorAll('[id^="th-"]').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('th-' + theme).classList.add('active');
+  
+  const root = document.documentElement;
+  if (theme === 'gold') {
+    root.style.setProperty('--theme-color', '#f1c40f');
+    root.style.setProperty('--theme-hover', '#ffe033');
+    root.style.setProperty('--theme-glow', 'rgba(241,196,15,0.4)');
+    root.style.setProperty('--theme-glow-strong', 'rgba(241,196,15,0.9)');
+    root.style.setProperty('--theme-bg-mix', '#1a1800');
+    root.style.setProperty('--theme-border-mix', 'rgba(241,196,15,0.27)');
+  } else if (theme === 'cyan') {
+    root.style.setProperty('--theme-color', '#00bcff');
+    root.style.setProperty('--theme-hover', '#33ccff');
+    root.style.setProperty('--theme-glow', 'rgba(0,188,255,0.4)');
+    root.style.setProperty('--theme-glow-strong', 'rgba(0,188,255,0.9)');
+    root.style.setProperty('--theme-bg-mix', '#00161a');
+    root.style.setProperty('--theme-border-mix', 'rgba(0,188,255,0.27)');
+  } else if (theme === 'flame') {
+    root.style.setProperty('--theme-color', '#ff5500');
+    root.style.setProperty('--theme-hover', '#ff7733');
+    root.style.setProperty('--theme-glow', 'rgba(255,85,0,0.4)');
+    root.style.setProperty('--theme-glow-strong', 'rgba(255,85,0,0.9)');
+    root.style.setProperty('--theme-bg-mix', '#1a0900');
+    root.style.setProperty('--theme-border-mix', 'rgba(255,85,0,0.27)');
+  } else if (theme === 'green') {
+    root.style.setProperty('--theme-color', '#2ecc71');
+    root.style.setProperty('--theme-hover', '#40d47e');
+    root.style.setProperty('--theme-glow', 'rgba(46,204,113,0.4)');
+    root.style.setProperty('--theme-glow-strong', 'rgba(46,204,113,0.9)');
+    root.style.setProperty('--theme-bg-mix', '#041a0b');
+    root.style.setProperty('--theme-border-mix', 'rgba(46,204,113,0.27)');
+  }
+  
+  // Refresh slider gradients and layout states
+  setBpm(bpm);
+  setVolume(volume * 100);
+  setSwing(swingAmount);
+  buildAccentEditor();
+}
+
+function setShape(shape) {
+  currentShape = shape;
+  document.querySelectorAll('[id^="sh-"]').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('sh-' + shape).classList.add('active');
+  
+  const root = document.documentElement;
+  if (shape === 'circle') {
+    root.style.setProperty('--dot-radius', '50%');
+    root.style.setProperty('--dot-width', '32px');
+  } else if (shape === 'square') {
+    root.style.setProperty('--dot-radius', '6px');
+    root.style.setProperty('--dot-width', '32px');
+  } else if (shape === 'pill') {
+    root.style.setProperty('--dot-radius', '20px');
+    root.style.setProperty('--dot-width', '54px');
+  }
+  buildBeatRow();
+}
+
+function setDarkness(darkness) {
+  currentDarkness = darkness;
+  document.querySelectorAll('[id^="bg-"]').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('bg-' + darkness).classList.add('active');
+  
+  const root = document.documentElement;
+  if (darkness === 'charcoal') {
+    root.style.setProperty('--bg-main', '#0f0f0f');
+    root.style.setProperty('--bg-card', '#141414');
+    root.style.setProperty('--bg-input', '#1e1e1e');
+    root.style.setProperty('--border-card', '#222');
+  } else if (darkness === 'pitch') {
+    root.style.setProperty('--bg-main', '#000000');
+    root.style.setProperty('--bg-card', '#0a0a0a');
+    root.style.setProperty('--bg-input', '#141414');
+    root.style.setProperty('--border-card', '#151515');
+  } else if (darkness === 'midnight') {
+    root.style.setProperty('--bg-main', '#05050d');
+    root.style.setProperty('--bg-card', '#0b0b16');
+    root.style.setProperty('--bg-input', '#131326');
+    root.style.setProperty('--border-card', '#1a1a33');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
    TEMPO PRESETS
 ═══════════════════════════════════════════════════════ */
 const TEMPOS = [
@@ -436,6 +583,7 @@ function getTempoName(b) {
 }
 function buildPresets() {
   const grid = document.getElementById('presetGrid');
+  grid.innerHTML = '';
   TEMPOS.forEach(t => {
     const btn = document.createElement('button');
     btn.className = 'preset-btn';
@@ -491,7 +639,6 @@ function synthWoodblock(ctx, out, when, freq, dur) {
   osc.start(when); osc.stop(when+dur+0.01);
 }
 function synthClick(ctx, out, when, freq, dur) {
-  // White noise burst shaped like a click
   const bufSize = Math.ceil(ctx.sampleRate * dur);
   const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
   const data = buf.getChannelData(0);
@@ -515,7 +662,6 @@ function synthRim(ctx, out, when) {
   env.gain.exponentialRampToValueAtTime(0.001, when+dur);
   osc.connect(env); env.connect(out);
   osc.start(when); osc.stop(when+dur+0.01);
-  // Add noise layer
   const nb = ctx.createBuffer(1,Math.ceil(ctx.sampleRate*dur),ctx.sampleRate);
   const nd = nb.getChannelData(0);
   for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*Math.pow(1-i/nd.length,3);
@@ -573,7 +719,6 @@ function synthBeep(ctx, out, when, freq, dur) {
 ═══════════════════════════════════════════════════════ */
 function getSubInterval() {
   const beatSec = 60 / bpm;
-  // For compound time (6/8, 12/8): beat = dotted quarter = 3 eighth notes
   const baseSec = (beatUnit === 8) ? beatSec / 3 * 2 : beatSec;
   const subSec  = baseSec / subdivision;
   return subSec;
@@ -588,7 +733,6 @@ function schedule() {
     const sub  = currentSub % subdivision;
     const isDownbeat = currentSub === 0 && !countInActive;
 
-    // Swing: delay even subs by swingAmount%
     let swingOffset = 0;
     if (subdivision >= 2 && sub % 2 === 1 && swingAmount > 0) {
       const subInterval = getSubInterval();
@@ -598,29 +742,22 @@ function schedule() {
     const when = nextBeatTime + swingOffset;
 
     if (!countInActive) {
-      // Determine sound to play
       if (sub === 0) {
-        // Beat hit
-        const accent = accentLevels[beat] ?? 1;
-        if (accent === 0) {
-          // muted — play nothing
-        } else {
-          const snd = (accent === 2) ? accentSoundName : beatSoundName;
-          const vol = (accent === 2) ? 1.0 : 0.7;
+        const accent = accentLevels[beat] ?? 2;
+        if (accent !== 0) {
+          const snd = (accent === 3) ? accentSoundName : beatSoundName;
+          const vol = (accent === 3) ? 1.0 : (accent === 2) ? 0.7 : 0.4;
           playSound(snd, when, vol);
         }
       } else {
-        // Subdivision
         playSound(subSoundName, when, 0.4);
       }
     } else {
-      // Count-in: always play strong accent
       if (sub === 0) {
         playSound(accentSoundName, when, beat === 0 ? 1.0 : 0.6);
       }
     }
 
-    // Schedule visual update
     const beatAtTime = nextBeatTime;
     const beatIdx = currentSub;
     const barAtTime = currentBar;
@@ -633,7 +770,6 @@ function schedule() {
       updatePendulum(beat, beatsPerBar);
     }, Math.max(0, (when - ctx.currentTime) * 1000));
 
-    // Advance
     nextBeatTime += getSubInterval();
     currentSub++;
 
@@ -656,22 +792,18 @@ function schedule() {
 }
 
 function handlePracticeBar() {
-  // Speed-up
   if (speedupEnabled && currentBar > 0 && currentBar % speedupBars === 0) {
     const newBpm = Math.min(300, bpm + speedupBpm);
     setBpm(newBpm);
-    document.getElementById('speedupStatus').textContent =
-      `Bar ${currentBar}: bumped to ${newBpm} BPM`;
+    document.getElementById('speedupStatus').textContent = `Bar ${currentBar}: bumped to ${newBpm} BPM`;
   }
-  // Count stop
   if (countEnabled && currentBar >= countBars) {
     stopMetronome();
     document.getElementById('countStatus').textContent = `Stopped after ${countBars} bars`;
     return;
   }
   if (countEnabled) {
-    document.getElementById('countStatus').textContent =
-      `Bar ${currentBar} / ${countBars}`;
+    document.getElementById('countStatus').textContent = `Bar ${currentBar} / ${countBars}`;
   }
 }
 
@@ -686,7 +818,6 @@ function startMetronome() {
   currentBar = 0;
   nextBeatTime = audioCtx.currentTime + 0.05;
 
-  // Count-in
   if (countInEnabled) {
     countInActive = true;
     countInRemaining = parseInt(document.getElementById('countInBars').value) || 1;
@@ -726,10 +857,9 @@ function buildBeatRow() {
     const dot = document.createElement('div');
     dot.className = 'beat-dot' + (accentLevels[i] === 0 ? ' muted' : '') + (i === 0 ? ' accent' : '');
     dot.id = 'bd' + i;
-    dot.title = 'Click to toggle mute';
+    dot.title = 'Click to toggle level';
     dot.onclick = () => {
-      // Clicking a dot cycles its accent: strong→medium→off→strong
-      accentLevels[i] = (accentLevels[i] + 1) % 3 === 0 ? 2 : (accentLevels[i] + 1) % 3;
+      accentLevels[i] = accentLevels[i] === 3 ? 2 : accentLevels[i] === 2 ? 1 : accentLevels[i] === 1 ? 0 : 3;
       buildBeatRow();
       buildAccentEditor();
     };
@@ -748,11 +878,10 @@ function flashBeat(beatIdx, isCountIn) {
     if (isCountIn) dot.style.background = '#3a3aaa';
     else dot.style.background = '';
   }
-  // Flash BPM display
   const bpmEl = document.getElementById('bpmDisplay');
   bpmEl.classList.remove('beat-flash','accent-flash');
   void bpmEl.offsetWidth;
-  bpmEl.classList.add(beatIdx === 0 ? 'accent-flash' : 'beat-flash');
+  bpmEl.classList.add(accentLevels[beatIdx] === 3 ? 'accent-flash' : 'beat-flash');
 }
 
 function clearBeatDots() {
@@ -800,12 +929,17 @@ function drawPendulumFrame() {
   }
 }
 
+function getActiveColor() {
+  return computedStyleVariable('--theme-color');
+}
+
+function computedStyleVariable(varName) {
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 function drawPendMode(W, H, t) {
-  // Target angle: alternates -30° to +30° each beat
   const targetAngle = (currentBeat % 2 === 0 ? -1 : 1) * (Math.PI / 6);
-  // Previous angle
   const prevAngle = (currentBeat % 2 === 0 ? 1 : -1) * (Math.PI / 6);
-  // Smooth via ease-in-out
   const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
   const angle = prevAngle + (targetAngle - prevAngle) * ease;
 
@@ -815,7 +949,6 @@ function drawPendMode(W, H, t) {
   const bx = cx + Math.sin(angle) * armLen;
   const by = pivotY + Math.cos(angle) * armLen;
 
-  // Rod
   pendCtx.beginPath();
   pendCtx.moveTo(cx, pivotY);
   pendCtx.lineTo(bx, by);
@@ -823,10 +956,16 @@ function drawPendMode(W, H, t) {
   pendCtx.lineWidth = 2;
   pendCtx.stroke();
 
-  // Bob glow
   const inBeat = t < 0.15;
   const bobR = inBeat ? 18 : 14;
-  const bobColor = inBeat ? (currentBeat === 0 ? '#ff7733' : '#f1c40f') : '#555';
+  
+  let bobColor = '#555';
+  if (inBeat) {
+    if (accentLevels[currentBeat] === 3) bobColor = '#ff7733';
+    else if (accentLevels[currentBeat] === 2) bobColor = getActiveColor();
+    else bobColor = '#00bcff';
+  }
+  
   pendCtx.beginPath();
   pendCtx.arc(bx, by, bobR, 0, Math.PI*2);
   pendCtx.fillStyle = bobColor;
@@ -835,7 +974,6 @@ function drawPendMode(W, H, t) {
   pendCtx.fill();
   pendCtx.shadowBlur = 0;
 
-  // Pivot dot
   pendCtx.beginPath();
   pendCtx.arc(cx, pivotY, 5, 0, Math.PI*2);
   pendCtx.fillStyle = '#444';
@@ -844,7 +982,8 @@ function drawPendMode(W, H, t) {
 
 function drawFlashMode(W, H, t) {
   const fade = Math.max(0, 1 - t * 5);
-  const col = currentBeat === 0 ? `rgba(255,119,51,${fade})` : `rgba(241,196,15,${fade})`;
+  const themeCol = getActiveColor();
+  const col = accentLevels[currentBeat] === 3 ? `rgba(255,119,51,${fade})` : accentLevels[currentBeat] === 2 ? themeCol.replace(')', `, ${fade})`).replace('rgb', 'rgba') : `rgba(0,188,255,${fade})`;
   pendCtx.fillStyle = col;
   pendCtx.fillRect(0, 0, W, H);
   if (fade > 0) {
@@ -859,13 +998,9 @@ function drawFlashMode(W, H, t) {
 function drawBounceMode(W, H, t) {
   const ease = 1 - Math.pow(1 - t, 3);
   const x = (W - 30) * ease + 15;
-  const beatSec = 60/bpm;
-  const col = currentBeat === 0 ? '#ff7733' : '#f1c40f';
-  // Track
+  const col = accentLevels[currentBeat] === 3 ? '#ff7733' : accentLevels[currentBeat] === 2 ? getActiveColor() : '#00bcff';
   pendCtx.fillStyle = '#1a1a1a';
   pendCtx.fillRect(10, H/2-3, W-20, 6);
-  pendCtx.borderRadius = 3;
-  // Ball
   pendCtx.beginPath();
   pendCtx.arc(x, H/2, 16, 0, Math.PI*2);
   pendCtx.fillStyle = col;
@@ -873,7 +1008,6 @@ function drawBounceMode(W, H, t) {
   pendCtx.shadowBlur = 20;
   pendCtx.fill();
   pendCtx.shadowBlur = 0;
-  // Beat number
   pendCtx.fillStyle = '#111';
   pendCtx.font = 'bold 14px Bebas Neue, sans-serif';
   pendCtx.textAlign = 'center';
@@ -882,11 +1016,7 @@ function drawBounceMode(W, H, t) {
 }
 
 function drawWaveMode(W, H, t) {
-  const beatSec = 60/bpm;
-  pendCtx.strokeStyle = '#1e1e1e';
-  pendCtx.lineWidth = 1;
-  const cx = W/2, cy = H/2;
-  // Draw wave history
+  const cy = H/2;
   pendCtx.beginPath();
   for(let x=0;x<W;x++) {
     const phase = (x/W) * Math.PI * 2 * beatsPerBar;
@@ -896,12 +1026,10 @@ function drawWaveMode(W, H, t) {
   pendCtx.strokeStyle = '#222';
   pendCtx.lineWidth = 1;
   pendCtx.stroke();
-  // Bright current beat indicator
+  const col = accentLevels[currentBeat] === 3 ? '#ff7733' : accentLevels[currentBeat] === 2 ? getActiveColor() : '#00bcff';
   const beatX = (currentBeat / beatsPerBar) * W + (t / beatsPerBar) * W;
-  const beatY = cy + Math.sin(0) * (H/3);
   pendCtx.beginPath();
   pendCtx.arc(beatX % W, cy, 12, 0, Math.PI*2);
-  const col = currentBeat === 0 ? '#ff7733' : '#f1c40f';
   pendCtx.fillStyle = col;
   pendCtx.shadowColor = col;
   pendCtx.shadowBlur = 16;
@@ -916,10 +1044,7 @@ function drawPendulumIdle() {
   drawPendMode(W, H, 0.5);
 }
 
-function updatePendulum(beat) {
-  // currentBeat is updated here for visual use
-  // (the actual scheduling uses currentSub)
-}
+function updatePendulum(beat) {}
 
 /* ═══════════════════════════════════════════════════════
    CONTROLS
@@ -933,7 +1058,6 @@ function setBpm(val) {
   slider.value = bpm;
   slider.style.setProperty('--pct', pct + '%');
   document.getElementById('tempoName').textContent = getTempoName(bpm);
-  // Restart scheduler seamlessly if running
   if (isRunning) {
     clearTimeout(schedulerTimer);
     schedule();
@@ -942,13 +1066,11 @@ function setBpm(val) {
 
 function nudgeBpm(delta) { setBpm(bpm + delta); }
 
-// Tap tempo
 let tapTimeout = null;
 function tap() {
   const now = performance.now();
   tapTimes.push(now);
   if (tapTimes.length > 8) tapTimes.shift();
-  // Remove old taps (>3s ago)
   while (tapTimes.length > 1 && now - tapTimes[0] > 3000) tapTimes.shift();
   if (tapTimes.length >= 2) {
     const intervals = [];
@@ -956,10 +1078,9 @@ function tap() {
     const avg = intervals.reduce((a,b)=>a+b,0) / intervals.length;
     setBpm(Math.round(60000 / avg));
   }
-  // Visual feedback on tap button
   const btn = document.getElementById('tapBtn');
-  btn.style.background = '#1a1800';
-  btn.style.borderColor = '#f1c40f';
+  btn.style.background = computedStyleVariable('--theme-bg-mix');
+  btn.style.borderColor = computedStyleVariable('--theme-color');
   clearTimeout(tapTimeout);
   tapTimeout = setTimeout(() => {
     btn.style.background = '';
@@ -970,9 +1091,8 @@ function tap() {
 function setTimeSig(beats, unit) {
   beatsPerBar = beats;
   beatUnit    = unit;
-  // Rebuild accent levels
   const prev = [...accentLevels];
-  accentLevels = Array.from({length:beats}, (_,i) => prev[i] ?? (i===0?2:1));
+  accentLevels = Array.from({length:beats}, (_,i) => prev[i] ?? (i===0?3:2));
   document.querySelectorAll('.sig-btn').forEach(b => {
     b.classList.toggle('active', b.textContent === beats+'/'+unit);
   });
@@ -992,14 +1112,23 @@ function setSubdiv(n) {
 function buildAccentEditor() {
   const editor = document.getElementById('accentEditor');
   editor.innerHTML = '';
-  const icons = ['💥','🟡','⬜']; // strong, medium, off
+  const icons = ['💥','🟡','🔹','⬜'];
   accentLevels.forEach((lvl, i) => {
     const chip = document.createElement('div');
-    chip.className = 'accent-chip ' + ['accent-strong','accent-medium','accent-off'][2-lvl];
-    chip.textContent = icons[2-lvl];
-    chip.title = `Beat ${i+1}: ${['Off','Medium','Strong'][lvl]}`;
+    chip.className = 'accent-chip ' + ['accent-strong','accent-medium','accent-weak','accent-off'][3-lvl];
+    chip.textContent = icons[3-lvl];
+    chip.title = `Beat ${i+1}: ${['Off','Weak','Medium','Strong'][lvl]}`;
+    
+    if (lvl === 2) {
+      chip.style.borderColor = computedStyleVariable('--theme-color');
+      chip.style.background = computedStyleVariable('--theme-bg-mix');
+    } else {
+      chip.style.borderColor = '';
+      chip.style.background = '';
+    }
+
     chip.onclick = () => {
-      accentLevels[i] = lvl === 2 ? 1 : lvl === 1 ? 0 : 2;
+      accentLevels[i] = lvl === 3 ? 2 : lvl === 2 ? 1 : lvl === 1 ? 0 : 3;
       buildAccentEditor();
       buildBeatRow();
     };
@@ -1033,7 +1162,6 @@ function updateSounds() {
   subSoundName    = document.getElementById('subSound').value;
 }
 
-/* Practice toggles */
 function toggleSpeedup() {
   speedupEnabled = !speedupEnabled;
   speedupBpm     = parseInt(document.getElementById('speedupBpm').value) || 5;
@@ -1058,7 +1186,6 @@ function toggleCountIn() {
   btn.classList.toggle('active', countInEnabled);
 }
 
-/* Keyboard shortcuts */
 document.addEventListener('keydown', e => {
   if (document.activeElement.tagName === 'INPUT') return;
   if (e.code === 'Space') { e.preventDefault(); toggleMetronome(); }
@@ -1103,7 +1230,6 @@ loadArtists();
 
 /* ═══════════════════════════════════════════════════════
    PANEL DRAG ENGINE — pointer-events based
-   Works on desktop and touch, no HTML5 drag API conflicts
 ═══════════════════════════════════════════════════════ */
 (function initDragPanels(storageKey, collapseKey, onAfterDrop) {
   const workspace = document.getElementById('dragWorkspace');
@@ -1150,7 +1276,7 @@ loadArtists();
     ghost = panel.cloneNode(true);
     ghost.style.cssText = `position:fixed;z-index:9999;pointer-events:none;width:${r.width}px;`
       + `opacity:.85;left:${r.left}px;top:${r.top}px;`
-      + `border:1px solid #f1c40f;box-shadow:0 8px 32px rgba(241,196,15,.3);`
+      + `border:1px solid var(--theme-color);box-shadow:0 8px 32px var(--theme-glow);`
       + `border-radius:12px;transition:none;`;
     document.body.appendChild(ghost);
     offsetX = cx - r.left; offsetY = cy - r.top;
@@ -1163,7 +1289,7 @@ loadArtists();
   function createPlaceholder(panel) {
     placeholder = document.createElement('div');
     placeholder.style.cssText = `width:${panel.offsetWidth}px;height:${panel.offsetHeight}px;`
-      + `border:2px dashed #f1c40f55;border-radius:12px;background:#0a0a0a;flex-shrink:0;`;
+      + `border:2px dashed var(--theme-border-mix);border-radius:12px;background:#0a0a0a;flex-shrink:0;`;
     panel.parentNode.insertBefore(placeholder, panel);
   }
   function removePlaceholder() {
