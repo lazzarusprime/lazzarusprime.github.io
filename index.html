@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Song Requests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;z-index:9999;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-guitar{width:110px;height:auto;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(241,196,15,.6));animation:splashFloat 2.4s ease-in-out infinite}
+@keyframes splashFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.splash-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,10vw,96px);letter-spacing:6px;margin:0;background:linear-gradient(to bottom,#fff 0%,#f1c40f 50%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1;animation:splashFadeIn .8s ease forwards}
+.splash-sub{color:#666;font-size:15px;letter-spacing:4px;text-transform:uppercase;margin-top:10px;font-weight:600;animation:splashFadeIn 1s .2s ease both}
+@keyframes splashFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.splash-bar{width:260px;height:3px;background:#1e1e1e;border-radius:2px;margin-top:36px;overflow:hidden;animation:splashFadeIn .6s .4s ease both}
+.splash-bar-fill{height:100%;background:linear-gradient(90deg,#b8860b,#f1c40f,#fff,#f1c40f,#b8860b);background-size:300%;animation:splashLoad 3s cubic-bezier(.4,0,.2,1) forwards,shimmer 1.8s linear infinite}
+@keyframes splashLoad{from{width:0}to{width:100%}}
+@keyframes shimmer{0%{background-position:300%}100%{background-position:-300%}}
+.splash-tagline{color:#3a3a3a;font-size:12px;margin-top:16px;letter-spacing:2px;animation:splashFadeIn .6s .6s ease both}
+.splash-skip{position:absolute;bottom:30px;right:30px;background:transparent;border:1px solid #2a2a2a;color:#333;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:11px;letter-spacing:1px;text-transform:uppercase;transition:.2s;font-family:'Inter',sans-serif;font-weight:700}
+.splash-skip:hover{border-color:#555;color:#888}
+
+/* ── TITLE BAR ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+
+/* ── NAV / TOP BAR ── */
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
+.topBar input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+.clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
+
+/* ── GENRE BAR ── */
+#genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:#141414;border-bottom:1px solid #222;justify-content:center}
+.genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.genre-btn:hover{border-color:#f1c40f;color:#f1c40f}
+.genre-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+
+/* ── ALPHABET ── */
+#alphabet{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;justify-content:center}
+.alpha-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:11px;transition:.2s}
+.alpha-btn:hover{background:#444;border-color:#f1c40f;color:#f1c40f}
+.alpha-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+
+/* ── ARTIST STATS ACCORDION ── */
+#artistStats{background:#151515;border-bottom:1px solid #222;transition:.3s}
+#artistToggle{cursor:pointer;margin:0;padding:10px 14px;font-size:14px;font-weight:700;user-select:none}
+#artistList{display:none;padding:10px 14px;border-top:1px solid #222;animation:slideDown .3s ease-out;columns:2;gap:20px}
+@media(max-width:500px){#artistList{columns:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+#artistList div{padding:4px 0;cursor:pointer;transition:.15s;break-inside:avoid;font-size:13px}
+#artistList div:hover{color:#f1c40f;padding-left:4px}
+.flame-effect{animation:warmPulse .6s ease-out}
+@keyframes warmPulse{0%{box-shadow:0 0 0 transparent}50%{box-shadow:inset 0 0 30px rgba(241,196,15,.15)}100%{box-shadow:0 0 0 transparent}}
+
+/* ── ACTIVE FILTER BANNER ── */
+#activeFilters{display:none;padding:7px 12px;background:#181818;border-bottom:1px solid #222;font-size:13px;color:#888;text-align:center}
+#activeFilters span{color:#f1c40f}
+#activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
+
+/* ── SONG LIST ── */
+.listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a}
+.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px}
+.resultsCount{font-size:12px;color:#555}
+.song{display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid #1e1e1e;transition:.15s;gap:10px}
+.song:hover{background:#161616}
+.songArt{width:42px;height:42px;border-radius:4px;object-fit:cover;flex-shrink:0;background:#222}
+.songArtPlaceholder{width:42px;height:42px;border-radius:4px;background:#1e1e1e;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:#333}
+.songInfo{display:flex;flex-direction:column;flex:1;min-width:0}
+.songTitle{font-weight:700;font-size:15px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.songArtist{font-size:12px;font-weight:600;color:#f1c40f;margin-top:2px;display:flex;align-items:center;gap:2px;white-space:nowrap;overflow:hidden}
+.songArtist span{cursor:pointer;overflow:hidden;text-overflow:ellipsis;transition:.15s}
+.songArtist span:hover{text-shadow:0 0 4px #f1c40f}
+.songMeta{display:flex;gap:8px;margin-top:2px;align-items:center}
+.songGenre{font-size:11px;color:#555}
+/* MusicBrainz link on song rows — tiny unobtrusive icon after artist name */
+.mb-link{color:#333;text-decoration:none;font-size:10px;margin-left:5px;opacity:.7;transition:.15s;vertical-align:middle}
+.mb-link:hover{color:#f1c40f;opacity:1}
+.req-btn{background:#1a3a1a;color:#4caf50;border:1px solid #2d5a2d;padding:7px 13px;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;transition:.2s;white-space:nowrap;flex-shrink:0}
+.req-btn:hover,.req-btn:active{background:#2d5a2d;color:#7ddd80;border-color:#4caf50}
+.req-btn.fired{animation:flamePulse 0.5s ease-out;pointer-events:none}
+.req-btn.in-queue{background:#1a2a3a;color:#f1c40f;border-color:#3a5a1a;cursor:default;pointer-events:none}
+@keyframes flamePulse{0%{background:#1a3a1a;box-shadow:none;transform:scale(1)}25%{background:#7a2a00;box-shadow:0 0 12px rgba(255,100,0,.7);transform:scale(1.08);color:#ffcc00;border-color:#ff6600}55%{background:#a83800;box-shadow:0 0 20px rgba(255,60,0,.5);transform:scale(1.05);color:#fff;border-color:#ff4400}100%{background:#2d5a2d;box-shadow:none;transform:scale(1);color:#7ddd80;border-color:#4caf50}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 18px;min-width:260px;max-width:90vw;z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toastIcon{font-size:20px;margin-bottom:4px}
+#toastTitle{font-weight:700;font-size:14px;color:#4caf50;margin-bottom:2px}
+#toastMsg{font-size:12px;color:#888;line-height:1.4}
+
+/* ── SLOPSMITH BANNER ── */
+#slopBanner{display:none;padding:10px 14px;background:linear-gradient(90deg,#1a0a00,#2a1000,#1a0a00);border-bottom:2px solid #ff5500;text-align:center;font-size:13px;animation:slopPulse 3s ease-in-out infinite}
+@keyframes slopPulse{0%,100%{border-color:#ff5500}50%{border-color:#ff8800;box-shadow:inset 0 0 20px rgba(255,100,0,.1)}}
+#slopBanner span{color:#ff7733;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-right:8px}
+
+/* ── PAGINATION ── */
+.pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+
+/* ── MOBILE ── */
+@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.topBar input{font-size:13px;padding:8px 10px}.song{padding:7px 10px;gap:8px}.songArt,.songArtPlaceholder{width:38px;height:38px}.songTitle{font-size:14px}.req-btn{padding:6px 10px;font-size:11px}#alphabet{gap:2px;padding:6px}.alpha-btn{padding:5px 7px;font-size:10px}.titleBar .site-logo{width:36px;height:36px}}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <img class="splash-guitar" src="guitar.png" alt="Guitar">
+  <div class="splash-title">Lazzarus Prime</div>
+  <div class="splash-sub">Song Request Library</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  <div class="splash-tagline">6,705 songs &nbsp;·&nbsp; 1,229 artists &nbsp;·&nbsp; 0 excuses</div>
+  <button class="splash-skip" onclick="hideSplash()">Skip ▶</button>
+</div>
+
+<div id="toast"><div id="toastIcon">🔥</div><div id="toastTitle"></div><div id="toastMsg"></div></div>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Song Requests</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div id="slopBanner"><span>🤘 SLOPSMITH MODE</span> Tonight we attempt everything. Accuracy not guaranteed. Chaos very much is.</div>
+
+<div class="topBar">
+  <button class="nav-btn active-page" onclick="goHome()">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+  <button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
+  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+  <button class="nav-btn" onclick="randomArtistFilter(this)">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist or song…" oninput="handleSearchInput()" autocomplete="off">
+  <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✕</button>
+</div>
+
+<div id="genreBar"></div>
+<div id="activeFilters">Showing: <span id="filterLabel"></span><button onclick="clearSearch()">✕ Clear</button></div>
+<div id="alphabet"></div>
+<div id="artistStats">
+  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+  <div id="artistList"></div>
+</div>
+<div id="paginationTop" class="pagination"></div>
+<div class="listHeader"><h3>SONG LIBRARY</h3><span id="resultsCount" class="resultsCount"></span></div>
+<div id="songList"></div>
+<div id="paginationBottom" class="pagination"></div>
+
+<footer>
+  <a href="index.html" onclick="goHome();return false;">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="#" onclick="randomArtistFilter();return false;">🎲 Random</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<!-- Firebase 9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+/* ── State ── */
+let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGenre = null;
+let artistArtMap = {}, artistGenreMap = {};
+let activeAlphaLetter = null;
+let queuedSongs = new Set(); // songs currently in queue
+let firebaseDb = null;
+
+/* ── Splash ── */
+const splashStart = Date.now();
+const MIN_SPLASH_MS = 3000;
+const _noSplash = new URLSearchParams(window.location.search).has('nosplash');
+function hideSplash() {
+  if (_noSplash) { const el=document.getElementById('splash'); el.style.transition='none'; el.classList.add('hidden'); el.style.display='none'; return; }
+  const wait = Math.max(0, MIN_SPLASH_MS - (Date.now()-splashStart));
+  setTimeout(() => { document.getElementById('splash').classList.add('hidden'); setTimeout(()=>{document.getElementById('splash').style.display='none';},900); }, wait);
+}
+
+/* ── Firebase init (read-only for queue watching + write for requests) ── */
+function initFirebase() {
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(FIREBASE_CONFIG);
+    }
+    firebaseDb = firebase.database();
+    // watch slopsmith flag
+    firebaseDb.ref('/slopsmith').on('value', snap => {
+      document.getElementById('slopBanner').style.display = snap.val() ? 'block' : 'none';
+    });
+    // watch queue to know what's already queued
+    firebaseDb.ref('/queue').on('value', snap => {
+      queuedSongs = new Set();
+      const data = snap.val();
+      if (data) {
+        Object.values(data).forEach(item => {
+          queuedSongs.add((item.artist+'||'+item.song).toLowerCase());
+        });
+      }
+      // refresh queue badges without full re-render
+      document.querySelectorAll('.req-btn[data-key]').forEach(btn => {
+        const key = btn.dataset.key;
+        if (queuedSongs.has(key)) {
+          btn.textContent = '✓ In Queue';
+          btn.classList.add('in-queue');
+        } else {
+          btn.textContent = 'Request';
+          btn.classList.remove('in-queue');
+        }
+      });
+    });
+  } catch(e) { console.warn('Firebase unavailable:', e); }
+}
+
+/* ── Init ── */
+async function init() {
+  try {
+    const raw = await (await fetch('songs.json')).json();
+    const seen = new Set();
+    raw.forEach(s => {
+      if (!seen.has(s.artist)) {
+        seen.add(s.artist);
+        if (s.art) artistArtMap[s.artist] = s.art;
+        artistGenreMap[s.artist] = s.genre || assignGenre(s.artist);
+      }
+    });
+    songs = raw.map(s => ({...s, displayName:s.song}));
+    filteredSongs = songs;
+    // Update splash tagline dynamically
+    const artistCount = new Set(raw.map(s=>s.artist)).size;
+    const tagline = document.querySelector('.splash-tagline');
+    if (tagline) tagline.textContent = `${raw.length.toLocaleString()} songs · ${artistCount.toLocaleString()} artists · 0 excuses`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const artistSearch = urlParams.get('search');
+    if (artistSearch) {
+      document.getElementById('searchBox').value = artistSearch;
+      filteredSongs = songs.filter(s => s.artist === artistSearch);
+      toggleClearButton();
+    }
+    buildGenreBar(); buildAlphabet(); buildArtistStats(); renderSongs();
+    hideSplash();
+    initFirebase();
+  } catch(e) { console.error(e); hideSplash(); }
+}
+
+function applyFilters() {
+  let base = songs;
+  // search
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  if (q) base = base.filter(s => s.artist.toLowerCase().includes(q) || s.displayName.toLowerCase().includes(q));
+  // genre
+  if (activeGenre) {
+    const list = GENRE_MAP[activeGenre].map(a => a.toLowerCase());
+    base = base.filter(s => { const l=s.artist.toLowerCase(); return list.some(g=>l===g||l.includes(g)||g.includes(l)); });
+  }
+  filteredSongs = base;
+  renderSongs();
+}
+
+/* ── Render ── */
+function renderSongs() {
+  const list = document.getElementById('songList'); list.innerHTML = '';
+  const start = (currentPage-1)*songsPerPage;
+  const frag = document.createDocumentFragment();
+  filteredSongs.slice(start, start+songsPerPage).forEach(song => {
+    const div = document.createElement('div'); div.className = 'song';
+    const artUrl = song.art || artistArtMap[song.artist];
+    const genre = artistGenreMap[song.artist];
+    const emoji = genre ? (GENRE_EMOJI[genre]||'') : '';
+    const artHtml = artUrl
+      ? `<img class="songArt" src="${artUrl}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="songArtPlaceholder">🎵</div>`;
+    const sa = song.artist.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const ss = song.song.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const queueKey = (song.artist+'||'+song.song).toLowerCase();
+    const isQueued = queuedSongs.has(queueKey);
+    const btnClass = isQueued ? 'req-btn in-queue' : 'req-btn';
+    const btnText = isQueued ? '✓ In Queue' : 'Request';
+    const mbUrl = `https://musicbrainz.org/search?query=${encodeURIComponent(song.artist)}&type=artist&method=indexed`;
+    div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span><a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genre}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+  document.getElementById('resultsCount').textContent = filteredSongs.length !== songs.length
+    ? filteredSongs.length.toLocaleString()+' results'
+    : songs.length.toLocaleString()+' songs';
+  renderPagination();
+}
+
+function renderPagination() {
+  const total = Math.ceil(filteredSongs.length/songsPerPage)||1;
+  ['paginationTop','paginationBottom'].forEach(id => {
+    const c = document.getElementById(id); c.innerHTML = '';
+    if (currentPage>1){const b=document.createElement('button');b.textContent='◀ Prev';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
+    const l=document.createElement('span');l.textContent=` Page ${currentPage} / ${total} `;l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
+    if (currentPage<total){const b=document.createElement('button');b.textContent='Next ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
+  });
+}
+
+/* ── Search / Filter helpers ── */
+function handleSearchInput() {
+  activeGenre = null; activeAlphaLetter = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display = 'none';
+  currentPage = 1; applyFilters(); toggleClearButton();
+}
+function toggleClearButton() {
+  document.getElementById('clearBtn').style.display =
+    (document.getElementById('searchBox').value || activeGenre) ? 'inline-block' : 'none';
+}
+function clearSearch() {
+  document.getElementById('searchBox').value = '';
+  activeGenre = null; activeAlphaLetter = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display = 'none';
+  filteredSongs = songs; currentPage = 1; renderSongs(); toggleClearButton();
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
+function filterArtist(artist) {
+  activeGenre = null; activeAlphaLetter = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display = 'none';
+  document.getElementById('searchBox').value = artist;
+  filteredSongs = songs.filter(s => s.artist === artist);
+  currentPage = 1; renderSongs(); toggleClearButton();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── Genre bar ── */
+function buildGenreBar() {
+  const bar = document.getElementById('genreBar'); bar.innerHTML = '';
+  for (const genre of Object.keys(GENRE_MAP)) {
+    const btn = document.createElement('button');
+    btn.className = 'genre-btn';
+    btn.textContent = (GENRE_EMOJI[genre]||'')+' '+genre;
+    btn.onclick = () => toggleGenre(genre, btn);
+    bar.appendChild(btn);
+  }
+}
+function toggleGenre(genre, btn) {
+  if (activeGenre === genre) { activeGenre=null; document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active')); clearSearch(); return; }
+  activeGenre = genre;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('searchBox').value = '';
+  currentPage = 1;
+  document.getElementById('activeFilters').style.display = 'block';
+  document.getElementById('filterLabel').textContent = (GENRE_EMOJI[genre]||'')+' '+genre;
+  applyFilters(); toggleClearButton();
+}
+
+/* ── Alphabet ── */
+function buildAlphabet() {
+  const div = document.getElementById('alphabet'); div.innerHTML = '';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letter => {
+    const b = document.createElement('button');
+    b.textContent = letter; b.className = 'alpha-btn'; b.dataset.letter = letter;
+    b.onclick = () => jumpToLetter(letter, b);
+    div.appendChild(b);
+  });
+}
+function jumpToLetter(letter, btn) {
+  // clear other states
+  document.getElementById('searchBox').value = '';
+  activeGenre = null;
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('activeFilters').style.display = 'none';
+  filteredSongs = songs;
+  applyFilters();
+
+  const idx = filteredSongs.findIndex(s => s.artist.toLowerCase().startsWith(letter.toLowerCase()));
+  if (idx === -1) return;
+  currentPage = Math.floor(idx/songsPerPage)+1;
+  renderSongs();
+
+  // highlight active letter
+  document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
+  (btn || document.querySelector(`.alpha-btn[data-letter="${letter}"]`))?.classList.add('active');
+  activeAlphaLetter = letter;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── Artist stats accordion ── */
+function buildArtistStats() {
+  const map = {}; songs.forEach(s => { map[s.artist]=(map[s.artist]||0)+1; });
+  const sorted = Object.entries(map).sort((a,b) => b[1]-a[1]).slice(0,10);
+  const list = document.getElementById('artistList'); const sc = document.getElementById('artistStats'); list.innerHTML = '';
+  sorted.forEach(([artist,count]) => {
+    const row = document.createElement('div');
+    row.innerHTML = `${esc(artist)} <span style="color:#555">(${count})</span>`;
+    row.onclick = () => filterArtist(artist); list.appendChild(row);
+  });
+  document.getElementById('artistToggle').onclick = () => {
+    const hidden = list.style.display === 'none' || list.style.display === '';
+    sc.classList.remove('flame-effect'); void sc.offsetWidth; sc.classList.add('flame-effect');
+    list.style.display = hidden ? 'block' : 'none';
+    document.getElementById('artistToggle').querySelector('span:last-child').textContent = hidden ? '▼' : '▶';
+  };
+}
+
+/* ── Toast ── */
+let toastTimer = null;
+function showToast(title, msg, icon, color) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon||'🔥';
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastTitle').style.color = color||'#4caf50';
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── Request a song ── */
+async function requestSong(artist, song, btn) {
+  if (btn) { btn.classList.remove('fired'); void btn.offsetWidth; btn.classList.add('fired'); setTimeout(()=>btn.classList.remove('fired'),520); }
+  const cmd = `!request "${artist}" "${song}"`;
+  try {
+    await navigator.clipboard.writeText(cmd);
+    showToast('Copied! 🎸 Paste into Twitch chat', artist+' — '+song, '🔥', '#4caf50');
+  } catch {
+    showToast('Paste this into chat:', cmd, '📋', '#f1c40f');
+  }
+}
+
+/* ── Random ── */
+function slotSpin(btn, onDone) {
+  const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲']; let i=0;
+  btn.classList.add('spinning');
+  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);
+  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);
+}
+function randomArtistFilter(btn) {
+  if (!songs.length) return;
+  const artists = [...new Set(songs.map(s=>s.artist))];
+  const pick = artists[Math.floor(Math.random()*artists.length)];
+  if (btn) { slotSpin(btn, ()=>filterArtist(pick)); } else { filterArtist(pick); }
+}
+function goHome() { clearSearch(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+document.addEventListener('keydown', e => {
+  if (e.key==='/' && document.activeElement.tagName!=='INPUT') { e.preventDefault(); document.getElementById('searchBox').focus(); }
+  if (e.key==='Escape') { document.getElementById('searchBox').blur(); clearSearch(); }
+});
+
+init();
+</script>
+</body>
+</html>
