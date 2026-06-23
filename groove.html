@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime — Groove Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden;user-select:none}
+
+/* ── TITLE BAR (matches site) ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+
+/* ── NAV (matches site) ── */
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:20px 16px 8px;background:#111;border-bottom:1px solid #1e1e1e;text-align:center}
+.page-header h1{margin:0 0 6px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:4px;background:linear-gradient(to bottom,#fff 0%,#f1c40f 50%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-header p{margin:0;color:#555;font-size:13px;letter-spacing:1px}
+
+/* ── CONTROLS BAR ── */
+.controls{display:flex;gap:10px;padding:14px 16px;flex-wrap:wrap;align-items:center;background:#141414;border-bottom:1px solid #222;justify-content:center}
+.ctrl-btn{padding:9px 18px;background:#222;color:#fff;border:1px solid #444;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.ctrl-btn:hover{background:#333;border-color:#f1c40f;color:#f1c40f}
+#playBtn.playing{background:#ff5500;border-color:#ff5500;color:#fff}
+#playBtn.playing:hover{background:#ff6622}
+.bpm-group{display:flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:6px 12px}
+.bpm-group label{color:#888;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+#bpmSlider{-webkit-appearance:none;appearance:none;width:110px;height:4px;background:#333;border-radius:2px;outline:none;cursor:pointer}
+#bpmSlider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#f1c40f;cursor:pointer;box-shadow:0 0 4px rgba(241,196,15,.5)}
+#bpmSlider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#f1c40f;cursor:pointer;border:none}
+#bpmValue{color:#f1c40f;font-weight:700;font-size:14px;min-width:32px;text-align:right}
+.swing-group{display:flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:6px 12px}
+.swing-group label{color:#888;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+#swingSlider{-webkit-appearance:none;appearance:none;width:80px;height:4px;background:#333;border-radius:2px;outline:none;cursor:pointer}
+#swingSlider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#f1c40f;cursor:pointer}
+#swingSlider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#f1c40f;cursor:pointer;border:none}
+#swingValue{color:#f1c40f;font-weight:700;font-size:14px;min-width:26px;text-align:right}
+
+/* ── PATTERN SELECTOR ── */
+.pattern-bar{display:flex;gap:8px;padding:10px 16px;background:#141414;border-bottom:1px solid #222;align-items:center;flex-wrap:wrap;justify-content:center}
+.pattern-bar label{color:#888;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.preset-btn{background:#1e1e1e;color:#aaa;border:1px solid #2a2a2a;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;white-space:nowrap}
+.preset-btn:hover{border-color:#f1c40f;color:#f1c40f}
+.preset-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+
+/* ── GRID ── */
+.grid-wrap{padding:16px;background:#0f0f0f;overflow-x:auto}
+.grid{display:grid;grid-template-columns:90px repeat(16,1fr);gap:3px;min-width:500px}
+.track-label{display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-weight:700;color:#888;font-size:12px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:.15s;user-select:none}
+.track-label:hover{color:#f1c40f}
+/* Beat separators: groups of 4 */
+.step-cell{height:34px;background:#1e1e1e;cursor:pointer;border-radius:3px;transition:transform .05s,background .08s;position:relative}
+.step-cell:hover{background:#2a2a2a}
+/* Group 1: steps 1-4 */
+.step-cell.g1{border-left:2px solid transparent}
+.step-cell:nth-child(4n+2){border-left:2px solid #111} /* every 4th visual separator handled via JS classes */
+.step-cell.active{background:#ff5500;box-shadow:0 0 6px rgba(255,85,0,.5)}
+.step-cell.accent{background:#f1c40f;box-shadow:0 0 6px rgba(241,196,15,.6)}
+.step-cell.current-step{outline:2px solid rgba(255,255,255,.85);z-index:2;transform:scale(1.06)}
+/* Beat group dividers */
+.beat-divider{background:transparent !important;cursor:default !important;width:3px}
+
+/* ── STEP INFO STRIP ── */
+.step-numbers{display:grid;grid-template-columns:90px repeat(16,1fr);gap:3px;padding:0 16px 4px;min-width:500px}
+.step-num-spacer{} 
+.step-num{text-align:center;font-size:9px;color:#333;font-weight:700}
+.step-num.beat-mark{color:#555}
+
+/* ── VOLUME STRIP ── */
+.vol-strip{display:flex;gap:3px;padding:4px 16px 12px;min-width:500px;box-sizing:border-box}
+.vol-spacer{width:90px;flex-shrink:0}
+.track-vol{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+.track-vol label{font-size:9px;color:#444;white-space:nowrap}
+
+/* ── TRANSPORT STATUS ── */
+.status-bar{padding:6px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:12px;font-size:12px;color:#444;flex-wrap:wrap}
+#stepIndicator{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#f1c40f;letter-spacing:2px;min-width:40px}
+#statusMsg{flex:1;font-size:11px;color:#333}
+
+/* ── FOOTER (matches site) ── */
+footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
+.footer-sep{color:#2a2a2a;margin:0 2px}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}
+  .topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}
+  .titleBar .site-logo{width:36px;height:36px}
+  .controls{gap:8px;padding:10px 12px}
+  .ctrl-btn{padding:8px 12px;font-size:11px}
+  #bpmSlider{width:80px}
+}
+</style>
+</head>
+<body>
+
+<!-- TITLE BAR -->
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Groove Station</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+  <button class="nav-btn active-page">🔥 Groove</button>
+  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+  <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>🔥 Groove Station</h1>
+  <p>16-step drum machine · click once = normal hit · click twice = accented hit · click again = off</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="ctrl-btn" id="playBtn" onclick="togglePlay()">▶ Play</button>
+  <button class="ctrl-btn" onclick="clearPattern()">✕ Clear</button>
+  <button class="ctrl-btn" onclick="randomPattern()">🎲 Random</button>
+  <div class="bpm-group">
+    <label>BPM</label>
+    <input type="range" id="bpmSlider" min="40" max="220" value="120" oninput="onBpmChange()">
+    <span id="bpmValue">120</span>
+  </div>
+  <div class="swing-group">
+    <label>Swing</label>
+    <input type="range" id="swingSlider" min="0" max="75" value="0" oninput="onSwingChange()">
+    <span id="swingValue">0%</span>
+  </div>
+</div>
+
+<!-- PRESET BAR -->
+<div class="pattern-bar">
+  <label>Presets:</label>
+  <button class="preset-btn" onclick="loadPreset('rock')">Rock</button>
+  <button class="preset-btn" onclick="loadPreset('funk')">Funk</button>
+  <button class="preset-btn" onclick="loadPreset('hiphop')">Hip-Hop</button>
+  <button class="preset-btn" onclick="loadPreset('reggae')">Reggae</button>
+  <button class="preset-btn" onclick="loadPreset('bossanova')">Bossa Nova</button>
+  <button class="preset-btn" onclick="loadPreset('metal')">Metal</button>
+</div>
+
+<!-- STEP NUMBER STRIP -->
+<div class="step-numbers" id="stepNumbers"></div>
+
+<!-- GRID -->
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <span id="stepIndicator">--</span>
+  <span id="statusMsg">Press Play to start · Click steps to build your pattern</span>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  INSTRUMENT CONFIG
+// ─────────────────────────────────────────────
+const INSTRUMENTS = [
+  { name: 'Kick',    emoji: '🥁' },
+  { name: 'Snare',   emoji: '🪘' },
+  { name: 'Hat',     emoji: '🎩' },
+  { name: 'OpenHat', emoji: '💿' },
+  { name: 'Clap',    emoji: '👏' },
+  { name: 'Ride',    emoji: '🔔' },
+];
+
+// pattern[inst][step] = 0 | 1 | 2  (off / normal / accent)
+const pattern = {};
+// DOM cell cache — avoids querySelectorAll during hot audio path
+const cellCache = {};
+// Per-track mute state
+const muted = {};
+
+INSTRUMENTS.forEach(({ name }) => {
+  pattern[name] = Array(16).fill(0);
+  cellCache[name] = [];
+  muted[name] = false;
+});
+
+// ─────────────────────────────────────────────
+//  AUDIO STATE
+// ─────────────────────────────────────────────
+let ctx = null;
+let noiseBuffer = null;
+let isPlaying = false;
+let currentStep = 0;
+let nextNoteTime = 0.0;
+let timerId = null;
+
+const LOOKAHEAD_MS = 25;          // scheduler interval
+const SCHEDULE_AHEAD_S = 0.12;    // how far ahead to schedule audio
+
+// ─────────────────────────────────────────────
+//  NOISE BUFFER  (shared across all percussive hits)
+// ─────────────────────────────────────────────
+function createNoiseBuffer() {
+  // 2-second buffer of white noise — reused, never recreated mid-session
+  const len = ctx.sampleRate * 2;
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+// ─────────────────────────────────────────────
+//  SYNTH ENGINE
+// ─────────────────────────────────────────────
+function hit(inst, time, vol) {
+  if (!ctx) return;
+
+  // BUG FIX: masterGain gain value must be set at `time`, not AudioContext creation time.
+  // Previously vol was set via setValueAtTime(vol, time) but on accent the outer gain
+  // would sometimes still be at default 1.0 if `time` had already passed. We now always
+  // clamp to ensure the value is scheduled in the future.
+  const safeTime = Math.max(time, ctx.currentTime);
+
+  const masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(vol, safeTime);
+  masterGain.connect(ctx.destination);
+
+  if (inst === 'Kick') {
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.connect(env); env.connect(masterGain);
+
+    // Punchy sub-bass pitch sweep
+    osc.frequency.setValueAtTime(160, safeTime);
+    osc.frequency.exponentialRampToValueAtTime(40, safeTime + 0.12);
+
+    env.gain.setValueAtTime(1, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
+
+    osc.start(safeTime); osc.stop(safeTime + 0.20);
+  }
+  else if (inst === 'Snare') {
+    // Noise snap
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    // BUG FIX: BufferSource.loop = false prevents the 2-second noise buffer
+    // from accidentally wrapping around on long playback sessions.
+    noise.loop = false;
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = 'highpass'; hpf.frequency.value = 1200;
+    const nGain = ctx.createGain();
+    noise.connect(hpf); hpf.connect(nGain); nGain.connect(masterGain);
+    nGain.gain.setValueAtTime(0.75, safeTime);
+    nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.14);
+
+    // Tonal body
+    const osc = ctx.createOscillator();
+    const oGain = ctx.createGain();
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(200, safeTime);
+    osc.connect(oGain); oGain.connect(masterGain);
+    oGain.gain.setValueAtTime(0.5, safeTime);
+    oGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.09);
+
+    noise.start(safeTime); noise.stop(safeTime + 0.15);
+    osc.start(safeTime);   osc.stop(safeTime + 0.10);
+  }
+  else if (inst === 'Hat') {
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = false;
+    const bpf = ctx.createBiquadFilter();
+    bpf.type = 'bandpass'; bpf.frequency.value = 9000; bpf.Q.value = 0.8;
+    const env = ctx.createGain();
+    noise.connect(bpf); bpf.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(0.55, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.045);
+    noise.start(safeTime); noise.stop(safeTime + 0.06);
+  }
+  else if (inst === 'OpenHat') {
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = false;
+    const bpf = ctx.createBiquadFilter();
+    bpf.type = 'bandpass'; bpf.frequency.value = 8500; bpf.Q.value = 0.6;
+    const env = ctx.createGain();
+    noise.connect(bpf); bpf.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(0.55, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.28);
+    noise.start(safeTime); noise.stop(safeTime + 0.30);
+  }
+  else if (inst === 'Clap') {
+    // Layered micro-bursts simulate realistic clap texture
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = false;
+    const bpf = ctx.createBiquadFilter();
+    bpf.type = 'bandpass'; bpf.frequency.value = 1400; bpf.Q.value = 0.5;
+    const env = ctx.createGain();
+    noise.connect(bpf); bpf.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(0.7,  safeTime);
+    env.gain.setValueAtTime(0.1,  safeTime + 0.010);
+    env.gain.setValueAtTime(0.55, safeTime + 0.020);
+    env.gain.setValueAtTime(0.1,  safeTime + 0.035);
+    env.gain.setValueAtTime(0.45, safeTime + 0.045);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.095);
+    noise.start(safeTime); noise.stop(safeTime + 0.10);
+  }
+  else if (inst === 'Ride') {
+    // BUG FIX: OscillatorNode type 'cymbal' does not exist in the Web Audio spec.
+    // The original code had: osc.type = "cymbal" in osc ? "cymbal" : "square"
+    // The `in` check tests for the property key on the node, not a valid type value,
+    // so it always resolved to "cymbal" → silent/error on most browsers. Fixed to
+    // use a proper metallic tone via detuned sawtooth + highpass filter.
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const mixer = ctx.createGain();
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = 'highpass'; hpf.frequency.value = 5500;
+    const env = ctx.createGain();
+
+    osc1.type = 'sawtooth'; osc1.frequency.value = 451;
+    osc2.type = 'sawtooth'; osc2.frequency.value = 337; // detuned interval for metallic shimmer
+
+    osc1.connect(mixer); osc2.connect(mixer);
+    mixer.connect(hpf); hpf.connect(env); env.connect(masterGain);
+
+    env.gain.setValueAtTime(0.35, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.5);
+
+    osc1.start(safeTime); osc1.stop(safeTime + 0.52);
+    osc2.start(safeTime); osc2.stop(safeTime + 0.52);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  SCHEDULER
+// ─────────────────────────────────────────────
+function scheduler() {
+  while (nextNoteTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
+    scheduleStep(currentStep, nextNoteTime);
+
+    const bpm = parseFloat(document.getElementById('bpmSlider').value);
+    const swing = parseFloat(document.getElementById('swingSlider').value) / 100;
+
+    // Swing: odd 16th-notes are delayed by a fraction of one step
+    const stepDur = (60 / bpm) / 4;
+    // BUG FIX: swing amount was not implemented in the original code (slider existed
+    // visually but had no effect on timing). Implemented here via odd-step delay.
+    const isOddStep = (currentStep % 2) === 1;
+    const swingOffset = isOddStep ? stepDur * swing * 0.67 : 0;
+
+    nextNoteTime += stepDur + swingOffset;
+    currentStep = (currentStep + 1) % 16;
+  }
+  timerId = setTimeout(scheduler, LOOKAHEAD_MS);
+}
+
+function scheduleStep(step, time) {
+  // Visual update on animation frame — keeps audio thread clean
+  requestAnimationFrame(() => {
+    const prev = (step + 15) % 16;
+    INSTRUMENTS.forEach(({ name }) => {
+      cellCache[name][prev]?.classList.remove('current-step');
+      cellCache[name][step]?.classList.add('current-step');
+    });
+    document.getElementById('stepIndicator').textContent = (step + 1).toString().padStart(2, '0');
+  });
+
+  // Trigger sounds
+  INSTRUMENTS.forEach(({ name }) => {
+    if (muted[name]) return;
+    const val = pattern[name][step];
+    if (val > 0) {
+      // Accent: +8dB equivalent (×2.5 gain), normal: 0.28
+      const vol = val === 2 ? 0.70 : 0.28;
+      hit(name, time, vol);
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+//  TRANSPORT
+// ─────────────────────────────────────────────
+function togglePlay() {
+  if (!ctx) {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    noiseBuffer = createNoiseBuffer();
+  }
+  if (ctx.state === 'suspended') ctx.resume();
+
+  isPlaying = !isPlaying;
+  const btn = document.getElementById('playBtn');
+
+  if (isPlaying) {
+    currentStep = 0;
+    nextNoteTime = ctx.currentTime + 0.05;
+    btn.textContent = '⏹ Stop';
+    btn.classList.add('playing');
+    document.getElementById('statusMsg').textContent = 'Playing…';
+    scheduler();
+  } else {
+    clearTimeout(timerId);
+    btn.textContent = '▶ Play';
+    btn.classList.remove('playing');
+    document.getElementById('stepIndicator').textContent = '--';
+    document.getElementById('statusMsg').textContent = 'Stopped';
+    // Clear all step highlights
+    document.querySelectorAll('.step-cell.current-step').forEach(c => c.classList.remove('current-step'));
+  }
+}
+
+// ─────────────────────────────────────────────
+//  PATTERN OPERATIONS
+// ─────────────────────────────────────────────
+function clearPattern() {
+  INSTRUMENTS.forEach(({ name }) => {
+    pattern[name].fill(0);
+    cellCache[name].forEach(c => { c.className = 'step-cell'; });
+  });
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+function randomPattern() {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  INSTRUMENTS.forEach(({ name }) => {
+    for (let s = 0; s < 16; s++) {
+      const r = Math.random();
+      let val = 0;
+      if (r > 0.88) val = 2;
+      else if (r > 0.72) val = 1;
+      setCell(name, s, val);
+    }
+  });
+}
+
+function setCell(name, step, val) {
+  pattern[name][step] = val;
+  const cell = cellCache[name][step];
+  if (!cell) return;
+  // Preserve current-step highlight if active
+  const isCurrent = cell.classList.contains('current-step');
+  cell.className = 'step-cell';
+  if (isCurrent) cell.classList.add('current-step');
+  if (val === 1) cell.classList.add('active');
+  if (val === 2) cell.classList.add('accent');
+}
+
+// Preset patterns
+// Each row = 16 steps (0=off, 1=hit, 2=accent)
+const PRESETS = {
+  rock: {
+    Kick:    [2,0,0,0, 0,0,0,0, 2,0,0,0, 0,0,0,0],
+    Snare:   [0,0,0,0, 2,0,0,0, 0,0,0,0, 2,0,0,0],
+    Hat:     [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
+    OpenHat: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,1],
+    Clap:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Ride:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  },
+  funk: {
+    Kick:    [2,0,0,1, 0,1,0,0, 1,0,0,0, 0,1,0,0],
+    Snare:   [0,0,0,0, 2,0,0,1, 0,0,0,0, 2,0,1,0],
+    Hat:     [1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
+    OpenHat: [0,0,0,0, 0,0,1,0, 0,0,0,0, 0,0,1,0],
+    Clap:    [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
+    Ride:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  },
+  hiphop: {
+    Kick:    [2,0,0,0, 0,0,1,0, 0,0,2,0, 0,1,0,0],
+    Snare:   [0,0,0,0, 2,0,0,0, 0,0,0,0, 2,0,0,0],
+    Hat:     [0,1,0,1, 0,1,0,1, 0,1,0,1, 0,1,0,1],
+    OpenHat: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,1,0],
+    Clap:    [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
+    Ride:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  },
+  reggae: {
+    Kick:    [2,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,2,0],
+    Snare:   [0,0,0,0, 0,0,1,0, 0,0,0,0, 0,0,1,0],
+    Hat:     [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
+    OpenHat: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Clap:    [0,0,0,0, 0,0,0,1, 0,0,0,0, 0,0,0,1],
+    Ride:    [0,1,0,1, 0,1,0,1, 0,1,0,1, 0,1,0,1],
+  },
+  bossanova: {
+    Kick:    [2,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,0],
+    Snare:   [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Hat:     [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
+    OpenHat: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Clap:    [0,0,0,1, 0,1,0,0, 0,0,0,1, 0,0,1,0],
+    Ride:    [1,0,0,1, 0,0,1,0, 1,0,0,1, 0,0,1,0],
+  },
+  metal: {
+    Kick:    [2,0,2,0, 2,0,2,0, 2,0,2,0, 2,0,2,2],
+    Snare:   [0,0,0,0, 2,0,0,0, 0,0,0,0, 2,0,0,1],
+    Hat:     [1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
+    OpenHat: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Clap:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+    Ride:    [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+  },
+};
+
+function loadPreset(name) {
+  const p = PRESETS[name];
+  if (!p) return;
+  INSTRUMENTS.forEach(({ name: inst }) => {
+    const row = p[inst] || Array(16).fill(0);
+    for (let s = 0; s < 16; s++) setCell(inst, s, row[s]);
+  });
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(`'${name}'`));
+  });
+}
+
+// ─────────────────────────────────────────────
+//  BPM / SWING INPUT
+// ─────────────────────────────────────────────
+function onBpmChange() {
+  document.getElementById('bpmValue').textContent = document.getElementById('bpmSlider').value;
+}
+function onSwingChange() {
+  document.getElementById('swingValue').textContent = document.getElementById('swingSlider').value + '%';
+}
+
+// ─────────────────────────────────────────────
+//  BUILD GRID UI
+// ─────────────────────────────────────────────
+function buildGrid() {
+  // Step number strip
+  const numStrip = document.getElementById('stepNumbers');
+  numStrip.style.cssText = 'display:grid;grid-template-columns:90px repeat(16,1fr);gap:3px;padding:4px 16px 2px;min-width:500px';
+  const spacer = document.createElement('div');
+  numStrip.appendChild(spacer);
+  for (let s = 0; s < 16; s++) {
+    const d = document.createElement('div');
+    d.className = 'step-num' + ((s % 4 === 0) ? ' beat-mark' : '');
+    d.textContent = s + 1;
+    d.style.cssText = 'text-align:center;font-size:9px;color:' + (s % 4 === 0 ? '#555' : '#2a2a2a') + ';font-weight:700';
+    numStrip.appendChild(d);
+  }
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  INSTRUMENTS.forEach(({ name, emoji }) => {
+    // Track label (click to mute)
+    const label = document.createElement('div');
+    label.className = 'track-label';
+    label.innerHTML = `<span style="margin-right:4px;font-size:14px">${emoji}</span>${name}`;
+    label.title = 'Click to mute/unmute';
+    label.dataset.track = name;
+    label.onclick = () => toggleMute(name, label);
+    grid.appendChild(label);
+
+    // 16 step cells
+    for (let s = 0; s < 16; s++) {
+      const cell = document.createElement('div');
+      cell.className = 'step-cell';
+
+      // Visual beat-group separator (every 4 steps)
+      if (s % 4 === 0 && s > 0) {
+        cell.style.marginLeft = '3px';
+      }
+
+      cell.onclick = () => {
+        const next = (pattern[name][s] + 1) % 3;
+        setCell(name, s, next);
+      };
+
+      grid.appendChild(cell);
+      cellCache[name][s] = cell;
+    }
+  });
+}
+
+function toggleMute(name, label) {
+  muted[name] = !muted[name];
+  label.style.color = muted[name] ? '#333' : '';
+  label.style.textDecoration = muted[name] ? 'line-through' : '';
+  label.title = muted[name] ? 'Muted — click to unmute' : 'Click to mute/unmute';
+}
+
+// ─────────────────────────────────────────────
+//  KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'KeyC') clearPattern();
+  if (e.code === 'KeyR') randomPattern();
+});
+
+// ─────────────────────────────────────────────
+//  RANDOM ARTIST (mirrors other pages)
+// ─────────────────────────────────────────────
+let _artists = [];
+(async () => {
+  try { const d = await (await fetch('songs.json')).json(); _artists = [...new Set(d.map(s => s.artist))]; } catch(e) {}
+})();
+
+function slotSpin(btn, onDone) {
+  const f = ['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲']; let i = 0;
+  btn.classList.add('spinning');
+  const fast = setInterval(() => { btn.textContent = f[i++ % f.length] + ' Random'; }, 60);
+  setTimeout(() => {
+    clearInterval(fast); let j = 0;
+    const slow = setInterval(() => { btn.textContent = f[j++ % f.length] + ' Random'; }, 120);
+    setTimeout(() => { clearInterval(slow); btn.textContent = '🎲 Random'; btn.classList.remove('spinning'); onDone(); }, 480);
+  }, 600);
+}
+
+function randomSong(btn) {
+  if (!_artists.length) { location.href = 'index.html?nosplash=1'; return; }
+  const pick = _artists[Math.floor(Math.random() * _artists.length)];
+  if (btn) slotSpin(btn, () => { location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick); });
+  else location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick);
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+buildGrid();
+</script>
+</body>
+</html>
