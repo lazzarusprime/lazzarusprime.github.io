@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Chord & Scale Reference</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
+
+/* ── TITLE BAR ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+
+/* ── NAV ── */
+.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
+.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+@media(max-width:660px){.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}.socialLinks{display:none}.titleBar .site-logo{width:36px;height:36px}}
+
+/* ── MAIN LAYOUT ── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:18px 14px}
+.controls-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center}
+.ctrl-group{display:flex;flex-direction:column;gap:4px}
+.ctrl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666}
+select{background:#1e1e1e;color:white;border:1px solid #444;padding:9px 12px;border-radius:6px;font-size:14px;font-family:inherit;cursor:pointer;min-width:110px}
+select:focus{outline:none;border-color:#f1c40f}
+.mode-toggle{display:flex;gap:0}
+.mode-btn{background:#1e1e1e;color:#888;border:1px solid #444;padding:9px 18px;cursor:pointer;font-weight:700;font-size:12px;text-transform:uppercase;transition:.2s}
+.mode-btn:first-child{border-radius:6px 0 0 6px}
+.mode-btn:last-child{border-radius:0 6px 6px 0;border-left:none}
+.mode-btn.active{background:#f1c40f22;color:#f1c40f;border-color:#f1c40f}
+
+/* ── DIAGRAMS GRID ── */
+.diagrams-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-start}
+.diagram-card{background:#141414;border:1px solid #222;border-radius:10px;padding:14px 16px;min-width:160px;flex:0 0 auto}
+.diagram-card h3{margin:0 0 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#f1c40f}
+.fret-svg{display:block}
+
+/* ── SCALE DISPLAY ── */
+.scale-wrap{background:#141414;border:1px solid #222;border-radius:10px;padding:18px}
+.scale-header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.scale-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#f1c40f}
+.scale-notes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.note-pill{background:#1e1e1e;border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;transition:.2s}
+.note-pill.root{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.fretboard-wrap{overflow-x:auto;padding-bottom:4px}
+
+/* ── INFO BOX ── */
+.info-box{background:#181818;border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px;color:#888;line-height:1.6}
+.info-box strong{color:#ccc}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:18px;color:#444;font-size:12px;border-top:1px solid #1a1a1a;margin-top:30px}
+footer a{color:#555;text-decoration:none;transition:.15s}
+footer a:hover{color:#f1c40f}
+.footer-sep{margin:0 6px;color:#2a2a2a}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Chords &amp; Scales</h2>
+  </div>
+  <div class="socialLinks">
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+  <button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
+  <button class="nav-btn active-page">🎼 Chords</button>
+  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+  <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+</div>
+
+<div class="page-wrap">
+  <div class="controls-row">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Root Note</span>
+      <select id="rootSel">
+        <option>C</option><option>C#/Db</option><option>D</option><option>D#/Eb</option>
+        <option>E</option><option>F</option><option>F#/Gb</option><option>G</option>
+        <option>G#/Ab</option><option>A</option><option>A#/Bb</option><option>B</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Mode</span>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btnChords" onclick="setMode('chords')">Chords</button>
+        <button class="mode-btn" id="btnScales" onclick="setMode('scales')">Scales</button>
+      </div>
+    </div>
+    <div class="ctrl-group" id="chordTypeGroup">
+      <span class="ctrl-label">Chord Type</span>
+      <select id="chordTypeSel">
+        <option value="major">Major</option>
+        <option value="minor">Minor</option>
+        <option value="dom7">Dominant 7</option>
+        <option value="maj7">Major 7</option>
+        <option value="min7">Minor 7</option>
+        <option value="sus2">Sus2</option>
+        <option value="sus4">Sus4</option>
+        <option value="dim">Diminished</option>
+        <option value="aug">Augmented</option>
+        <option value="power">Power (5th)</option>
+      </select>
+    </div>
+    <div class="ctrl-group" id="scaleTypeGroup" style="display:none">
+      <span class="ctrl-label">Scale Type</span>
+      <select id="scaleTypeSel">
+        <option value="major">Major (Ionian)</option>
+        <option value="minor">Natural Minor</option>
+        <option value="pent_maj">Pentatonic Major</option>
+        <option value="pent_min">Pentatonic Minor</option>
+        <option value="blues">Blues</option>
+        <option value="dorian">Dorian</option>
+        <option value="mixolydian">Mixolydian</option>
+        <option value="harmonic_min">Harmonic Minor</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Instrument</span>
+      <select id="instrSel">
+        <option value="guitar">Guitar (Standard)</option>
+        <option value="bass">Bass (4-string)</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<script>
+// ── NOTE DATA ──
+const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const NOTE_DISPLAY = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
+
+function noteIdx(name) {
+  const n = name.split('/')[0];
+  return NOTES.indexOf(n);
+}
+
+// intervals in semitones from root
+const CHORD_INTERVALS = {
+  major:    [0,4,7],
+  minor:    [0,3,7],
+  dom7:     [0,4,7,10],
+  maj7:     [0,4,7,11],
+  min7:     [0,3,7,10],
+  sus2:     [0,2,7],
+  sus4:     [0,5,7],
+  dim:      [0,3,6],
+  aug:      [0,4,8],
+  power:    [0,7,12],
+};
+
+const CHORD_NAMES = {
+  major:'Major', minor:'Minor', dom7:'Dominant 7th', maj7:'Major 7th',
+  min7:'Minor 7th', sus2:'Sus2', sus4:'Sus4', dim:'Diminished', aug:'Augmented', power:'Power (5th)'
+};
+
+const CHORD_INFO = {
+  major:'Bright, happy sound. The backbone of Western music. Three notes: root, major 3rd, perfect 5th.',
+  minor:'Darker, more emotional. Root, minor 3rd, perfect 5th. Classic for rock and metal.',
+  dom7:'Bluesy tension. Adds a minor 7th to a major chord — wants to resolve. Essential for blues and funk.',
+  maj7:'Dreamy, jazzy. Softer than dominant 7th. Common in jazz, R&B, and shoegaze.',
+  min7:'Smooth and melancholic. Minor chord with a minor 7th. Soul, funk, jazz staple.',
+  sus2:'Open and airy. Replaces the 3rd with a 2nd — neither major nor minor. Great for arpeggiated parts.',
+  sus4:'Tense and unresolved. Replaces the 3rd with a 4th. Often resolves to major or minor.',
+  dim:'Tense, unsettling. Three minor 3rds stacked. Great for tension before resolution.',
+  aug:'Eerie, unstable. Major chord with a raised 5th. Uncommon but effective for color.',
+  power:'The rock workhorse. Root + 5th (no 3rd = neutral tonality). Works with any distortion.',
+};
+
+const SCALE_INTERVALS = {
+  major:        [0,2,4,5,7,9,11],
+  minor:        [0,2,3,5,7,8,10],
+  pent_maj:     [0,2,4,7,9],
+  pent_min:     [0,3,5,7,10],
+  blues:        [0,3,5,6,7,10],
+  dorian:       [0,2,3,5,7,9,10],
+  mixolydian:   [0,2,4,5,7,9,10],
+  harmonic_min: [0,2,3,5,7,8,11],
+};
+
+const SCALE_NAMES = {
+  major:'Major (Ionian)', minor:'Natural Minor', pent_maj:'Pentatonic Major',
+  pent_min:'Pentatonic Minor', blues:'Blues', dorian:'Dorian',
+  mixolydian:'Mixolydian', harmonic_min:'Harmonic Minor',
+};
+
+const SCALE_INFO = {
+  major:'The foundation of Western music. Bright and resolved. 7 notes, whole-whole-half-whole-whole-whole-half pattern.',
+  minor:'Darker and more emotional than major. Relative minor starts on the 6th degree of major.',
+  pent_maj:'5-note subset of major. Clean, versatile — country, pop, rock. No half-steps so nothing clashes.',
+  pent_min:'The go-to rock/blues scale. 5 notes, sounds great over minor and dominant chord progressions.',
+  blues:'Pentatonic minor + the ♭5 "blue note." That one note adds all the grit and tension.',
+  dorian:'Minor scale with a raised 6th. Slightly brighter than natural minor. Think Santana, Daft Punk.',
+  mixolydian:'Major scale with a ♭7. Bluesy-but-bright. All over classic rock — "Sweet Home Alabama", etc.',
+  harmonic_min:'Natural minor with a raised 7th. Creates a leading tone. Dramatic, classical, metal feel.',
+};
+
+// ── GUITAR TUNINGS ──
+// Standard guitar: E2 A2 D3 G3 B3 E4 → open fret indices [4,9,2,7,11,4]
+// Bass 4-string:   E1 A1 D2 G2          → [4,9,2,7]
+const GUITAR_OPEN = [4,9,2,7,11,4]; // low→high
+const BASS_OPEN   = [4,9,2,7];
+
+// ── MODE ──
+let mode = 'chords';
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnChords').classList.toggle('active', m==='chords');
+  document.getElementById('btnScales').classList.toggle('active', m==='scales');
+  document.getElementById('chordTypeGroup').style.display = m==='chords' ? '' : 'none';
+  document.getElementById('scaleTypeGroup').style.display = m==='scales' ? '' : 'none';
+  render();
+}
+
+// ── CHORD VOICINGS (guitar) ── [string0..5] fret, -1=mute, 0=open
+// Only the most common/useful open and barre voicings
+const GUITAR_VOICINGS = {
+  // [rootNote][chordType] = array of voicings
+  C:{
+    major:  [{name:'Open C', frets:[- 1,3,2,0,1,0]}, {name:'Barre 8th', frets:[8,10,10,9,8,8]}],
+    minor:  [{name:'Barre 8th', frets:[8,10,10,9,8,8]}, {name:'Open Cm', frets:[-1,3,5,5,4,3]}],
+    dom7:   [{name:'C7 Open', frets:[-1,3,2,3,1,0]}],
+    maj7:   [{name:'Cmaj7', frets:[-1,3,2,0,0,0]}],
+    min7:   [{name:'Cm7', frets:[-1,3,5,3,4,3]}],
+    sus2:   [{name:'Csus2', frets:[-1,3,5,5,3,3]}],
+    sus4:   [{name:'Csus4', frets:[-1,3,3,0,1,1]}],
+    power:  [{name:'C5', frets:[-1,-1,-1,5,3,3]}],
+    dim:    [{name:'Cdim', frets:[-1,-1,1,2,1,2]}],
+    aug:    [{name:'Caug', frets:[-1,3,2,1,1,0]}],
+  },
+  'C#':{
+    major:  [{name:'Barre 4th', frets:[4,4,6,6,6,4]}],
+    minor:  [{name:'Barre 4th', frets:[4,4,6,6,5,4]}],
+    power:  [{name:'C#5', frets:[-1,-1,4,6,6,-1]}],
+    dom7:   [{name:'C#7', frets:[4,4,6,5,6,4]}],
+    maj7:   [{name:'C#maj7', frets:[4,4,6,5,5,4]}],
+    min7:   [{name:'C#m7', frets:[4,4,6,4,5,4]}],
+    sus2:   [{name:'C#sus2', frets:[4,4,6,6,4,4]}],
+    sus4:   [{name:'C#sus4', frets:[4,4,6,7,6,4]}],
+    dim:    [{name:'C#dim', frets:[-1,-1,2,3,2,3]}],
+    aug:    [{name:'C#aug', frets:[-1,4,3,2,2,1]}],
+  },
+  D:{
+    major:  [{name:'Open D', frets:[-1,-1,0,2,3,2]}, {name:'Barre 5th', frets:[5,5,7,7,7,5]}],
+    minor:  [{name:'Open Dm', frets:[-1,-1,0,2,3,1]}, {name:'Barre 5th', frets:[5,5,7,7,6,5]}],
+    dom7:   [{name:'D7 Open', frets:[-1,-1,0,2,1,2]}],
+    maj7:   [{name:'Dmaj7', frets:[-1,-1,0,2,2,2]}],
+    min7:   [{name:'Dm7', frets:[-1,-1,0,2,1,1]}],
+    sus2:   [{name:'Dsus2', frets:[-1,-1,0,2,3,0]}],
+    sus4:   [{name:'Dsus4', frets:[-1,-1,0,2,3,3]}],
+    power:  [{name:'D5', frets:[-1,-1,0,2,3,-1]}],
+    dim:    [{name:'Ddim', frets:[-1,-1,0,1,0,1]}],
+    aug:    [{name:'Daug', frets:[-1,-1,0,3,3,2]}],
+  },
+  'D#':{
+    major:  [{name:'Barre 6th', frets:[6,6,8,8,8,6]}],
+    minor:  [{name:'Barre 6th', frets:[6,6,8,8,7,6]}],
+    power:  [{name:'Eb5', frets:[-1,-1,1,3,4,-1]}],
+    dom7:   [{name:'Eb7', frets:[6,6,8,7,8,6]}],
+    maj7:   [{name:'Ebmaj7', frets:[6,6,8,7,7,6]}],
+    min7:   [{name:'Ebm7', frets:[6,6,8,6,7,6]}],
+    sus2:   [{name:'Ebsus2', frets:[6,6,8,8,6,6]}],
+    sus4:   [{name:'Ebsus4', frets:[6,6,8,9,8,6]}],
+    dim:    [{name:'Ebdim', frets:[-1,-1,1,2,1,2]}],
+    aug:    [{name:'Ebaug', frets:[-1,-1,1,0,0,3]}],
+  },
+  E:{
+    major:  [{name:'Open E', frets:[0,2,2,1,0,0]}, {name:'Barre 7th', frets:[7,7,9,9,9,7]}],
+    minor:  [{name:'Open Em', frets:[0,2,2,0,0,0]}, {name:'Barre 7th', frets:[7,7,9,9,8,7]}],
+    dom7:   [{name:'E7 Open', frets:[0,2,0,1,0,0]}],
+    maj7:   [{name:'Emaj7', frets:[0,2,1,1,0,0]}],
+    min7:   [{name:'Em7', frets:[0,2,2,0,3,0]}],
+    sus2:   [{name:'Esus2', frets:[0,2,2,4,0,0]}],
+    sus4:   [{name:'Esus4', frets:[0,2,2,2,0,0]}],
+    power:  [{name:'E5', frets:[0,2,2,-1,-1,-1]}],
+    dim:    [{name:'Edim', frets:[-1,-1,2,3,2,3]}],
+    aug:    [{name:'Eaug', frets:[0,3,2,1,1,0]}],
+  },
+  F:{
+    major:  [{name:'Barre 1st', frets:[1,1,2,3,3,1]}, {name:'Barre 8th', frets:[8,8,10,10,10,8]}],
+    minor:  [{name:'Barre 1st', frets:[1,1,3,3,2,1]}],
+    dom7:   [{name:'F7', frets:[1,1,2,1,3,1]}],
+    maj7:   [{name:'Fmaj7', frets:[-1,-1,3,2,1,0]}],
+    min7:   [{name:'Fm7', frets:[1,1,3,1,2,1]}],
+    sus2:   [{name:'Fsus2', frets:[1,1,3,3,1,1]}],
+    sus4:   [{name:'Fsus4', frets:[1,1,3,4,3,1]}],
+    power:  [{name:'F5', frets:[1,3,3,-1,-1,-1]}],
+    dim:    [{name:'Fdim', frets:[1,2,3,1,-1,-1]}],
+    aug:    [{name:'Faug', frets:[-1,-1,3,2,2,1]}],
+  },
+  'F#':{
+    major:  [{name:'Barre 2nd', frets:[2,2,4,4,4,2]}],
+    minor:  [{name:'Barre 2nd', frets:[2,2,4,4,3,2]}],
+    dom7:   [{name:'F#7', frets:[2,2,4,3,4,2]}],
+    maj7:   [{name:'F#maj7', frets:[2,2,4,3,3,2]}],
+    min7:   [{name:'F#m7', frets:[2,2,4,2,3,2]}],
+    sus2:   [{name:'F#sus2', frets:[2,2,4,4,2,2]}],
+    sus4:   [{name:'F#sus4', frets:[2,2,4,5,4,2]}],
+    power:  [{name:'F#5', frets:[2,4,4,-1,-1,-1]}],
+    dim:    [{name:'F#dim', frets:[2,3,4,2,-1,-1]}],
+    aug:    [{name:'F#aug', frets:[2,1,0,3,-1,-1]}],
+  },
+  G:{
+    major:  [{name:'Open G', frets:[3,2,0,0,0,3]}, {name:'Barre 3rd', frets:[3,3,5,5,5,3]}],
+    minor:  [{name:'Barre 3rd', frets:[3,3,5,5,4,3]}],
+    dom7:   [{name:'G7 Open', frets:[3,2,0,0,0,1]}],
+    maj7:   [{name:'Gmaj7', frets:[3,2,0,0,0,2]}],
+    min7:   [{name:'Gm7', frets:[3,1,0,0,3,3]}],
+    sus2:   [{name:'Gsus2', frets:[3,0,0,0,0,3]}],
+    sus4:   [{name:'Gsus4', frets:[3,3,0,0,1,3]}],
+    power:  [{name:'G5', frets:[3,5,5,-1,-1,-1]}],
+    dim:    [{name:'Gdim', frets:[-1,-1,5,6,5,6]}],
+    aug:    [{name:'Gaug', frets:[3,2,1,0,0,3]}],
+  },
+  'G#':{
+    major:  [{name:'Barre 4th', frets:[4,4,6,6,6,4]}],
+    minor:  [{name:'Barre 4th', frets:[4,4,6,6,5,4]}],
+    dom7:   [{name:'Ab7', frets:[4,4,6,5,6,4]}],
+    maj7:   [{name:'Abmaj7', frets:[4,4,6,5,5,4]}],
+    min7:   [{name:'Abm7', frets:[4,4,6,4,5,4]}],
+    sus2:   [{name:'Absus2', frets:[4,4,6,6,4,4]}],
+    sus4:   [{name:'Absus4', frets:[4,4,6,7,6,4]}],
+    power:  [{name:'Ab5', frets:[4,6,6,-1,-1,-1]}],
+    dim:    [{name:'Abdim', frets:[-1,-1,6,7,6,7]}],
+    aug:    [{name:'Abaug', frets:[4,3,2,1,1,0]}],
+  },
+  A:{
+    major:  [{name:'Open A', frets:[-1,0,2,2,2,0]}, {name:'Barre 5th', frets:[5,5,7,7,7,5]}],
+    minor:  [{name:'Open Am', frets:[-1,0,2,2,1,0]}, {name:'Barre 5th', frets:[5,5,7,7,6,5]}],
+    dom7:   [{name:'A7 Open', frets:[-1,0,2,0,2,0]}],
+    maj7:   [{name:'Amaj7', frets:[-1,0,2,1,2,0]}],
+    min7:   [{name:'Am7', frets:[-1,0,2,0,1,0]}],
+    sus2:   [{name:'Asus2', frets:[-1,0,2,2,0,0]}],
+    sus4:   [{name:'Asus4', frets:[-1,0,2,2,3,0]}],
+    power:  [{name:'A5', frets:[-1,0,2,2,-1,-1]}],
+    dim:    [{name:'Adim', frets:[-1,0,1,2,1,2]}],
+    aug:    [{name:'Aaug', frets:[-1,0,3,2,2,1]}],
+  },
+  'A#':{
+    major:  [{name:'Barre 1st (A shape)', frets:[-1,1,3,3,3,1]}, {name:'Barre 6th', frets:[6,6,8,8,8,6]}],
+    minor:  [{name:'Barre 1st (Am shape)', frets:[-1,1,3,3,2,1]}],
+    dom7:   [{name:'Bb7', frets:[-1,1,3,1,3,1]}],
+    maj7:   [{name:'Bbmaj7', frets:[-1,1,3,2,3,1]}],
+    min7:   [{name:'Bbm7', frets:[-1,1,3,1,2,1]}],
+    sus2:   [{name:'Bbsus2', frets:[-1,1,3,3,1,1]}],
+    sus4:   [{name:'Bbsus4', frets:[-1,1,3,3,4,1]}],
+    power:  [{name:'Bb5', frets:[-1,1,3,3,-1,-1]}],
+    dim:    [{name:'Bbdim', frets:[-1,1,2,3,2,3]}],
+    aug:    [{name:'Bbaug', frets:[-1,1,0,3,3,2]}],
+  },
+  B:{
+    major:  [{name:'Barre 2nd (A shape)', frets:[-1,2,4,4,4,2]}, {name:'Barre 7th', frets:[7,7,9,9,9,7]}],
+    minor:  [{name:'Barre 2nd (Am shape)', frets:[-1,2,4,4,3,2]}],
+    dom7:   [{name:'B7 Open', frets:[-1,2,1,2,0,2]}],
+    maj7:   [{name:'Bmaj7', frets:[-1,2,4,3,4,2]}],
+    min7:   [{name:'Bm7', frets:[-1,2,0,2,0,2]}],
+    sus2:   [{name:'Bsus2', frets:[-1,2,4,4,2,2]}],
+    sus4:   [{name:'Bsus4', frets:[-1,2,4,4,5,2]}],
+    power:  [{name:'B5', frets:[-1,2,4,4,-1,-1]}],
+    dim:    [{name:'Bdim', frets:[-1,2,3,4,3,4]}],
+    aug:    [{name:'Baug', frets:[-1,2,1,0,0,3]}],
+  },
+};
+
+// ── SVG CHORD DIAGRAM ──
+function chordSVG(frets, stringCount) {
+  // frets: array low→high, -1=mute, 0=open, n=fret number
+  const W = 120, H = 140;
+  const strCount = stringCount || frets.length;
+  const FRETS_SHOWN = 5;
+  const PAD_L = 22, PAD_T = 30, PAD_R = 14, PAD_B = 16;
+  const gridW = W - PAD_L - PAD_R;
+  const gridH = H - PAD_T - PAD_B;
+  const strSpacing = gridW / (strCount - 1);
+  const fretSpacing = gridH / FRETS_SHOWN;
+
+  // Find the min fret (ignoring mutes/opens) to decide start fret
+  const playedFrets = frets.filter(f => f > 0);
+  let startFret = 1;
+  if (playedFrets.length > 0) {
+    const minF = Math.min(...playedFrets);
+    const maxF = Math.max(...playedFrets);
+    if (maxF > FRETS_SHOWN) {
+      startFret = minF;
+    }
+  }
+
+  let svg = `<svg class="fret-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Nut or position marker
+  if (startFret === 1) {
+    svg += `<rect x="${PAD_L}" y="${PAD_T - 4}" width="${gridW}" height="4" fill="#aaa" rx="1"/>`;
+  } else {
+    svg += `<text x="${PAD_L - 4}" y="${PAD_T + fretSpacing * 0.6}" text-anchor="end" fill="#888" font-size="9" font-family="Inter,sans-serif">${startFret}</text>`;
+  }
+
+  // Fret lines
+  for (let f = 0; f <= FRETS_SHOWN; f++) {
+    const y = PAD_T + f * fretSpacing;
+    svg += `<line x1="${PAD_L}" y1="${y}" x2="${PAD_L + gridW}" y2="${y}" stroke="#333" stroke-width="${f===0?1.5:1}"/>`;
+  }
+
+  // String lines
+  for (let s = 0; s < strCount; s++) {
+    const x = PAD_L + s * strSpacing;
+    svg += `<line x1="${x}" y1="${PAD_T}" x2="${x}" y2="${PAD_T + gridH}" stroke="#555" stroke-width="1.2"/>`;
+  }
+
+  // Dots and mute/open markers
+  frets.forEach((fret, si) => {
+    const x = PAD_L + si * strSpacing;
+    const markerY = PAD_T - 11;
+    if (fret === -1) {
+      // mute X
+      svg += `<text x="${x}" y="${markerY + 8}" text-anchor="middle" fill="#555" font-size="11" font-family="Inter,sans-serif">✕</text>`;
+    } else if (fret === 0) {
+      // open circle
+      svg += `<circle cx="${x}" cy="${markerY + 4}" r="4" fill="none" stroke="#666" stroke-width="1.2"/>`;
+    } else {
+      const relFret = fret - startFret + 1;
+      if (relFret >= 1 && relFret <= FRETS_SHOWN) {
+        const dotY = PAD_T + (relFret - 0.5) * fretSpacing;
+        svg += `<circle cx="${x}" cy="${dotY}" r="7" fill="#f1c40f"/>`;
+      }
+    }
+  });
+
+  // Barre detection: same fret on 2+ consecutive strings
+  const fretGroups = {};
+  frets.forEach((f, i) => {
+    if (f > 0) { if (!fretGroups[f]) fretGroups[f]=[]; fretGroups[f].push(i); }
+  });
+  Object.entries(fretGroups).forEach(([f, indices]) => {
+    const relFret = parseInt(f) - startFret + 1;
+    if (indices.length >= 2 && relFret >= 1 && relFret <= FRETS_SHOWN) {
+      const first = indices[0], last = indices[indices.length-1];
+      if (last - first >= 1) {
+        const barY = PAD_T + (relFret - 0.5) * fretSpacing;
+        const x1 = PAD_L + first * strSpacing;
+        const x2 = PAD_L + last * strSpacing;
+        svg += `<rect x="${x1-7}" y="${barY-7}" width="${x2-x1+14}" height="14" rx="7" fill="#f1c40f"/>`;
+      }
+    }
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+// ── FRETBOARD SCALE SVG ──
+function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets) {
+  const strCount = openTuning.length;
+  numFrets = numFrets || 12;
+  const W = Math.min(900, window.innerWidth - 60);
+  const H = strCount * 30 + 30;
+  const PAD_L = 28, PAD_T = 20, PAD_R = 14, PAD_B = 14;
+  const gridW = W - PAD_L - PAD_R;
+  const gridH = H - PAD_T - PAD_B;
+  const strSpacing = gridH / (strCount - 1);
+  const fretSpacing = gridW / numFrets;
+
+  const rootIdx = noteIdx(rootNote);
+
+  let svg = `<svg class="fret-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">`;
+
+  // Nut
+  svg += `<rect x="${PAD_L}" y="${PAD_T}" width="3" height="${gridH}" fill="#aaa"/>`;
+
+  // Fret lines
+  for (let f = 1; f <= numFrets; f++) {
+    const x = PAD_L + f * fretSpacing;
+    svg += `<line x1="${x}" y1="${PAD_T}" x2="${x}" y2="${PAD_T + gridH}" stroke="${[3,5,7,9,12].includes(f)?'#2a2a2a':'#1e1e1e'}" stroke-width="1"/>`;
+  }
+
+  // Position dots on fretboard
+  [3,5,7,9].forEach(f => {
+    const x = PAD_L + (f - 0.5) * fretSpacing;
+    const y = PAD_T + gridH / 2;
+    svg += `<circle cx="${x}" cy="${y}" r="3" fill="#1e1e1e"/>`;
+  });
+  [0.5,1.5].forEach(o => {
+    const x = PAD_L + (12 - o) * fretSpacing;
+    svg += `<circle cx="${x}" cy="${PAD_T + gridH*0.35}" r="3" fill="#1e1e1e"/>`;
+    svg += `<circle cx="${x}" cy="${PAD_T + gridH*0.65}" r="3" fill="#1e1e1e"/>`;
+  });
+
+  // String lines
+  for (let s = 0; s < strCount; s++) {
+    const y = PAD_T + s * strSpacing;
+    svg += `<line x1="${PAD_L}" y1="${y}" x2="${PAD_L + gridW}" y2="${y}" stroke="#444" stroke-width="1.5"/>`;
+  }
+
+  // Notes on strings
+  for (let s = 0; s < strCount; s++) {
+    const y = PAD_T + s * strSpacing;
+    const open = openTuning[s];
+    for (let f = 0; f <= numFrets; f++) {
+      const noteI = (open + f) % 12;
+      if (scaleNotes.includes(noteI)) {
+        const x = f === 0 ? PAD_L - 10 : PAD_L + (f - 0.5) * fretSpacing;
+        const isRoot = noteI === rootIdx;
+        svg += `<circle cx="${x}" cy="${y}" r="${isRoot?9:7}" fill="${isRoot?'#f1c40f':'#2a6496'}" opacity="0.92"/>`;
+        svg += `<text x="${x}" y="${y+4}" text-anchor="middle" fill="${isRoot?'#000':'#fff'}" font-size="${isRoot?'8':'7'}" font-weight="700" font-family="Inter,sans-serif">${NOTE_DISPLAY[noteI].split('/')[0]}</text>`;
+      }
+    }
+  }
+
+  // String labels (left side)
+  for (let s = 0; s < strCount; s++) {
+    const y = PAD_T + s * strSpacing;
+    svg += `<text x="6" y="${y+4}" text-anchor="middle" fill="#444" font-size="8" font-family="Inter,sans-serif">${NOTE_DISPLAY[openTuning[s]].split('/')[0]}</text>`;
+  }
+
+  // Fret numbers along bottom
+  for (let f = 1; f <= numFrets; f++) {
+    if ([3,5,7,9,12].includes(f)) {
+      const x = PAD_L + (f - 0.5) * fretSpacing;
+      svg += `<text x="${x}" y="${H-2}" text-anchor="middle" fill="#333" font-size="8" font-family="Inter,sans-serif">${f}</text>`;
+    }
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+// ── RENDER ──
+function render() {
+  const rootSel = document.getElementById('rootSel').value;
+  const rootKey = rootSel.split('/')[0];
+  const instr = document.getElementById('instrSel').value;
+  const out = document.getElementById('output');
+
+  if (mode === 'chords') {
+    const chordType = document.getElementById('chordTypeSel').value;
+    const voicings = (GUITAR_VOICINGS[rootKey] && GUITAR_VOICINGS[rootKey][chordType]) || [];
+    const strCount = instr === 'bass' ? 4 : 6;
+    const intervals = CHORD_INTERVALS[chordType];
+    const rootIdx2 = noteIdx(rootKey);
+    const chordNoteIdxs = intervals.map(i => (rootIdx2 + i) % 12);
+    const noteNames = chordNoteIdxs.map(i => NOTE_DISPLAY[i]);
+
+    let html = `<div class="scale-wrap">
+      <div class="scale-header">
+        <span class="scale-title">${rootSel} ${CHORD_NAMES[chordType]}</span>
+      </div>
+      <div class="scale-notes">`;
+    noteNames.forEach((n,i) => {
+      html += `<span class="note-pill ${i===0?'root':''}">${n}${i===0?' (R)':i===1?' (3rd)':i===2?' (5th)':i===3?' (7th)':''}</span>`;
+    });
+    html += `</div>`;
+
+    if (instr === 'guitar' && voicings.length > 0) {
+      html += `<div class="diagrams-grid">`;
+      voicings.forEach(v => {
+        html += `<div class="diagram-card"><h3>${v.name}</h3>${chordSVG(v.frets, 6)}</div>`;
+      });
+      html += `</div>`;
+    } else if (instr === 'bass') {
+      // Show notes on bass fretboard
+      html += `<p style="color:#666;font-size:13px;margin:0 0 10px">Chord tones on bass — highlight where the chord lives on the neck:</p>`;
+      const openTuning = BASS_OPEN;
+      const scaleNotes = chordNoteIdxs;
+      html += `<div class="fretboard-wrap">${scaleFretboardSVG(openTuning, scaleNotes, rootKey, 12)}</div>`;
+    } else if (voicings.length === 0) {
+      html += `<p style="color:#555;font-size:13px">Chord diagram coming soon for this voicing.</p>`;
+    }
+
+    html += `<div class="info-box"><strong>About ${CHORD_NAMES[chordType]}:</strong> ${CHORD_INFO[chordType]}</div>`;
+    html += `</div>`;
+    out.innerHTML = html;
+
+  } else {
+    // SCALES mode
+    const scaleType = document.getElementById('scaleTypeSel').value;
+    const rootIdx2 = noteIdx(rootKey);
+    const intervals = SCALE_INTERVALS[scaleType];
+    const scaleNoteIdxs = intervals.map(i => (rootIdx2 + i) % 12);
+    const noteNames = scaleNoteIdxs.map(i => NOTE_DISPLAY[i]);
+    const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
+
+    let html = `<div class="scale-wrap">
+      <div class="scale-header">
+        <span class="scale-title">${rootSel} ${SCALE_NAMES[scaleType]}</span>
+      </div>
+      <div class="scale-notes">`;
+    noteNames.forEach((n,i) => {
+      html += `<span class="note-pill ${i===0?'root':''}">${n}</span>`;
+    });
+    html += `</div>
+      <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root note &nbsp; 🔵 = scale tone &nbsp; Open strings shown left of nut</p>
+      <div class="fretboard-wrap">${scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12)}</div>
+      <div class="info-box"><strong>About ${SCALE_NAMES[scaleType]}:</strong> ${SCALE_INFO[scaleType]}</div>
+    </div>`;
+    out.innerHTML = html;
+  }
+}
+
+// ── EVENT LISTENERS ──
+['rootSel','chordTypeSel','scaleTypeSel','instrSel'].forEach(id => {
+  document.getElementById(id).addEventListener('change', render);
+});
+
+// Initial render
+render();
+</script>
+</body>
+</html>
