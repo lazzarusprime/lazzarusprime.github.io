@@ -34,6 +34,10 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .page-header h1{margin:0 0 6px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:4px;background:linear-gradient(to bottom,#fff 0%,#f1c40f 50%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-header p{margin:0;color:#555;font-size:13px;letter-spacing:1px}
 
+/* Explanation Tooltip Banner */
+.info-banner {max-width:700px; margin: 8px auto 0; background: #161616; border: 1px solid #222; padding: 6px 12px; border-radius: 4px; font-size: 11px; color: #888; line-height: 1.4}
+.info-banner strong {color: #ff5500}
+
 /* ── CONTROLS BAR ── */
 .controls{display:flex;gap:10px;padding:14px 16px;flex-wrap:wrap;align-items:center;background:#141414;border-bottom:1px solid #222;justify-content:center}
 .ctrl-btn{padding:9px 18px;background:#222;color:#fff;border:1px solid #444;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;transition:.2s;display:inline-flex;align-items:center;gap:6px}
@@ -134,6 +138,9 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 <div class="page-header">
   <h1>🔥 Groove Station Pro</h1>
   <p>Engine-swappable production suite · click once = normal hit · click twice = accented hit · click again = off</p>
+  <div class="info-banner">
+    ⚡ <strong>Performance Mode:</strong> Disables heavy glow effects and step animations during playback. Turn this on if you are streaming to OBS or experiencing audio stuttering under high hardware loads!
+  </div>
 </div>
 
 <div class="controls">
@@ -220,9 +227,6 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 </footer>
 
 <script>
-// ─────────────────────────────────────────────
-//  UPGRADED 9 INSTRUMENT CONFIG
-// ─────────────────────────────────────────────
 const INSTRUMENTS = [
   { id: 'Kick',      name: 'Kick',       emoji: '🥁' },
   { id: 'Snare',     name: 'Snare',      emoji: '🪘' },
@@ -251,9 +255,6 @@ function initArrays() {
 }
 initArrays();
 
-// ─────────────────────────────────────────────
-//  AUDIO STATE & SHARED RESOURCES
-// ─────────────────────────────────────────────
 let ctx = null;
 let noiseBuffer = null;
 let isPlaying = false;
@@ -269,9 +270,6 @@ function createNoiseBuffer() {
   return buf;
 }
 
-// ─────────────────────────────────────────────
-//  4-ENGINE DYNAMIC MODEL ROUTER
-// ─────────────────────────────────────────────
 function hit(inst, time, volumeMultiplier) {
   if (!ctx) return;
   const safeTime = Math.max(time, ctx.currentTime);
@@ -306,7 +304,7 @@ function hit(inst, time, volumeMultiplier) {
       osc.frequency.exponentialRampToValueAtTime(45, safeTime + 0.14);
       env.gain.setValueAtTime(0.8, safeTime);
       env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
-    } else { // acoustic
+    } else {
       osc.frequency.setValueAtTime(150, safeTime);
       osc.frequency.exponentialRampToValueAtTime(46, safeTime + 0.11);
       env.gain.setValueAtTime(1.0, safeTime);
@@ -333,7 +331,7 @@ function hit(inst, time, volumeMultiplier) {
       hpf.type = 'bandpass'; hpf.frequency.value = 950;
       nGain.gain.setValueAtTime(0.7, safeTime);
       nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.16);
-    } else { // acoustic & electronic
+    } else {
       hpf.frequency.value = 1100;
       nGain.gain.setValueAtTime(0.75, safeTime);
       nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.14);
@@ -400,9 +398,6 @@ function hit(inst, time, volumeMultiplier) {
   }
 }
 
-// ─────────────────────────────────────────────
-//  SEQUENCER TIMING ENGINE
-// ─────────────────────────────────────────────
 function scheduler() {
   while (nextNoteTime < ctx.currentTime + 0.12) {
     scheduleStep(currentStep, nextNoteTime);
@@ -444,16 +439,12 @@ function scheduleStep(step, time) {
   });
 }
 
-// ─────────────────────────────────────────────
-//  MATRIX & MIXER UI DOM ENGINE
-// ─────────────────────────────────────────────
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.style.gridTemplateColumns = `170px repeat(${maxSteps}, minmax(22px, 1fr))`;
   grid.innerHTML = '';
 
   INSTRUMENTS.forEach(inst => {
-    // Left Control Block
     const ctrlCell = document.createElement('div');
     ctrlCell.className = 'track-mixer-panel';
     ctrlCell.innerHTML = `
@@ -466,7 +457,6 @@ function buildGrid() {
     `;
     grid.appendChild(ctrlCell);
 
-    // Matrix Row Sequencing Steps
     for (let s = 0; s < maxSteps; s++) {
       const cell = document.createElement('div');
       cell.className = 'step-cell';
@@ -492,9 +482,6 @@ function buildGrid() {
   });
 }
 
-// ─────────────────────────────────────────────
-//  CORE SYSTEM FUNCTIONS
-// ─────────────────────────────────────────────
 function togglePlay() {
   if (!ctx) {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -557,9 +544,6 @@ function togglePerfMode() {
 function onBpmChange() { document.getElementById('bpmValue').textContent = document.getElementById('bpmSlider').value; }
 function onSwingChange() { document.getElementById('swingValue').textContent = document.getElementById('swingSlider').value + '%'; }
 
-// ─────────────────────────────────────────────
-//  STORAGE COMPONENT PERSISTENCE
-// ─────────────────────────────────────────────
 function saveToLocal() {
   localStorage.setItem('lp_groove_snapshot', JSON.stringify({ pattern, maxSteps }));
   document.getElementById('statusMsg').textContent = 'Groove architecture snapshot cached to LocalStorage successfully.';
@@ -603,7 +587,7 @@ function importJSON() {
           maxSteps = structuralData.maxSteps || 16;
           document.getElementById('stepSelect').value = maxSteps;
         } else {
-          pattern = structuralData; // backwards compatibility with flat patterns
+          pattern = structuralData;
         }
         initArrays();
         buildGrid();
@@ -613,9 +597,6 @@ function importJSON() {
   selector.click();
 }
 
-// ─────────────────────────────────────────────
-//  PRESET ARCHITECTURE DATA MODULE
-// ─────────────────────────────────────────────
 const PRESETS = {
   rock: { Kick:[2,0,0,0,2,0,0,0], Snare:[0,0,2,0,0,0,2,0], ClosedHat:[1,1,1,1,1,1,1,1] },
   metal: { Kick:[2,1,2,1,2,1,2,2], Snare:[0,0,2,0,0,0,2,0], ClosedHat:[1,1,1,1,1,1,1,1], Ride:[1,0,1,0,1,0,1,0] },
@@ -637,9 +618,6 @@ function loadPreset(name) {
   buildGrid();
 }
 
-// ─────────────────────────────────────────────
-//  KEYBOARD SHORTCUTS & APP INTIALIZATION
-// ─────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
@@ -647,7 +625,6 @@ document.addEventListener('keydown', e => {
   if (e.code === 'KeyR') randomPattern();
 });
 
-// Original Site Core Random Song Hook System
 let _artists = [];
 (async () => {
   try { const d = await (await fetch('songs.json')).json(); _artists = [...new Set(d.map(s => s.artist))]; } catch(e) {}
@@ -671,7 +648,6 @@ function randomSong(btn) {
   else location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick);
 }
 
-// Initial UI construction
 buildGrid();
 </script>
 </body>
