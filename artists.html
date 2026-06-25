@@ -20,8 +20,8 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
 .socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
-.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
-.topBar input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
+.topBar{display:flex;flex-direction:column;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center}
+.search-row input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
@@ -30,7 +30,7 @@ footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:
 footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
 footer a:hover{color:#f1c40f;background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
-@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.artistGrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;gap:8px!important;padding:10px!important}.titleBar .site-logo{width:36px;height:36px}}
+@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-row{gap:4px}.nav-btn{padding:7px 9px;font-size:10px}.artistGrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;gap:8px!important;padding:10px!important}.titleBar .site-logo{width:36px;height:36px}}
 #genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:#141414;border-bottom:1px solid #222;justify-content:center}
 .genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
 .genre-btn:hover{border-color:#f1c40f;color:#f1c40f}
@@ -97,17 +97,21 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 </div>
 
 <div class="topBar">
-  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
-  <button class="nav-btn active-page" onclick="location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
-  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
-  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
-  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
-  <button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
-  <button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
-  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
-  <button class="nav-btn" onclick="randomArtist(this)">🎲 Random</button>
-  <input id="searchBox" placeholder="Search artist…" oninput="handleSearch()" autocomplete="off">
+  <div class="nav-row">
+    <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+<button class="nav-btn active-page" onclick="location.href='artists.html'">🎸 Artists</button>
+<button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+<button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+<button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+<button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+<button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
+<button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
+<button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+<button class="nav-btn" onclick="randomArtist(this)">🎲 Random</button>
+  </div>
+  <div class="search-row">
+    <input id="searchBox" placeholder="Search artist…" oninput="handleSearch()" autocomplete="off">
+  </div>
 </div>
 
 <div id="genreBar"></div>

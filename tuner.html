@@ -23,7 +23,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
 
 /* ── TOP BAR ── */
-.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
+.topBar{display:flex;flex-direction:column;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
@@ -97,7 +97,7 @@ footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-
 footer a:hover{color:#f1c40f;background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
 
-@media(max-width:660px){.app-workspace{padding:12px;gap:14px}.legend-panel{width:100%}.display-panel{padding:20px 14px}.arc-meter-wrap{max-width:100%}.titleBar .site-logo{width:36px;height:36px}.socialLinks{display:none}.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}}
+@media(max-width:660px){.app-workspace{padding:12px;gap:14px}.legend-panel{width:100%}.display-panel{padding:20px 14px}.arc-meter-wrap{max-width:100%}.titleBar .site-logo{width:36px;height:36px}.socialLinks{display:none}.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}.nav-row{gap:4px}}
 /* ── DRAG PANELS ── */
 .drag-workspace{display:flex;flex-wrap:wrap;gap:16px;padding:16px;justify-content:flex-start;align-items:flex-start;max-width:1100px;margin:0 auto;width:100%}
 .drag-panel{background:#141414;border:1px solid #222;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s;position:relative}
@@ -135,20 +135,22 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 </div>
 
 <div class="topBar">
-  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
-  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
-  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
-  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
-  <button class="nav-btn active-page">🎵 Tuner</button>
-  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
-  <button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
-  <button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
-  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
-  <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
-  <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
-  <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
-  <div class="topBar-action">
+  <div class="nav-row">
+    <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+<button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+<button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+<button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+<button class="nav-btn active-page">🎵 Tuner</button>
+<button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+<button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
+<button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
+<button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+<button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
     <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">🎙️ Start Tuner</button>
+  </div>
+  <div class="search-row">
+    <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
+    <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
   </div>
 </div>
 
