@@ -94,6 +94,20 @@ body.perf-mode .step-cell{box-shadow:none !important;transform:none !important;t
 #statusMsg{flex:1;font-size:11px;color:#555}
 
 /* ── FOOTER (matches site) ── */
+.help-panel{background:#0d0d0d;border-top:1px solid #1a1a1a;padding:0}
+.help-panel details{padding:0}
+.help-panel summary{padding:10px 16px;cursor:pointer;font-size:12px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:1px;list-style:none;user-select:none;transition:.15s}
+.help-panel summary:hover{color:#f1c40f}
+.help-panel summary::-webkit-details-marker{display:none}
+.help-panel details[open] summary{color:#f1c40f;border-bottom:1px solid #1a1a1a}
+.help-grid{display:flex;flex-wrap:wrap;gap:20px;padding:16px;align-items:flex-start}
+.help-section{flex:1;min-width:200px;max-width:300px}
+.help-section h4{margin:0 0 10px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#f1c40f}
+.help-section p{margin:0 0 8px;font-size:12px;color:#666;line-height:1.6}
+.help-section code{background:#1e1e1e;padding:1px 5px;border-radius:3px;font-size:11px;color:#aaa}
+.help-row{display:flex;align-items:center;gap:10px;padding:4px 0;font-size:12px;color:#666}
+kbd{background:#222;border:1px solid #444;border-radius:4px;padding:2px 8px;font-size:11px;font-family:monospace;color:#ccc;font-weight:700}
+.click-label{background:#1e1e1e;border:1px solid #333;border-radius:4px;padding:2px 8px;font-size:11px;color:#888;white-space:nowrap}
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
 footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
 footer a:hover{color:#f1c40f;background:#1a1a1a}
@@ -210,7 +224,37 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 
 <div class="status-bar">
   <span id="stepIndicator">--</span>
-  <span id="statusMsg">Hotkeys: [Space] Play/Stop · [C] Clear Matrix · [R] Random Pattern</span>
+  <span id="statusMsg">Ready</span>
+</div>
+
+<div class="help-panel">
+  <details>
+    <summary>⌨️ Keyboard Shortcuts &amp; Button Reference</summary>
+    <div class="help-grid">
+      <div class="help-section">
+        <h4>⌨️ Keyboard Shortcuts</h4>
+        <div class="help-row"><kbd>Space</kbd><span>Play / Stop</span></div>
+        <div class="help-row"><kbd>C</kbd><span>Clear all steps</span></div>
+        <div class="help-row"><kbd>R</kbd><span>Randomize pattern</span></div>
+      </div>
+      <div class="help-section">
+        <h4>🖱️ Grid Interaction</h4>
+        <div class="help-row"><span class="click-label">1 click</span><span>Normal hit</span></div>
+        <div class="help-row"><span class="click-label">2 clicks</span><span>Accented hit (louder)</span></div>
+        <div class="help-row"><span class="click-label">3 clicks</span><span>Off (clear step)</span></div>
+      </div>
+      <div class="help-section">
+        <h4>💾 Save State / 📁 Load State</h4>
+        <p><strong>Save State</strong> saves your entire current pattern — all steps, all instruments, and step count — to your browser's local storage. It stays saved even after you close the tab.</p>
+        <p><strong>Load State</strong> restores whatever you last saved. If nothing has been saved yet, it will tell you.</p>
+      </div>
+      <div class="help-section">
+        <h4>📤 Export JSON / 📥 Import JSON</h4>
+        <p><strong>Export JSON</strong> downloads your pattern as a <code>.json</code> file you can back up or share. Use this to save multiple patterns or move them between devices.</p>
+        <p><strong>Import JSON</strong> loads a previously exported <code>.json</code> file back into the grid.</p>
+      </div>
+    </div>
+  </details>
 </div>
 
 <footer>

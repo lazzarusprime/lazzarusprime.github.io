@@ -813,7 +813,7 @@ drawArc(0,false,false);
     const target = getDropTarget(e.clientX, e.clientY);
     if (!target || target === dragging) return;
     const r = target.getBoundingClientRect();
-    e.clientY < r.top + r.height / 2
+    e.clientX < r.left + r.width / 2
       ? workspace.insertBefore(placeholder, target)
       : workspace.insertBefore(placeholder, target.nextSibling);
   }
