@@ -55,8 +55,12 @@ select:focus{outline:none;border-color:#f1c40f}
 .scale-header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .scale-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#f1c40f}
 .scale-notes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.note-pill{background:#1e1e1e;border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;transition:.2s}
+.note-pill{background:#1e1e1e;border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;transition:.2s;cursor:pointer;user-select:none}
+.note-pill:hover{border-color:#888;color:#fff;background:#2a2a2a}
 .note-pill.root{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.note-pill.root:hover{background:#f1c40f44}
+.note-pill.active-pill{background:#f1c40f;color:#000;border-color:#f1c40f;box-shadow:0 0 12px rgba(241,196,15,.5)}
+.note-pill.root.active-pill{background:#f1c40f;color:#000}
 .fretboard-wrap{overflow-x:auto;padding-bottom:4px}
 
 /* ── INFO BOX ── */
@@ -496,7 +500,7 @@ function chordSVG(frets, stringCount) {
 }
 
 // ── FRETBOARD SCALE SVG ── (top-down view: low E at top, high e at bottom)
-function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets) {
+function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets, soloNoteIdx) {
   // Reverse so index 0 (low E) is drawn at top
   const strCount = openTuning.length;
   const displayTuning = [...openTuning].reverse(); // high string at bottom, low at top
@@ -548,7 +552,7 @@ function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets) {
     svg += `<line x1="${PAD_L}" y1="${y}" x2="${PAD_L + gridW}" y2="${y}" stroke="#555" stroke-width="${stringThickness.toFixed(1)}"/>`;
   }
 
-  // Notes on strings
+      // Notes on strings
   for (let s = 0; s < strCount; s++) {
     const y = PAD_T + s * strSpacing + strSpacing / 2;
     const open = displayTuning[s];
@@ -557,8 +561,15 @@ function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets) {
       if (scaleNotes.includes(noteI)) {
         const x = f === 0 ? PAD_L - 12 : PAD_L + (f - 0.5) * fretSpacing;
         const isRoot = noteI === rootIdx;
-        svg += `<circle cx="${x}" cy="${y}" r="${isRoot?10:8}" fill="${isRoot?'#f1c40f':'#2a6496'}" opacity="0.95"/>`;
-        svg += `<text x="${x}" y="${y+4}" text-anchor="middle" fill="${isRoot?'#000':'#fff'}" font-size="${isRoot?'8':'7.5'}" font-weight="800" font-family="Inter,sans-serif">${NOTE_DISPLAY[noteI].split('/')[0]}</text>`;
+        const isSolo = soloNoteIdx === undefined || soloNoteIdx === null;
+        const isHighlighted = isSolo || noteI === soloNoteIdx;
+        const opacity = isHighlighted ? '0.95' : '0.15';
+        const fill = isRoot ? '#f1c40f' : '#2a6496';
+        const textFill = isRoot ? '#000' : '#fff';
+        svg += `<circle cx="${x}" cy="${y}" r="${isRoot?10:8}" fill="${fill}" opacity="${opacity}"/>`;
+        if (isHighlighted) {
+          svg += `<text x="${x}" y="${y+4}" text-anchor="middle" fill="${textFill}" font-size="${isRoot?'8':'7.5'}" font-weight="800" font-family="Inter,sans-serif">${NOTE_DISPLAY[noteI].split('/')[0]}</text>`;
+        }
       }
     }
   }
@@ -584,29 +595,109 @@ function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets) {
   return svg;
 }
 
-// ── RENDER ──
+// ── AUDIO ──
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// NOTE_FREQS: midi note 60 = C4 = 261.63 Hz
+const NOTE_FREQS_BASE = [261.63,277.18,293.66,311.13,329.63,349.23,369.99,392.00,415.30,440.00,466.16,493.88];
+
+function playNote(noteIdx12) {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const freq = NOTE_FREQS_BASE[noteIdx12]; // play in octave 4
+
+    // Plucked string sound: sawtooth through lowpass, fast decay
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    osc1.type = 'sawtooth';
+    osc2.type = 'triangle';
+    osc1.frequency.value = freq;
+    osc2.frequency.value = freq * 2.001; // slight detune for richness
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3000, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.4);
+    filter.Q.value = 1;
+
+    gainNode.gain.setValueAtTime(0.35, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    osc1.start(ctx.currentTime);
+    osc2.start(ctx.currentTime);
+    osc1.stop(ctx.currentTime + 1.3);
+    osc2.stop(ctx.currentTime + 1.3);
+  } catch(e) { /* audio not available */ }
+}
+
+// ── PILL CLICK STATE ──
+let activePillIdx = null; // null = show all, number = solo that note
+
+function pillClick(noteIdx12, pillEl) {
+  // Toggle: clicking active pill resets to show-all
+  if (activePillIdx === noteIdx12) {
+    activePillIdx = null;
+    document.querySelectorAll('.note-pill').forEach(p => p.classList.remove('active-pill'));
+  } else {
+    activePillIdx = noteIdx12;
+    document.querySelectorAll('.note-pill').forEach(p => p.classList.remove('active-pill'));
+    pillEl.classList.add('active-pill');
+  }
+  playNote(noteIdx12);
+  refreshFretboard();
+}
+
+// Redraw just the fretboard SVG without full re-render
+function refreshFretboard() {
+  const fb = document.getElementById('fretboard-container');
+  if (!fb) return;
+  const instr = document.getElementById('instrSel').value;
+  const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
+  const noteIdxsStr = fb.dataset.noteIdxs;
+  const rootNote = fb.dataset.root;
+  const noteIdxs = noteIdxsStr.split(',').map(Number);
+  fb.innerHTML = scaleFretboardSVG(openTuning, noteIdxs, rootNote, 12, activePillIdx);
+}
+
 function render() {
+  activePillIdx = null; // reset highlight on any control change
   const rootSel = document.getElementById('rootSel').value;
   const rootKey = rootSel.split('/')[0];
   const instr = document.getElementById('instrSel').value;
   const out = document.getElementById('output');
 
+  const INTERVAL_LABELS = ['(R)','(b2)','(2nd)','(b3)','(3rd)','(4th)','(b5)','(5th)','(b6)','(6th)','(b7)','(7th)'];
+
   if (mode === 'chords') {
     const chordType = document.getElementById('chordTypeSel').value;
     const voicings = (GUITAR_VOICINGS[rootKey] && GUITAR_VOICINGS[rootKey][chordType]) || [];
-    const strCount = instr === 'bass' ? 4 : 6;
     const intervals = CHORD_INTERVALS[chordType];
     const rootIdx2 = noteIdx(rootKey);
     const chordNoteIdxs = intervals.map(i => (rootIdx2 + i) % 12);
     const noteNames = chordNoteIdxs.map(i => NOTE_DISPLAY[i]);
+    const intervalLabels = [' (R)',' (3rd)',' (5th)',' (7th)'];
 
     let html = `<div class="scale-wrap">
       <div class="scale-header">
         <span class="scale-title">${rootSel} ${CHORD_NAMES[chordType]}</span>
+        <span style="color:#555;font-size:12px;margin-left:4px">click a note to isolate &amp; play it</span>
       </div>
       <div class="scale-notes">`;
     noteNames.forEach((n,i) => {
-      html += `<span class="note-pill ${i===0?'root':''}">${n}${i===0?' (R)':i===1?' (3rd)':i===2?' (5th)':i===3?' (7th)':''}</span>`;
+      const ni = chordNoteIdxs[i];
+      html += `<span class="note-pill ${i===0?'root':''}" data-note-idx="${ni}" onclick="pillClick(${ni},this)">${n}${intervalLabels[i]||''}</span>`;
     });
     html += `</div>`;
 
@@ -616,14 +707,15 @@ function render() {
         html += `<div class="diagram-card"><h3>${v.name}</h3>${chordSVG(v.frets, 6)}</div>`;
       });
       html += `</div>`;
+      // Also show fretboard for guitar so pill clicks work
+      html += `<p style="color:#555;font-size:12px;margin:14px 0 6px">🟡 = root &nbsp; 🔵 = chord tone &nbsp; click a pill above to isolate</p>`;
+      html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(instr==='bass'?BASS_OPEN:GUITAR_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     } else if (instr === 'bass') {
-      // Show notes on bass fretboard
-      html += `<p style="color:#666;font-size:13px;margin:0 0 10px">Chord tones on bass — highlight where the chord lives on the neck:</p>`;
-      const openTuning = BASS_OPEN;
-      const scaleNotes = chordNoteIdxs;
-      html += `<div class="fretboard-wrap">${scaleFretboardSVG(openTuning, scaleNotes, rootKey, 12)}</div>`;
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Chord tones on bass — click a pill to isolate a note:</p>`;
+      html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(BASS_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     } else if (voicings.length === 0) {
       html += `<p style="color:#555;font-size:13px">Chord diagram coming soon for this voicing.</p>`;
+      html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(GUITAR_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     }
 
     html += `<div class="info-box"><strong>About ${CHORD_NAMES[chordType]}:</strong> ${CHORD_INFO[chordType]}</div>`;
@@ -642,14 +734,16 @@ function render() {
     let html = `<div class="scale-wrap">
       <div class="scale-header">
         <span class="scale-title">${rootSel} ${SCALE_NAMES[scaleType]}</span>
+        <span style="color:#555;font-size:12px;margin-left:4px">click a note to isolate &amp; play it</span>
       </div>
       <div class="scale-notes">`;
     noteNames.forEach((n,i) => {
-      html += `<span class="note-pill ${i===0?'root':''}">${n}</span>`;
+      const ni = scaleNoteIdxs[i];
+      html += `<span class="note-pill ${i===0?'root':''}" data-note-idx="${ni}" onclick="pillClick(${ni},this)">${n}</span>`;
     });
     html += `</div>
-      <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root note &nbsp; 🔵 = scale tone &nbsp; Open strings shown left of nut</p>
-      <div class="fretboard-wrap">${scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12)}</div>
+      <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root &nbsp; 🔵 = scale tone &nbsp; click a pill to isolate</p>
+      <div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12, null)}</div></div>
       <div class="info-box"><strong>About ${SCALE_NAMES[scaleType]}:</strong> ${SCALE_INFO[scaleType]}</div>
     </div>`;
     out.innerHTML = html;
