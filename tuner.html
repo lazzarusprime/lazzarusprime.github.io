@@ -27,6 +27,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
 .topBar-action{margin-left:auto}
 .action-btn{background:#ff5500;color:white;border:none;padding:9px 18px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;font-family:'Inter',sans-serif}
 .action-btn:hover{background:#ff7733}
@@ -144,6 +145,8 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
   <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
   <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
+  <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
   <div class="topBar-action">
     <button id="tunerBtn" class="action-btn" onclick="toggleTuner(event)">🎙️ Start Tuner</button>
   </div>

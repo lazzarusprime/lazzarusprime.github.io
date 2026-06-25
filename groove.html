@@ -28,6 +28,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
 .nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+.clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
 
 /* ── PAGE HEADER ── */
 .page-header{padding:20px 16px 8px;background:#111;border-bottom:1px solid #1e1e1e;text-align:center}
@@ -148,6 +149,8 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
   <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
   <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+  <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
+  <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
 </div>
 
 <div class="page-header">
