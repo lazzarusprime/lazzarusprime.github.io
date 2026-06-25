@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime — Groove Station v2</title>
+<title>Lazzarus Prime — Groove Station</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -13,7 +13,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden;user-select:none}
 
-/* ── TITLE BAR ── */
+/* ── TITLE BAR (matches site) ── */
 .titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
 .titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
@@ -22,75 +22,85 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
 .socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
 
-/* ── NAV ── */
+/* ── NAV (matches site) ── */
 .topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;align-items:center;border-bottom:1px solid #333}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
 .nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
 
 /* ── PAGE HEADER ── */
 .page-header{padding:20px 16px 8px;background:#111;border-bottom:1px solid #1e1e1e;text-align:center}
 .page-header h1{margin:0 0 6px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:4px;background:linear-gradient(to bottom,#fff 0%,#f1c40f 50%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.page-header p{margin:0;color:#666;font-size:13px;letter-spacing:1px}
+.page-header p{margin:0;color:#555;font-size:13px;letter-spacing:1px}
 
 /* ── CONTROLS BAR ── */
 .controls{display:flex;gap:10px;padding:14px 16px;flex-wrap:wrap;align-items:center;background:#141414;border-bottom:1px solid #222;justify-content:center}
-.ctrl-btn{padding:9px 14px;background:#222;color:#fff;border:1px solid #444;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;text-transform:uppercase;transition:.2s;display:inline-flex;align-items:center;gap:4px}
+.ctrl-btn{padding:9px 18px;background:#222;color:#fff;border:1px solid #444;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;transition:.2s;display:inline-flex;align-items:center;gap:6px}
 .ctrl-btn:hover{background:#333;border-color:#f1c40f;color:#f1c40f}
 #playBtn.playing{background:#ff5500;border-color:#ff5500;color:#fff}
-select.ctrl-select{background:#222;color:white;border:1px solid #444;padding:8px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;outline:none}
-select.ctrl-select:hover{border-color:#f1c40f}
+#playBtn.playing:hover{background:#ff6622}
+
+.ctrl-select{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;outline:none}
+.ctrl-select:hover{border-color:#f1c40f}
 
 .panel-group{display:flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:6px 12px}
-.panel-group label{color:#888;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
-.panel-group input[type="range"]{-webkit-appearance:none;appearance:none;width:80px;height:4px;background:#333;border-radius:2px;outline:none;cursor:pointer}
+.panel-group label{color:#888;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.panel-group input[type="range"]{-webkit-appearance:none;appearance:none;width:90px;height:4px;background:#333;border-radius:2px;outline:none;cursor:pointer}
 .panel-group input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#f1c40f;cursor:pointer}
 .panel-group .val-disp{color:#f1c40f;font-weight:700;font-size:13px;min-width:30px;text-align:right}
 
-/* ── PRESET & MGMT BAR ── */
+/* ── PRESET & STORAGE BAR ── */
 .pattern-bar{display:flex;gap:6px;padding:10px 16px;background:#141414;border-bottom:1px solid #222;align-items:center;flex-wrap:wrap;justify-content:center}
 .pattern-bar label{color:#888;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.preset-btn{background:#1e1e1e;color:#aaa;border:1px solid #2a2a2a;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s}
-.preset-btn:hover,.preset-btn.active{border-color:#f1c40f;color:#f1c40f;background:#f1c40f11}
-.mgmt-btn{background:#1a2a1a;color:#8f8;border:1px solid #2a442a;padding:5px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700}
-.mgmt-btn.danger{background:#2a1a1a;color:#f88;border:1px solid #442a2a}
+.preset-btn{background:#1e1e1e;color:#aaa;border:1px solid #2a2a2a;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;white-space:nowrap}
+.preset-btn:hover{border-color:#f1c40f;color:#f1c40f}
+.preset-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
 
-/* ── GRID SYSTEM ── */
+.mgmt-btn{background:#1e2e1e;color:#8f8;border:1px solid #2a492a;padding:5px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;transition:.2s}
+.mgmt-btn:hover{background:#2a3e2a;border-color:#4f4}
+
+/* ── GRID MIXER MATRIX ── */
 .grid-wrap{padding:16px;background:#0f0f0f;overflow-x:auto}
-.grid-container{display:grid;align-items:center;gap:4px;min-width:850px}
-.grid-row{display:contents}
+.grid{display:grid;gap:3px;min-width:850px;align-items:center}
 
-/* Track Controls Column */
-.track-controls{display:flex;flex-direction:column;gap:2px;padding-right:10px;border-right:2px solid #222}
-.track-meta{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:#aaa;font-size:11px;text-transform:uppercase}
-.track-btns{display:flex;gap:4px;margin-top:2px}
-.t-btn{padding:2px 6px;font-size:10px;font-weight:900;border:1px solid #444;background:#222;color:#bbb;border-radius:3px;cursor:pointer}
-.t-btn.muted-active{background:#442222;color:#ff5500;border-color:#ff5500}
-.t-btn.solo-active{background:#224422;color:#22ff22;border-color:#22ff22}
-.track-vol-slider{-webkit-appearance:none;width:100%;height:3px;background:#333;outline:none;margin-top:4px}
-.track-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:8px;background:#aaa;cursor:pointer}
+.track-mixer-panel{display:flex;flex-direction:column;gap:3px;padding-right:8px;border-right:2px solid #222}
+.track-title-info{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:#aaa;font-size:11px;text-transform:uppercase}
+.track-mixer-controls{display:flex;gap:4px;align-items:center}
+.m-s-btn{padding:2px 6px;font-size:10px;font-weight:900;border:1px solid #444;background:#222;color:#bbb;border-radius:3px;cursor:pointer;width:22px;text-align:center}
+.m-s-btn.mute-on{background:#442222;color:#ff5500;border-color:#ff5500}
+.m-s-btn.solo-on{background:#224422;color:#22ff22;border-color:#22ff22}
+.vol-mini-slider{-webkit-appearance:none;width:100%;height:3px;background:#333;outline:none;cursor:pointer}
+.vol-mini-slider::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:8px;background:#f1c40f}
 
-/* Grid Steps Cells */
-.step-cell{height:38px;background:#1e1e1e;cursor:pointer;border-radius:3px;transition:background .05s;position:relative;border:1px solid #141414}
+/* Step cells config */
+.step-cell{height:36px;background:#1e1e1e;cursor:pointer;border-radius:3px;transition:transform .05s,background .08s;position:relative}
 .step-cell:hover{background:#2a2a2a}
-.step-cell.active{background:#ff5500;box-shadow:0 0 6px rgba(255,85,0,.4)}
-.step-cell.accent{background:#f1c40f;box-shadow:0 0 6px rgba(241,196,15,.5)}
-.step-cell.current-step{outline:2px solid #fff;z-index:2}
-body.perf-mode .step-cell{box-shadow:none !important;transition:none !important}
+.step-cell.beat-divider{border-left:2px solid #555 !important}
+.step-cell.active{background:#ff5500;box-shadow:0 0 6px rgba(255,85,0,.5)}
+.step-cell.accent{background:#f1c40f;box-shadow:0 0 6px rgba(241,196,15,.6)}
+.step-cell.current-step{outline:2px solid rgba(255,255,255,.85);z-index:2;transform:scale(1.06)}
 
-/* Beat Group Lines */
-.beat-start{border-left: 2px solid #555 !important}
+/* Performance Mode Override rules */
+body.perf-mode .step-cell{box-shadow:none !important;transform:none !important;transition:none !important}
 
-/* ── STATUS BAR ── */
-.status-bar{padding:8px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:12px;font-size:12px;color:#555}
-#stepIndicator{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f1c40f;letter-spacing:2px;min-width:40px}
-#statusMsg{flex:1;font-size:11px}
+/* ── TRANSPORT STATUS ── */
+.status-bar{padding:6px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:12px;font-size:12px;color:#444;flex-wrap:wrap}
+#stepIndicator{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#f1c40f;letter-spacing:2px;min-width:40px}
+#statusMsg{flex:1;font-size:11px;color:#555}
 
-/* ── FOOTER ── */
+/* ── FOOTER (matches site) ── */
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
-footer a{color:#555;text-decoration:none;padding:2px 6px}
-footer a:hover{color:#f1c40f}
+footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
+footer a:hover{color:#f1c40f;background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
+
+@media(max-width:600px){
+  .titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}
+  .topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}
+  .titleBar .site-logo{width:36px;height:36px}
+  .controls{gap:8px;padding:10px 12px}
+}
 </style>
 </head>
 <body>
@@ -104,17 +114,26 @@ footer a:hover{color:#f1c40f}
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
     <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
     <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
   </div>
 </div>
 
 <div class="topBar">
-  <button class="nav-btn" onclick="location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+  <button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+  <button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+  <button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+  <button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+  <button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
   <button class="nav-btn active-page">🔥 Groove</button>
+  <button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+  <button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
 </div>
 
 <div class="page-header">
   <h1>🔥 Groove Station Pro</h1>
-  <p>Multi-engine drum workstation · Click steps: Normal ➔ Accent ➔ Off</p>
+  <p>Engine-swappable production suite · click once = normal hit · click twice = accented hit · click again = off</p>
 </div>
 
 <div class="controls">
@@ -124,7 +143,7 @@ footer a:hover{color:#f1c40f}
 
   <select id="engineSelect" class="ctrl-select" onchange="onEngineChange()">
     <option value="acoustic">🥁 Acoustic Kit</option>
-    <option value="electronic">🎛️ Electronic Kit</option>
+    <option value="electronic" selected>🎛️ Electronic Kit</option>
     <option value="metal">🎸 Metal Kit</option>
     <option value="retro">👾 Retro Synth</option>
   </select>
@@ -138,13 +157,13 @@ footer a:hover{color:#f1c40f}
 
   <div class="panel-group">
     <label>BPM</label>
-    <input type="range" id="bpmSlider" min="40" max="220" value="120" oninput="updateBpmDisp()">
+    <input type="range" id="bpmSlider" min="40" max="220" value="120" oninput="onBpmChange()">
     <span id="bpmValue" class="val-disp">120</span>
   </div>
 
   <div class="panel-group">
     <label>Swing</label>
-    <input type="range" id="swingSlider" min="0" max="75" value="0" oninput="updateSwingDisp()">
+    <input type="range" id="swingSlider" min="0" max="75" value="0" oninput="onSwingChange()">
     <span id="swingValue" class="val-disp">0%</span>
   </div>
 
@@ -154,7 +173,7 @@ footer a:hover{color:#f1c40f}
   </div>
 
   <div class="panel-group">
-    <label style="color:#ff5500">Perf Mode</label>
+    <label style="color:#ff5500; font-size:10px">Perf Mode</label>
     <input type="checkbox" id="perfModeToggle" onchange="togglePerfMode()">
   </div>
 </div>
@@ -169,38 +188,51 @@ footer a:hover{color:#f1c40f}
   <button class="preset-btn" onclick="loadPreset('disco')">Disco</button>
   <button class="preset-btn" onclick="loadPreset('halftime')">Half-Time</button>
   
-  <span style="color:#333;margin:0 8px">|</span>
+  <span style="color:#333; margin:0 4px">|</span>
 
-  <button class="mgmt-btn" onclick="saveToLocal()">💾 Save</button>
-  <button class="mgmt-btn" onclick="loadFromLocal()">📁 Load</button>
+  <button class="mgmt-btn" onclick="saveToLocal()">💾 Save State</button>
+  <button class="mgmt-btn" onclick="loadFromLocal()">📁 Load State</button>
   <button class="mgmt-btn" onclick="exportJSON()">📤 Export JSON</button>
   <button class="mgmt-btn" onclick="importJSON()">📥 Import JSON</button>
 </div>
 
 <div class="grid-wrap">
-  <div class="grid-container" id="grid"></div>
+  <div class="grid" id="grid"></div>
 </div>
 
 <div class="status-bar">
   <span id="stepIndicator">--</span>
-  <span id="statusMsg">Ready to Jam. Use [Space] to Play/Stop.</span>
+  <span id="statusMsg">Hotkeys: [Space] Play/Stop · [C] Clear Matrix · [R] Random Pattern</span>
 </div>
 
 <footer>
-  <span>Lazzarus Prime Drum Station Suite</span>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
 </footer>
 
 <script>
+// ─────────────────────────────────────────────
+//  UPGRADED 9 INSTRUMENT CONFIG
+// ─────────────────────────────────────────────
 const INSTRUMENTS = [
-  { id: 'Kick', name: 'Kick', emoji: '🥁' },
-  { id: 'Snare', name: 'Snare', emoji: '🪘' },
-  { id: 'ClosedHat', name: 'Closed Hat', emoji: '🎩' },
-  { id: 'OpenHat', name: 'Open Hat', emoji: '💿' },
-  { id: 'Clap', name: 'Clap', emoji: '👏' },
-  { id: 'Crash', name: 'Crash', emoji: '💥' },
-  { id: 'Ride', name: 'Ride', emoji: '🔔' },
-  { id: 'TomHigh', name: 'Tom High', emoji: '🦅' },
-  { id: 'TomLow', name: 'Tom Low', emoji: '🪵' }
+  { id: 'Kick',      name: 'Kick',       emoji: '🥁' },
+  { id: 'Snare',     name: 'Snare',      emoji: '🪘' },
+  { id: 'ClosedHat', name: 'Closed Hat',  emoji: '🎩' },
+  { id: 'OpenHat',   name: 'Open Hat',   emoji: '💿' },
+  { id: 'Clap',      name: 'Clap',       emoji: '👏' },
+  { id: 'Crash',     name: 'Crash',      emoji: '💥' },
+  { id: 'Ride',      name: 'Ride',       emoji: '🔔' },
+  { id: 'TomHigh',   name: 'Tom High',   emoji: '🦅' },
+  { id: 'TomLow',    name: 'Tom Low',    emoji: '🪵' }
 ];
 
 let maxSteps = 16;
@@ -208,13 +240,6 @@ let pattern = {};
 let trackVolumes = {};
 let muted = {};
 let soloed = {};
-
-let ctx = null;
-let noiseBuffer = null;
-let isPlaying = false;
-let currentStep = 0;
-let nextNoteTime = 0.0;
-let timerId = null;
 
 function initArrays() {
   INSTRUMENTS.forEach(inst => {
@@ -226,6 +251,16 @@ function initArrays() {
 }
 initArrays();
 
+// ─────────────────────────────────────────────
+//  AUDIO STATE & SHARED RESOURCES
+// ─────────────────────────────────────────────
+let ctx = null;
+let noiseBuffer = null;
+let isPlaying = false;
+let currentStep = 0;
+let nextNoteTime = 0.0;
+let timerId = null;
+
 function createNoiseBuffer() {
   const len = ctx.sampleRate * 2;
   const buf = ctx.createBuffer(1, len, ctx.sampleRate);
@@ -235,7 +270,7 @@ function createNoiseBuffer() {
 }
 
 // ─────────────────────────────────────────────
-//  DYNAMIC SOUND SYNTHESIS ENGINES
+//  4-ENGINE DYNAMIC MODEL ROUTER
 // ─────────────────────────────────────────────
 function hit(inst, time, volumeMultiplier) {
   if (!ctx) return;
@@ -256,33 +291,34 @@ function hit(inst, time, volumeMultiplier) {
     osc.connect(env); env.connect(masterGain);
 
     if (engine === 'metal') {
-      osc.frequency.setValueAtTime(280, safeTime);
-      osc.frequency.exponentialRampToValueAtTime(55, safeTime + 0.04);
-      env.gain.setValueAtTime(1.0, safeTime);
-      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.1);
+      osc.frequency.setValueAtTime(290, safeTime);
+      osc.frequency.exponentialRampToValueAtTime(58, safeTime + 0.035);
+      env.gain.setValueAtTime(1.1, safeTime);
+      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.09);
     } else if (engine === 'electronic') {
       osc.frequency.setValueAtTime(120, safeTime);
-      osc.frequency.exponentialRampToValueAtTime(35, safeTime + 0.25);
+      osc.frequency.exponentialRampToValueAtTime(38, safeTime + 0.22);
       env.gain.setValueAtTime(1.2, safeTime);
-      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.4);
+      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.35);
     } else if (engine === 'retro') {
       osc.type = 'square';
       osc.frequency.setValueAtTime(100, safeTime);
-      osc.frequency.exponentialRampToValueAtTime(40, safeTime + 0.15);
+      osc.frequency.exponentialRampToValueAtTime(45, safeTime + 0.14);
       env.gain.setValueAtTime(0.8, safeTime);
-      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.2);
+      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
     } else { // acoustic
       osc.frequency.setValueAtTime(150, safeTime);
-      osc.frequency.exponentialRampToValueAtTime(45, safeTime + 0.12);
+      osc.frequency.exponentialRampToValueAtTime(46, safeTime + 0.11);
       env.gain.setValueAtTime(1.0, safeTime);
-      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
+      env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.16);
     }
-    osc.start(safeTime); osc.stop(safeTime + 0.5);
+    osc.start(safeTime); osc.stop(safeTime + 0.45);
   } 
 
   else if (inst === 'Snare') {
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuffer;
+    noise.loop = false;
     const nGain = ctx.createGain();
     const hpf = ctx.createBiquadFilter();
     hpf.type = 'highpass';
@@ -290,32 +326,33 @@ function hit(inst, time, volumeMultiplier) {
     noise.connect(hpf); hpf.connect(nGain); nGain.connect(masterGain);
 
     if (engine === 'metal') {
-      hpf.frequency.value = 1600;
+      hpf.frequency.value = 1700;
       nGain.gain.setValueAtTime(0.9, safeTime);
-      nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.2);
+      nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
     } else if (engine === 'retro') {
-      hpf.type = 'bandpass'; hpf.frequency.value = 1000;
+      hpf.type = 'bandpass'; hpf.frequency.value = 950;
       nGain.gain.setValueAtTime(0.7, safeTime);
-      nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.15);
+      nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.16);
     } else { // acoustic & electronic
-      hpf.frequency.value = 1000;
-      nGain.gain.setValueAtTime(0.7, safeTime);
+      hpf.frequency.value = 1100;
+      nGain.gain.setValueAtTime(0.75, safeTime);
       nGain.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.14);
     }
-    noise.start(safeTime); noise.stop(safeTime + 0.3);
+    noise.start(safeTime); noise.stop(safeTime + 0.25);
   }
 
   else if (inst === 'ClosedHat' || inst === 'OpenHat') {
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuffer;
+    noise.loop = false;
     const bpf = ctx.createBiquadFilter();
     bpf.type = 'bandpass';
-    bpf.frequency.value = engine === 'retro' ? 4000 : 9000;
+    bpf.frequency.value = engine === 'retro' ? 4200 : 8800;
     
     const env = ctx.createGain();
     noise.connect(bpf); bpf.connect(env); env.connect(masterGain);
 
-    const duration = (inst === 'OpenHat') ? 0.35 : 0.05;
+    const duration = (inst === 'OpenHat') ? 0.32 : 0.045;
     env.gain.setValueAtTime(0.5, safeTime);
     env.gain.exponentialRampToValueAtTime(0.001, safeTime + duration);
     noise.start(safeTime); noise.stop(safeTime + duration + 0.02);
@@ -324,27 +361,28 @@ function hit(inst, time, volumeMultiplier) {
   else if (inst === 'Clap') {
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuffer;
+    noise.loop = false;
     const env = ctx.createGain();
     noise.connect(env); env.connect(masterGain);
-    env.gain.setValueAtTime(0.6, safeTime);
-    env.gain.setValueAtTime(0.4, safeTime + 0.015);
-    env.gain.setValueAtTime(0.5, safeTime + 0.03);
-    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.08);
-    noise.start(safeTime); noise.stop(safeTime + 0.1);
+    env.gain.setValueAtTime(0.65, safeTime);
+    env.gain.setValueAtTime(0.35, safeTime + 0.012);
+    env.gain.setValueAtTime(0.50, safeTime + 0.024);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.085);
+    noise.start(safeTime); noise.stop(safeTime + 0.12);
   }
 
   else if (inst === 'Crash' || inst === 'Ride') {
     const osc1 = ctx.createOscillator();
     const hpf = ctx.createBiquadFilter();
-    hpf.type = 'highpass'; hpf.frequency.value = inst === 'Crash' ? 4000 : 7000;
+    hpf.type = 'highpass'; hpf.frequency.value = inst === 'Crash' ? 4200 : 6800;
     const env = ctx.createGain();
 
     osc1.type = engine === 'retro' ? 'triangle' : 'sawtooth';
-    osc1.frequency.value = inst === 'Crash' ? 385 : 520;
+    osc1.frequency.value = inst === 'Crash' ? 390 : 510;
     
     osc1.connect(hpf); hpf.connect(env); env.connect(masterGain);
-    const length = inst === 'Crash' ? 0.8 : 0.4;
-    env.gain.setValueAtTime(0.4, safeTime);
+    const length = inst === 'Crash' ? 0.75 : 0.38;
+    env.gain.setValueAtTime(0.38, safeTime);
     env.gain.exponentialRampToValueAtTime(0.001, safeTime + length);
     osc1.start(safeTime); osc1.stop(safeTime + length + 0.05);
   }
@@ -353,17 +391,17 @@ function hit(inst, time, volumeMultiplier) {
     const osc = ctx.createOscillator();
     const env = ctx.createGain();
     osc.connect(env); env.connect(masterGain);
-    const pitch = inst === 'TomHigh' ? 220 : 130;
+    const pitch = inst === 'TomHigh' ? 210 : 125;
     osc.frequency.setValueAtTime(pitch, safeTime);
-    osc.frequency.exponentialRampToValueAtTime(pitch * 0.6, safeTime + 0.15);
-    env.gain.setValueAtTime(0.8, safeTime);
-    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.2);
-    osc.start(safeTime); osc.stop(safeTime + 0.25);
+    osc.frequency.exponentialRampToValueAtTime(pitch * 0.55, safeTime + 0.14);
+    env.gain.setValueAtTime(0.75, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
+    osc.start(safeTime); osc.stop(safeTime + 0.22);
   }
 }
 
 // ─────────────────────────────────────────────
-//  SEQUENCER CORE SCHEDULER
+//  SEQUENCER TIMING ENGINE
 // ─────────────────────────────────────────────
 function scheduler() {
   while (nextNoteTime < ctx.currentTime + 0.12) {
@@ -371,7 +409,7 @@ function scheduler() {
     const bpm = parseFloat(document.getElementById('bpmSlider').value);
     const swing = parseFloat(document.getElementById('swingSlider').value) / 100;
     const stepDur = (60 / bpm) / 4;
-    const swingOffset = (currentStep % 2 === 1) ? stepDur * swing * 0.65 : 0;
+    const swingOffset = (currentStep % 2 === 1) ? stepDur * swing * 0.67 : 0;
 
     nextNoteTime += stepDur + swingOffset;
     currentStep = (currentStep + 1) % maxSteps;
@@ -381,12 +419,13 @@ function scheduler() {
 
 function scheduleStep(step, time) {
   requestAnimationFrame(() => {
-    const allCells = document.querySelectorAll('.step-cell');
-    allCells.forEach(c => c.classList.remove('current-step'));
-    
     INSTRUMENTS.forEach(inst => {
-      const cell = document.getElementById(`cell-${inst.id}-${step}`);
-      if (cell) cell.classList.add('current-step');
+      for (let s = 0; s < 32; s++) {
+        const el = document.getElementById(`cell-${inst.id}-${s}`);
+        if (el) el.classList.remove('current-step');
+      }
+      const activeCell = document.getElementById(`cell-${inst.id}-${step}`);
+      if (activeCell) activeCell.classList.add('current-step');
     });
     document.getElementById('stepIndicator').textContent = String(step + 1).padStart(2, '0');
   });
@@ -399,43 +438,40 @@ function scheduleStep(step, time) {
 
     const val = pattern[inst.id][step];
     if (val > 0) {
-      const volumeMultiplier = val === 2 ? 0.75 : 0.28;
+      const volumeMultiplier = val === 2 ? 0.72 : 0.28;
       hit(inst.id, time, volumeMultiplier);
     }
   });
 }
 
 // ─────────────────────────────────────────────
-//  UI GENERATION & EVENT LISTENERS
+//  MATRIX & MIXER UI DOM ENGINE
 // ─────────────────────────────────────────────
 function buildGrid() {
   const grid = document.getElementById('grid');
-  grid.style.gridTemplateColumns = `160px repeat(${maxSteps}, minmax(22px, 1fr))`;
+  grid.style.gridTemplateColumns = `170px repeat(${maxSteps}, minmax(22px, 1fr))`;
   grid.innerHTML = '';
 
   INSTRUMENTS.forEach(inst => {
-    const row = document.createElement('div');
-    row.className = 'grid-row';
-
-    // Controls Panel Cell
+    // Left Control Block
     const ctrlCell = document.createElement('div');
-    ctrlCell.className = 'track-controls';
+    ctrlCell.className = 'track-mixer-panel';
     ctrlCell.innerHTML = `
-      <div class="track-meta"><span>${inst.emoji} ${inst.name}</span></div>
-      <div class="track-btns">
-        <button class="t-btn ${muted[inst.id]?'muted-active':''}" onclick="toggleMute('${inst.id}', this)">M</button>
-        <button class="t-btn ${soloed[inst.id]?'solo-active':''}" onclick="toggleSolo('${inst.id}', this)">S</button>
-        <input type="range" class="track-vol-slider" min="0" max="100" value="${trackVolumes[inst.id]}" oninput="trackVolumes['${inst.id}']=this.value">
+      <div class="track-title-info"><span>${inst.emoji} ${inst.name}</span></div>
+      <div class="track-mixer-controls">
+        <button class="m-s-btn ${muted[inst.id]?'mute-on':''}" onclick="toggleMute('${inst.id}', this)">M</button>
+        <button class="m-s-btn ${soloed[inst.id]?'solo-on':''}" onclick="toggleSolo('${inst.id}', this)">S</button>
+        <input type="range" class="vol-mini-slider" min="0" max="100" value="${trackVolumes[inst.id]}" oninput="trackVolumes['${inst.id}']=this.value">
       </div>
     `;
-    row.appendChild(ctrlCell);
+    grid.appendChild(ctrlCell);
 
-    // Dynamic Step Matrix Generation
+    // Matrix Row Sequencing Steps
     for (let s = 0; s < maxSteps; s++) {
       const cell = document.createElement('div');
       cell.className = 'step-cell';
       cell.id = `cell-${inst.id}-${s}`;
-      if (s % 4 === 0) cell.classList.add('beat-start');
+      if (s % 4 === 0 && s > 0) cell.classList.add('beat-divider');
 
       const val = pattern[inst.id][s] || 0;
       if (val === 1) cell.classList.add('active');
@@ -447,18 +483,17 @@ function buildGrid() {
         pattern[inst.id][s] = currentVal;
         
         cell.className = 'step-cell';
-        if (s % 4 === 0) cell.classList.add('beat-start');
+        if (s % 4 === 0 && s > 0) cell.classList.add('beat-divider');
         if (currentVal === 1) cell.classList.add('active');
         if (currentVal === 2) cell.classList.add('accent');
       };
-      row.appendChild(cell);
+      grid.appendChild(cell);
     }
-    grid.appendChild(row);
   });
 }
 
 // ─────────────────────────────────────────────
-//  TRANSPORT INTERACTION CONTROLS
+//  CORE SYSTEM FUNCTIONS
 // ─────────────────────────────────────────────
 function togglePlay() {
   if (!ctx) {
@@ -490,7 +525,7 @@ function randomPattern() {
   INSTRUMENTS.forEach(inst => {
     for (let s = 0; s < maxSteps; s++) {
       const r = Math.random();
-      pattern[inst.id][s] = r > 0.88 ? 2 : (r > 0.70 ? 1 : 0);
+      pattern[inst.id][s] = r > 0.88 ? 2 : (r > 0.72 ? 1 : 0);
     }
   });
   buildGrid();
@@ -498,12 +533,12 @@ function randomPattern() {
 
 function toggleMute(id, btn) {
   muted[id] = !muted[id];
-  btn.classList.toggle('muted-active', muted[id]);
+  btn.classList.toggle('mute-on', muted[id]);
 }
 
 function toggleSolo(id, btn) {
   soloed[id] = !soloed[id];
-  btn.classList.toggle('solo-active', soloed[id]);
+  btn.classList.toggle('solo-on', soloed[id]);
 }
 
 function onStepLengthChange() {
@@ -512,67 +547,74 @@ function onStepLengthChange() {
 }
 
 function onEngineChange() {
-  document.getElementById('statusMsg').textContent = `Engine swapped to: ${document.getElementById('engineSelect').value.toUpperCase()}`;
+  document.getElementById('statusMsg').textContent = `Engine profile changed to: ${document.getElementById('engineSelect').value.toUpperCase()}`;
 }
 
 function togglePerfMode() {
   document.body.classList.toggle('perf-mode', document.getElementById('perfModeToggle').checked);
 }
 
-function updateBpmDisp() { document.getElementById('bpmValue').textContent = document.getElementById('bpmSlider').value; }
-function updateSwingDisp() { document.getElementById('swingValue').textContent = document.getElementById('swingSlider').value + '%'; }
+function onBpmChange() { document.getElementById('bpmValue').textContent = document.getElementById('bpmSlider').value; }
+function onSwingChange() { document.getElementById('swingValue').textContent = document.getElementById('swingSlider').value + '%'; }
 
 // ─────────────────────────────────────────────
-//  LOCALSTORAGE & IMPORT/EXPORT MANAGEMENT
+//  STORAGE COMPONENT PERSISTENCE
 // ─────────────────────────────────────────────
 function saveToLocal() {
-  localStorage.setItem('lp_groove_pattern', JSON.stringify({ pattern, maxSteps }));
-  alert('Pattern saved directly to LocalStorage!');
+  localStorage.setItem('lp_groove_snapshot', JSON.stringify({ pattern, maxSteps }));
+  document.getElementById('statusMsg').textContent = 'Groove architecture snapshot cached to LocalStorage successfully.';
 }
 
 function loadFromLocal() {
-  const saved = localStorage.getItem('lp_groove_pattern');
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    pattern = parsed.pattern;
-    maxSteps = parsed.maxSteps;
+  const cache = localStorage.getItem('lp_groove_snapshot');
+  if (cache) {
+    const loadedData = JSON.parse(cache);
+    pattern = loadedData.pattern;
+    maxSteps = loadedData.maxSteps;
     document.getElementById('stepSelect').value = maxSteps;
     initArrays();
     buildGrid();
+    document.getElementById('statusMsg').textContent = 'Cached matrix state pulled and successfully re-built.';
   } else {
-    alert('No layout pattern snapshot found in browser cache store.');
+    alert('No layout state profile detected within local cache.');
   }
 }
 
 function exportJSON() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pattern));
-  const dlAnchorElem = document.createElement('a');
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", "groove-station-pattern.json");
-  dlAnchorElem.click();
+  const fileStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({pattern, maxSteps}));
+  const downloader = document.createElement('a');
+  downloader.setAttribute("href", fileStr);
+  downloader.setAttribute("download", "groove-station-pattern.json");
+  downloader.click();
 }
 
 function importJSON() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  input.onchange = e => {
-    const file = e.target.files[0];
+  const selector = document.createElement('input');
+  selector.type = 'file';
+  selector.accept = 'application/json';
+  selector.onchange = e => {
     const reader = new FileReader();
-    reader.readAsText(file,'UTF-8');
-    reader.onload = readerEvent => {
+    reader.readAsText(e.target.files[0],'UTF-8');
+    reader.onload = fileEvent => {
       try {
-        pattern = JSON.parse(readerEvent.target.result);
+        const structuralData = JSON.parse(fileEvent.target.result);
+        if(structuralData.pattern) {
+          pattern = structuralData.pattern;
+          maxSteps = structuralData.maxSteps || 16;
+          document.getElementById('stepSelect').value = maxSteps;
+        } else {
+          pattern = structuralData; // backwards compatibility with flat patterns
+        }
         initArrays();
         buildGrid();
-      } catch(err) { alert('Invalid layout file profile targeted.'); }
+      } catch(err) { alert('Invalid architectural grid JSON payload supplied.'); }
     }
   }
-  input.click();
+  selector.click();
 }
 
 // ─────────────────────────────────────────────
-//  PRESETS POOL DATA
+//  PRESET ARCHITECTURE DATA MODULE
 // ─────────────────────────────────────────────
 const PRESETS = {
   rock: { Kick:[2,0,0,0,2,0,0,0], Snare:[0,0,2,0,0,0,2,0], ClosedHat:[1,1,1,1,1,1,1,1] },
@@ -586,22 +628,50 @@ const PRESETS = {
 
 function loadPreset(name) {
   clearPattern();
-  const p = PRESETS[name];
-  Object.keys(p).forEach(instId => {
+  const data = PRESETS[name];
+  Object.keys(data).forEach(instId => {
     for (let s = 0; s < maxSteps; s++) {
-      pattern[instId][s] = p[instId][s % p[instId].length];
+      pattern[instId][s] = data[instId][s % data[instId].length];
     }
   });
   buildGrid();
 }
 
-// Keyboard binds
+// ─────────────────────────────────────────────
+//  KEYBOARD SHORTCUTS & APP INTIALIZATION
+// ─────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'KeyC') clearPattern();
+  if (e.code === 'KeyR') randomPattern();
 });
 
-// Initialization
+// Original Site Core Random Song Hook System
+let _artists = [];
+(async () => {
+  try { const d = await (await fetch('songs.json')).json(); _artists = [...new Set(d.map(s => s.artist))]; } catch(e) {}
+})();
+
+function slotSpin(btn, onDone) {
+  const f = ['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲']; let i = 0;
+  btn.classList.add('spinning');
+  const fast = setInterval(() => { btn.textContent = f[i++ % f.length] + ' Random'; }, 60);
+  setTimeout(() => {
+    clearInterval(fast); let j = 0;
+    const slow = setInterval(() => { btn.textContent = f[j++ % f.length] + ' Random'; }, 120);
+    setTimeout(() => { clearInterval(slow); btn.textContent = '🎲 Random'; btn.classList.remove('spinning'); onDone(); }, 480);
+  }, 600);
+}
+
+function randomSong(btn) {
+  if (!_artists.length) { location.href = 'index.html?nosplash=1'; return; }
+  const pick = _artists[Math.floor(Math.random() * _artists.length)];
+  if (btn) slotSpin(btn, () => { location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick); });
+  else location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick);
+}
+
+// Initial UI construction
 buildGrid();
 </script>
 </body>
