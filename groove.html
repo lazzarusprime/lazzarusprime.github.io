@@ -84,10 +84,49 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 .step-cell.beat-divider{border-left:2px solid #555 !important}
 .step-cell.active{background:#ff5500;box-shadow:0 0 6px rgba(255,85,0,.5)}
 .step-cell.accent{background:#f1c40f;box-shadow:0 0 6px rgba(241,196,15,.6)}
-.step-cell.current-step{outline:2px solid rgba(255,255,255,.85);z-index:2;transform:scale(1.06)}
+@keyframes stepPulse{from{box-shadow:0 0 0 3px rgba(255,255,255,.85)}to{box-shadow:0 0 18px 5px rgba(255,255,255,0)}}
+.step-cell.current-step{outline:2px solid rgba(255,255,255,.9);z-index:2;transform:scale(1.09);animation:stepPulse .18s ease-out forwards}
 
 /* Performance Mode Override rules */
-body.perf-mode .step-cell{box-shadow:none !important;transform:none !important;transition:none !important}
+body.perf-mode .step-cell{box-shadow:none !important;transform:none !important;transition:none !important;animation:none !important}
+
+/* ── INSTRUMENT ROW COLORS ── */
+.inst-Kick.active{background:#ff5500;box-shadow:0 0 8px rgba(255,85,0,.75)}
+.inst-Kick.accent{background:#ff7722;box-shadow:0 0 14px rgba(255,85,0,1)}
+.inst-Snare.active{background:#f1c40f;box-shadow:0 0 8px rgba(241,196,15,.75)}
+.inst-Snare.accent{background:#ffe033;box-shadow:0 0 14px rgba(241,196,15,1)}
+.inst-ClosedHat.active,.inst-OpenHat.active{background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,.65)}
+.inst-ClosedHat.accent,.inst-OpenHat.accent{background:#4ff8ff;box-shadow:0 0 14px rgba(0,229,255,.9)}
+.inst-Clap.active{background:#ff4081;box-shadow:0 0 8px rgba(255,64,129,.65)}
+.inst-Clap.accent{background:#ff79ab;box-shadow:0 0 14px rgba(255,64,129,.9)}
+.inst-Crash.active,.inst-Ride.active{background:#b388ff;box-shadow:0 0 8px rgba(179,136,255,.65)}
+.inst-Crash.accent,.inst-Ride.accent{background:#ce93d8;box-shadow:0 0 14px rgba(179,136,255,.9)}
+.inst-TomHigh.active,.inst-TomLow.active{background:#69f0ae;box-shadow:0 0 8px rgba(105,240,174,.65)}
+.inst-TomHigh.accent,.inst-TomLow.accent{background:#00e676;box-shadow:0 0 14px rgba(105,240,174,.9)}
+body.perf-mode [class*="inst-"]{box-shadow:none !important}
+
+/* ── BASS GENERATOR PANEL ── */
+.bass-panel{background:#0d0d0d;border-top:2px solid #1e1e1e;padding:12px 16px}
+.bass-header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #1a1a1a}
+.bass-label{color:#2ecc71;font-weight:900;font-size:13px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.bass-select{background:#1a1a1a;color:#ccc;border:1px solid #2a2a2a;padding:6px 10px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;outline:none;transition:.15s}
+.bass-select:hover{border-color:#2ecc71;color:#2ecc71}
+.bass-btn{padding:6px 14px;background:#0d1f0d;color:#2ecc71;border:1px solid #2ecc71;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;transition:.2s;white-space:nowrap}
+.bass-btn:hover{background:#1a2e1a}
+.bass-btn.bass-on{background:#2ecc71;color:#000}
+.bass-grid{display:grid;gap:3px;min-width:850px;overflow-x:auto}
+.bass-note-cell{height:30px;background:#161616;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#333;cursor:pointer;border:1px solid #1e1e1e;transition:background .1s,color .1s,box-shadow .1s;letter-spacing:.5px;user-select:none}
+.bass-note-cell:hover{background:#1e1e1e;color:#555}
+.bass-note-cell.has-note{background:#0d1f0d;border-color:#2ecc71;color:#2ecc71;box-shadow:0 0 6px rgba(46,204,113,.4)}
+.bass-note-cell.bass-current{outline:2px solid rgba(46,204,113,.9);transform:scale(1.07)}
+.bass-track-label{height:30px;padding-right:8px;border-right:2px solid #222;display:flex;align-items:center;font-size:10px;font-weight:700;color:#2ecc71;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+body.perf-mode .bass-note-cell{box-shadow:none !important;transform:none !important}
+
+/* ── JAM GENERATOR ── */
+.jam-bar{display:flex;gap:6px;padding:8px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;align-items:center;flex-wrap:wrap}
+.jam-label{color:#f39c12;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.jam-btn{background:#1a1200;color:#f39c12;border:1px solid #f39c12;padding:4px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:700;transition:.2s;white-space:nowrap}
+.jam-btn:hover{background:#2a2200;border-color:#ffe033;color:#ffe033}
 
 /* ── TRANSPORT STATUS ── */
 .status-bar{padding:6px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:12px;font-size:12px;color:#444;flex-wrap:wrap}
@@ -210,25 +249,95 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 
 
 <div class="pattern-bar">
-  <label>Presets:</label>
+  <label>Rock:</label>
   <button class="preset-btn" onclick="loadPreset('rock')">Rock</button>
+  <button class="preset-btn" onclick="loadPreset('hardrock')">Hard Rock</button>
   <button class="preset-btn" onclick="loadPreset('metal')">Metal</button>
   <button class="preset-btn" onclick="loadPreset('punk')">Punk</button>
+  <span style="color:#2a2a2a;margin:0 2px">|</span>
+  <label>Groove:</label>
   <button class="preset-btn" onclick="loadPreset('funk')">Funk</button>
-  <button class="preset-btn" onclick="loadPreset('shuffle')">Shuffle</button>
+  <button class="preset-btn" onclick="loadPreset('groove')">Groove</button>
+  <button class="preset-btn" onclick="loadPreset('rnb')">R&amp;B</button>
   <button class="preset-btn" onclick="loadPreset('disco')">Disco</button>
+  <button class="preset-btn" onclick="loadPreset('80s')">80s</button>
+  <span style="color:#2a2a2a;margin:0 2px">|</span>
+  <label>Hip-Hop:</label>
+  <button class="preset-btn" onclick="loadPreset('hiphop')">Hip-Hop</button>
+  <button class="preset-btn" onclick="loadPreset('trap')">Trap</button>
+  <span style="color:#2a2a2a;margin:0 2px">|</span>
+  <label>World:</label>
+  <button class="preset-btn" onclick="loadPreset('reggae')">Reggae</button>
+  <button class="preset-btn" onclick="loadPreset('latin')">Latin</button>
+  <button class="preset-btn" onclick="loadPreset('bossa')">Bossa</button>
+  <span style="color:#2a2a2a;margin:0 2px">|</span>
+  <label>Jazz/Blues:</label>
+  <button class="preset-btn" onclick="loadPreset('jazz')">Jazz</button>
+  <button class="preset-btn" onclick="loadPreset('blues')">Blues</button>
+  <button class="preset-btn" onclick="loadPreset('shuffle')">Shuffle</button>
+  <span style="color:#2a2a2a;margin:0 2px">|</span>
+  <label>Electronic:</label>
+  <button class="preset-btn" onclick="loadPreset('dnb')">D&amp;B</button>
   <button class="preset-btn" onclick="loadPreset('halftime')">Half-Time</button>
-  
-  <span style="color:#333; margin:0 4px">|</span>
-
-  <button class="mgmt-btn" onclick="saveToLocal()">💾 Save State</button>
-  <button class="mgmt-btn" onclick="loadFromLocal()">📁 Load State</button>
-  <button class="mgmt-btn" onclick="exportJSON()">📤 Export JSON</button>
-  <button class="mgmt-btn" onclick="importJSON()">📥 Import JSON</button>
+  <span style="color:#333;margin:0 6px">|</span>
+  <button class="mgmt-btn" onclick="saveToLocal()">💾 Save</button>
+  <button class="mgmt-btn" onclick="loadFromLocal()">📁 Load</button>
+  <button class="mgmt-btn" onclick="exportJSON()">📤 Export</button>
+  <button class="mgmt-btn" onclick="importJSON()">📥 Import</button>
 </div>
 
 <div class="grid-wrap">
   <div class="grid" id="grid"></div>
+</div>
+
+<!-- ── BASS GENERATOR ── -->
+<div class="bass-panel">
+  <div class="bass-header">
+    <span class="bass-label">🎸 Auto Bass</span>
+    <select id="bassKey" class="bass-select">
+      <option>E</option><option>A</option><option>D</option><option>G</option>
+      <option>B</option><option>C</option><option>F</option>
+      <option>Eb</option><option>Ab</option><option>Bb</option><option>C#</option><option>F#</option>
+    </select>
+    <select id="bassMode" class="bass-select">
+      <option value="minor">Minor</option>
+      <option value="major">Major</option>
+      <option value="pent">Pentatonic</option>
+      <option value="blues">Blues Scale</option>
+    </select>
+    <select id="bassStyle" class="bass-select">
+      <option value="rock">Rock</option>
+      <option value="funk">Funk</option>
+      <option value="punk">Punk</option>
+      <option value="reggae">Reggae</option>
+      <option value="metal">Metal</option>
+      <option value="walking">Walking</option>
+    </select>
+    <select id="bassOctave" class="bass-select">
+      <option value="1">Low Oct</option>
+      <option value="2" selected>Mid Oct</option>
+      <option value="3">High Oct</option>
+    </select>
+    <button class="bass-btn" onclick="generateBass()">⚡ Generate</button>
+    <button class="bass-btn" onclick="clearBass()">✕ Clear</button>
+    <button class="bass-btn" id="bassActiveBtn" onclick="toggleBassActive()">● Bass Off</button>
+  </div>
+  <div class="bass-grid" id="bassGrid"></div>
+</div>
+
+<!-- ── JAM GENERATOR ── -->
+<div class="jam-bar">
+  <span class="jam-label">⚡ Jam:</span>
+  <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')">Rock in E</button>
+  <button class="jam-btn" onclick="loadJam('metal','E','minor','metal')">Metal in E</button>
+  <button class="jam-btn" onclick="loadJam('punk','A','minor','punk')">Punk in A</button>
+  <button class="jam-btn" onclick="loadJam('funk','A','minor','funk')">Funk in A</button>
+  <button class="jam-btn" onclick="loadJam('blues','E','blues','walking')">Blues in E</button>
+  <button class="jam-btn" onclick="loadJam('groove','D','minor','funk')">Groove in D</button>
+  <button class="jam-btn" onclick="loadJam('reggae','A','major','reggae')">Reggae in A</button>
+  <button class="jam-btn" onclick="loadJam('jazz','D','major','walking')">Jazz in D</button>
+  <button class="jam-btn" onclick="loadJam('hiphop','C','minor','funk')">Hip-Hop in C</button>
+  <button class="jam-btn" onclick="loadJam('dnb','D','minor','punk')">D&amp;B in D</button>
 </div>
 
 <div class="status-bar">
@@ -479,20 +588,25 @@ function scheduleStep(step, time) {
       if (activeCell) activeCell.classList.add('current-step');
     });
     document.getElementById('stepIndicator').textContent = String(step + 1).padStart(2, '0');
+    // Bass playhead
+    document.querySelectorAll('.bass-note-cell').forEach(c => c.classList.remove('bass-current'));
+    const bc = document.getElementById(`bass-cell-${step}`);
+    if (bc) bc.classList.add('bass-current');
   });
 
   const anySolo = Object.values(soloed).some(v => v === true);
-
   INSTRUMENTS.forEach(inst => {
     if (muted[inst.id]) return;
     if (anySolo && !soloed[inst.id]) return;
-
     const val = pattern[inst.id][step];
     if (val > 0) {
       const volumeMultiplier = val === 2 ? 0.72 : 0.28;
       hit(inst.id, time, volumeMultiplier);
     }
   });
+
+  // Bass note playback
+  if (bassActive && bassPattern[step]) hitBass(bassPattern[step].freq, time);
 }
 
 function buildGrid() {
@@ -515,7 +629,7 @@ function buildGrid() {
 
     for (let s = 0; s < maxSteps; s++) {
       const cell = document.createElement('div');
-      cell.className = 'step-cell';
+      cell.className = `step-cell inst-${inst.id}`;
       cell.id = `cell-${inst.id}-${s}`;
       if (s % 4 === 0 && s > 0) cell.classList.add('beat-divider');
 
@@ -528,7 +642,7 @@ function buildGrid() {
         currentVal = (currentVal + 1) % 3;
         pattern[inst.id][s] = currentVal;
         
-        cell.className = 'step-cell';
+        cell.className = `step-cell inst-${inst.id}`;
         if (s % 4 === 0 && s > 0) cell.classList.add('beat-divider');
         if (currentVal === 1) cell.classList.add('active');
         if (currentVal === 2) cell.classList.add('accent');
@@ -536,6 +650,7 @@ function buildGrid() {
       grid.appendChild(cell);
     }
   });
+  buildBassGrid();
 }
 
 function togglePlay() {
@@ -654,13 +769,31 @@ function importJSON() {
 }
 
 const PRESETS = {
-  rock: { Kick:[2,0,0,0,2,0,0,0], Snare:[0,0,2,0,0,0,2,0], ClosedHat:[1,1,1,1,1,1,1,1] },
-  metal: { Kick:[2,1,2,1,2,1,2,2], Snare:[0,0,2,0,0,0,2,0], ClosedHat:[1,1,1,1,1,1,1,1], Ride:[1,0,1,0,1,0,1,0] },
-  punk: { Kick:[2,0,2,0,2,0,2,0], Snare:[0,2,0,2,0,2,0,2], ClosedHat:[1,1,1,1,1,1,1,1] },
-  funk: { Kick:[2,0,0,1,0,0,1,0], Snare:[0,0,2,0,0,1,2,0], ClosedHat:[1,1,1,1,1,1,1,1] },
-  shuffle: { Kick:[2,0,0,2,0,0,2,0], Snare:[0,0,0,2,0,0,0,2], ClosedHat:[1,0,1,1,0,1,1,0] },
-  disco: { Kick:[2,0,2,0,2,0,2,0], Snare:[0,0,2,0,0,0,2,0], OpenHat:[0,1,0,1,0,1,0,1] },
-  halftime: { Kick:[2,0,0,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,0], ClosedHat:[1,1,1,1,1,1,1,1] }
+  // ── Rock family ──
+  rock:     { Kick:[2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], ClosedHat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  hardrock: { Kick:[2,0,0,0,2,0,0,0,2,0,0,0,2,0,2,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], ClosedHat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], Crash:[2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] },
+  metal:    { Kick:[2,1,0,1,2,1,0,0,2,1,0,1,2,0,2,1], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], ClosedHat:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], Ride:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  punk:     { Kick:[2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0], Snare:[0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2], ClosedHat:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] },
+  // ── Groove family ──
+  funk:     { Kick:[2,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,1,0,0,0,0,2,0,0,0], ClosedHat:[1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0], OpenHat:[0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1] },
+  groove:   { Kick:[2,0,0,0,0,1,0,0,2,0,0,0,0,1,0,0], Snare:[0,0,0,0,2,0,1,0,0,0,0,0,2,0,0,1], ClosedHat:[1,1,0,1,1,0,1,1,1,1,0,1,1,0,1,0], OpenHat:[0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,1] },
+  rnb:      { Kick:[2,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,1,0,0,2,0,0,0], ClosedHat:[1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,0], OpenHat:[0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,1] },
+  disco:    { Kick:[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], OpenHat:[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0], ClosedHat:[1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0] },
+  '80s':    { Kick:[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], Clap:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], OpenHat:[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1] },
+  // ── Hip-hop ──
+  hiphop:   { Kick:[2,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,1,0], ClosedHat:[1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0], OpenHat:[0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0] },
+  trap:     { Kick:[2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], ClosedHat:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0], OpenHat:[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1] },
+  // ── World ──
+  reggae:   { Kick:[2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0], Snare:[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1], ClosedHat:[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0], Ride:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  latin:    { Kick:[2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0], Snare:[0,0,2,0,0,2,0,0,0,0,2,0,0,0,0,0], ClosedHat:[1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0], Clap:[0,0,0,2,0,0,0,0,0,0,0,2,0,0,0,0] },
+  bossa:    { Kick:[2,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0], Clap:[0,0,2,0,0,2,0,0,2,0,0,2,0,0,0,0], ClosedHat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  // ── Jazz / Blues ──
+  jazz:     { Ride:[1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0], Kick:[2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0], Snare:[0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2] },
+  blues:    { Kick:[2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0], Snare:[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0], ClosedHat:[1,0,1,1,0,0,1,1,0,0,1,1,0,0,1,0] },
+  shuffle:  { Kick:[2,0,0,2,0,0,2,0,0,2,0,0,2,0,0,0], Snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], ClosedHat:[1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0] },
+  // ── Electronic ──
+  dnb:      { Kick:[2,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0], Snare:[0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0], ClosedHat:[1,1,0,1,1,0,1,1,1,1,0,1,1,0,1,0], OpenHat:[0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0] },
+  halftime: { Kick:[2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], Snare:[0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0], ClosedHat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] }
 };
 
 function loadPreset(name) {
@@ -675,7 +808,165 @@ function loadPreset(name) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// AMBIENT GROOVE TOGGLE — Ctrl+Shift+Alt+G
+// BASS GENERATOR
+// ═══════════════════════════════════════════════════════════
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const ROOT_SEMI  = { 'C':0,'C#':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'G':7,'Ab':8,'G#':8,'A':9,'Bb':10,'A#':10,'B':11 };
+
+const SCALES = {
+  minor: [0,2,3,5,7,8,10],
+  major: [0,2,4,5,7,9,11],
+  pent:  [0,3,5,7,10],
+  blues: [0,3,5,6,7,10]
+};
+
+// Pattern arrays: each value is a scale degree index (0=root, 1=2nd, 2=3rd, 4=5th…)
+// 99 = rest
+const BASS_RHYTHMS = {
+  rock:    [0,99,99,99,4,99,99,99,0,99,99,99,4,99,0,99],
+  funk:    [0,99,99,0,99,2,99,99,4,99,0,99,99,99,4,99],
+  punk:    [0,99,0,99,0,99,0,99,0,99,0,99,0,4,0,99],
+  reggae:  [99,99,99,99,0,99,99,99,99,99,99,99,4,99,99,99],
+  metal:   [0,0,99,0,0,0,99,99,0,0,99,0,4,99,0,99],
+  walking: [0,99,2,99,4,99,6,99,2,99,4,99,0,99,4,99]
+};
+
+let bassPattern = [];
+let bassActive = false;
+
+function noteFreq(semitone, octave) {
+  const midi = semitone + (octave + 1) * 12;
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+function generateBass() {
+  const rootKey  = document.getElementById('bassKey').value;
+  const mode     = document.getElementById('bassMode').value;
+  const style    = document.getElementById('bassStyle').value;
+  const octave   = parseInt(document.getElementById('bassOctave').value);
+  const rootSemi = ROOT_SEMI[rootKey] ?? 4;
+  const scale    = SCALES[mode];
+  const rhythm   = BASS_RHYTHMS[style];
+
+  const base = rhythm.map(degIdx => {
+    if (degIdx === 99) return null;
+    const scaleDeg = scale[degIdx % scale.length] ?? 0;
+    const semi = (rootSemi + scaleDeg) % 12;
+    return { freq: noteFreq(semi, octave), name: NOTE_NAMES[semi] };
+  });
+
+  // Tile to maxSteps
+  bassPattern = [];
+  while (bassPattern.length < maxSteps) bassPattern = bassPattern.concat(base);
+  bassPattern = bassPattern.slice(0, maxSteps);
+
+  buildBassGrid();
+  document.getElementById('statusMsg').textContent = `🎸 Bass: ${rootKey} ${mode} / ${style}`;
+}
+
+function clearBass() {
+  bassPattern = Array(maxSteps).fill(null);
+  buildBassGrid();
+  document.getElementById('statusMsg').textContent = '🎸 Bass cleared.';
+}
+
+function toggleBassActive() {
+  bassActive = !bassActive;
+  const btn = document.getElementById('bassActiveBtn');
+  btn.textContent = bassActive ? '🔊 Bass On' : '● Bass Off';
+  btn.classList.toggle('bass-on', bassActive);
+}
+
+function buildBassGrid() {
+  const grid = document.getElementById('bassGrid');
+  if (!grid) return;
+  grid.style.gridTemplateColumns = `170px repeat(${maxSteps}, minmax(22px, 1fr))`;
+  grid.innerHTML = '';
+
+  const label = document.createElement('div');
+  label.className = 'bass-track-label';
+  label.textContent = '🎸 Bass';
+  grid.appendChild(label);
+
+  for (let s = 0; s < maxSteps; s++) {
+    const cell = document.createElement('div');
+    cell.className = 'bass-note-cell';
+    cell.id = `bass-cell-${s}`;
+    if (s % 4 === 0 && s > 0) cell.style.borderLeft = '2px solid #2a2a2a';
+
+    const note = bassPattern[s];
+    cell.classList.toggle('has-note', !!note);
+    cell.textContent = note ? note.name : '·';
+
+    cell.onclick = () => {
+      if (bassPattern[s]) {
+        bassPattern[s] = null;
+        cell.classList.remove('has-note');
+        cell.textContent = '·';
+      } else {
+        const rootKey  = document.getElementById('bassKey').value;
+        const octave   = parseInt(document.getElementById('bassOctave').value);
+        const rootSemi = ROOT_SEMI[rootKey] ?? 4;
+        bassPattern[s] = { freq: noteFreq(rootSemi, octave), name: NOTE_NAMES[rootSemi] };
+        cell.classList.add('has-note');
+        cell.textContent = NOTE_NAMES[rootSemi];
+      }
+    };
+    grid.appendChild(cell);
+  }
+}
+
+function hitBass(freq, time) {
+  if (!ctx || !freq) return;
+  const safeTime = Math.max(time, ctx.currentTime);
+  const mVol = parseFloat(document.getElementById('masterVol').value) / 100;
+
+  const osc  = ctx.createOscillator();
+  const env  = ctx.createGain();
+  const gain = ctx.createGain();
+
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(freq, safeTime);
+  gain.gain.setValueAtTime(mVol * 0.55, safeTime);
+  gain.connect(ctx.destination);
+
+  env.gain.setValueAtTime(0.9, safeTime);
+  env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.4);
+
+  osc.connect(env); env.connect(gain);
+  osc.start(safeTime); osc.stop(safeTime + 0.45);
+}
+
+// ═══════════════════════════════════════════════════════════
+// JAM GENERATOR
+// One click → load drum preset + generate bass in key
+// ═══════════════════════════════════════════════════════════
+function loadJam(drumPreset, key, mode, bassStyle) {
+  // Load drums
+  INSTRUMENTS.forEach(inst => pattern[inst.id].fill(0));
+  const data = PRESETS[drumPreset];
+  if (data) {
+    Object.keys(data).forEach(instId => {
+      for (let s = 0; s < maxSteps; s++) {
+        pattern[instId][s] = data[instId][s % data[instId].length];
+      }
+    });
+  }
+  buildGrid();
+
+  // Set bass controls and generate
+  document.getElementById('bassKey').value    = key;
+  document.getElementById('bassMode').value   = mode;
+  document.getElementById('bassStyle').value  = bassStyle;
+  generateBass();
+
+  // Auto-enable bass
+  if (!bassActive) toggleBassActive();
+
+  document.getElementById('statusMsg').textContent = `⚡ Jam: ${drumPreset} + ${key} ${mode} bass`;
+}
+
+
 // Loads a random chill preset and starts/stops playback.
 // Triggered via Touch Portal "Send Key" action. Not listed
 // in the public keyboard shortcuts panel — streamer-only.
