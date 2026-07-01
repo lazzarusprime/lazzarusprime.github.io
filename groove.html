@@ -208,6 +208,7 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   </div>
 </div>
 
+
 <div class="pattern-bar">
   <label>Presets:</label>
   <button class="preset-btn" onclick="loadPreset('rock')">Rock</button>
@@ -298,6 +299,7 @@ let pattern = {};
 let trackVolumes = {};
 let muted = {};
 let soloed = {};
+
 
 function initArrays() {
   INSTRUMENTS.forEach(inst => {
@@ -672,12 +674,56 @@ function loadPreset(name) {
   buildGrid();
 }
 
+// ═══════════════════════════════════════════════════════════
+// AMBIENT GROOVE TOGGLE — Ctrl+Shift+Alt+G
+// Loads a random chill preset and starts/stops playback.
+// Triggered via Touch Portal "Send Key" action. Not listed
+// in the public keyboard shortcuts panel — streamer-only.
+// ═══════════════════════════════════════════════════════════
+const AMBIENT_PRESETS = ['shuffle', 'halftime', 'funk', 'disco'];
+let ambientActive = false;
+
+function toggleAmbientGroove() {
+  if (!ctx) {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    noiseBuffer = createNoiseBuffer();
+  }
+
+  if (ambientActive && isPlaying) {
+    // Currently playing ambient — stop it
+    ambientActive = false;
+    if (isPlaying) togglePlay();
+    document.getElementById('statusMsg').textContent = '🎵 Ambient groove stopped.';
+  } else {
+    // Start a fresh ambient loop
+    const pick = AMBIENT_PRESETS[Math.floor(Math.random() * AMBIENT_PRESETS.length)];
+    INSTRUMENTS.forEach(inst => pattern[inst.id].fill(0));
+    const data = PRESETS[pick];
+    Object.keys(data).forEach(instId => {
+      for (let s = 0; s < maxSteps; s++) {
+        pattern[instId][s] = data[instId][s % data[instId].length];
+      }
+    });
+    buildGrid();
+    ambientActive = true;
+    if (!isPlaying) togglePlay();
+    document.getElementById('statusMsg').textContent = `🎵 Ambient groove: ${pick}`;
+  }
+}
+
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
   if (e.code === 'KeyC') clearPattern();
   if (e.code === 'KeyR') randomPattern();
+
+  // Secret streamer combo — Touch Portal only, not shown in help panel
+  if (e.ctrlKey && e.shiftKey && e.altKey && e.code === 'KeyG') {
+    e.preventDefault();
+    toggleAmbientGroove();
+  }
 });
+
 
 let _artists = [];
 (async () => {
