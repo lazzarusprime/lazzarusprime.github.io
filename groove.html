@@ -122,7 +122,15 @@ body.perf-mode [class*="inst-"]{box-shadow:none !important}
 .bass-track-label{height:30px;padding-right:8px;border-right:2px solid #222;display:flex;align-items:center;font-size:10px;font-weight:700;color:#2ecc71;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
 body.perf-mode .bass-note-cell{box-shadow:none !important;transform:none !important}
 
-/* ── JAM GENERATOR ── */
+/* ── SHARE CODE BAR ── */
+.share-bar{display:flex;gap:8px;padding:10px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;align-items:center;flex-wrap:wrap}
+.share-label{color:#9b59b6;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.share-btn{background:#1a0d2e;color:#9b59b6;border:1px solid #9b59b6;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;transition:.2s;white-space:nowrap}
+.share-btn:hover{background:#2a1a3e;border-color:#b07fce}
+.share-btn.share-copied{background:#9b59b6;color:#fff}
+.share-input{flex:1;min-width:220px;background:#1a1a1a;color:#ccc;border:1px solid #2a2a2a;padding:6px 10px;border-radius:6px;font-size:11px;font-family:monospace;outline:none;transition:.15s}
+.share-input:focus{border-color:#9b59b6;color:#fff}
+.share-msg{font-size:11px;color:#666;white-space:nowrap}
 .jam-bar{display:flex;gap:6px;padding:8px 16px;background:#0a0a0a;border-top:1px solid #1a1a1a;align-items:center;flex-wrap:wrap}
 .jam-label{color:#f39c12;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase}
 .jam-btn{background:#1a1200;color:#f39c12;border:1px solid #f39c12;padding:4px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:700;transition:.2s;white-space:nowrap}
@@ -325,8 +333,14 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <div class="bass-grid" id="bassGrid"></div>
 </div>
 
-<!-- ── JAM GENERATOR ── -->
-<div class="jam-bar">
+<!-- ── SHARE CODE ── -->
+<div class="share-bar">
+  <span class="share-label">🔗 Share Code</span>
+  <button class="share-btn" id="copyShareBtn" onclick="copyShareCode()">📋 Copy Code</button>
+  <input type="text" id="shareCodeInput" class="share-input" placeholder="Paste an LP-... code to load a groove">
+  <button class="share-btn" onclick="loadShareCode()">⬇ Load Code</button>
+  <span id="shareMsg" class="share-msg"></span>
+</div>
   <span class="jam-label">⚡ Jam:</span>
   <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')">Rock in E</button>
   <button class="jam-btn" onclick="loadJam('metal','E','minor','metal')">Metal in E</button>
@@ -767,6 +781,144 @@ function importJSON() {
   }
   selector.click();
 }
+
+// ═══════════════════════════════════════════════════════════
+// SHARE CODES
+// Format: LP-[base64]
+// Encodes: drum pattern, bass pattern, BPM, swing, steps, engine,
+// bass key/mode/style/octave/active. One-click copy, paste-to-load.
+// ═══════════════════════════════════════════════════════════
+
+function buildShareState() {
+  // Drum pattern: each instrument row → string of '0'/'1'/'2', joined by '|'
+  const drumStr = INSTRUMENTS
+    .map(inst => pattern[inst.id].slice(0, maxSteps).join(''))
+    .join('|');
+
+  // Bass pattern: array of semitone index (0-11) or -1 for rest
+  const bassArr = (bassPattern || []).map(n => {
+    if (!n) return -1;
+    // reverse-lookup semitone from note name
+    const idx = NOTE_NAMES.indexOf(n.name);
+    return idx >= 0 ? idx : -1;
+  });
+
+  return {
+    v: 2,
+    s: maxSteps,
+    b: parseInt(document.getElementById('bpmSlider').value),
+    w: parseInt(document.getElementById('swingSlider').value),
+    e: document.getElementById('engineSelect').value,
+    p: drumStr,
+    bk: document.getElementById('bassKey').value,
+    bm: document.getElementById('bassMode').value,
+    bs: document.getElementById('bassStyle').value,
+    bo: parseInt(document.getElementById('bassOctave').value),
+    ba: bassActive ? 1 : 0,
+    bn: bassArr
+  };
+}
+
+function encodeShareCode(state) {
+  const json = JSON.stringify(state);
+  // btoa needs ASCII — encode URI components first for any special chars
+  return 'LP-' + btoa(unescape(encodeURIComponent(json)));
+}
+
+function decodeShareCode(code) {
+  if (!code.startsWith('LP-')) return null;
+  try {
+    const json = decodeURIComponent(escape(atob(code.slice(3))));
+    return JSON.parse(json);
+  } catch (e) { return null; }
+}
+
+function copyShareCode() {
+  const code = encodeShareCode(buildShareState());
+  document.getElementById('shareCodeInput').value = code;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copyShareBtn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('share-copied');
+    document.getElementById('shareMsg').textContent = 'Code copied to clipboard.';
+    setTimeout(() => {
+      btn.textContent = '📋 Copy Code';
+      btn.classList.remove('share-copied');
+      document.getElementById('shareMsg').textContent = '';
+    }, 2500);
+  }).catch(() => {
+    // Clipboard API unavailable — code is still visible in the input
+    document.getElementById('shareMsg').textContent = 'Copy the code from the box above.';
+  });
+}
+
+function loadShareCode() {
+  const raw = (document.getElementById('shareCodeInput').value || '').trim();
+  if (!raw) { document.getElementById('shareMsg').textContent = 'Paste a code first.'; return; }
+  const state = decodeShareCode(raw);
+  if (!state) {
+    document.getElementById('shareMsg').textContent = '✗ Invalid code.';
+    return;
+  }
+
+  // ── Restore steps ──
+  maxSteps = state.s || 16;
+  const stepSel = document.getElementById('stepSelect');
+  if (stepSel) stepSel.value = maxSteps;
+  initArrays();
+
+  // ── Restore drum pattern ──
+  if (state.p) {
+    const rows = state.p.split('|');
+    INSTRUMENTS.forEach((inst, i) => {
+      const row = rows[i] || '';
+      for (let s = 0; s < maxSteps; s++) {
+        pattern[inst.id][s] = parseInt(row[s] || '0') || 0;
+      }
+    });
+  }
+  buildGrid();
+
+  // ── Restore transport ──
+  if (state.b) {
+    document.getElementById('bpmSlider').value = state.b;
+    onBpmChange();
+  }
+  if (state.w !== undefined) {
+    document.getElementById('swingSlider').value = state.w;
+    onSwingChange();
+  }
+  if (state.e) {
+    document.getElementById('engineSelect').value = state.e;
+    onEngineChange();
+  }
+
+  // ── Restore bass controls ──
+  if (state.bk) document.getElementById('bassKey').value    = state.bk;
+  if (state.bm) document.getElementById('bassMode').value   = state.bm;
+  if (state.bs) document.getElementById('bassStyle').value  = state.bs;
+  if (state.bo) document.getElementById('bassOctave').value = state.bo;
+
+  // ── Restore bass pattern ──
+  const octave = state.bo || 2;
+  bassPattern = (state.bn || []).map(semi => {
+    if (semi < 0) return null;
+    return { freq: noteFreq(semi, octave), name: NOTE_NAMES[semi] };
+  });
+  while (bassPattern.length < maxSteps) bassPattern.push(null);
+  bassPattern = bassPattern.slice(0, maxSteps);
+  buildBassGrid();
+
+  // ── Restore bass active state ──
+  if (state.ba && !bassActive) toggleBassActive();
+  if (!state.ba && bassActive) toggleBassActive();
+
+  document.getElementById('shareMsg').textContent =
+    `✓ Groove loaded — ${state.b} BPM, ${state.s} steps, ${state.e} kit.`;
+  document.getElementById('statusMsg').textContent =
+    `🔗 Share code loaded: ${state.b} BPM / ${state.e} / ${state.s} steps`;
+}
+
 
 const PRESETS = {
   // ── Rock family ──
