@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groove Station OBS Overlay</title>
+<style>
+  /* OBS browser source: set width=960 height=200, transparent background ON */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:transparent;font-family:'Segoe UI',system-ui,monospace;overflow:hidden;padding:10px}
+
+  .panel{
+    background:rgba(8,8,8,0.82);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:10px;
+    padding:10px 14px 8px;
+    backdrop-filter:blur(4px);
+  }
+
+  /* Info row */
+  .info-row{
+    display:flex;align-items:center;gap:14px;margin-bottom:8px;
+  }
+  .logo{color:#ff5500;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.7}
+  .bpm{color:#ff5500;font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1}
+  .bpm-label{color:#333;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+  .kit-badge{
+    background:rgba(255,85,0,.12);color:#ff5500;border:1px solid rgba(255,85,0,.3);
+    padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;
+    letter-spacing:2px;text-transform:uppercase
+  }
+  .step-counter{color:#333;font-size:10px;margin-left:auto;letter-spacing:1px}
+
+  /* Grid */
+  .obs-grid{
+    display:grid;
+    gap:2px;
+    width:100%;
+  }
+  .obs-row{display:contents}
+
+  /* Cells */
+  .obs-cell{
+    height:16px;
+    border-radius:2px;
+    background:#141414;
+    border:1px solid #1a1a1a;
+    transition:background .06s, box-shadow .06s, transform .06s;
+    position:relative;
+  }
+  .obs-cell.on    { opacity:.6 }
+  .obs-cell.accent{ opacity:1  }
+  .obs-cell.cur   {
+    outline:2px solid rgba(255,255,255,.85);
+    z-index:2;
+    transform:scaleY(1.18);
+  }
+
+  /* Kit-specific beat-divider visual */
+  .obs-cell.div{ border-left:2px solid #222 }
+
+  /* Instrument colors — data attr set by JS */
+  .obs-cell[data-inst="Kick"].on,   .obs-cell[data-inst="Kick"].accent   { background:#ff5500;box-shadow:0 0 6px rgba(255,85,0,.5) }
+  .obs-cell[data-inst="Snare"].on,  .obs-cell[data-inst="Snare"].accent  { background:#f1c40f;box-shadow:0 0 6px rgba(241,196,15,.5) }
+  .obs-cell[data-inst="ClosedHat"].on,.obs-cell[data-inst="ClosedHat"].accent { background:#00e5ff;box-shadow:0 0 6px rgba(0,229,255,.4) }
+  .obs-cell[data-inst="OpenHat"].on,.obs-cell[data-inst="OpenHat"].accent { background:#00bcd4;box-shadow:0 0 6px rgba(0,188,212,.4) }
+  .obs-cell[data-inst="Clap"].on,   .obs-cell[data-inst="Clap"].accent   { background:#ff4081;box-shadow:0 0 6px rgba(255,64,129,.4) }
+  .obs-cell[data-inst="Crash"].on,  .obs-cell[data-inst="Crash"].accent  { background:#b388ff;box-shadow:0 0 6px rgba(179,136,255,.4) }
+  .obs-cell[data-inst="Ride"].on,   .obs-cell[data-inst="Ride"].accent   { background:#9c27b0;box-shadow:0 0 6px rgba(156,39,176,.4) }
+  .obs-cell[data-inst="TomHigh"].on,.obs-cell[data-inst="TomHigh"].accent{ background:#69f0ae;box-shadow:0 0 6px rgba(105,240,174,.4) }
+  .obs-cell[data-inst="TomLow"].on, .obs-cell[data-inst="TomLow"].accent { background:#00e676;box-shadow:0 0 6px rgba(0,230,118,.4) }
+
+  /* Accent is brighter */
+  .obs-cell.accent{ filter:brightness(1.35) }
+
+  /* Playhead column highlight */
+  .col-highlight{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    background:rgba(255,255,255,.04);
+    pointer-events:none;border-radius:2px;
+  }
+
+  /* Not-playing state */
+  .idle-msg{
+    text-align:center;color:#333;font-size:11px;letter-spacing:2px;
+    padding:12px 0;text-transform:uppercase
+  }
+</style>
+</head>
+<body>
+<div class="panel">
+  <div class="info-row">
+    <span class="logo">LP</span>
+    <span class="bpm" id="bpmVal">---</span>
+    <span class="bpm-label">BPM</span>
+    <span class="kit-badge" id="kitVal">––</span>
+    <span class="step-counter" id="stepVal"></span>
+  </div>
+  <div class="obs-grid" id="obsGrid">
+    <div class="idle-msg">Waiting for Groove Station…</div>
+  </div>
+</div>
+
+<script>
+const INSTS = ['Kick','Snare','ClosedHat','OpenHat','Clap','Crash','Ride','TomHigh','TomLow'];
+const KIT_LABELS = { acoustic:'Acoustic', electronic:'808 / TR', metal:'Metal', retro:'Retro' };
+
+let maxSteps = 16;
+let pat = {};
+let gridBuilt = false;
+let lastGridKey = '';
+let lastStep = -1;
+
+INSTS.forEach(id => { pat[id] = Array(16).fill(0); });
+
+function buildObsGrid() {
+  const grid = document.getElementById('obsGrid');
+  grid.style.gridTemplateColumns = `repeat(${maxSteps}, 1fr)`;
+  grid.innerHTML = '';
+  INSTS.forEach(inst => {
+    for (let s = 0; s < maxSteps; s++) {
+      const cell = document.createElement('div');
+      cell.className = 'obs-cell' + (s % 4 === 0 && s > 0 ? ' div' : '');
+      cell.id = `oc-${inst}-${s}`;
+      cell.setAttribute('data-inst', inst);
+      const v = pat[inst][s] || 0;
+      if (v === 1) cell.classList.add('on');
+      if (v === 2) cell.classList.add('on','accent');
+      grid.appendChild(cell);
+    }
+  });
+  gridBuilt = true;
+}
+
+function highlightStep(step) {
+  if (!gridBuilt) return;
+  // Clear previous
+  INSTS.forEach(inst => {
+    const prev = document.getElementById(`oc-${inst}-${lastStep}`);
+    if (prev) prev.classList.remove('cur');
+  });
+  // Set new
+  INSTS.forEach(inst => {
+    const cell = document.getElementById(`oc-${inst}-${step}`);
+    if (cell) cell.classList.add('cur');
+  });
+  lastStep = step;
+  document.getElementById('stepVal').textContent =
+    `STEP ${String(step+1).padStart(2,'0')} / ${maxSteps}`;
+}
+
+function poll() {
+  // Grid data (pattern)
+  try {
+    const raw = localStorage.getItem('lp_obs_grid');
+    if (raw && raw !== lastGridKey) {
+      lastGridKey = raw;
+      const data = JSON.parse(raw);
+      pat      = data.pattern || pat;
+      maxSteps = data.maxSteps || 16;
+      buildObsGrid();
+      if (lastStep >= 0) highlightStep(lastStep);
+    }
+  } catch(e) {}
+
+  // Tick (step + transport)
+  try {
+    const raw = localStorage.getItem('lp_obs_tick');
+    if (raw) {
+      const tick = JSON.parse(raw);
+      document.getElementById('bpmVal').textContent = tick.bpm || '---';
+      document.getElementById('kitVal').textContent =
+        KIT_LABELS[tick.kit] || (tick.kit || '––').toUpperCase();
+      if (!gridBuilt) buildObsGrid();
+      if (tick.step !== lastStep) highlightStep(tick.step);
+    }
+  } catch(e) {}
+}
+
+setInterval(poll, 40); // ~25fps is plenty for OBS
+</script>
+</body>
+</html>

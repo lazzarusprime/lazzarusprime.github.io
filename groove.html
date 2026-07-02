@@ -340,6 +340,11 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
   <input type="text" id="shareCodeInput" class="share-input" placeholder="Paste an LP-... code to load a groove">
   <button class="share-btn" onclick="loadShareCode()">⬇ Load Code</button>
   <span id="shareMsg" class="share-msg"></span>
+  <span style="color:#2a2a2a;margin:0 4px">|</span>
+  <button class="share-btn" onclick="window.open('groove-overlay.html','_blank','width=980,height=220')"
+    style="border-color:#444;color:#666;background:#111" title="Open OBS browser source preview">
+    📺 OBS Overlay
+  </button>
 </div>
   <span class="jam-label">⚡ Jam:</span>
   <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')">Rock in E</button>
@@ -606,6 +611,14 @@ function scheduleStep(step, time) {
     document.querySelectorAll('.bass-note-cell').forEach(c => c.classList.remove('bass-current'));
     const bc = document.getElementById(`bass-cell-${step}`);
     if (bc) bc.classList.add('bass-current');
+    // OBS overlay sync — write current step + transport state
+    try {
+      localStorage.setItem('lp_obs_tick', JSON.stringify({
+        step,
+        bpm: parseInt(document.getElementById('bpmSlider').value),
+        kit: document.getElementById('engineSelect').value
+      }));
+    } catch(e) {}
   });
 
   const anySolo = Object.values(soloed).some(v => v === true);
@@ -623,10 +636,19 @@ function scheduleStep(step, time) {
   if (bassActive && bassPattern[step]) hitBass(bassPattern[step].freq, time);
 }
 
+function obsWriteGrid() {
+  try {
+    const snap = {};
+    INSTRUMENTS.forEach(inst => { snap[inst.id] = pattern[inst.id].slice(0, maxSteps); });
+    localStorage.setItem('lp_obs_grid', JSON.stringify({ pattern: snap, maxSteps }));
+  } catch(e) {}
+}
+
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.style.gridTemplateColumns = `170px repeat(${maxSteps}, minmax(22px, 1fr))`;
   grid.innerHTML = '';
+  obsWriteGrid();
 
   INSTRUMENTS.forEach(inst => {
     const ctrlCell = document.createElement('div');
