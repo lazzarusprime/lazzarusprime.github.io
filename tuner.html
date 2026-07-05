@@ -9,24 +9,26 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
 
 /* ── TITLE BAR ── */
-.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel2);padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
-.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
-.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(var(--accent-rgb),.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,var(--accent) 45%,var(--accent-dark) 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(var(--accent-rgb),.6))}
 .socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
-.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
+.socialLinks a:hover{color:var(--accent);border-color:#333;background:#1a1a1a}
 
 /* ── TOP BAR ── */
-.topBar{display:flex;flex-direction:column;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
+.topBar{display:flex;flex-direction:column;padding:8px 10px;background:var(--bg-panel4);position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
-.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
-.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:var(--accent);color:var(--accent)}
+.nav-btn.active-page{border-color:rgba(var(--accent-rgb),.33);color:var(--accent);background:var(--accent-dim1)}
 .clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}.search-row input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
 .topBar-action{margin-left:auto}
 .action-btn{background:#ff5500;color:white;border:none;padding:9px 18px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;font-family:'Inter',sans-serif}
@@ -35,16 +37,16 @@ body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;
 @keyframes btnPulse{0%,100%{box-shadow:0 0 8px rgba(192,57,43,.5)}50%{box-shadow:0 0 18px rgba(192,57,43,.9)}}
 
 /* ── MENU ROW ── */
-.menu-row{display:flex;gap:12px;background:#141414;padding:10px 16px;justify-content:center;border-bottom:1px solid #222;flex-wrap:wrap;align-items:flex-end}
+.menu-row{display:flex;gap:12px;background:var(--bg-panel2);padding:10px 16px;justify-content:center;border-bottom:1px solid #222;flex-wrap:wrap;align-items:flex-end}
 .menu-group{display:flex;flex-direction:column;gap:4px}
 .menu-group label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#666}
 select{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;min-width:160px;transition:.15s}
-select:focus{outline:none;border-color:#f1c40f}
+select:focus{outline:none;border-color:var(--accent)}
 
 /* ── WORKSPACE ── */
 .app-workspace{flex:1;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;padding:20px;max-width:1020px;margin:0 auto;width:100%;gap:20px}
 .tuner-container{flex:1;min-width:300px;max-width:620px}
-.display-panel{background:#141414;border:1px solid #222;border-radius:14px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.display-panel{background:var(--bg-panel2);border:1px solid #222;border-radius:14px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.6)}
 
 /* ── STRING PICKER CHIPS ── */
 .string-picker{display:flex;gap:8px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
@@ -53,7 +55,7 @@ select:focus{outline:none;border-color:#f1c40f}
 .string-chip.in-tune{background:#27ae60;border-color:#2ecc71;color:#fff;box-shadow:0 0 18px rgba(39,174,96,.6)}
 .string-chip .ref-btn{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);background:#2a2a2a;border:1px solid #444;color:#666;font-size:8px;padding:2px 5px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:.15s;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.3px;display:none}
 .string-chip:hover .ref-btn{display:block}
-.string-chip .ref-btn:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1a1a}
+.string-chip .ref-btn:hover{border-color:var(--accent);color:var(--accent);background:#1a1a1a}
 
 /* ── BIG NOTE DISPLAY ── */
 .note-display{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,18vw,140px);line-height:1;color:#fff;margin:10px 0 4px;transition:color .15s,filter .1s;letter-spacing:4px}
@@ -76,8 +78,8 @@ select:focus{outline:none;border-color:#f1c40f}
 .arc-scale-right{position:absolute;right:0;bottom:10px;font-size:10px;color:#444;font-weight:700}
 
 /* ── LEGEND PANEL ── */
-.legend-panel{width:240px;background:#141414;border:1px solid #222;border-radius:14px;padding:18px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.legend-title{font-size:11px;font-weight:900;text-transform:uppercase;color:#f1c40f;letter-spacing:1.5px;border-bottom:1px solid #222;padding-bottom:10px;margin-bottom:12px;text-align:center}
+.legend-panel{width:240px;background:var(--bg-panel2);border:1px solid #222;border-radius:14px;padding:18px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.legend-title{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--accent);letter-spacing:1.5px;border-bottom:1px solid #222;padding-bottom:10px;margin-bottom:12px;text-align:center}
 .legend-list{display:flex;flex-direction:column;gap:7px}
 .legend-row{display:flex;justify-content:space-between;align-items:center;background:#1d1d1d;padding:9px 12px;border-radius:6px;border:1px solid #262626;font-size:13px;font-weight:600;color:#888;transition:.2s;gap:6px}
 .legend-row .s-lbl{font-weight:700;color:#fff;background:#2a2a2a;padding:2px 8px;border-radius:4px;min-width:26px;text-align:center;font-size:13px}
@@ -87,33 +89,33 @@ select:focus{outline:none;border-color:#f1c40f}
 .legend-row.in-tune-match{border-color:#27ae60;background:rgba(39,174,96,.1);color:#2ecc71;box-shadow:0 0 10px rgba(39,174,96,.2)}
 .legend-row.in-tune-match .s-lbl{background:#27ae60;color:#fff}
 .legend-row .play-tone{background:transparent;border:1px solid #333;color:#555;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0;font-family:'Inter',sans-serif}
-.legend-row .play-tone:hover{border-color:#f1c40f;color:#f1c40f;background:#1a1a00}
-.legend-row .play-tone.playing{border-color:#f1c40f;color:#f1c40f;background:#2a2a00;animation:tonePulse 1s ease-in-out infinite}
+.legend-row .play-tone:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim2)}
+.legend-row .play-tone.playing{border-color:var(--accent);color:var(--accent);background:var(--accent-dim3);animation:tonePulse 1s ease-in-out infinite}
 @keyframes tonePulse{0%,100%{opacity:1}50%{opacity:.5}}
 
 /* ── FOOTER ── */
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
 footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
-footer a:hover{color:#f1c40f;background:#1a1a1a}
+footer a:hover{color:var(--accent);background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
 
 @media(max-width:660px){.app-workspace{padding:12px;gap:14px}.legend-panel{width:100%}.display-panel{padding:20px 14px}.arc-meter-wrap{max-width:100%}.titleBar .site-logo{width:36px;height:36px}.socialLinks{display:none}.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}.nav-row{gap:4px}}
 /* ── DRAG PANELS ── */
 .drag-workspace{display:flex;flex-wrap:wrap;gap:16px;padding:16px;justify-content:flex-start;align-items:flex-start;max-width:1100px;margin:0 auto;width:100%}
-.drag-panel{background:#141414;border:1px solid #222;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s;position:relative}
-.drag-panel.dragging{opacity:.5;border-color:#f1c40f55}
-.drag-panel.drag-over{border-color:#f1c40f;box-shadow:0 0 0 2px #f1c40f55;background:#141410}
-.drag-handle{display:flex;align-items:center;gap:8px;padding:8px 14px 6px;cursor:grab;border-bottom:1px solid #1e1e1e;user-select:none;background:#181818;border-radius:12px 12px 0 0}
+.drag-panel{background:var(--bg-panel2);border:1px solid #222;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);transition:box-shadow .2s,border-color .2s;position:relative}
+.drag-panel.dragging{opacity:.5;border-color:rgba(var(--accent-rgb),.33)}
+.drag-panel.drag-over{border-color:var(--accent);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.33);background:#141410}
+.drag-handle{display:flex;align-items:center;gap:8px;padding:8px 14px 6px;cursor:grab;border-bottom:1px solid #1e1e1e;user-select:none;background:var(--bg-panel4);border-radius:12px 12px 0 0}
 .drag-handle:active{cursor:grabbing}
 .drag-handle-icon{color:#333;font-size:14px;letter-spacing:-2px;line-height:1}
-.drag-handle-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#f1c40f;flex:1}
+.drag-handle-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);flex:1}
 .drag-handle-hint{font-size:9px;color:#2a2a2a;font-weight:600}
 .drag-panel-body{padding:14px}
 .drag-panel.collapsed .drag-panel-body{display:none}
 .drag-panel.collapsed{border-radius:12px}
 .drag-panel.collapsed .drag-handle{border-bottom:none;border-radius:12px}
 .collapse-btn{background:transparent;border:none;color:#333;cursor:pointer;font-size:13px;padding:0 4px;transition:.15s;line-height:1}
-.collapse-btn:hover{color:#f1c40f}
+.collapse-btn:hover{color:var(--accent)}
 .w-xl{flex:1;min-width:340px} .w-lg{width:420px} .w-md{width:300px}
 @media(max-width:660px){.drag-panel,.w-xl,.w-lg,.w-md{width:100%!important;min-width:unset!important}}
 </style>
@@ -126,6 +128,10 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     <h2>Lazzarus Prime — Tuner</h2>
   </div>
     <div class="socialLinks">
+      <div class="theme-switcher" id="themeSwitcher">
+        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 Theme</button>
+        <div class="theme-menu" id="themeMenu"></div>
+      </div>
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
     <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
     <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
@@ -390,7 +396,7 @@ function drawArc(centsVal, inTune, active) {
     arcCtx.beginPath();
     arcCtx.moveTo(cx + inner*Math.cos(angle), cy + inner*Math.sin(angle));
     arcCtx.lineTo(cx + outer*Math.cos(angle), cy + outer*Math.sin(angle));
-    arcCtx.strokeStyle = isCenter ? '#f1c40f' : '#333';
+    arcCtx.strokeStyle = isCenter ? 'var(--accent)' : '#333';
     arcCtx.lineWidth = isCenter ? 2.5 : 1;
     arcCtx.stroke();
 
@@ -769,7 +775,7 @@ drawArc(0,false,false);
     ghost = panel.cloneNode(true);
     ghost.style.cssText = `position:fixed;z-index:9999;pointer-events:none;width:${r.width}px;`
       + `opacity:.85;left:${r.left}px;top:${r.top}px;`
-      + `border:1px solid #f1c40f;box-shadow:0 8px 32px rgba(241,196,15,.3);`
+      + `border:1px solid var(--accent);box-shadow:0 8px 32px rgba(var(--accent-rgb),.3);`
       + `border-radius:12px;transition:none;`;
     document.body.appendChild(ghost);
     offsetX = cx - r.left; offsetY = cy - r.top;
@@ -782,7 +788,7 @@ drawArc(0,false,false);
   function createPlaceholder(panel) {
     placeholder = document.createElement('div');
     placeholder.style.cssText = `width:${panel.offsetWidth}px;height:${panel.offsetHeight}px;`
-      + `border:2px dashed #f1c40f55;border-radius:12px;background:#0a0a0a;flex-shrink:0;`;
+      + `border:2px dashed rgba(var(--accent-rgb),.33);border-radius:12px;background:var(--bg-void);flex-shrink:0;`;
     panel.parentNode.insertBefore(placeholder, panel);
   }
   function removePlaceholder() {

@@ -1,0 +1,89 @@
+/* ═══════════════════════════════════════════════════════════════
+   theme.css — Lazzarus Prime site-wide theme engine
+   Include on every page alongside theme.js
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  --accent:#f1c40f;
+  --accent-dark:#b8860b;
+  --accent-rgb:241,196,15;
+  --accent-dim1:#1a1800;
+  --accent-dim2:#1a1a00;
+  --accent-dim3:#2a2a00;
+  --bg-void:#0a0a0a;
+  --bg-page:#0e0e0e;
+  --bg-page2:#0f0f0f;
+  --bg-panel:#111111;
+  --bg-panel2:#141414;
+  --bg-panel3:#151515;
+  --bg-panel4:#181818;
+}
+
+/* ── Fire Mode ── */
+[data-theme="fire"]{
+  --accent:#ff5500;
+  --accent-dark:#b03a00;
+  --accent-rgb:255,85,0;
+  --accent-dim1:#2a1100;
+  --accent-dim2:#2a1400;
+  --accent-dim3:#3a1800;
+  --bg-void:#0d0605;
+  --bg-page:#120806;
+  --bg-page2:#140907;
+  --bg-panel:#180a08;
+  --bg-panel2:#1c0d0a;
+  --bg-panel3:#1f0f0b;
+  --bg-panel4:#23110d;
+}
+
+/* ── Synthwave ── */
+[data-theme="synthwave"]{
+  --accent:#ff2fd6;
+  --accent-dark:#a3178a;
+  --accent-rgb:255,47,214;
+  --accent-dim1:#2a0e28;
+  --accent-dim2:#22102a;
+  --accent-dim3:#33143a;
+  --bg-void:#08060f;
+  --bg-page:#0c0916;
+  --bg-page2:#0e0a1a;
+  --bg-panel:#100b1e;
+  --bg-panel2:#140d26;
+  --bg-panel3:#160e2a;
+  --bg-panel4:#1a1030;
+}
+
+/* ── Retro Arcade ── */
+[data-theme="arcade"]{
+  --accent:#39ff14;
+  --accent-dark:#1f9e0c;
+  --accent-rgb:57,255,20;
+  --accent-dim1:#0a2400;
+  --accent-dim2:#0c2a00;
+  --accent-dim3:#123a00;
+  --bg-void:#050505;
+  --bg-page:#070707;
+  --bg-page2:#080808;
+  --bg-panel:#0a0a0a;
+  --bg-panel2:#0d0d0d;
+  --bg-panel3:#0f0f0f;
+  --bg-panel4:#111111;
+}
+[data-theme="arcade"] .titleLeft h2,
+[data-theme="arcade"] .splash-title{
+  font-family:'Press Start 2P','Bebas Neue',sans-serif;
+  letter-spacing:1px;
+}
+
+/* ── Theme switcher widget ── */
+.theme-switcher{position:relative}
+.theme-btn{background:#2a2a2a;color:#fff;border:1px solid #444;padding:4px 9px;border-radius:4px;cursor:pointer;font-size:13px;transition:.15s;white-space:nowrap;font-family:'Inter',sans-serif}
+.theme-btn:hover{color:var(--accent);border-color:var(--accent)}
+.theme-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:6px;min-width:170px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.theme-menu.open{display:flex;flex-direction:column;gap:2px}
+.theme-option{background:transparent;border:1px solid transparent;color:#ccc;text-align:left;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;transition:.15s}
+.theme-option:hover{background:#262626;color:var(--accent)}
+.theme-option.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim1)}
+.theme-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);background:#1a1a1a;border:1px solid var(--accent);color:var(--accent);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:700;z-index:99999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.theme-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:600px){.theme-btn{font-size:11px;padding:3px 6px}.theme-menu{right:auto;left:0}}

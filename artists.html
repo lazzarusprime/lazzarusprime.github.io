@@ -10,60 +10,62 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="shared.js"></script>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
-.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden}
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel2);padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
-.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
-.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(var(--accent-rgb),.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,var(--accent) 45%,var(--accent-dark) 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(var(--accent-rgb),.6))}
 .socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
-.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
-.topBar{display:flex;flex-direction:column;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
+.socialLinks a:hover{color:var(--accent);border-color:#333;background:#1a1a1a}
+.topBar{display:flex;flex-direction:column;padding:8px 10px;background:var(--bg-panel4);position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
 .search-row input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
-.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
-.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
-.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:var(--accent);color:var(--accent)}
+.nav-btn.active-page{border-color:rgba(var(--accent-rgb),.33);color:var(--accent);background:var(--accent-dim1)}
+.nav-btn.spinning{pointer-events:none;border-color:var(--accent);color:var(--accent);background:#444}
 footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2}
 footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
-footer a:hover{color:#f1c40f;background:#1a1a1a}
+footer a:hover{color:var(--accent);background:#1a1a1a}
 .footer-sep{color:#2a2a2a;margin:0 2px}
 @media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-row{gap:4px}.nav-btn{padding:7px 9px;font-size:10px}.artistGrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;gap:8px!important;padding:10px!important}.titleBar .site-logo{width:36px;height:36px}}
-#genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:#141414;border-bottom:1px solid #222;justify-content:center}
+#genreBar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:var(--bg-panel2);border-bottom:1px solid #222;justify-content:center}
 .genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
-.genre-btn:hover{border-color:#f1c40f;color:#f1c40f}
-.genre-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.genre-btn:hover{border-color:var(--accent);color:var(--accent)}
+.genre-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
 #alphabet{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;justify-content:center}
 .alpha-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:11px;transition:.2s}
-.alpha-btn:hover{background:#444;border-color:#f1c40f;color:#f1c40f}
-.alpha-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
-#artistStats{background:#151515;border-bottom:1px solid #222}
+.alpha-btn:hover{background:#444;border-color:var(--accent);color:var(--accent)}
+.alpha-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
+#artistStats{background:var(--bg-panel3);border-bottom:1px solid #222}
 #artistToggle{cursor:pointer;margin:0;padding:10px 14px;font-size:14px;font-weight:700;user-select:none}
 #artistList{display:none;padding:10px 14px;border-top:1px solid #222;animation:slideDown .3s ease-out;columns:2;gap:20px}
 @media(max-width:500px){#artistList{columns:1}}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 #artistList div{padding:4px 0;cursor:pointer;transition:.15s;break-inside:avoid;font-size:13px}
-#artistList div:hover{color:#f1c40f;padding-left:4px}
+#artistList div:hover{color:var(--accent);padding-left:4px}
 .flame-effect{animation:warmPulse .6s ease-out}
-@keyframes warmPulse{0%{box-shadow:0 0 0 transparent}50%{box-shadow:inset 0 0 30px rgba(241,196,15,.15)}100%{box-shadow:0 0 0 transparent}}
-#activeFilters{display:none;padding:7px 12px;background:#181818;border-bottom:1px solid #222;font-size:13px;color:#888;text-align:center}
-#activeFilters span{color:#f1c40f}
+@keyframes warmPulse{0%{box-shadow:0 0 0 transparent}50%{box-shadow:inset 0 0 30px rgba(var(--accent-rgb),.15)}100%{box-shadow:0 0 0 transparent}}
+#activeFilters{display:none;padding:7px 12px;background:var(--bg-panel4);border-bottom:1px solid #222;font-size:13px;color:#888;text-align:center}
+#activeFilters span{color:var(--accent)}
 #activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
 .listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a}
 .listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#666;letter-spacing:.5px}
 .resultsCount{font-size:12px;color:#555}
-#sortBar{display:flex;gap:6px;padding:8px 12px;background:#141414;border-bottom:1px solid #222;align-items:center}
+#sortBar{display:flex;gap:6px;padding:8px 12px;background:var(--bg-panel2);border-bottom:1px solid #222;align-items:center}
 #sortBar span{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
 .sort-btn{background:transparent;color:#666;border:1px solid #333;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;transition:.2s}
-.sort-btn:hover{border-color:#f1c40f;color:#f1c40f}
-.sort-btn.active{background:#f1c40f22;border-color:#f1c40f;color:#f1c40f}
+.sort-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sort-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
 .artistGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:14px}
-.artistCard{background:#181818;border:1px solid #222;border-radius:8px;cursor:pointer;transition:.2s;overflow:hidden;display:flex;flex-direction:column}
-.artistCard:hover{border-color:#f1c40f;transform:translateY(-3px);box-shadow:0 6px 20px rgba(241,196,15,.12)}
+.artistCard{background:var(--bg-panel4);border:1px solid #222;border-radius:8px;cursor:pointer;transition:.2s;overflow:hidden;display:flex;flex-direction:column}
+.artistCard:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 6px 20px rgba(var(--accent-rgb),.12)}
 .artistCard:active{transform:translateY(0)}
-.artistCardArt{width:100%;aspect-ratio:1;object-fit:cover;background:#111;display:block}
+.artistCardArt{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg-panel);display:block}
 .artistCardArtPlaceholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1a1a1a,#222);display:flex;align-items:center;justify-content:center;font-size:36px;color:#333}
 .artistCardBody{padding:10px 10px 8px}
 .artistCardName{font-weight:700;font-size:14px;color:#fff;line-height:1.2;flex:1;min-width:0;word-break:break-word}
@@ -71,13 +73,13 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
 .artistCardGenre{font-size:10px;color:#555;margin-top:3px}
 /* MusicBrainz info link — artist cards */
 .info-link{color:#555;text-decoration:none;font-size:10px;font-weight:700;flex-shrink:0;margin-left:6px;padding:1px 5px;border-radius:3px;border:1px solid #2a2a2a;transition:.15s;white-space:nowrap;line-height:1.8;align-self:flex-start}
-.info-link:hover{color:#f1c40f;border-color:#f1c40f55;background:#1a1800}
+.info-link:hover{color:var(--accent);border-color:rgba(var(--accent-rgb),.33);background:var(--accent-dim1)}
 /* owned ratio bar */
 .ownedBar{height:3px;background:#222;border-radius:2px;margin-top:6px;overflow:hidden}
 .ownedBarFill{height:100%;background:linear-gradient(90deg,#27ae60,#4caf50);border-radius:2px;transition:width .4s}
-.ownedBarFill.partial{background:linear-gradient(90deg,#f39c12,#f1c40f)}
+.ownedBarFill.partial{background:linear-gradient(90deg,#f39c12,var(--accent))}
 .ownedBarFill.none{background:#e74c3c}
-.pagination{padding:12px;text-align:center;background:#111;border-bottom:1px solid #222}
+.pagination{padding:12px;text-align:center;background:var(--bg-panel);border-bottom:1px solid #222}
 </style>
 </head>
 <body>
@@ -88,6 +90,10 @@ footer a:hover{color:#f1c40f;background:#1a1a1a}
     <h2>Lazzarus Prime — Artists</h2>
   </div>
     <div class="socialLinks">
+      <div class="theme-switcher" id="themeSwitcher">
+        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 Theme</button>
+        <div class="theme-menu" id="themeMenu"></div>
+      </div>
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
     <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
     <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
