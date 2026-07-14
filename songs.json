@@ -155,6 +155,11 @@
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/dc/98/51/dc9851bd-9521-6fcb-c4b7-499f23b05498/18UMGIM09114.rgb.jpg/600x600bb.jpg"
     },
     {
+        "artist":  "5 Seconds of Summer",
+        "song":  "Youngblood P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/dc/98/51/dc9851bd-9521-6fcb-c4b7-499f23b05498/18UMGIM09114.rgb.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "50 Cent",
         "song":  "Hate It Or Love It Ft 50 Cent",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/51/a6/c9/51a6c989-f81d-42b3-c94c-e889a7c07885/06UMGIM15592.rgb.jpg/600x600bb.jpg"
@@ -833,6 +838,11 @@
         "artist":  "Alexisonfire",
         "song":  "Sons Of Privilege",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/40/41/8a/40418a8f-78dd-2089-a256-270cfb944f38/821826032385.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Alice Cooper",
+        "song":  "Unholy War",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/1a/60/9a/1a609a56-76da-8aa9-98c0-47050fbf54d2/603497073160.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Alice in Chains",
@@ -1707,17 +1717,17 @@
     {
         "artist":  "Asian Kung-Fu Generation",
         "song":  "Haruka Kanata",
-        "art":  "https://dn710302.ca.archive.org/0/items/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b-12986873248_thumb500.jpg"
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/48/96/3e/48963e5a-75d7-7a8b-132c-233f26ebd70d/jacket_KSCL01917B00Z_550.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Asian Kung-Fu Generation",
         "song":  "Rere2016ver",
-        "art":  "https://dn710302.ca.archive.org/0/items/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b-12986873248_thumb500.jpg"
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/48/96/3e/48963e5a-75d7-7a8b-132c-233f26ebd70d/jacket_KSCL01917B00Z_550.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Asian Kung-Fu Generation",
         "song":  "Riraito Rewrite",
-        "art":  "https://dn710302.ca.archive.org/0/items/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b/mbid-c8208be7-1045-4ed3-8ce1-d036dc44ae9b-12986873248_thumb500.jpg"
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/48/96/3e/48963e5a-75d7-7a8b-132c-233f26ebd70d/jacket_KSCL01917B00Z_550.jpg/600x600bb.jpg"
     },
     {
         "artist":  "ASIAN KUNG-FU GENERATION",
@@ -2046,7 +2056,17 @@
     },
     {
         "artist":  "Bananarama",
+        "song":  "Cruel Summer P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/90/6b/d2/906bd238-ac29-b0e6-03fe-a1f7321befd9/190295713270.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Bananarama",
         "song":  "Cruel Summer.1",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/90/6b/d2/906bd238-ac29-b0e6-03fe-a1f7321befd9/190295713270.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Bananarama",
+        "song":  "Cruel Summer.1 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/90/6b/d2/906bd238-ac29-b0e6-03fe-a1f7321befd9/190295713270.jpg/600x600bb.jpg"
     },
     {
@@ -2061,7 +2081,8 @@
     },
     {
         "artist":  "Band Aid",
-        "song":  "Do They Know It\u0027s Christmas"
+        "song":  "Do They Know It\u0027s Christmas",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/58/71/fc/5871fc45-fac8-df0c-a4de-1d13c02b27b2/14UMGIM56130.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Band Maid",
@@ -2500,6 +2521,11 @@
     },
     {
         "artist":  "Bee Gees",
+        "song":  "Tragedy P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/94/a7/5f/94a75fd1-17da-3a38-42dc-c5e35bf56046/16UMGIM86639.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Bee Gees",
         "song":  "You Should Be Dancing",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/94/a7/5f/94a75fd1-17da-3a38-42dc-c5e35bf56046/16UMGIM86639.rgb.jpg/600x600bb.jpg"
     },
@@ -2630,7 +2656,8 @@
     },
     {
         "artist":  "BFMV",
-        "song":  "The Last Fight"
+        "song":  "The Last Fight",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a7/ba/ee/a7baee51-d341-d9dc-075c-5c0c07538a6b/mzi.olssublm.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Biff Naked",
@@ -2639,7 +2666,8 @@
     },
     {
         "artist":  "Big Data",
-        "song":  "Dangerous"
+        "song":  "Dangerous",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/fe/8c/fc/fe8cfc89-8a70-b64a-ad15-baed48a3f2e7/5056167116172_1.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Big Mountain",
@@ -3293,6 +3321,11 @@
     },
     {
         "artist":  "Billy Talent",
+        "song":  "M P 2 P 2",
+        "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
+    },
+    {
+        "artist":  "Billy Talent",
         "song":  "Man Alive",
         "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
     },
@@ -3329,6 +3362,11 @@
     {
         "artist":  "Billy Talent",
         "song":  "P P 2",
+        "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
+    },
+    {
+        "artist":  "Billy Talent",
+        "song":  "P P 2 P 2",
         "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
     },
     {
@@ -3543,6 +3581,11 @@
     },
     {
         "artist":  "Billy Talent",
+        "song":  "The Ex P 2 P 2",
+        "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
+    },
+    {
+        "artist":  "Billy Talent",
         "song":  "The Navy Song",
         "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
     },
@@ -3613,6 +3656,11 @@
     },
     {
         "artist":  "Billy Talent",
+        "song":  "White Sparrows P 2 P 2",
+        "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
+    },
+    {
+        "artist":  "Billy Talent",
         "song":  "Wolf The",
         "art":  "https://dn721601.ca.archive.org/0/items/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7/mbid-0879216e-bed8-3c41-afcd-dcb082bc85a7-34394833932_thumb500.jpg"
     },
@@ -3640,6 +3688,11 @@
         "artist":  "Billy-Joe Armstrong",
         "song":  "Billie Joe Armstrong Of Green Day That Thing You Do",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/1c/eb/7d/1ceb7da7-5867-1f75-0fc9-536f6357f88c/054391972309.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Birthday Massacre",
+        "song":  "Blue Gojima",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/fb/f1/e3/fbf1e3d7-7ab3-9b6a-a062-ffd59625953c/782388083065_Cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "BJ Thomas",
@@ -4288,7 +4341,52 @@
     },
     {
         "artist":  "Blue Stones",
+        "song":  "Come Apart",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Dont Feel Right",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Falling Leaves",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Happy Cry",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Jesse James",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Lose My Name",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "New Immigrant",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
         "song":  "New Immigrant V1",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Scared Of The Dark",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Blue Stones",
+        "song":  "Your Master",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/a4/b5/99a4b537-1581-3e04-4c97-79820ef42aac/5905271087758.png/600x600bb.jpg"
     },
     {
@@ -4478,7 +4576,8 @@
     },
     {
         "artist":  "Bobby Blue Band",
-        "song":  "Farther Up The Road"
+        "song":  "Farther Up The Road",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/6d/24/b6/mzi.pwjapndi.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Bobby Hebb",
@@ -4577,15 +4676,18 @@
     },
     {
         "artist":  "Bonnie Raitt",
-        "song":  "I Can\u0027t Make You Love Me"
+        "song":  "I Can\u0027t Make You Love Me",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/80/f8/f3/80f8f307-ab30-6a8c-e727-80fdc8c0cadd/00724359049151.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Bonnie Raitt",
-        "song":  "I Can\u0027t Make You Love Me P 2"
+        "song":  "I Can\u0027t Make You Love Me P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/80/f8/f3/80f8f307-ab30-6a8c-e727-80fdc8c0cadd/00724359049151.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Bonnie Raitt",
-        "song":  "Something To Talk About"
+        "song":  "Something To Talk About",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/80/f8/f3/80f8f307-ab30-6a8c-e727-80fdc8c0cadd/00724359049151.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Bonnie Tyler",
@@ -5258,6 +5360,11 @@
         "art":  "https://dn721802.ca.archive.org/0/items/mbid-0295428e-30bf-460b-992a-3b83b788bc15/mbid-0295428e-30bf-460b-992a-3b83b788bc15-34283524532_thumb500.jpg"
     },
     {
+        "artist":  "Bryan Adams",
+        "song":  "Summer Of \u002769 Bojar P 2",
+        "art":  "https://dn721802.ca.archive.org/0/items/mbid-0295428e-30bf-460b-992a-3b83b788bc15/mbid-0295428e-30bf-460b-992a-3b83b788bc15-34283524532_thumb500.jpg"
+    },
+    {
         "artist":  "Buddy Guy",
         "song":  "A Man And The Blues V",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/8a/4f/1b/mzi.gmeyrmdu.jpg/600x600bb.jpg"
@@ -5719,6 +5826,11 @@
     },
     {
         "artist":  "Chris Cornell",
+        "song":  "Before We Disappear P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0a/8c/c4/0a8cc4a7-3357-8323-68f6-f7f8c4f17a89/00602567714675.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Chris Cornell",
         "song":  "Cant Change Me",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0a/8c/c4/0a8cc4a7-3357-8323-68f6-f7f8c4f17a89/00602567714675.rgb.jpg/600x600bb.jpg"
     },
@@ -6054,7 +6166,8 @@
     },
     {
         "artist":  "Chumbawumba",
-        "song":  "Tubthumping"
+        "song":  "Tubthumping",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e0/a1/ef/e0a1ef4a-6aa6-f614-6351-05a348fd4b56/13UABIM57031.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "CHVRCHES",
@@ -6095,6 +6208,11 @@
         "artist":  "Cold War Kids",
         "song":  "Hang Me Up To Dry",
         "art":  "https://dn710909.ca.archive.org/0/items/mbid-1cd89dd6-158f-43c8-8a36-70546defb4a9/mbid-1cd89dd6-158f-43c8-8a36-70546defb4a9-33924468639_thumb500.jpg"
+    },
+    {
+        "artist":  "Coldplay",
+        "song":  "Adventure Of A Lifetime",
+        "art":  "https://dn721907.ca.archive.org/0/items/mbid-03271bb1-a396-4038-a068-b7d5945c2c37/mbid-03271bb1-a396-4038-a068-b7d5945c2c37-32061600279_thumb500.jpg"
     },
     {
         "artist":  "Coldplay",
@@ -6733,7 +6851,8 @@
     },
     {
         "artist":  "Danilo Vicari",
-        "song":  "Sweet Child O\u0027 Mine But Bass And Guitar Are Swapped"
+        "song":  "Sweet Child O\u0027 Mine But Bass And Guitar Are Swapped",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/34/56/af/3456af88-a531-f8e5-3d62-82765c16034c/artwork.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Danko Jones",
@@ -7192,7 +7311,17 @@
     },
     {
         "artist":  "Dire Straights",
+        "song":  "Once Upon A Time In The West",
+        "art":  "https://dn710808.ca.archive.org/0/items/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7-1706679939_thumb500.jpg"
+    },
+    {
+        "artist":  "Dire Straights",
         "song":  "So Far Away",
+        "art":  "https://dn710808.ca.archive.org/0/items/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7-1706679939_thumb500.jpg"
+    },
+    {
+        "artist":  "Dire Straights",
+        "song":  "Southbound Again",
         "art":  "https://dn710808.ca.archive.org/0/items/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7/mbid-1a88b34a-a74b-3100-a901-a7302cc085e7-1706679939_thumb500.jpg"
     },
     {
@@ -7273,6 +7402,11 @@
     {
         "artist":  "DJ Jazzy Jeff and the Fresh Prince",
         "song":  "Dj Jazzy Jeff And The Fresh Prince Summertimedell",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/b2/ce/e3/b2cee338-f448-443d-1481-e89c752b75d4/dj.emstbgxj.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "DJ Jazzy Jeff and the Fresh Prince",
+        "song":  "Dj Jazzy Jeff And The Fresh Prince Summertimedell P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/b2/ce/e3/b2cee338-f448-443d-1481-e89c752b75d4/dj.emstbgxj.jpg/600x600bb.jpg"
     },
     {
@@ -7372,6 +7506,11 @@
     },
     {
         "artist":  "Don Henley",
+        "song":  "Boys Of Summer P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/97/e2/ea/97e2ea42-0f53-7a97-dc37-6bc20c5abe01/00602547138309.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Don Henley",
         "song":  "Dirty Laundry",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/97/e2/ea/97e2ea42-0f53-7a97-dc37-6bc20c5abe01/00602547138309.rgb.jpg/600x600bb.jpg"
     },
@@ -7397,7 +7536,17 @@
     },
     {
         "artist":  "Donna Summer",
+        "song":  "Bad Girls P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Donna Summer",
         "song":  "Hot Stuff",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Donna Summer",
+        "song":  "Hot Stuff P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -7407,7 +7556,17 @@
     },
     {
         "artist":  "Donna Summer",
+        "song":  "Last Dance V1 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Donna Summer",
         "song":  "Love To Love You Baby",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Donna Summer",
+        "song":  "Love To Love You Baby P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -7418,6 +7577,11 @@
     {
         "artist":  "Donna Summer",
         "song":  "She Works Hard For The Money P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Donna Summer",
+        "song":  "She Works Hard For The Money P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -7497,7 +7661,8 @@
     },
     {
         "artist":  "Dramaram",
-        "song":  "Anything Anything Ill Give You"
+        "song":  "Anything Anything Ill Give You",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/b9/73/0a/b9730a68-c5f6-4814-e62f-8c52d349827e/mzi.deyyjlgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Dream Theater",
@@ -7521,11 +7686,13 @@
     },
     {
         "artist":  "Ducktales",
-        "song":  "Disney Afternoon Studio Chorus The Ducktales Theme"
+        "song":  "Disney Afternoon Studio Chorus The Ducktales Theme",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/72/02/997202a5-f692-d670-7191-78b321cb4457/5063181283834_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Ducktales",
-        "song":  "Ducktales Theme V"
+        "song":  "Ducktales Theme V",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/99/72/02/997202a5-f692-d670-7191-78b321cb4457/5063181283834_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Duran Duran",
@@ -7554,7 +7721,8 @@
     },
     {
         "artist":  "DVDA",
-        "song":  "Now You\u0027re A Man"
+        "song":  "Now You\u0027re A Man",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/83/13/16/83131679-223d-a0f8-279b-3c823e89b0ab/5063812293720_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Dvididos",
@@ -7897,11 +8065,13 @@
     },
     {
         "artist":  "Elephant Gym",
-        "song":  "Finger"
+        "song":  "Finger",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/a6/b0/1ea6b05d-d165-8246-77d0-a10a582ab660/192641287268.png/600x600bb.jpg"
     },
     {
         "artist":  "Elephant Gym",
-        "song":  "Underwater"
+        "song":  "Underwater",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/a6/b0/1ea6b05d-d165-8246-77d0-a10a582ab660/192641287268.png/600x600bb.jpg"
     },
     {
         "artist":  "Ellie Goulding",
@@ -8577,6 +8747,26 @@
         "artist":  "Evanescence",
         "song":  "Wasted On You",
         "art":  "https://dn710302.ca.archive.org/0/items/mbid-6d782346-7f35-4813-8b9e-b1799fdc1eab/mbid-6d782346-7f35-4813-8b9e-b1799fdc1eab-1017996413_thumb500.jpg"
+    },
+    {
+        "artist":  "Eve",
+        "song":  "Dramaturgy",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/13/ce/6113ce9b-ce47-3b77-45d2-4bf18d089f37/mzi.gfjbvtrz.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Eve",
+        "song":  "Inochi No Tabekata",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/13/ce/6113ce9b-ce47-3b77-45d2-4bf18d089f37/mzi.gfjbvtrz.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Eve",
+        "song":  "Last Dance",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/13/ce/6113ce9b-ce47-3b77-45d2-4bf18d089f37/mzi.gfjbvtrz.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Eve",
+        "song":  "Tokyo Ghetto",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/13/ce/6113ce9b-ce47-3b77-45d2-4bf18d089f37/mzi.gfjbvtrz.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Everclear",
@@ -9450,6 +9640,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "In Your Honor P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "La Dee Da",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -9490,12 +9685,22 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "Let It Die P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "Line The",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Foo Fighters",
         "song":  "Line The P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "Line The P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
@@ -9526,6 +9731,11 @@
     {
         "artist":  "Foo Fighters",
         "song":  "M P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "M P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
@@ -9610,6 +9820,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "No Way Back P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "On The Mend",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -9640,6 +9855,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "P P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "Razor",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -9666,6 +9886,16 @@
     {
         "artist":  "Foo Fighters",
         "song":  "Resolve P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "Resolve P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "Rest",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
@@ -9770,6 +10000,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "Summers End P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "Sunday Rain",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -9870,6 +10105,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "V1 P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "Virginia Moon",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -9896,6 +10136,11 @@
     {
         "artist":  "Foo Fighters",
         "song":  "Waiting On A War P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "Waiting On A War P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
@@ -9946,6 +10191,11 @@
     {
         "artist":  "Foo Fighters",
         "song":  "White Limo P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
+        "song":  "White Limo P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
     {
@@ -10226,7 +10476,7 @@
     {
         "artist":  "FUN",
         "song":  "We Are Young",
-        "art":  "https://dn710702.ca.archive.org/0/items/mbid-59b51324-b897-4967-972b-c0b105a5cd2f/mbid-59b51324-b897-4967-972b-c0b105a5cd2f-13503072753_thumb500.jpg"
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/b2/df/a3/b2dfa32c-ea54-7983-0da1-6964e60a1bd7/dj.aqphuayl.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Fun",
@@ -10411,6 +10661,11 @@
     {
         "artist":  "George Michael",
         "song":  "Father Figure P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/87/29/d2/8729d243-f06f-e588-3ddf-ffa87a2ce17e/mzi.yupygcca.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "George Michael",
+        "song":  "Father Figure P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/87/29/d2/8729d243-f06f-e588-3ddf-ffa87a2ce17e/mzi.yupygcca.jpg/600x600bb.jpg"
     },
     {
@@ -10750,6 +11005,11 @@
     },
     {
         "artist":  "Gordon Lightfoot",
+        "song":  "Sundown P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/2d/3f/6c/2d3f6cc6-3162-50c9-eaed-c4051963fb63/mzi.cbqwbgfl.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Gordon Lightfoot",
         "song":  "Wreck Of The Edmund Fitzgerald The",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/2d/3f/6c/2d3f6cc6-3162-50c9-eaed-c4051963fb63/mzi.cbqwbgfl.jpg/600x600bb.jpg"
     },
@@ -10935,6 +11195,11 @@
     },
     {
         "artist":  "Grease",
+        "song":  "Summer Nights P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/64/6c/f1/646cf1e4-4a53-5e78-e7fd-b16b28450d5d/artwork.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Grease",
         "song":  "We Go Together",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/64/6c/f1/646cf1e4-4a53-5e78-e7fd-b16b28450d5d/artwork.jpg/600x600bb.jpg"
     },
@@ -11021,6 +11286,11 @@
     {
         "artist":  "Green Day",
         "song":  "Corvette Summer P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Green Day",
+        "song":  "Corvette Summer P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
     },
     {
@@ -11185,6 +11455,11 @@
     },
     {
         "artist":  "Green Day",
+        "song":  "M P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Green Day",
         "song":  "Maria",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
     },
@@ -11231,6 +11506,11 @@
     {
         "artist":  "Green Day",
         "song":  "P P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Green Day",
+        "song":  "P P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
     },
     {
@@ -11719,6 +11999,11 @@
         "art":  "https://ia800901.us.archive.org/4/items/mbid-30187819-1e8e-4087-b671-ac29ebf06863/mbid-30187819-1e8e-4087-b671-ac29ebf06863-42805396520_thumb500.jpg"
     },
     {
+        "artist":  "Hank Levy",
+        "song":  "Whiplash",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/ed/2f/3d/ed2f3d83-54a6-0ea6-bc53-07be0c6ddff1/887396419315.tif/600x600bb.jpg"
+    },
+    {
         "artist":  "Hank Williams",
         "song":  "Hey Good Lookin",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/cb/3a/ef/cb3aef18-bae8-19c1-cb91-d4278481798e/06UMGIM07035.rgb.jpg/600x600bb.jpg"
@@ -12159,6 +12444,11 @@
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/63/e7/a1/63e7a164-6760-396a-b1cc-0b1240115de4/cover.jpg/600x600bb.jpg"
     },
     {
+        "artist":  "Hypocrisy",
+        "song":  "Roswell 47",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/63/e7/a1/63e7a164-6760-396a-b1cc-0b1240115de4/cover.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "I Mother Earth",
         "song":  "One More Astronaut",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/86/46/16/86461605-e760-bd52-019d-dc829d708aab/05099967939756.jpg/600x600bb.jpg"
@@ -12311,6 +12601,11 @@
     {
         "artist":  "Imagine Dragons",
         "song":  "Summer",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3f/80/a8/3f80a8ef-5409-42ac-c126-c7354698c7fc/18UMGIM65849.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Imagine Dragons",
+        "song":  "Summer P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3f/80/a8/3f80a8ef-5409-42ac-c126-c7354698c7fc/18UMGIM65849.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -12475,6 +12770,11 @@
     },
     {
         "artist":  "Incubus",
+        "song":  "Favorite Things P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Incubus",
         "song":  "Glass",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
     },
@@ -12616,6 +12916,11 @@
     {
         "artist":  "Incubus",
         "song":  "Summer Romance Anti Gravity Love Song P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Incubus",
+        "song":  "Summer Romance Anti Gravity Love Song P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
     },
     {
@@ -13305,6 +13610,11 @@
     },
     {
         "artist":  "James Taylor",
+        "song":  "Fire And Rain P 2 P 2",
+        "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
+    },
+    {
+        "artist":  "James Taylor",
         "song":  "Handy Man",
         "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
     },
@@ -13341,6 +13651,11 @@
     {
         "artist":  "James Taylor",
         "song":  "Something In The Way She Moves P 2",
+        "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
+    },
+    {
+        "artist":  "James Taylor",
+        "song":  "Something In The Way She Moves P 2 P 2",
         "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
     },
     {
@@ -13609,6 +13924,11 @@
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/77/e5/05/mzi.wpgmdbsr.jpg/600x600bb.jpg"
     },
     {
+        "artist":  "Janis Joplin",
+        "song":  "Summertime P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/77/e5/05/mzi.wpgmdbsr.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "Janis Joplin and Big Brother Holding Company",
         "song":  "Piece Of My Heart",
         "art":  "https://ia802809.us.archive.org/14/items/mbid-01ac30e4-4ada-43fa-8cab-f22fe9a2dce4/mbid-01ac30e4-4ada-43fa-8cab-f22fe9a2dce4-24884758513_thumb500.jpg"
@@ -13795,7 +14115,8 @@
     },
     {
         "artist":  "Jem \u0026 The Holograms",
-        "song":  "Truly Outrageous"
+        "song":  "Truly Outrageous",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4b/40/37/4b403701-1a25-b52c-c333-5ee204132b75/199350325762.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Jennifer Lopez",
@@ -13895,6 +14216,11 @@
     {
         "artist":  "Jimi Hendrix",
         "song":  "All Along The Watchtower P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Jimi Hendrix",
+        "song":  "All Along The Watchtower P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
     },
     {
@@ -14060,6 +14386,11 @@
     {
         "artist":  "Jimi Hendrix",
         "song":  "Hey Joe P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Jimi Hendrix",
+        "song":  "Hey Joe P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
     },
     {
@@ -14259,6 +14590,11 @@
     },
     {
         "artist":  "Jimi Hendrix",
+        "song":  "Stone Free P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Jimi Hendrix",
         "song":  "Sunshine Of Your Love",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
     },
@@ -14295,6 +14631,11 @@
     {
         "artist":  "Jimi Hendrix",
         "song":  "Voodoo Chile Blues P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Jimi Hendrix",
+        "song":  "Voodoo Chile Blues P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/e9/b9/53e9b9f0-97f4-aac7-ee5b-12c2f2007ad3/884977413878.jpg/600x600bb.jpg"
     },
     {
@@ -14374,6 +14715,11 @@
     },
     {
         "artist":  "Joan Jett",
+        "song":  "Summertime Blues P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/49/f7/8b/49f78bb0-c748-1c5c-e634-b1cad8fbe803/074644414622.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Joan Jett",
         "song":  "You Drive Me Wild V",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/49/f7/8b/49f78bb0-c748-1c5c-e634-b1cad8fbe803/074644414622.jpg/600x600bb.jpg"
     },
@@ -14409,6 +14755,11 @@
     },
     {
         "artist":  "Joe Cocker",
+        "song":  "Summer In The City P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/45/bc/c5/45bcc533-2360-4f8d-b783-343c13d6b800/06UMGIM03749.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Joe Cocker",
         "song":  "The Letter",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/45/bc/c5/45bcc533-2360-4f8d-b783-343c13d6b800/06UMGIM03749.rgb.jpg/600x600bb.jpg"
     },
@@ -14429,7 +14780,8 @@
     },
     {
         "artist":  "Joe Exotic",
-        "song":  "Here Kitty Kitty"
+        "song":  "Here Kitty Kitty",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/dc/73/91/dc73918e-0699-9836-cc97-6937b917bd35/859782736313_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Joe Jackson",
@@ -14618,35 +14970,43 @@
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Authority Song"
+        "song":  "Authority Song",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Big Jack The"
+        "song":  "Big Jack The",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Hurts So Good {Crossbplt242}"
+        "song":  "Hurts So Good {Crossbplt242}",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Hurts So Good V1"
+        "song":  "Hurts So Good V1",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Hurts So Good V1 P (1)"
+        "song":  "Hurts So Good V1 P (1)",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "John Mellencamp And Meshell Ndegeocello Wild Night"
+        "song":  "John Mellencamp And Meshell Ndegeocello Wild Night",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Lonely Ol Night"
+        "song":  "Lonely Ol Night",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Cougar Mellencamp",
-        "song":  "Rock In The Usa {Crossbolt242}"
+        "song":  "Rock In The Usa {Crossbolt242}",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/03/cd/d003cdda-f01e-4ee9-906d-8242a2d0b2bd/06UMGIM20400.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "John Denver",
@@ -15625,7 +15985,8 @@
     },
     {
         "artist":  "Kelis",
-        "song":  "Milkshake"
+        "song":  "Milkshake",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/89/46/6d/89466db6-26bf-9131-b042-e8217c7c6c28/5021392891699.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Kelly Clarkson",
@@ -15649,7 +16010,8 @@
     },
     {
         "artist":  "Ken Ashcorp",
-        "song":  "Absolute Territory"
+        "song":  "Absolute Territory",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a4/c2/a2/a4c2a28a-2eda-9b25-650c-23f56640b3d5/mzi.vlhcxfak.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Kendrick Lamar",
@@ -15744,6 +16106,11 @@
     {
         "artist":  "Kid Rock",
         "song":  "All Summer Long",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ba/10/fe/ba10fe4d-cf66-041f-4711-46ec7d7dc04d/dj.qprjhunf.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Kid Rock",
+        "song":  "All Summer Long P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ba/10/fe/ba10fe4d-cf66-041f-4711-46ec7d7dc04d/dj.qprjhunf.jpg/600x600bb.jpg"
     },
     {
@@ -15973,6 +16340,11 @@
     },
     {
         "artist":  "Kool \u0026 The Gang",
+        "song":  "Summer Madness P 2",
+        "art":  "https://dn711107.ca.archive.org/0/items/mbid-0ef7734b-5d57-4c49-b700-339134ed1045/mbid-0ef7734b-5d57-4c49-b700-339134ed1045-14249718749_thumb500.jpg"
+    },
+    {
+        "artist":  "Kool \u0026 The Gang",
         "song":  "Take My Heart",
         "art":  "https://dn711107.ca.archive.org/0/items/mbid-0ef7734b-5d57-4c49-b700-339134ed1045/mbid-0ef7734b-5d57-4c49-b700-339134ed1045-14249718749_thumb500.jpg"
     },
@@ -16088,7 +16460,8 @@
     },
     {
         "artist":  "Lady Antebellum",
-        "song":  "Need You Now"
+        "song":  "Need You Now",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8f/60/92/8f6092a6-8efb-c71b-20d1-81da6be2a716/13UABIM57670.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Lady Gaga",
@@ -16178,6 +16551,11 @@
     {
         "artist":  "Led Zeppelin",
         "song":  "All My Love P 2",
+        "art":  "https://dn721303.ca.archive.org/0/items/mbid-3df3b60f-d6e1-3af9-913f-0014e73650ee/mbid-3df3b60f-d6e1-3af9-913f-0014e73650ee-7207589209_thumb500.jpg"
+    },
+    {
+        "artist":  "Led Zeppelin",
+        "song":  "All My Love P 2 P 2",
         "art":  "https://dn721303.ca.archive.org/0/items/mbid-3df3b60f-d6e1-3af9-913f-0014e73650ee/mbid-3df3b60f-d6e1-3af9-913f-0014e73650ee-7207589209_thumb500.jpg"
     },
     {
@@ -17197,6 +17575,11 @@
     },
     {
         "artist":  "Limp Bizkit",
+        "song":  "Breaking The Habit P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Limp Bizkit",
         "song":  "Build A Bridge",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
     },
@@ -17223,6 +17606,11 @@
     {
         "artist":  "Limp Bizkit",
         "song":  "Burning In The Skies P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Limp Bizkit",
+        "song":  "Burning In The Skies P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -17617,6 +18005,11 @@
     },
     {
         "artist":  "Limp Bizkit",
+        "song":  "Nookie P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Limp Bizkit",
         "song":  "One More Light",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
     },
@@ -17847,6 +18240,11 @@
     },
     {
         "artist":  "Limp Bizkit",
+        "song":  "Two Faceddell P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Limp Bizkit",
         "song":  "Until It Breakstinfoilpowerless V",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b2/70/c8/b270c885-3e28-3dfa-3bd3-faa6e5fa8540/15UMGIM36851.rgb.jpg/600x600bb.jpg"
     },
@@ -18002,6 +18400,11 @@
     },
     {
         "artist":  "Linkin Park",
+        "song":  "Breaking The Habit P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Linkin Park",
         "song":  "Burn It Down",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
     },
@@ -18018,6 +18421,11 @@
     {
         "artist":  "Linkin Park",
         "song":  "Burning In The Skies P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Linkin Park",
+        "song":  "Burning In The Skies P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
     },
     {
@@ -18602,6 +19010,11 @@
     },
     {
         "artist":  "Linkin Park",
+        "song":  "Two Faceddell P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Linkin Park",
         "song":  "Until It Breakstinfoilpowerless V",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
     },
@@ -18678,6 +19091,11 @@
     {
         "artist":  "Linkin Park",
         "song":  "With You P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Linkin Park",
+        "song":  "With You P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ae/96/55/ae965544-a29d-5355-910a-1cc14dab7542/contsched.ltemslzy.jpg/600x600bb.jpg"
     },
     {
@@ -18892,7 +19310,8 @@
     },
     {
         "artist":  "Lorenzo Ceci",
-        "song":  "Order Of Chaos"
+        "song":  "Order Of Chaos",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/62/50/fa/6250fa1a-5b1e-104a-2ea3-5d2d690abc32/artwork.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Loretta Lynn",
@@ -19746,6 +20165,11 @@
     },
     {
         "artist":  "Me First and The Gimme Gimmes",
+        "song":  "Summertime P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/eb/ed/7e/ebed7efe-945d-be34-1f8b-08d0b3310d34/mzi.iihtkoja.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Me First and The Gimme Gimmes",
         "song":  "Times They Are A Changin",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/eb/ed/7e/ebed7efe-945d-be34-1f8b-08d0b3310d34/mzi.iihtkoja.jpg/600x600bb.jpg"
     },
@@ -19827,6 +20251,11 @@
     {
         "artist":  "Megan Thee Stallion",
         "song":  "Hot Girl Summer (Feat. Nicki Minaj \u0026 Ty Dolla Sign)",
+        "art":  "https://dn721504.ca.archive.org/0/items/mbid-5d35e14d-e926-42bc-9494-ed2e0df3f338/mbid-5d35e14d-e926-42bc-9494-ed2e0df3f338-23161278832_thumb500.jpg"
+    },
+    {
+        "artist":  "Megan Thee Stallion",
+        "song":  "Hot Girl Summer (Feat. Nicki Minaj \u0026 Ty Dolla Sign) P 2",
         "art":  "https://dn721504.ca.archive.org/0/items/mbid-5d35e14d-e926-42bc-9494-ed2e0df3f338/mbid-5d35e14d-e926-42bc-9494-ed2e0df3f338-23161278832_thumb500.jpg"
     },
     {
@@ -19961,6 +20390,11 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "And Justice For All P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Anesthesia Pulling Teeth",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
@@ -19987,6 +20421,11 @@
     {
         "artist":  "Metallica",
         "song":  "Battery P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "Battery P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -20111,6 +20550,11 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "Don\u0027t Tread On Me P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Dyers Eve",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
@@ -20146,12 +20590,22 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "Fade To Black P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Fight Fire With Fire",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
         "artist":  "Metallica",
         "song":  "Fight Fire With Fire P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "Fight Fire With Fire P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -20217,6 +20671,11 @@
     {
         "artist":  "Metallica",
         "song":  "I Disappear P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "I Disappear P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -20341,6 +20800,11 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "Master Of Puppets P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Memory Remains",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
@@ -20427,6 +20891,11 @@
     {
         "artist":  "Metallica",
         "song":  "One P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "One P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -20536,6 +21005,11 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "Sad But True P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Seek And Destroy",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
@@ -20562,6 +21036,11 @@
     {
         "artist":  "Metallica",
         "song":  "Shortest Straw P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "Shortest Straw P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -20706,12 +21185,22 @@
     },
     {
         "artist":  "Metallica",
+        "song":  "To Live Is To Die P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
         "song":  "Trapped Under Ice",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
         "artist":  "Metallica",
         "song":  "Trapped Under Ice P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
+    },
+    {
+        "artist":  "Metallica",
+        "song":  "Trapped Under Ice P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/7a/74/0f7a7472-92fa-e77d-384a-1e4304705e83/dj.jbiruenb.png/600x600bb.jpg"
     },
     {
@@ -21286,15 +21775,18 @@
     },
     {
         "artist":  "Misses Green Apple",
-        "song":  "Inferno"
+        "song":  "Inferno",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e2/02/6d/e2026db1-a828-6437-2db1-536e454fe044/00602557312133.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Misses Green Apple",
-        "song":  "Liliac"
+        "song":  "Liliac",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e2/02/6d/e2026db1-a828-6437-2db1-536e454fe044/00602557312133.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Misses Green Apple",
-        "song":  "Romanticism"
+        "song":  "Romanticism",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e2/02/6d/e2026db1-a828-6437-2db1-536e454fe044/00602557312133.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "mission impossible theme",
@@ -21502,7 +21994,8 @@
     },
     {
         "artist":  "MrBig",
-        "song":  "Daddybrotherloverlittleboy"
+        "song":  "Daddybrotherloverlittleboy",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/dd/1f/b2/mzi.ylrouqhq.tif/600x600bb.jpg"
     },
     {
         "artist":  "Muddy Waters",
@@ -21711,7 +22204,8 @@
     },
     {
         "artist":  "Nachblut",
-        "song":  "Ich Trinke Blut"
+        "song":  "Ich Trinke Blut",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ac/a2/ec/aca2ec4c-a376-2a7d-135d-775acad65075/810170320262.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Nachtblut",
@@ -21797,6 +22291,11 @@
         "artist":  "Nate Dogg",
         "song":  "I Got Love",
         "art":  "https://dn710908.ca.archive.org/0/items/mbid-5d8d1421-fca4-4009-89a2-6fd3c591a528/mbid-5d8d1421-fca4-4009-89a2-6fd3c591a528-11183633466_thumb500.jpg"
+    },
+    {
+        "artist":  "Natori",
+        "song":  "Overdose",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/63/fb/14/63fb149b-4b27-ac16-3029-e815083e16e2/196925612890.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Nazareth",
@@ -22250,6 +22749,11 @@
     },
     {
         "artist":  "Nickelback",
+        "song":  "Believe It Or Not P 2 P 2",
+        "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
+    },
+    {
+        "artist":  "Nickelback",
         "song":  "Betrayal Act I The",
         "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
     },
@@ -22396,6 +22900,11 @@
     {
         "artist":  "Nickelback",
         "song":  "Figured You Out P 2",
+        "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
+    },
+    {
+        "artist":  "Nickelback",
+        "song":  "Figured You Out P 2 P 2",
         "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
     },
     {
@@ -22611,6 +23120,11 @@
     {
         "artist":  "Nickelback",
         "song":  "P P 2",
+        "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
+    },
+    {
+        "artist":  "Nickelback",
+        "song":  "P P 2 P 2",
         "art":  "https://dn711102.ca.archive.org/0/items/mbid-26374035-ce6e-4eb9-a78e-69f313319f04/mbid-26374035-ce6e-4eb9-a78e-69f313319f04-39875275290_thumb500.jpg"
     },
     {
@@ -23395,6 +23909,11 @@
     },
     {
         "artist":  "Norman Greenbaum",
+        "song":  "Spirit In The Sky P 2 P 2",
+        "art":  "https://dn710903.ca.archive.org/0/items/mbid-03591e03-fbb4-43a3-863b-e0e230daf357/mbid-03591e03-fbb4-43a3-863b-e0e230daf357-11168554515_thumb500.jpg"
+    },
+    {
+        "artist":  "Norman Greenbaum",
         "song":  "Spirit In The Sky V",
         "art":  "https://dn710903.ca.archive.org/0/items/mbid-03591e03-fbb4-43a3-863b-e0e230daf357/mbid-03591e03-fbb4-43a3-863b-e0e230daf357-11168554515_thumb500.jpg"
     },
@@ -23557,6 +24076,16 @@
         "artist":  "Ok Go",
         "song":  "Go Here It Goes Again",
         "art":  "https://dn721700.ca.archive.org/0/items/mbid-3b7c6979-25f9-45bf-986c-cb5f30f4706d/mbid-3b7c6979-25f9-45bf-986c-cb5f30f4706d-9992416751_thumb500.jpg"
+    },
+    {
+        "artist":  "Olivia Dean",
+        "song":  "Man I Need Djpavs",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/08/e2/21/08e22164-7c0b-1522-818f-e0e74f62dc49/25UMGIM69703.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Olivia Dean",
+        "song":  "So Easy To Fall In Love Djpavs",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/08/e2/21/08e22164-7c0b-1522-818f-e0e74f62dc49/25UMGIM69703.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Olivia Newton-John",
@@ -24875,6 +25404,11 @@
     },
     {
         "artist":  "Pink Floyd",
+        "song":  "Another Brick In The Wall Part 2 P 2 P 2",
+        "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
+    },
+    {
+        "artist":  "Pink Floyd",
         "song":  "Another Brick In The Wall Parts I Iii",
         "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
     },
@@ -25045,6 +25579,11 @@
     },
     {
         "artist":  "Pink Floyd",
+        "song":  "Mother P 2 P 2",
+        "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
+    },
+    {
+        "artist":  "Pink Floyd",
         "song":  "Nobody Home",
         "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
     },
@@ -25071,6 +25610,11 @@
     {
         "artist":  "Pink Floyd",
         "song":  "Pigs (Three Different Ones) P 2",
+        "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
+    },
+    {
+        "artist":  "Pink Floyd",
+        "song":  "Pigs (Three Different Ones) P 2 P 2",
         "art":  "https://dn710702.ca.archive.org/0/items/mbid-04bc55af-516a-35cd-9c69-eab8f151873e/mbid-04bc55af-516a-35cd-9c69-eab8f151873e-14473261077_thumb500.jpg"
     },
     {
@@ -25849,6 +26393,11 @@
     },
     {
         "artist":  "Queens of the Stone Age",
+        "song":  "Feel Good Hit Of The Summer P 2",
+        "art":  "https://dn721808.ca.archive.org/0/items/mbid-2afba28e-4ba4-3947-9b01-e5552233da09/mbid-2afba28e-4ba4-3947-9b01-e5552233da09-4301817433_thumb500.jpg"
+    },
+    {
+        "artist":  "Queens of the Stone Age",
         "song":  "Feet Don\u0027t Fail Me",
         "art":  "https://dn721808.ca.archive.org/0/items/mbid-2afba28e-4ba4-3947-9b01-e5552233da09/mbid-2afba28e-4ba4-3947-9b01-e5552233da09-4301817433_thumb500.jpg"
     },
@@ -26299,7 +26848,8 @@
     },
     {
         "artist":  "Rage",
-        "song":  "From The Cradle To The Grave"
+        "song":  "From The Cradle To The Grave",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/94/9b/e0/949be070-d7ea-d572-0d31-bad9b48fe6ad/4001617091098.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rage Against The Machine",
@@ -26383,6 +26933,11 @@
     },
     {
         "artist":  "Rage Against The Machine",
+        "song":  "Freedom P 2 P 2",
+        "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
+    },
+    {
+        "artist":  "Rage Against The Machine",
         "song":  "Ghost Of Tom Joad The",
         "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
     },
@@ -26423,12 +26978,22 @@
     },
     {
         "artist":  "Rage Against The Machine",
+        "song":  "M P 2 P 2",
+        "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
+    },
+    {
+        "artist":  "Rage Against The Machine",
         "song":  "Maggies Farm",
         "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
     },
     {
         "artist":  "Rage Against The Machine",
         "song":  "Maggies Farm P 2",
+        "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
+    },
+    {
+        "artist":  "Rage Against The Machine",
+        "song":  "Microhone Fiend",
         "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
     },
     {
@@ -26449,6 +27014,11 @@
     {
         "artist":  "Rage Against The Machine",
         "song":  "P P 2",
+        "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
+    },
+    {
+        "artist":  "Rage Against The Machine",
+        "song":  "P P 2 P 2",
         "art":  "https://dn710606.ca.archive.org/0/items/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89/mbid-20fd2c8f-671c-4ebe-921b-39204dde8f89-14831559261_thumb500.jpg"
     },
     {
@@ -27448,7 +28018,17 @@
     },
     {
         "artist":  "REM",
+        "song":  "Bang And Blame P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
         "song":  "Driver 8",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Driver 8 P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27458,7 +28038,17 @@
     },
     {
         "artist":  "REM",
+        "song":  "Electrolite P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
         "song":  "Its The End Of The World As We Know It And I Feel Fine",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Its The End Of The World As We Know It And I Feel Fine P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27468,7 +28058,17 @@
     },
     {
         "artist":  "REM",
+        "song":  "Laughing P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
         "song":  "Man On The Moon",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Man On The Moon P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27478,7 +28078,17 @@
     },
     {
         "artist":  "REM",
+        "song":  "Near Wild Heaven P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
         "song":  "Orange Crush",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Orange Crush P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27488,7 +28098,17 @@
     },
     {
         "artist":  "REM",
+        "song":  "Shaking Through P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
         "song":  "Stand",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Stand P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27499,6 +28119,11 @@
     {
         "artist":  "REM",
         "song":  "Texarkana P 2",
+        "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
+    },
+    {
+        "artist":  "REM",
+        "song":  "Texarkana P 2 P 2",
         "art":  "https://dn710603.ca.archive.org/0/items/mbid-10f4f4ca-d983-4dda-9095-b89d58882953/mbid-10f4f4ca-d983-4dda-9095-b89d58882953-17691120013_thumb500.jpg"
     },
     {
@@ -27528,7 +28153,8 @@
     },
     {
         "artist":  "RHCP",
-        "song":  "Walkabout1.1"
+        "song":  "Walkabout1.1",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/00/8c/9a/008c9ad2-409a-a830-7e4d-ec5b5085415a/093624954811.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rheostatics",
@@ -27597,23 +28223,28 @@
     },
     {
         "artist":  "Rihana",
-        "song":  "California King Bed"
+        "song":  "California King Bed",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/85/90/4c859051-e42e-9a4d-e9e0-ec00419c4a80/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rihana",
-        "song":  "Four Five Seconds"
+        "song":  "Four Five Seconds",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/85/90/4c859051-e42e-9a4d-e9e0-ec00419c4a80/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rihana",
-        "song":  "Monster"
+        "song":  "Monster",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/85/90/4c859051-e42e-9a4d-e9e0-ec00419c4a80/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rihana",
-        "song":  "Stay (Feat Mikky Ekko)"
+        "song":  "Stay (Feat Mikky Ekko)",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/85/90/4c859051-e42e-9a4d-e9e0-ec00419c4a80/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rihana",
-        "song":  "Umbrella"
+        "song":  "Umbrella",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/85/90/4c859051-e42e-9a4d-e9e0-ec00419c4a80/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rihanna",
@@ -27648,7 +28279,7 @@
     {
         "artist":  "Rise Against",
         "song":  "Life Less Frightening",
-        "art":  "https://dn710005.ca.archive.org/0/items/mbid-4c951f85-3df4-4d0f-8011-dd192ef8c643/mbid-4c951f85-3df4-4d0f-8011-dd192ef8c643-17000635241_thumb500.jpg"
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/6b/65/1b/6b651b33-a58a-5f91-a429-3178897356fd/mzi.jhgbbzxt.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rise against",
@@ -27872,7 +28503,17 @@
     },
     {
         "artist":  "Rolling Stones",
+        "song":  "Honky Tonk Women P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
         "song":  "Its Only Rocknroll But I Like It Syvaa",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
+        "song":  "Its Only Rocknroll But I Like It Syvaa P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -27882,7 +28523,17 @@
     },
     {
         "artist":  "Rolling Stones",
+        "song":  "Let It Loose Syvaa P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
         "song":  "M",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
+        "song":  "M P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -27892,7 +28543,17 @@
     },
     {
         "artist":  "Rolling Stones",
+        "song":  "No Expectations P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
         "song":  "Out Of Time",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
+        "song":  "Out Of Time P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -27902,12 +28563,27 @@
     },
     {
         "artist":  "Rolling Stones",
+        "song":  "P P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
         "song":  "Sweet Virginia",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Rolling Stones",
+        "song":  "Sweet Virginia P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
         "song":  "Time Is On My Side",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Rolling Stones",
+        "song":  "Time Is On My Side P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b7/81/29b781e5-3773-c87e-c6a8-82581e53d270/13ABKIM00053.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -29047,6 +29723,11 @@
     },
     {
         "artist":  "Sam Cooke",
+        "song":  "Another Saturday Night P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/81/75/17/817517e7-6f6b-c43c-dcea-8fac270ea4e7/886445744330.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Sam Cooke",
         "song":  "Bring It On Home To Me",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/81/75/17/817517e7-6f6b-c43c-dcea-8fac270ea4e7/886445744330.jpg/600x600bb.jpg"
     },
@@ -29160,26 +29841,6 @@
         "art":  "https://dn710709.ca.archive.org/0/items/mbid-24c2ac63-264a-4f9c-ae0e-f3e62f5a4a4c/mbid-24c2ac63-264a-4f9c-ae0e-f3e62f5a4a4c-12088028728_thumb500.jpg"
     },
     {
-        "artist":  "Saturday",
-        "song":  "Another Saturday Night",
-        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d3/d1/1b/d3d11b76-19b3-21d6-4836-2d3a76a13c40/192914122401.jpg/600x600bb.jpg"
-    },
-    {
-        "artist":  "Saturday",
-        "song":  "Dark Saturday",
-        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d3/d1/1b/d3d11b76-19b3-21d6-4836-2d3a76a13c40/192914122401.jpg/600x600bb.jpg"
-    },
-    {
-        "artist":  "Saturday",
-        "song":  "Saturday Night Special",
-        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d3/d1/1b/d3d11b76-19b3-21d6-4836-2d3a76a13c40/192914122401.jpg/600x600bb.jpg"
-    },
-    {
-        "artist":  "Saturday",
-        "song":  "Saturday Nights Alright For Fighting",
-        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d3/d1/1b/d3d11b76-19b3-21d6-4836-2d3a76a13c40/192914122401.jpg/600x600bb.jpg"
-    },
-    {
         "artist":  "Satyricon",
         "song":  "Black Crow On A Tombstone",
         "art":  "https://dn711105.ca.archive.org/0/items/mbid-0b564824-177f-4113-8c67-2edcc68d4da0/mbid-0b564824-177f-4113-8c67-2edcc68d4da0-20615702191_thumb500.jpg"
@@ -29196,7 +29857,8 @@
     },
     {
         "artist":  "Scrantones",
-        "song":  "Office Theme"
+        "song":  "Office Theme",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/60/e1/9f/60e19f0f-d041-3493-2400-8fc9a61543e0/780163677621.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Seal",
@@ -29960,7 +30622,8 @@
     },
     {
         "artist":  "Slackjaw",
-        "song":  "Mean It"
+        "song":  "Mean It",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/af/32/06/af3206ed-658d-670b-3121-e0618312502c/artwork.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Slash",
@@ -30154,6 +30817,11 @@
     },
     {
         "artist":  "Sly \u0026 The Family Stone",
+        "song":  "Hot Fun In The Summertime P 2",
+        "art":  "https://dn710206.ca.archive.org/0/items/mbid-13a61b22-7072-4561-a939-4abb4c823b1f/mbid-13a61b22-7072-4561-a939-4abb4c823b1f-39586215259_thumb500.jpg"
+    },
+    {
+        "artist":  "Sly \u0026 The Family Stone",
         "song":  "I Want To Take You Higher",
         "art":  "https://dn710206.ca.archive.org/0/items/mbid-13a61b22-7072-4561-a939-4abb4c823b1f/mbid-13a61b22-7072-4561-a939-4abb4c823b1f-39586215259_thumb500.jpg"
     },
@@ -30170,6 +30838,11 @@
     {
         "artist":  "Sly and The Family Stone",
         "song":  "Hot Fun In The Summertime",
+        "art":  "https://dn710206.ca.archive.org/0/items/mbid-13a61b22-7072-4561-a939-4abb4c823b1f/mbid-13a61b22-7072-4561-a939-4abb4c823b1f-39586215259_thumb500.jpg"
+    },
+    {
+        "artist":  "Sly and The Family Stone",
+        "song":  "Hot Fun In The Summertime P 2",
         "art":  "https://dn710206.ca.archive.org/0/items/mbid-13a61b22-7072-4561-a939-4abb4c823b1f/mbid-13a61b22-7072-4561-a939-4abb4c823b1f-39586215259_thumb500.jpg"
     },
     {
@@ -30344,6 +31017,11 @@
     },
     {
         "artist":  "Sonic Youth",
+        "song":  "Dirty Boots",
+        "art":  "https://dn721608.ca.archive.org/0/items/mbid-ff861234-0ed7-3d90-b365-32acb6f8fcfb/mbid-ff861234-0ed7-3d90-b365-32acb6f8fcfb-28361084778_thumb500.jpg"
+    },
+    {
+        "artist":  "Sonic Youth",
         "song":  "Teenage Riot",
         "art":  "https://dn721608.ca.archive.org/0/items/mbid-ff861234-0ed7-3d90-b365-32acb6f8fcfb/mbid-ff861234-0ed7-3d90-b365-32acb6f8fcfb-28361084778_thumb500.jpg"
     },
@@ -30374,7 +31052,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Birth Ritual P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Black Rain",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Black Rain P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30394,7 +31082,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Bones Of Birds P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Boot Camp",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Boot Camp P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30405,6 +31103,11 @@
     {
         "artist":  "Soundgarden",
         "song":  "Burden In My Hand P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Day I Tried To Live",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30424,6 +31127,11 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Drawing Flies P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Dusty",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
@@ -30435,6 +31143,11 @@
     {
         "artist":  "Soundgarden",
         "song":  "Face Pollution",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Flower",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30469,7 +31182,22 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Hunted Down",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "I Awake",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Kickstand",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Kickstand P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30519,7 +31247,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Mailman P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Mind Riot",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Mind Riot P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30539,7 +31277,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Never The Machine Forever P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Non State Actor",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Non State Actor P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30569,7 +31317,27 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Room A Thousand Years Wide P (1)",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Room A Thousand Years Wide P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Rusty Cage",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Rusty Cage P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Rusty Cage Pitch",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30579,7 +31347,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Slaves And Bulldozers P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Superunknown",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Taree",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30589,7 +31367,17 @@
     },
     {
         "artist":  "Soundgarden",
+        "song":  "Tighter Tighter P 2",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
         "song":  "Zero Chance",
+        "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
+    },
+    {
+        "artist":  "Soundgarden",
+        "song":  "Zero Chance P 2",
         "art":  "https://dn721804.ca.archive.org/0/items/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8/mbid-0d810c50-c79c-4f73-9ba7-6eb3ea0791f8-5720923036_thumb500.jpg"
     },
     {
@@ -30819,7 +31607,8 @@
     },
     {
         "artist":  "Steel Drivers",
-        "song":  "Blue Side Of The Mountain"
+        "song":  "Blue Side Of The Mountain",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/e7/ae/61e7aefe-7bf5-d05a-b7fd-84454bea8e3d/00888072371798.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Steel Pulse",
@@ -31133,12 +31922,32 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "And So I Know P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Andy Warhol",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Art School Girl",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Art School Girl P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Atlanta",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Atlanta P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31158,7 +31967,22 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Black Heart P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Christmastime Is Here",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Cinnamon",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Cinnamon P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31173,7 +31997,17 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Crackerman Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Dancing Days",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Dancing Days P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31183,7 +32017,17 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Dare If You Dare P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Days Of The Week",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Days Of The Week P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31198,7 +32042,22 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Dead Bloated Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Down",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Down P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Heaven And Hot Rods",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31208,12 +32067,27 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Hello It\u0027s Late P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Hollywood Bitch",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Hollywood Bitch P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Lady Picture Show",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Lady Picture Show P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31228,12 +32102,32 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Meadow",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Meatplow",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
         "artist":  "Stone Temple Pilots",
         "song":  "Meatplow P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Naked Sunday Palms.1",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "No Memory Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "No Way Out",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31253,7 +32147,22 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Piece Of Pie P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Piece Of Pie Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Pop\u0027s Love Suicide",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Pop\u0027s Love Suicide P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31263,7 +32172,17 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Regeneration P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Same On The Inside",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Same On The Inside P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31274,6 +32193,11 @@
     {
         "artist":  "Stone Temple Pilots",
         "song":  "Silvergun Superman P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Sin Palms.0",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31298,7 +32222,17 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Still Remains P 2",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Take A Load Off",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Take A Load Off P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31313,7 +32247,17 @@
     },
     {
         "artist":  "Stone Temple Pilots",
+        "song":  "Wet My Bed Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
         "song":  "Where The River Goes Palms.0",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Where The River Goes Palms.0 P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31324,6 +32268,11 @@
     {
         "artist":  "Stone Temple Pilots",
         "song":  "Wonderful",
+        "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
+    },
+    {
+        "artist":  "Stone Temple Pilots",
+        "song":  "Wonderful P 2",
         "art":  "https://dn710604.ca.archive.org/0/items/mbid-2265a2cf-198b-4475-8cfd-595be34d74db/mbid-2265a2cf-198b-4475-8cfd-595be34d74db-5356892703_thumb500.jpg"
     },
     {
@@ -31433,6 +32382,11 @@
     },
     {
         "artist":  "Sublime",
+        "song":  "Doin\u0027 Time Summertime P 2 P 2",
+        "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
+    },
+    {
+        "artist":  "Sublime",
         "song":  "Ebin V",
         "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
     },
@@ -31473,12 +32427,22 @@
     },
     {
         "artist":  "Sublime",
+        "song":  "M P 2 P 2",
+        "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
+    },
+    {
+        "artist":  "Sublime",
         "song":  "P",
         "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
     },
     {
         "artist":  "Sublime",
         "song":  "P P 2",
+        "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
+    },
+    {
+        "artist":  "Sublime",
+        "song":  "P P 2 P 2",
         "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
     },
     {
@@ -31707,169 +32671,58 @@
         "art":  "https://dn710608.ca.archive.org/0/items/mbid-1b5da874-06f7-4c0c-b235-48b5e6c2dbf7/mbid-1b5da874-06f7-4c0c-b235-48b5e6c2dbf7-20785320553_thumb500.jpg"
     },
     {
-        "artist":  "sunday",
-        "song":  "Doors Blue Sunday",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Doors Blue Sunday P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Doors Blue Sunday P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Papa\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Papa\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19 P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Papa\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19 P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Paps\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Paps\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19 P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Paps\u0027s Got A Brand New Baglive Set 2 Sunday April 10 19 P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sometimes On A Sunday",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sometimes On A Sunday P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sometimes On A Sunday P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Bloody Sunday Live Acoustic",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Bloody Sunday Live Acoustic P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Bloody Sunday Live Acoustic P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Driver",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Driver P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Driver P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Morning",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Morning P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Morning P 2 Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Morning P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Rain",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Rain P 2",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
-    },
-    {
-        "artist":  "sunday",
-        "song":  "Sunday Rain P Copy",
-        "art":  "https://dn720707.ca.archive.org/0/items/mbid-17f88c72-99db-495c-8fbd-37610350c785/mbid-17f88c72-99db-495c-8fbd-37610350c785-44879511601_thumb500.jpg"
+        "artist":  "Supertrampp",
+        "song":  "Bloody Well Right",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Bloody Well Right"
+        "song":  "Breakfast In America V 1",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Breakfast In America V 1"
+        "song":  "Crime Of The Century",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Crime Of The Century"
+        "song":  "Dreamer",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Dreamer"
+        "song":  "Give A Little Bit Cb242",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Give A Little Bit Cb242"
+        "song":  "Give A Little Bit Slickwilly",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Give A Little Bit Slickwilly"
+        "song":  "Logical Song",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Supertrampp",
-        "song":  "Logical Song"
-    },
-    {
-        "artist":  "Supertrampp",
-        "song":  "Take The Long Way Home"
+        "song":  "Take The Long Way Home",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/95/b3/0995b3e6-1dfd-7eed-e4fc-3ec7594c8fde/06UMGIM10542.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "SWAT Theme",
         "song":  "Theme From S.W.A.T.2 B Ejmillan"
     },
     {
+        "artist":  "Sweet",
+        "song":  "Hard Times",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/2e/48/f5/2e48f5b8-34b5-b0b8-999f-c7b821f8f44f/00077778032458.rgb.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "Switchfoot",
-        "song":  "Ment To Live"
+        "song":  "Ment To Live",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a1/9c/63/a19c63b2-5a14-c3d7-36d5-f3de471efadf/075679950536.jpg/600x600bb.jpg"
     },
     {
         "artist":  "System of A Down",
@@ -31994,6 +32847,11 @@
     {
         "artist":  "Taylor Swift",
         "song":  "Cruel Summer",
+        "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
+    },
+    {
+        "artist":  "Taylor Swift",
+        "song":  "Cruel Summer P 2",
         "art":  "https://dn721809.ca.archive.org/0/items/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5/mbid-3abd5b90-20f0-4f1d-b1a3-49147628eeb5-39611892869_thumb500.jpg"
     },
     {
@@ -32163,7 +33021,8 @@
     },
     {
         "artist":  "Ted Poley Tony Harnell",
-        "song":  "Escape From The City"
+        "song":  "Escape From The City",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/ef/96/51/ef965162-5eeb-1cee-c7df-914034fe4191/192562851692.jpg/600x600bb.jpg"
     },
     {
         "artist":  "TEMP",
@@ -32184,6 +33043,21 @@
         "artist":  "TEMP",
         "song":  "Song 1",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/ca/2d/d9/ca2dd914-78fe-858e-7977-a0315dd3fab5/artwork.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Temple Of The Dog",
+        "song":  "Call Me A Dog",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0a/8c/c4/0a8cc4a7-3357-8323-68f6-f7f8c4f17a89/00602567714675.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Temple Of The Dog",
+        "song":  "Reach Down",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0a/8c/c4/0a8cc4a7-3357-8323-68f6-f7f8c4f17a89/00602567714675.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Temple Of The Dog",
+        "song":  "Say Hello 2 Heaven",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0a/8c/c4/0a8cc4a7-3357-8323-68f6-f7f8c4f17a89/00602567714675.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Tenacious D",
@@ -32343,6 +33217,11 @@
     {
         "artist":  "The Ataris",
         "song":  "The Boys Of Summer P 2",
+        "art":  "https://dn710802.ca.archive.org/0/items/mbid-21d884b5-2baf-3512-85ae-f2a18b660e22/mbid-21d884b5-2baf-3512-85ae-f2a18b660e22-3374016893_thumb500.jpg"
+    },
+    {
+        "artist":  "The Ataris",
+        "song":  "The Boys Of Summer P 2 P 2",
         "art":  "https://dn710802.ca.archive.org/0/items/mbid-21d884b5-2baf-3512-85ae-f2a18b660e22/mbid-21d884b5-2baf-3512-85ae-f2a18b660e22-3374016893_thumb500.jpg"
     },
     {
@@ -33767,11 +34646,13 @@
     },
     {
         "artist":  "The Legend of Zelda",
-        "song":  "Lost Woods"
+        "song":  "Lost Woods",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/82/51/52/825152b4-9423-b23b-c036-cc67ead732d4/888888046775.jpg/600x600bb.jpg"
     },
     {
         "artist":  "The Lion King",
-        "song":  "I Just Can\u0027t Wait To Be King"
+        "song":  "I Just Can\u0027t Wait To Be King",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/08/ae/6d/08ae6d30-78c2-15f9-2d1f-753bef5e2468/cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "The Lovin Spoonful",
@@ -33786,6 +34667,11 @@
     {
         "artist":  "The Lovin Spoonful",
         "song":  "Summer In The City",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/87/b0/ea/mzi.pxvsbwor.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "The Lovin Spoonful",
+        "song":  "Summer In The City P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/87/b0/ea/mzi.pxvsbwor.jpg/600x600bb.jpg"
     },
     {
@@ -33881,6 +34767,11 @@
     {
         "artist":  "The Offspring",
         "song":  "Bad Habit P 2",
+        "art":  "https://ia903208.us.archive.org/35/items/mbid-2af14d71-4333-494a-a981-7701897e3f1c/mbid-2af14d71-4333-494a-a981-7701897e3f1c-3035143260_thumb500.jpg"
+    },
+    {
+        "artist":  "The Offspring",
+        "song":  "Bad Habit P 2 P 2",
         "art":  "https://ia903208.us.archive.org/35/items/mbid-2af14d71-4333-494a-a981-7701897e3f1c/mbid-2af14d71-4333-494a-a981-7701897e3f1c-3035143260_thumb500.jpg"
     },
     {
@@ -34325,7 +35216,8 @@
     },
     {
         "artist":  "The Rembrandts",
-        "song":  "Ill Be There For You"
+        "song":  "Ill Be There For You",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/58/13/0e/mzi.uxnbmdha.jpg/600x600bb.jpg"
     },
     {
         "artist":  "The Righteous Brothers",
@@ -35629,6 +36521,11 @@
     },
     {
         "artist":  "The Tragically Hip",
+        "song":  "New Orleans Is Sinking P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/f6/ef/daf6ef85-7602-8261-3068-a90fe4a89e49/21UMGIM31478.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "The Tragically Hip",
         "song":  "On The Verge",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/f6/ef/daf6ef85-7602-8261-3068-a90fe4a89e49/21UMGIM31478.rgb.jpg/600x600bb.jpg"
     },
@@ -35665,6 +36562,11 @@
     {
         "artist":  "The Tragically Hip",
         "song":  "Pigeon Camera P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/f6/ef/daf6ef85-7602-8261-3068-a90fe4a89e49/21UMGIM31478.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "The Tragically Hip",
+        "song":  "Pigeon Camera P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/f6/ef/daf6ef85-7602-8261-3068-a90fe4a89e49/21UMGIM31478.rgb.jpg/600x600bb.jpg"
     },
     {
@@ -36319,6 +37221,11 @@
     },
     {
         "artist":  "The Who",
+        "song":  "Summertime Blues P 2 P 2",
+        "art":  "https://dn711006.ca.archive.org/0/items/mbid-055614c4-920a-40b6-9fbd-725cf49c913f/mbid-055614c4-920a-40b6-9fbd-725cf49c913f-9658328156_thumb500.jpg"
+    },
+    {
+        "artist":  "The Who",
         "song":  "Wont Get Fooled Again",
         "art":  "https://dn711006.ca.archive.org/0/items/mbid-055614c4-920a-40b6-9fbd-725cf49c913f/mbid-055614c4-920a-40b6-9fbd-725cf49c913f-9658328156_thumb500.jpg"
     },
@@ -36344,7 +37251,8 @@
     },
     {
         "artist":  "The Wonder Years",
-        "song":  "Passing Through A Screen Door"
+        "song":  "Passing Through A Screen Door",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music2/v4/10/e3/e0/10e3e0a2-9d12-8675-2404-8740155fbe6d/HR771_twy_greatest_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "The Young Rascals",
@@ -36938,7 +37846,8 @@
     },
     {
         "artist":  "TMNT Theme",
-        "song":  "Teenage Mutant Ninja Turtles Theme"
+        "song":  "Teenage Mutant Ninja Turtles Theme",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/78/ea/e8/78eae855-afc5-1435-5376-56e7e9aafce9/886443712188.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Toad The Wet Sprocket",
@@ -37472,15 +38381,18 @@
     },
     {
         "artist":  "Transformers",
-        "song":  "Autobots Theme"
+        "song":  "Autobots Theme",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/02/5d/a7/025da7b4-0238-102a-6b94-b3fb97bf6f23/886443379770.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Transformers",
-        "song":  "Transformers Movie Theme"
+        "song":  "Transformers Movie Theme",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/02/5d/a7/025da7b4-0238-102a-6b94-b3fb97bf6f23/886443379770.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Transformers",
-        "song":  "Transformers Theme The"
+        "song":  "Transformers Theme The",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/02/5d/a7/025da7b4-0238-102a-6b94-b3fb97bf6f23/886443379770.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Trapt",
@@ -37568,6 +38480,16 @@
         "art":  "https://dn710608.ca.archive.org/0/items/mbid-0d03d65f-69d2-4bc0-bd98-cfd94449c06a/mbid-0d03d65f-69d2-4bc0-bd98-cfd94449c06a-10824837106_thumb500.jpg"
     },
     {
+        "artist":  "Triumph",
+        "song":  "Allied Forces",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/83/ef/e3/83efe35d-eb6a-c4ba-5d84-663b7cf1b170/24CRGIM42058.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Triumph",
+        "song":  "Lay It On The Line",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/83/ef/e3/83efe35d-eb6a-c4ba-5d84-663b7cf1b170/24CRGIM42058.rgb.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "Trooper",
         "song":  "We\u0027re Here For A Good Time (Not A Long Time)",
         "art":  "https://dn710702.ca.archive.org/0/items/mbid-72c2d922-4a09-47c3-a2ab-2310218042cf/mbid-72c2d922-4a09-47c3-a2ab-2310218042cf-16440715879_thumb500.jpg"
@@ -37580,6 +38502,11 @@
     {
         "artist":  "Twenty-One Pilots",
         "song":  "Navigating",
+        "art":  "https://dn710108.ca.archive.org/0/items/mbid-22a60a07-0b28-4b40-b1dc-ab8cc80d94fc/mbid-22a60a07-0b28-4b40-b1dc-ab8cc80d94fc-39256597397_thumb500.jpg"
+    },
+    {
+        "artist":  "Twenty-One Pilots",
+        "song":  "Navigating P 2",
         "art":  "https://dn710108.ca.archive.org/0/items/mbid-22a60a07-0b28-4b40-b1dc-ab8cc80d94fc/mbid-22a60a07-0b28-4b40-b1dc-ab8cc80d94fc-39256597397_thumb500.jpg"
     },
     {
@@ -37795,6 +38722,11 @@
     {
         "artist":  "U2",
         "song":  "Summer Of Love",
+        "art":  "https://dn711109.ca.archive.org/0/items/mbid-24385f92-4dd1-4726-8719-437d1c74ac18/mbid-24385f92-4dd1-4726-8719-437d1c74ac18-7239583402_thumb500.jpg"
+    },
+    {
+        "artist":  "U2",
+        "song":  "Summer Of Love P 2",
         "art":  "https://dn711109.ca.archive.org/0/items/mbid-24385f92-4dd1-4726-8719-437d1c74ac18/mbid-24385f92-4dd1-4726-8719-437d1c74ac18-7239583402_thumb500.jpg"
     },
     {
@@ -38194,27 +39126,33 @@
     },
     {
         "artist":  "Warning",
-        "song":  "Dull Knives Cut Better"
+        "song":  "Dull Knives Cut Better",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warning",
-        "song":  "Dust To Dust"
+        "song":  "Dust To Dust",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warning",
-        "song":  "Escapism"
+        "song":  "Escapism",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warning",
-        "song":  "Psychotic"
+        "song":  "Psychotic",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warning",
-        "song":  "Queen Of The Murder Scene"
+        "song":  "Queen Of The Murder Scene",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warning",
-        "song":  "River\u0027s Soul"
+        "song":  "River\u0027s Soul",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cb/d8/b4/cbd8b4f0-e800-23bb-a596-399501e24a2c/781676556717.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Warren G",
@@ -38358,6 +39296,11 @@
     },
     {
         "artist":  "Weezer",
+        "song":  "Summer Elaine And Drunk Dori P 2",
+        "art":  "https://ia800100.us.archive.org/15/items/mbid-1e477f68-c407-4eae-ad01-518528cedc2c/mbid-1e477f68-c407-4eae-ad01-518528cedc2c-26015079702_thumb500.jpg"
+    },
+    {
+        "artist":  "Weezer",
         "song":  "Surf Wax America",
         "art":  "https://ia800100.us.archive.org/15/items/mbid-1e477f68-c407-4eae-ad01-518528cedc2c/mbid-1e477f68-c407-4eae-ad01-518528cedc2c-26015079702_thumb500.jpg"
     },
@@ -38429,6 +39372,11 @@
     {
         "artist":  "Wham",
         "song":  "Freedom P 2",
+        "art":  "https://dn711102.ca.archive.org/0/items/mbid-5c5e0fbd-c48b-4bae-aeff-040f0b9214d1/mbid-5c5e0fbd-c48b-4bae-aeff-040f0b9214d1-11941541353_thumb500.jpg"
+    },
+    {
+        "artist":  "Wham",
+        "song":  "Freedom P 2 P 2",
         "art":  "https://dn711102.ca.archive.org/0/items/mbid-5c5e0fbd-c48b-4bae-aeff-040f0b9214d1/mbid-5c5e0fbd-c48b-4bae-aeff-040f0b9214d1-11941541353_thumb500.jpg"
     },
     {
@@ -38558,12 +39506,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "All Of Me P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "Always On My Mind",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "Always On My Mind P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "Always On My Mind P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38578,12 +39536,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Blue Eyes Crying In The Rain P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "Blue Skies",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "Blue Skies P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "Blue Skies P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38598,12 +39566,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Buddy P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "City Of New Orleans Djpavs",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "City Of New Orleans Djpavs P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "City Of New Orleans Djpavs P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38618,12 +39596,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Crazy P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "Funny How Time Slips Away Djpavs",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "Funny How Time Slips Away Djpavs P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "Funny How Time Slips Away Djpavs P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38638,6 +39626,11 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Georgia On My Mind P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "Hands On The Wheel",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
@@ -38648,12 +39641,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Hands On The Wheel P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "I Gotta Get Drunk Djpavs",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "I Gotta Get Drunk Djpavs P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "I Gotta Get Drunk Djpavs P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38678,6 +39681,11 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "My Heroes Have Always Been Cowboys P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "P",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
@@ -38698,12 +39706,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Red Headed Stranger P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "September Song",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "September Song P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "September Song P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38718,12 +39736,22 @@
     },
     {
         "artist":  "Willie Nelson",
+        "song":  "Stardust Djpavs P 2 P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
         "song":  "Whiskey River",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
         "artist":  "Willie Nelson",
         "song":  "Whiskey River P 2",
+        "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
+    },
+    {
+        "artist":  "Willie Nelson",
+        "song":  "Whiskey River P 2 P 2",
         "art":  "https://dn710602.ca.archive.org/0/items/mbid-0cbafffe-8977-414f-8b86-fd49be164e68/mbid-0cbafffe-8977-414f-8b86-fd49be164e68-18853188275_thumb500.jpg"
     },
     {
@@ -38838,23 +39866,28 @@
     },
     {
         "artist":  "Yoasobi",
-        "song":  "Kaibitsu"
+        "song":  "Kaibitsu",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7f/8c/90/7f8c90dd-e11f-30d5-271d-4b72eee970bd/195497666737.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Yoasobi",
-        "song":  "Yuusha"
+        "song":  "Yuusha",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7f/8c/90/7f8c90dd-e11f-30d5-271d-4b72eee970bd/195497666737.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Yorushika",
-        "song":  "Rain With Capuccino"
+        "song":  "Rain With Capuccino",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/64/ab/ba/64abba45-d080-0e8a-c24b-313e597c63cb/PA00076158_0_91679_jacket.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Yorushika",
-        "song":  "Rain With Capuccino P 2"
+        "song":  "Rain With Capuccino P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/64/ab/ba/64abba45-d080-0e8a-c24b-313e597c63cb/PA00076158_0_91679_jacket.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Yorushika",
-        "song":  "That\u0027s Why I Gave Up On Music"
+        "song":  "That\u0027s Why I Gave Up On Music",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/64/ab/ba/64abba45-d080-0e8a-c24b-313e597c63cb/PA00076158_0_91679_jacket.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Young MC",
@@ -38923,7 +39956,8 @@
     },
     {
         "artist":  "Zutomayo",
-        "song":  "Byoushinwo Kamu"
+        "song":  "Byoushinwo Kamu",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/67/9f/91/679f9186-53d0-7181-b5ed-a3ba8272c794/22UM1IM09345.rgb.jpg/600x600bb.jpg"
     },
     {
         "artist":  "ZZ Top",
