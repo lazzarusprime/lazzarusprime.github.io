@@ -69,10 +69,15 @@
   --bg-panel3:#0f0f0f;
   --bg-panel4:#111111;
 }
-[data-theme="arcade"] .titleLeft h2,
+[data-theme="arcade"] .titleLeft h2{
+  font-family:'Press Start 2P','Bebas Neue',sans-serif;
+  font-size:clamp(9px,1.6vw,14px);
+  letter-spacing:0;
+}
 [data-theme="arcade"] .splash-title{
   font-family:'Press Start 2P','Bebas Neue',sans-serif;
-  letter-spacing:1px;
+  font-size:clamp(26px,6vw,50px);
+  letter-spacing:2px;
 }
 
 /* ── Theme switcher widget ── */
