@@ -55,35 +55,68 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;d
 .hit-counter{font-size:11px;color:#555;font-weight:700;letter-spacing:.5px}
 .hit-counter b{color:var(--accent)}
 
+/* ── CUSTOMIZE PANEL ── */
+.customize{max-width:820px;width:100%;margin:0 auto;background:var(--bg-panel2);border:1px solid #222;border-radius:12px}
+.customize summary{cursor:pointer;padding:12px 16px;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1px;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+.customize summary::-webkit-details-marker{display:none}
+.customize summary::before{content:'▸';transition:.2s}
+.customize[open] summary::before{transform:rotate(90deg)}
+.customize[open] summary{border-bottom:1px solid #1e1e1e}
+.customize-body{padding:16px;display:flex;flex-direction:column;gap:16px}
+.custom-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.custom-row label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#666;min-width:90px}
+.custom-row .ctrl-select{background:#1e1e1e}
+.swatch-row{display:flex;gap:10px;flex-wrap:wrap}
+.swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.swatch:hover{transform:scale(1.1)}
+.swatch.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg-panel2),0 0 0 4px var(--accent)}
+.check-row{display:flex;align-items:center;gap:6px;font-size:12px;color:#aaa;cursor:pointer}
+.check-row input{accent-color:var(--accent)}
+
 /* ── KIT ── */
 .kit-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 16px 40px;gap:26px}
-.kit-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:14px;width:100%;max-width:820px;grid-template-areas:
+#kitGrid{width:100%;max-width:820px}
+
+/* Kit Shape layout */
+#kitGrid.layout-shape{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:12px;grid-template-areas:
   "crash crash chat ohat ride"
-  "crash crash tomh tomh ride"
-  "clap  toml  snare snare kick";
+  "splash tomh tomh toml cow"
+  "clap snare snare floortom floortom"
+  ". kick kick . .";
 }
-.pad{position:relative;border-radius:16px;border:1px solid #222;background:var(--bg-panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;user-select:none;transition:transform .06s ease,box-shadow .15s,border-color .15s;min-height:90px;padding:10px}
+
+/* Grid layout — simple uniform flow */
+#kitGrid.layout-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}
+#kitGrid.layout-grid .pad{grid-area:auto!important}
+
+/* Circle layout */
+#kitGrid.layout-circle{position:relative;max-width:520px;aspect-ratio:1/1;margin:0 auto}
+#kitGrid.layout-circle .pad{position:absolute;width:120px;height:120px;min-height:0;grid-area:auto!important;left:50%;top:50%;transform:translate(-50%,-50%)}
+
+.pad{position:relative;border-radius:16px;border:1px solid #222;background:var(--bg-panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;user-select:none;transition:transform .06s ease,box-shadow .15s,border-color .15s;min-height:110px;padding:10px}
 .pad:active{transform:scale(.95)}
-.pad-emoji{font-size:clamp(22px,4vw,34px);line-height:1;pointer-events:none}
-.pad-name{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;pointer-events:none}
+.pad-icon{width:64px;height:64px;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.pad-photo{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5));transition:filter .2s}
+.pad-name{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;pointer-events:none}
 .pad-key{position:absolute;top:8px;right:10px;font-size:10px;font-weight:900;color:#555;background:#0d0d0d;border:1px solid #333;border-radius:4px;padding:1px 6px;pointer-events:none}
 .pad.hit{border-color:var(--accent);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.4),0 0 30px rgba(var(--accent-rgb),.45);background:var(--accent-dim1)}
-.pad[data-inst="Crash"]{grid-area:crash}
-.pad[data-inst="ClosedHat"]{grid-area:chat}
-.pad[data-inst="OpenHat"]{grid-area:ohat}
-.pad[data-inst="Ride"]{grid-area:ride}
-.pad[data-inst="TomHigh"]{grid-area:tomh}
-.pad[data-inst="Clap"]{grid-area:clap}
-.pad[data-inst="TomLow"]{grid-area:toml}
-.pad[data-inst="Snare"]{grid-area:snare}
-.pad[data-inst="Kick"]{grid-area:kick;background:var(--bg-panel3)}
+.pad[data-inst="Kick"]{background:var(--bg-panel3)}
+.pad.pad-hidden{display:none!important}
+body.hide-names .pad-name{display:none}
+body.hide-keys .pad-key{display:none}
+
 @media(max-width:640px){
-  .kit-grid{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);grid-template-areas:
+  #kitGrid.layout-shape{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(6,1fr);grid-template-areas:
     "crash chat ride"
-    "ohat tomh clap"
-    "toml snare snare"
-    ".    kick ."
+    "splash ohat cow"
+    "tomh tomh toml"
+    "clap snare snare"
+    "floortom floortom floortom"
+    ". kick ."
   }
+  #kitGrid.layout-circle{max-width:360px}
+  #kitGrid.layout-circle .pad{width:88px;height:88px;min-height:0}
+  #kitGrid.layout-circle .pad-icon{width:44px;height:44px}
 }
 
 .help-panel{max-width:820px;width:100%;background:var(--bg-panel2);border:1px solid #222;border-radius:12px;padding:14px 18px;font-size:12px;color:#777;line-height:1.8}
@@ -173,11 +206,43 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 </div>
 
 <div class="kit-wrap">
-  <div class="kit-grid" id="kitGrid"></div>
+
+  <details class="customize" id="customizePanel" open>
+    <summary>🎨 Customize Kit</summary>
+    <div class="customize-body">
+      <div class="custom-row">
+        <label>Kit Size</label>
+        <select id="kitSizeSelect" class="ctrl-select">
+          <option value="5">5-Piece (Kick, Snare, Hat, Crash, Tom)</option>
+          <option value="9" selected>Standard (9-Piece)</option>
+          <option value="12">Full Kit (12-Piece)</option>
+        </select>
+      </div>
+      <div class="custom-row">
+        <label>Layout</label>
+        <select id="layoutSelect" class="ctrl-select">
+          <option value="shape">Kit Shape</option>
+          <option value="grid">Grid</option>
+          <option value="circle">Circle</option>
+        </select>
+      </div>
+      <div class="custom-row">
+        <label>Shell Finish</label>
+        <div class="swatch-row" id="swatchRow"></div>
+      </div>
+      <div class="custom-row">
+        <label>Display</label>
+        <span class="check-row"><input type="checkbox" id="toggleNames" checked> Show names</span>
+        <span class="check-row"><input type="checkbox" id="toggleKeys" checked> Show key labels</span>
+      </div>
+    </div>
+  </details>
+
+  <div class="kit-grid layout-shape" id="kitGrid"></div>
 
   <div class="help-panel">
-    <b>Keyboard:</b> 1 Crash · Q Closed Hat · W Open Hat · 2 Ride · E Tom High · A Clap · S Tom Low · D Snare · Space Kick.
-    Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take.
+    <b>Keyboard:</b> 1 Crash · Q Closed Hat · W Open Hat · 2 Ride · E Tom High · A Clap · S Tom Low · D Snare · Space Kick · F Floor Tom · C Cowbell · 3 Splash (Floor Tom/Cowbell/Splash need Full Kit selected).
+    Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. Kit size, layout and shell finish are remembered next time you visit.
   </div>
 </div>
 
@@ -202,31 +267,82 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 </footer>
 
 <script>
-/* ── Instrument definitions ── */
+/* ══════════════════════════════════════════════════════
+   PHOTO MAP — real product photography, drum shells get
+   a CSS-filter tint for the Shell Finish customizer;
+   cymbals/hardware keep their natural metal finish
+   ══════════════════════════════════════════════════════ */
+const PHOTO_MAP = {
+  kick:     { file: 'kick.png',     shell: true },
+  snare:    { file: 'snare.png',    shell: true },
+  tomh:     { file: 'tom-high.png', shell: true },
+  toml:     { file: 'tom-low.png',  shell: true },
+  floortom: { file: 'floortom.png', shell: true },
+  chat:     { file: 'chat.png',     shell: false },
+  ohat:     { file: 'ohat.png',     shell: false },
+  crash:    { file: 'crash.png',    shell: false },
+  ride:     { file: 'ride.png',     shell: false },
+  splash:   { file: 'splash.png',   shell: false },
+  cowbell:  { file: 'cowbell.png',  shell: false },
+  clap:     { file: 'clap.png',     shell: false }
+};
+
+/* ══════════════════════════════════════════════════════
+   INSTRUMENT DATA
+   ══════════════════════════════════════════════════════ */
 const INSTRUMENTS = [
-  { id: 'Kick',      name: 'Kick',       emoji: '🥁', key: ' ',   keyLabel: 'SPACE' },
-  { id: 'Snare',     name: 'Snare',      emoji: '🪘', key: 'd',   keyLabel: 'D' },
-  { id: 'ClosedHat', name: 'Closed Hat', emoji: '🎩', key: 'q',   keyLabel: 'Q' },
-  { id: 'OpenHat',   name: 'Open Hat',   emoji: '💿', key: 'w',   keyLabel: 'W' },
-  { id: 'Clap',      name: 'Clap',       emoji: '👏', key: 'a',   keyLabel: 'A' },
-  { id: 'Crash',     name: 'Crash',      emoji: '💥', key: '1',   keyLabel: '1' },
-  { id: 'Ride',      name: 'Ride',       emoji: '🔔', key: '2',   keyLabel: '2' },
-  { id: 'TomHigh',   name: 'Tom High',   emoji: '🦅', key: 'e',   keyLabel: 'E' },
-  { id: 'TomLow',    name: 'Tom Low',    emoji: '🪵', key: 's',   keyLabel: 'S' }
+  { id: 'Kick',      name: 'Kick',       icon: 'kick',     area: 'kick',     key: ' ', keyLabel: 'SPACE', sizes: [5,9,12] },
+  { id: 'Snare',     name: 'Snare',      icon: 'snare',    area: 'snare',    key: 'd', keyLabel: 'D',     sizes: [5,9,12] },
+  { id: 'ClosedHat', name: 'Closed Hat', icon: 'chat',     area: 'chat',     key: 'q', keyLabel: 'Q',     sizes: [5,9,12] },
+  { id: 'OpenHat',   name: 'Open Hat',   icon: 'ohat',     area: 'ohat',     key: 'w', keyLabel: 'W',     sizes: [9,12] },
+  { id: 'Clap',      name: 'Clap',       icon: 'clap',     area: 'clap',     key: 'a', keyLabel: 'A',     sizes: [9,12] },
+  { id: 'Crash',     name: 'Crash',      icon: 'crash',    area: 'crash',    key: '1', keyLabel: '1',     sizes: [5,9,12] },
+  { id: 'Ride',      name: 'Ride',       icon: 'ride',     area: 'ride',     key: '2', keyLabel: '2',     sizes: [9,12] },
+  { id: 'TomHigh',   name: 'Tom High',   icon: 'tomh',     area: 'tomh',     key: 'e', keyLabel: 'E',     sizes: [9,12] },
+  { id: 'TomLow',    name: 'Tom Low',    icon: 'toml',     area: 'toml',     key: 's', keyLabel: 'S',     sizes: [5,9,12] },
+  { id: 'FloorTom',  name: 'Floor Tom',  icon: 'floortom', area: 'floortom', key: 'f', keyLabel: 'F',     sizes: [12] },
+  { id: 'Cowbell',   name: 'Cowbell',    icon: 'cowbell',  area: 'cow',      key: 'c', keyLabel: 'C',     sizes: [12] },
+  { id: 'Splash',    name: 'Splash',     icon: 'splash',   area: 'splash',   key: '3', keyLabel: '3',     sizes: [12] }
 ];
 
-/* ── Build pads ── */
+const SHELL_SWATCHES = [
+  { name: 'Jet Black',      shell: '#1a1a1a', light: '#4a4a4a', filter: 'none' },
+  { name: 'Racing Red',     shell: '#8a1220', light: '#c73a4a', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(-50deg)' },
+  { name: 'Ocean Blue',     shell: '#123a6b', light: '#3f6fb5', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(160deg)' },
+  { name: 'Pearl White',    shell: '#cfc9bd', light: '#f2efe8', filter: 'brightness(2.6) contrast(.75) saturate(.25)' },
+  { name: 'Champagne Gold', shell: '#6b5015', light: '#c9a355', filter: 'brightness(1.3) sepia(1) saturate(3.5) hue-rotate(8deg)' }
+];
+
+/* ══════════════════════════════════════════════════════
+   BUILD PADS
+   ══════════════════════════════════════════════════════ */
 const kitGrid = document.getElementById('kitGrid');
 INSTRUMENTS.forEach(inst => {
   const pad = document.createElement('div');
   pad.className = 'pad';
   pad.dataset.inst = inst.id;
-  pad.innerHTML = `<div class="pad-key">${inst.keyLabel}</div><div class="pad-emoji">${inst.emoji}</div><div class="pad-name">${inst.name}</div>`;
+  pad.style.gridArea = inst.area;
+  const photo = PHOTO_MAP[inst.icon];
+  pad.innerHTML = `<div class="pad-key">${inst.keyLabel}</div><div class="pad-icon"><img class="pad-photo${photo.shell ? ' shell-photo' : ''}" src="images/drums/${photo.file}" alt="${inst.name}" draggable="false"></div><div class="pad-name">${inst.name}</div>`;
   pad.addEventListener('pointerdown', () => triggerHit(inst.id));
   kitGrid.appendChild(pad);
 });
 
-/* ── Audio engine (matches the Groove Station's synthesis) ── */
+/* Build shell swatches */
+const swatchRow = document.getElementById('swatchRow');
+SHELL_SWATCHES.forEach((sw, i) => {
+  const el = document.createElement('div');
+  el.className = 'swatch';
+  el.title = sw.name;
+  el.style.background = `linear-gradient(135deg, ${sw.light}, ${sw.shell})`;
+  el.dataset.index = i;
+  el.addEventListener('click', () => setShell(i));
+  swatchRow.appendChild(el);
+});
+
+/* ══════════════════════════════════════════════════════
+   AUDIO ENGINE (matches the Groove Station's synthesis)
+   ══════════════════════════════════════════════════════ */
 let ctx = null;
 let noiseBuffer = null;
 let hitCount = 0;
@@ -238,7 +354,6 @@ function ensureAudio() {
   }
   if (ctx.state === 'suspended') ctx.resume();
 }
-
 function createNoiseBuffer() {
   const len = ctx.sampleRate * 2;
   const buf = ctx.createBuffer(1, len, ctx.sampleRate);
@@ -335,42 +450,59 @@ function hit(inst, time) {
     noise.start(safeTime); noise.stop(safeTime + 0.12);
   }
 
-  else if (inst === 'Crash' || inst === 'Ride') {
+  else if (inst === 'Crash' || inst === 'Ride' || inst === 'Splash') {
     const osc1 = ctx.createOscillator();
     const hpf = ctx.createBiquadFilter();
-    hpf.type = 'highpass'; hpf.frequency.value = inst === 'Crash' ? 4200 : 6800;
+    hpf.type = 'highpass';
+    hpf.frequency.value = inst === 'Crash' ? 4200 : inst === 'Ride' ? 6800 : 5800;
     const env = ctx.createGain();
     osc1.type = engine === 'retro' ? 'triangle' : 'sawtooth';
-    osc1.frequency.value = inst === 'Crash' ? 390 : 510;
+    osc1.frequency.value = inst === 'Crash' ? 390 : inst === 'Ride' ? 510 : 640;
     osc1.connect(hpf); hpf.connect(env); env.connect(masterGain);
-    const length = inst === 'Crash' ? 0.75 : 0.38;
-    env.gain.setValueAtTime(0.38, safeTime);
+    const length = inst === 'Crash' ? 0.75 : inst === 'Ride' ? 0.38 : 0.3;
+    env.gain.setValueAtTime(inst === 'Splash' ? 0.32 : 0.38, safeTime);
     env.gain.exponentialRampToValueAtTime(0.001, safeTime + length);
     osc1.start(safeTime); osc1.stop(safeTime + length + 0.05);
   }
 
-  else if (inst === 'TomHigh' || inst === 'TomLow') {
+  else if (inst === 'TomHigh' || inst === 'TomLow' || inst === 'FloorTom') {
     const osc = ctx.createOscillator();
     const env = ctx.createGain();
     osc.connect(env); env.connect(masterGain);
-    const pitch = inst === 'TomHigh' ? 210 : 125;
+    const pitch = inst === 'TomHigh' ? 210 : inst === 'TomLow' ? 125 : 85;
+    const dur = inst === 'FloorTom' ? 0.26 : 0.18;
     osc.frequency.setValueAtTime(pitch, safeTime);
     osc.frequency.exponentialRampToValueAtTime(pitch * 0.55, safeTime + 0.14);
     env.gain.setValueAtTime(0.75, safeTime);
-    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.18);
-    osc.start(safeTime); osc.stop(safeTime + 0.22);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + dur);
+    osc.start(safeTime); osc.stop(safeTime + dur + 0.04);
+  }
+
+  else if (inst === 'Cowbell') {
+    const osc1 = ctx.createOscillator(); osc1.type = 'square'; osc1.frequency.value = 587;
+    const osc2 = ctx.createOscillator(); osc2.type = 'square'; osc2.frequency.value = 845;
+    const bpf = ctx.createBiquadFilter(); bpf.type = 'bandpass'; bpf.frequency.value = 760; bpf.Q.value = 2;
+    const env = ctx.createGain();
+    osc1.connect(bpf); osc2.connect(bpf); bpf.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(0.5, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.28);
+    osc1.start(safeTime); osc1.stop(safeTime + 0.3);
+    osc2.start(safeTime); osc2.stop(safeTime + 0.3);
   }
 }
 
-/* ── Trigger + visual flash + recording capture ── */
+/* ══════════════════════════════════════════════════════
+   TRIGGER + VISUAL FLASH + RECORDING CAPTURE
+   ══════════════════════════════════════════════════════ */
 function flashPad(instId) {
   const pad = kitGrid.querySelector(`[data-inst="${instId}"]`);
   if (!pad) return;
   pad.classList.add('hit');
   setTimeout(() => pad.classList.remove('hit'), 130);
 }
-
 function triggerHit(instId) {
+  const pad = kitGrid.querySelector(`[data-inst="${instId}"]`);
+  if (!pad || pad.classList.contains('pad-hidden')) return;
   ensureAudio();
   hit(instId, ctx.currentTime);
   flashPad(instId);
@@ -382,10 +514,11 @@ function triggerHit(instId) {
   }
 }
 
-/* ── Keyboard control ── */
+/* ══════════════════════════════════════════════════════
+   KEYBOARD CONTROL
+   ══════════════════════════════════════════════════════ */
 const KEY_TO_INST = {};
 INSTRUMENTS.forEach(inst => { KEY_TO_INST[inst.key] = inst.id; });
-
 window.addEventListener('keydown', e => {
   if (e.repeat) return;
   const tag = document.activeElement.tagName;
@@ -397,7 +530,9 @@ window.addEventListener('keydown', e => {
   }
 });
 
-/* ── Record / Play / Loop ── */
+/* ══════════════════════════════════════════════════════
+   RECORD / PLAY / LOOP
+   ══════════════════════════════════════════════════════ */
 const MAX_RECORD_MS = 30000;
 let isRecording = false;
 let recordStart = 0;
@@ -421,13 +556,11 @@ function toggleRecord() {
     btn.textContent = '⏺ Record';
   }
 }
-
 function stopPlayback() {
   playTimers.forEach(id => clearTimeout(id));
   playTimers = [];
   if (loopTimeout) { clearTimeout(loopTimeout); loopTimeout = null; }
 }
-
 function playRecording() {
   ensureAudio();
   stopPlayback();
@@ -437,17 +570,13 @@ function playRecording() {
     const id = setTimeout(() => { hit(ev.inst, ctx.currentTime); flashPad(ev.inst); }, ev.t);
     playTimers.push(id);
   });
-  if (isLooping) {
-    loopTimeout = setTimeout(playRecording, lastT);
-  }
+  if (isLooping) loopTimeout = setTimeout(playRecording, lastT);
 }
-
 function toggleLoop() {
   isLooping = !isLooping;
   document.getElementById('loopBtn').classList.toggle('active', isLooping);
   if (!isLooping) stopPlayback();
 }
-
 function clearRecording() {
   stopPlayback();
   recordedEvents = [];
@@ -456,6 +585,99 @@ function clearRecording() {
   btn.classList.remove('active');
   btn.textContent = '⏺ Record';
 }
+
+/* ══════════════════════════════════════════════════════
+   CUSTOMIZATION: kit size, layout, shell finish, labels
+   ══════════════════════════════════════════════════════ */
+const kitSizeSelect = document.getElementById('kitSizeSelect');
+const layoutSelect = document.getElementById('layoutSelect');
+const toggleNames = document.getElementById('toggleNames');
+const toggleKeys = document.getElementById('toggleKeys');
+let currentShellIndex = 0;
+
+function applyKitSize() {
+  const size = parseInt(kitSizeSelect.value, 10);
+  INSTRUMENTS.forEach(inst => {
+    const pad = kitGrid.querySelector(`[data-inst="${inst.id}"]`);
+    if (!pad) return;
+    pad.classList.toggle('pad-hidden', !inst.sizes.includes(size));
+  });
+  if (layoutSelect.value === 'circle') applyCircleLayout();
+  saveSettings();
+}
+
+function applyLayout() {
+  kitGrid.classList.remove('layout-shape', 'layout-grid', 'layout-circle');
+  kitGrid.classList.add('layout-' + layoutSelect.value);
+  kitGrid.querySelectorAll('.pad').forEach(p => { p.style.left = ''; p.style.top = ''; });
+  if (layoutSelect.value === 'circle') applyCircleLayout();
+  saveSettings();
+}
+
+function applyCircleLayout() {
+  const kickPad = kitGrid.querySelector('[data-inst="Kick"]');
+  const others = [...kitGrid.querySelectorAll('.pad')].filter(p => !p.classList.contains('pad-hidden') && p.dataset.inst !== 'Kick');
+  if (kickPad && !kickPad.classList.contains('pad-hidden')) {
+    kickPad.style.left = '50%'; kickPad.style.top = '50%';
+  }
+  const n = others.length;
+  const R = 38;
+  others.forEach((pad, i) => {
+    const angle = (2 * Math.PI * i / n) - Math.PI / 2;
+    pad.style.left = (50 + R * Math.cos(angle)) + '%';
+    pad.style.top = (50 + R * Math.sin(angle)) + '%';
+  });
+}
+
+function setShell(i) {
+  currentShellIndex = i;
+  const sw = SHELL_SWATCHES[i];
+  kitGrid.querySelectorAll('.shell-photo').forEach(img => { img.style.filter = sw.filter + ' drop-shadow(0 3px 6px rgba(0,0,0,.5))'; });
+  document.querySelectorAll('.swatch').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  saveSettings();
+}
+
+function applyDisplayToggles() {
+  document.body.classList.toggle('hide-names', !toggleNames.checked);
+  document.body.classList.toggle('hide-keys', !toggleKeys.checked);
+  saveSettings();
+}
+
+function saveSettings() {
+  try {
+    localStorage.setItem('lp-drums-settings', JSON.stringify({
+      kitSize: kitSizeSelect.value,
+      layout: layoutSelect.value,
+      shell: currentShellIndex,
+      showNames: toggleNames.checked,
+      showKeys: toggleKeys.checked
+    }));
+  } catch (e) {}
+}
+function loadSettings() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem('lp-drums-settings')); } catch (e) {}
+  if (saved) {
+    if (saved.kitSize) kitSizeSelect.value = saved.kitSize;
+    if (saved.layout) layoutSelect.value = saved.layout;
+    if (typeof saved.showNames === 'boolean') toggleNames.checked = saved.showNames;
+    if (typeof saved.showKeys === 'boolean') toggleKeys.checked = saved.showKeys;
+    setShell(typeof saved.shell === 'number' ? saved.shell : 0);
+  } else {
+    setShell(0);
+  }
+  applyKitSize();
+  applyLayout();
+  applyDisplayToggles();
+}
+
+kitSizeSelect.addEventListener('change', applyKitSize);
+layoutSelect.addEventListener('change', applyLayout);
+toggleNames.addEventListener('change', applyDisplayToggles);
+toggleKeys.addEventListener('change', applyDisplayToggles);
+window.addEventListener('resize', () => { if (layoutSelect.value === 'circle') applyCircleLayout(); });
+
+loadSettings();
 </script>
 </body>
 </html>
