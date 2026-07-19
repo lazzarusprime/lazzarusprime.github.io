@@ -72,6 +72,12 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;d
 .swatch.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg-panel2),0 0 0 4px var(--accent)}
 .check-row{display:flex;align-items:center;gap:6px;font-size:12px;color:#aaa;cursor:pointer}
 .check-row input{accent-color:var(--accent)}
+.keymap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.keymap-row{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg-panel3);border:1px solid #222;border-radius:6px;padding:6px 10px}
+.keymap-row span{font-size:11px;color:#aaa;font-weight:700}
+.keymap-row button{background:#1e1e1e;color:var(--accent);border:1px solid #333;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:800;cursor:pointer;min-width:56px}
+.keymap-row button:hover{border-color:var(--accent)}
+.keymap-row button.listening{background:var(--accent);color:var(--bg-panel);animation:recPulse 1s ease-in-out infinite}
 
 /* ── KIT ── */
 .kit-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 16px 40px;gap:26px}
@@ -92,6 +98,11 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;d
 /* Circle layout */
 #kitGrid.layout-circle{position:relative;max-width:520px;aspect-ratio:1/1;margin:0 auto}
 #kitGrid.layout-circle .pad{position:absolute;width:120px;height:120px;min-height:0;grid-area:auto!important;left:50%;top:50%;transform:translate(-50%,-50%)}
+
+/* Custom drag-to-arrange layout */
+#kitGrid.layout-custom{position:relative;height:520px;border:1px dashed #2a2a2a;border-radius:12px}
+#kitGrid.layout-custom .pad{position:absolute;width:110px;height:110px;min-height:0;grid-area:auto!important;cursor:grab;touch-action:none;transform:translate(-50%,-50%)}
+#kitGrid.layout-custom .pad.dragging{cursor:grabbing;z-index:10;box-shadow:0 8px 24px rgba(0,0,0,.6)}
 
 .pad{position:relative;border-radius:16px;border:1px solid #222;background:var(--bg-panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;user-select:none;transition:transform .06s ease,box-shadow .15s,border-color .15s;min-height:110px;padding:10px}
 .pad:active{transform:scale(.95)}
@@ -188,10 +199,11 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <div class="ctrl-group">
     <label>Engine</label>
     <select id="engineSelect" class="ctrl-select">
-      <option value="standard">Standard</option>
-      <option value="metal">Metal</option>
-      <option value="electronic">Electronic</option>
-      <option value="retro">Retro</option>
+      <option value="sampled" selected>Real Kit (Samples)</option>
+      <option value="standard">Standard (Synth)</option>
+      <option value="metal">Metal (Synth)</option>
+      <option value="electronic">Electronic (Synth)</option>
+      <option value="retro">Retro (Synth)</option>
     </select>
   </div>
   <div class="ctrl-group">
@@ -224,7 +236,9 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
           <option value="shape">Kit Shape</option>
           <option value="grid">Grid</option>
           <option value="circle">Circle</option>
+          <option value="custom">Custom (Drag to Arrange)</option>
         </select>
+        <button class="action-btn" id="resetLayoutBtn" onclick="resetCustomLayout()" style="display:none">↺ Reset Positions</button>
       </div>
       <div class="custom-row">
         <label>Shell Finish</label>
@@ -235,14 +249,21 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         <span class="check-row"><input type="checkbox" id="toggleNames" checked> Show names</span>
         <span class="check-row"><input type="checkbox" id="toggleKeys" checked> Show key labels</span>
       </div>
+      <div class="custom-row" style="flex-direction:column;align-items:stretch;gap:10px">
+        <label>Keyboard — QWERTY primary, numpad always works too</label>
+        <div class="keymap-grid" id="keymapGrid"></div>
+        <button class="action-btn" style="align-self:flex-start" onclick="resetKeyMap()">↺ Reset Keys to Default</button>
+      </div>
     </div>
   </details>
 
   <div class="kit-grid layout-shape" id="kitGrid"></div>
 
   <div class="help-panel">
-    <b>Keyboard:</b> 1 Crash · Q Closed Hat · W Open Hat · 2 Ride · E Tom High · A Clap · S Tom Low · D Snare · Space Kick · F Floor Tom · C Cowbell · 3 Splash (Floor Tom/Cowbell/Splash need Full Kit selected).
-    Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. Kit size, layout and shell finish are remembered next time you visit.
+    <b>Keyboard:</b> defaults to QWERTY — Q Closed Hat · W Open Hat · E Tom High · R Tom Low · T Floor Tom · Y Crash · U Ride · I Splash · O Cowbell · P Clap · A Snare · Space Kick. Your numpad works too, all the time, laid out to match (Numpad5 Kick, Numpad2 Snare, etc.) — it's a bonus and isn't affected by remapping.
+    Don't like a key? Scroll down to <b>Customize Kit → Keyboard</b>, hit the button next to any piece, and press whatever key you want instead — it remembers your layout.
+    <b>Custom layout:</b> pick "Custom (Drag to Arrange)" and drag any pad wherever you want it; positions save automatically.
+    Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. Kit size, layout, shell finish and key bindings are all remembered next time you visit.
   </div>
 </div>
 
@@ -291,19 +312,61 @@ const PHOTO_MAP = {
    INSTRUMENT DATA
    ══════════════════════════════════════════════════════ */
 const INSTRUMENTS = [
-  { id: 'Kick',      name: 'Kick',       icon: 'kick',     area: 'kick',     key: ' ', keyLabel: 'SPACE', sizes: [5,9,12] },
-  { id: 'Snare',     name: 'Snare',      icon: 'snare',    area: 'snare',    key: 'd', keyLabel: 'D',     sizes: [5,9,12] },
-  { id: 'ClosedHat', name: 'Closed Hat', icon: 'chat',     area: 'chat',     key: 'q', keyLabel: 'Q',     sizes: [5,9,12] },
-  { id: 'OpenHat',   name: 'Open Hat',   icon: 'ohat',     area: 'ohat',     key: 'w', keyLabel: 'W',     sizes: [9,12] },
-  { id: 'Clap',      name: 'Clap',       icon: 'clap',     area: 'clap',     key: 'a', keyLabel: 'A',     sizes: [9,12] },
-  { id: 'Crash',     name: 'Crash',      icon: 'crash',    area: 'crash',    key: '1', keyLabel: '1',     sizes: [5,9,12] },
-  { id: 'Ride',      name: 'Ride',       icon: 'ride',     area: 'ride',     key: '2', keyLabel: '2',     sizes: [9,12] },
-  { id: 'TomHigh',   name: 'Tom High',   icon: 'tomh',     area: 'tomh',     key: 'e', keyLabel: 'E',     sizes: [9,12] },
-  { id: 'TomLow',    name: 'Tom Low',    icon: 'toml',     area: 'toml',     key: 's', keyLabel: 'S',     sizes: [5,9,12] },
-  { id: 'FloorTom',  name: 'Floor Tom',  icon: 'floortom', area: 'floortom', key: 'f', keyLabel: 'F',     sizes: [12] },
-  { id: 'Cowbell',   name: 'Cowbell',    icon: 'cowbell',  area: 'cow',      key: 'c', keyLabel: 'C',     sizes: [12] },
-  { id: 'Splash',    name: 'Splash',     icon: 'splash',   area: 'splash',   key: '3', keyLabel: '3',     sizes: [12] }
+  { id: 'Kick',      name: 'Kick',       icon: 'kick',     area: 'kick',     sizes: [5,9,12] },
+  { id: 'Snare',     name: 'Snare',      icon: 'snare',    area: 'snare',    sizes: [5,9,12] },
+  { id: 'ClosedHat', name: 'Closed Hat', icon: 'chat',     area: 'chat',     sizes: [5,9,12] },
+  { id: 'OpenHat',   name: 'Open Hat',   icon: 'ohat',     area: 'ohat',     sizes: [9,12] },
+  { id: 'Clap',      name: 'Clap',       icon: 'clap',     area: 'clap',     sizes: [9,12] },
+  { id: 'Crash',     name: 'Crash',      icon: 'crash',    area: 'crash',    sizes: [5,9,12] },
+  { id: 'Ride',      name: 'Ride',       icon: 'ride',     area: 'ride',     sizes: [9,12] },
+  { id: 'TomHigh',   name: 'Tom High',   icon: 'tomh',     area: 'tomh',     sizes: [9,12] },
+  { id: 'TomLow',    name: 'Tom Low',    icon: 'toml',     area: 'toml',     sizes: [5,9,12] },
+  { id: 'FloorTom',  name: 'Floor Tom',  icon: 'floortom', area: 'floortom', sizes: [12] },
+  { id: 'Cowbell',   name: 'Cowbell',    icon: 'cowbell',  area: 'cow',      sizes: [12] },
+  { id: 'Splash',    name: 'Splash',     icon: 'splash',   area: 'splash',   sizes: [12] }
 ];
+
+/* ══════════════════════════════════════════════════════
+   KEYBOARD BINDINGS — QWERTY primary (remappable) +
+   fixed numpad alternate (always on, not remappable)
+   ══════════════════════════════════════════════════════ */
+const DEFAULT_KEYS = {
+  Kick: 'Space', Snare: 'KeyA', ClosedHat: 'KeyQ', OpenHat: 'KeyW',
+  TomHigh: 'KeyE', TomLow: 'KeyR', FloorTom: 'KeyT', Crash: 'KeyY',
+  Ride: 'KeyU', Splash: 'KeyI', Cowbell: 'KeyO', Clap: 'KeyP'
+};
+const NUMPAD_ALT = {
+  Kick: 'Numpad5', Snare: 'Numpad2', ClosedHat: 'Numpad7', OpenHat: 'Numpad8',
+  TomHigh: 'Numpad4', TomLow: 'Numpad1', FloorTom: 'Numpad0', Crash: 'Numpad9',
+  Ride: 'Numpad6', Splash: 'Numpad3', Cowbell: 'NumpadDecimal', Clap: 'NumpadEnter'
+};
+let userKeyMap = {};
+
+function codeToLabel(code) {
+  if (!code) return '';
+  if (code === 'Space') return 'SPACE';
+  if (code.startsWith('Key')) return code.slice(3);
+  if (code.startsWith('Digit')) return code.slice(5);
+  if (code === 'NumpadDecimal') return 'NUM.';
+  if (code === 'NumpadEnter') return 'NUM⏎';
+  if (code.startsWith('Numpad')) return 'NUM' + code.slice(6);
+  return code.replace('Arrow', '').toUpperCase();
+}
+function effectiveKey(instId) { return userKeyMap[instId] || DEFAULT_KEYS[instId]; }
+function loadKeyMap() {
+  try { userKeyMap = JSON.parse(localStorage.getItem('lp-drums-keymap')) || {}; } catch (e) { userKeyMap = {}; }
+}
+function saveKeyMap() {
+  try { localStorage.setItem('lp-drums-keymap', JSON.stringify(userKeyMap)); } catch (e) {}
+}
+function rebuildCodeToInst() {
+  CODE_TO_INST = {};
+  INSTRUMENTS.forEach(inst => {
+    CODE_TO_INST[effectiveKey(inst.id)] = inst.id;
+    CODE_TO_INST[NUMPAD_ALT[inst.id]] = inst.id;
+  });
+}
+let CODE_TO_INST = {};
 
 const SHELL_SWATCHES = [
   { name: 'Jet Black',      shell: '#1a1a1a', light: '#4a4a4a', filter: 'none' },
@@ -323,8 +386,8 @@ INSTRUMENTS.forEach(inst => {
   pad.dataset.inst = inst.id;
   pad.style.gridArea = inst.area;
   const photo = PHOTO_MAP[inst.icon];
-  pad.innerHTML = `<div class="pad-key">${inst.keyLabel}</div><div class="pad-icon"><img class="pad-photo${photo.shell ? ' shell-photo' : ''}" src="images/drums/${photo.file}" alt="${inst.name}" draggable="false"></div><div class="pad-name">${inst.name}</div>`;
-  pad.addEventListener('pointerdown', () => triggerHit(inst.id));
+  pad.innerHTML = `<div class="pad-key" id="padkey-${inst.id}">${codeToLabel(effectiveKey(inst.id))}</div><div class="pad-icon"><img class="pad-photo${photo.shell ? ' shell-photo' : ''}" src="images/drums/${photo.file}" alt="${inst.name}" draggable="false"></div><div class="pad-name">${inst.name}</div>`;
+  pad.addEventListener('pointerdown', e => startPadInteraction(e, pad, inst.id));
   kitGrid.appendChild(pad);
 });
 
@@ -341,11 +404,22 @@ SHELL_SWATCHES.forEach((sw, i) => {
 });
 
 /* ══════════════════════════════════════════════════════
-   AUDIO ENGINE (matches the Groove Station's synthesis)
+   AUDIO ENGINE — real drum samples (default) + 4 synth engines
+   Samples: Pearl Master Studio kit (CC-BY 3.0, by enoe, via
+   oramics/sampled) for kick/snare/hats/crash/ride/splash/toms,
+   plus CC0 clap/cowbell (Boochi44/free-drum-samples)
    ══════════════════════════════════════════════════════ */
 let ctx = null;
 let noiseBuffer = null;
 let hitCount = 0;
+const sampleBuffers = {};
+let samplesLoading = null;
+
+const SAMPLE_FILES = {
+  Kick: 'kick', Snare: 'snare', ClosedHat: 'chat', OpenHat: 'ohat',
+  Crash: 'crash', Ride: 'ride', Splash: 'splash', TomHigh: 'tomh',
+  TomLow: 'toml', FloorTom: 'floortom', Cowbell: 'cowbell', Clap: 'clap'
+};
 
 function ensureAudio() {
   if (!ctx) {
@@ -353,6 +427,27 @@ function ensureAudio() {
     noiseBuffer = createNoiseBuffer();
   }
   if (ctx.state === 'suspended') ctx.resume();
+  if (!samplesLoading) samplesLoading = loadSamples();
+}
+function loadSamples() {
+  return Promise.all(Object.entries(SAMPLE_FILES).map(([inst, file]) =>
+    fetch(`sounds/drums/${file}.mp3`)
+      .then(r => r.arrayBuffer())
+      .then(buf => ctx.decodeAudioData(buf))
+      .then(decoded => { sampleBuffers[inst] = decoded; })
+      .catch(() => {})
+  ));
+}
+function playSample(inst, time, mVol) {
+  const buf = sampleBuffers[inst];
+  if (!buf) return false;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(mVol, time);
+  src.connect(gain); gain.connect(ctx.destination);
+  src.start(time);
+  return true;
 }
 function createNoiseBuffer() {
   const len = ctx.sampleRate * 2;
@@ -367,6 +462,11 @@ function hit(inst, time) {
   const safeTime = Math.max(time, ctx.currentTime);
   const engine = document.getElementById('engineSelect').value;
   const mVol = parseFloat(document.getElementById('masterVol').value) / 100;
+
+  if (engine === 'sampled') {
+    if (playSample(inst, safeTime, mVol)) return;
+    /* sample not loaded yet (first hit right after page load) — fall through to synth this one time */
+  }
 
   const masterGain = ctx.createGain();
   masterGain.gain.setValueAtTime(mVol, safeTime);
@@ -517,22 +617,70 @@ function triggerHit(instId) {
 /* ══════════════════════════════════════════════════════
    KEYBOARD CONTROL
    ══════════════════════════════════════════════════════ */
-const KEY_TO_INST = {};
-INSTRUMENTS.forEach(inst => { KEY_TO_INST[inst.key] = inst.id; });
+let isRemapping = false;
 window.addEventListener('keydown', e => {
-  if (e.repeat) return;
+  if (e.repeat || isRemapping) return;
   const tag = document.activeElement.tagName;
   if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-  const k = e.key.toLowerCase();
-  if (KEY_TO_INST[k]) {
-    if (k === ' ') e.preventDefault();
-    triggerHit(KEY_TO_INST[k]);
+  const instId = CODE_TO_INST[e.code];
+  if (instId) {
+    if (e.code === 'Space') e.preventDefault();
+    triggerHit(instId);
   }
 });
 
-/* ══════════════════════════════════════════════════════
-   RECORD / PLAY / LOOP
-   ══════════════════════════════════════════════════════ */
+function refreshAllKeyLabels() {
+  INSTRUMENTS.forEach(inst => {
+    const badge = document.getElementById(`padkey-${inst.id}`);
+    if (badge) badge.textContent = codeToLabel(effectiveKey(inst.id));
+    const btn = document.getElementById(`rebind-${inst.id}`);
+    if (btn && !btn.classList.contains('listening')) btn.textContent = codeToLabel(effectiveKey(inst.id));
+  });
+}
+
+const keymapGrid = document.getElementById('keymapGrid');
+INSTRUMENTS.forEach(inst => {
+  const row = document.createElement('div');
+  row.className = 'keymap-row';
+  row.innerHTML = `<span>${inst.name}</span><button id="rebind-${inst.id}" onclick="startRebind('${inst.id}', this)">${codeToLabel(effectiveKey(inst.id))}</button>`;
+  keymapGrid.appendChild(row);
+});
+
+function startRebind(instId, btnEl) {
+  if (isRemapping) return;
+  isRemapping = true;
+  btnEl.textContent = 'Press a key…';
+  btnEl.classList.add('listening');
+  const handler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.code === 'Escape') { finish(); return; }
+    const newCode = e.code;
+    const oldCode = effectiveKey(instId);
+    const conflict = INSTRUMENTS.find(i => i.id !== instId && effectiveKey(i.id) === newCode);
+    userKeyMap[instId] = newCode;
+    if (conflict) userKeyMap[conflict.id] = oldCode;
+    saveKeyMap();
+    rebuildCodeToInst();
+    finish();
+  };
+  function finish() {
+    window.removeEventListener('keydown', handler, true);
+    btnEl.classList.remove('listening');
+    isRemapping = false;
+    refreshAllKeyLabels();
+  }
+  window.addEventListener('keydown', handler, true);
+}
+
+function resetKeyMap() {
+  userKeyMap = {};
+  saveKeyMap();
+  rebuildCodeToInst();
+  refreshAllKeyLabels();
+}
+
+
 const MAX_RECORD_MS = 30000;
 let isRecording = false;
 let recordStart = 0;
@@ -603,14 +751,17 @@ function applyKitSize() {
     pad.classList.toggle('pad-hidden', !inst.sizes.includes(size));
   });
   if (layoutSelect.value === 'circle') applyCircleLayout();
+  if (layoutSelect.value === 'custom') applyCustomLayout();
   saveSettings();
 }
 
 function applyLayout() {
-  kitGrid.classList.remove('layout-shape', 'layout-grid', 'layout-circle');
+  kitGrid.classList.remove('layout-shape', 'layout-grid', 'layout-circle', 'layout-custom');
   kitGrid.classList.add('layout-' + layoutSelect.value);
   kitGrid.querySelectorAll('.pad').forEach(p => { p.style.left = ''; p.style.top = ''; });
+  document.getElementById('resetLayoutBtn').style.display = layoutSelect.value === 'custom' ? '' : 'none';
   if (layoutSelect.value === 'circle') applyCircleLayout();
+  if (layoutSelect.value === 'custom') applyCustomLayout();
   saveSettings();
 }
 
@@ -627,6 +778,69 @@ function applyCircleLayout() {
     pad.style.left = (50 + R * Math.cos(angle)) + '%';
     pad.style.top = (50 + R * Math.sin(angle)) + '%';
   });
+}
+
+/* ══════════════════════════════════════════════════════
+   CUSTOM DRAG-TO-ARRANGE LAYOUT
+   ══════════════════════════════════════════════════════ */
+let customPositions = {};
+function loadCustomPositions() {
+  try { customPositions = JSON.parse(localStorage.getItem('lp-drums-custom-positions')) || {}; } catch (e) { customPositions = {}; }
+}
+function saveCustomPositions() {
+  const pos = {};
+  kitGrid.querySelectorAll('.pad').forEach(p => {
+    if (p.style.left && p.style.top) pos[p.dataset.inst] = { left: p.style.left, top: p.style.top };
+  });
+  customPositions = pos;
+  try { localStorage.setItem('lp-drums-custom-positions', JSON.stringify(pos)); } catch (e) {}
+}
+function applyCustomLayout() {
+  const visible = [...kitGrid.querySelectorAll('.pad')].filter(p => !p.classList.contains('pad-hidden'));
+  const cols = 4;
+  visible.forEach((pad, i) => {
+    const saved = customPositions[pad.dataset.inst];
+    if (saved && saved.left && saved.top) {
+      pad.style.left = saved.left;
+      pad.style.top = saved.top;
+    } else {
+      const row = Math.floor(i / cols), col = i % cols;
+      pad.style.left = (14 + col * 24) + '%';
+      pad.style.top = (18 + row * 28) + '%';
+    }
+  });
+}
+function resetCustomLayout() {
+  customPositions = {};
+  try { localStorage.removeItem('lp-drums-custom-positions'); } catch (e) {}
+  applyCustomLayout();
+}
+
+/* click to play; in Custom layout, press-and-drag repositions the pad */
+function startPadInteraction(e, pad, instId) {
+  triggerHit(instId);
+  if (!kitGrid.classList.contains('layout-custom')) return;
+  const rect = kitGrid.getBoundingClientRect();
+  pad.setPointerCapture(e.pointerId);
+  pad.classList.add('dragging');
+  const onMove = (ev) => {
+    let x = ((ev.clientX - rect.left) / rect.width) * 100;
+    let y = ((ev.clientY - rect.top) / rect.height) * 100;
+    x = Math.max(4, Math.min(96, x));
+    y = Math.max(4, Math.min(96, y));
+    pad.style.left = x + '%';
+    pad.style.top = y + '%';
+  };
+  const onUp = () => {
+    pad.classList.remove('dragging');
+    pad.removeEventListener('pointermove', onMove);
+    pad.removeEventListener('pointerup', onUp);
+    pad.removeEventListener('pointercancel', onUp);
+    saveCustomPositions();
+  };
+  pad.addEventListener('pointermove', onMove);
+  pad.addEventListener('pointerup', onUp);
+  pad.addEventListener('pointercancel', onUp);
 }
 
 function setShell(i) {
@@ -655,6 +869,9 @@ function saveSettings() {
   } catch (e) {}
 }
 function loadSettings() {
+  loadKeyMap();
+  rebuildCodeToInst();
+  loadCustomPositions();
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem('lp-drums-settings')); } catch (e) {}
   if (saved) {
@@ -669,6 +886,7 @@ function loadSettings() {
   applyKitSize();
   applyLayout();
   applyDisplayToggles();
+  refreshAllKeyLabels();
 }
 
 kitSizeSelect.addEventListener('change', applyKitSize);
