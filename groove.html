@@ -134,9 +134,10 @@ body.perf-mode .bass-note-cell{box-shadow:none !important;transform:none !import
 .share-input:focus{border-color:#9b59b6;color:#fff}
 .share-msg{font-size:11px;color:#666;white-space:nowrap}
 .jam-bar{display:flex;gap:6px;padding:8px 16px;background:var(--bg-void);border-top:1px solid #1a1a1a;align-items:center;flex-wrap:wrap}
-.jam-label{color:#f39c12;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.jam-label{color:#f39c12;font-weight:900;font-size:11px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
 .jam-btn{background:#1a1200;color:#f39c12;border:1px solid #f39c12;padding:4px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:700;transition:.2s;white-space:nowrap}
 .jam-btn:hover{background:#2a2200;border-color:#ffe033;color:#ffe033}
+.jam-bar{display:flex;gap:8px;padding:10px 16px;background:var(--bg-void);border-top:1px solid #1a1a1a;align-items:center;flex-wrap:wrap}
 
 /* ── TRANSPORT STATUS ── */
 .status-bar{padding:6px 16px;background:var(--bg-void);border-top:1px solid #1a1a1a;display:flex;align-items:center;gap:12px;font-size:12px;color:#444;flex-wrap:wrap}
@@ -349,6 +350,9 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <button class="share-btn" onclick="loadShareCode()">⬇ Load Code</button>
   <span id="shareMsg" class="share-msg"></span>
 </div>
+
+<!-- ── JAM PRESETS ── -->
+<div class="jam-bar">
   <span class="jam-label">⚡ Jam:</span>
   <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')">Rock in E</button>
   <button class="jam-btn" onclick="loadJam('metal','E','minor','metal')">Metal in E</button>
