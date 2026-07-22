@@ -55,14 +55,19 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;d
 .hit-counter{font-size:11px;color:#555;font-weight:700;letter-spacing:.5px}
 .hit-counter b{color:var(--accent)}
 
+/* ── PANEL ROW (secondary panels, below the kit) ── */
+.panel-row{max-width:820px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+
 /* ── CUSTOMIZE PANEL ── */
-.customize{max-width:820px;width:100%;margin:0 auto;background:var(--bg-panel2);border:1px solid #222;border-radius:12px}
-.customize summary{cursor:pointer;padding:12px 16px;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1px;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+.customize{width:100%;background:var(--bg-panel2);border:1px solid #222;border-radius:12px}
+.customize summary{cursor:pointer;padding:12px 16px;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1px;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px;user-select:none;flex-wrap:wrap}
 .customize summary::-webkit-details-marker{display:none}
 .customize summary::before{content:'▸';transition:.2s}
 .customize[open] summary::before{transform:rotate(90deg)}
 .customize[open] summary{border-bottom:1px solid #1e1e1e}
+.summary-hint{color:#555;font-weight:600;text-transform:none;letter-spacing:0;font-size:11px}
 .customize-body{padding:16px;display:flex;flex-direction:column;gap:16px}
+.customize-body .help-panel{padding:0;border:none;background:none;max-width:none}
 .custom-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .custom-row label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#666;min-width:90px}
 .custom-row .ctrl-select{background:#1e1e1e}
@@ -109,7 +114,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;d
 .pad-icon{width:64px;height:64px;pointer-events:none;display:flex;align-items:center;justify-content:center}
 .pad-photo{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5));transition:filter .2s}
 .pad-name{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;pointer-events:none}
-.pad-key{position:absolute;top:8px;right:10px;font-size:10px;font-weight:900;color:#555;background:#0d0d0d;border:1px solid #333;border-radius:4px;padding:1px 6px;pointer-events:none}
+.pad-key{position:absolute;top:8px;right:8px;left:8px;font-size:9px;font-weight:900;color:#555;background:#0d0d0d;border:1px solid #333;border-radius:4px;padding:2px 5px;pointer-events:none;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pad.hit{border-color:var(--accent);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.4),0 0 30px rgba(var(--accent-rgb),.45);background:var(--accent-dim1)}
 .pad[data-inst="Kick"]{background:var(--bg-panel3)}
 .pad.pad-hidden{display:none!important}
@@ -219,52 +224,67 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
 <div class="kit-wrap">
 
-  <details class="customize" id="customizePanel" open>
-    <summary>🎨 Customize Kit</summary>
-    <div class="customize-body">
-      <div class="custom-row">
-        <label>Kit Size</label>
-        <select id="kitSizeSelect" class="ctrl-select">
-          <option value="5">5-Piece (Kick, Snare, Hat, Crash, Tom)</option>
-          <option value="9" selected>Standard (9-Piece)</option>
-          <option value="12">Full Kit (12-Piece)</option>
-        </select>
-      </div>
-      <div class="custom-row">
-        <label>Layout</label>
-        <select id="layoutSelect" class="ctrl-select">
-          <option value="shape">Kit Shape</option>
-          <option value="grid">Grid</option>
-          <option value="circle">Circle</option>
-          <option value="custom">Custom (Drag to Arrange)</option>
-        </select>
-        <button class="action-btn" id="resetLayoutBtn" onclick="resetCustomLayout()" style="display:none">↺ Reset Positions</button>
-      </div>
-      <div class="custom-row">
-        <label>Shell Finish</label>
-        <div class="swatch-row" id="swatchRow"></div>
-      </div>
-      <div class="custom-row">
-        <label>Display</label>
-        <span class="check-row"><input type="checkbox" id="toggleNames" checked> Show names</span>
-        <span class="check-row"><input type="checkbox" id="toggleKeys" checked> Show key labels</span>
-      </div>
-      <div class="custom-row" style="flex-direction:column;align-items:stretch;gap:10px">
-        <label>Keyboard — QWERTY primary, numpad always works too</label>
-        <div class="keymap-grid" id="keymapGrid"></div>
-        <button class="action-btn" style="align-self:flex-start" onclick="resetKeyMap()">↺ Reset Keys to Default</button>
-      </div>
-    </div>
-  </details>
-
   <div class="kit-grid layout-shape" id="kitGrid"></div>
 
-  <div class="help-panel">
-    <b>Keyboard:</b> defaults to QWERTY — Q Closed Hat · W Open Hat · E Tom High · R Tom Low · T Floor Tom · Y Crash · U Ride · I Splash · O Cowbell · P Clap · A Snare · Space Kick. Your numpad works too, all the time, laid out to match (Numpad5 Kick, Numpad2 Snare, etc.) — it's a bonus and isn't affected by remapping.
-    Don't like a key? Scroll down to <b>Customize Kit → Keyboard</b>, hit the button next to any piece, and press whatever key you want instead — it remembers your layout.
-    <b>Custom layout:</b> pick "Custom (Drag to Arrange)" and drag any pad wherever you want it; positions save automatically.
-    Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. Kit size, layout, shell finish and key bindings are all remembered next time you visit.
+  <div class="panel-row">
+    <details class="customize" id="customizePanel">
+      <summary>🎨 Customize Kit <span class="summary-hint">size · layout · shell · key labels</span></summary>
+      <div class="customize-body">
+        <div class="custom-row">
+          <label>Kit Size</label>
+          <select id="kitSizeSelect" class="ctrl-select">
+            <option value="5">5-Piece (Kick, Snare, Hat, Crash, Tom)</option>
+            <option value="9" selected>Standard (9-Piece)</option>
+            <option value="12">Full Kit (12-Piece)</option>
+          </select>
+        </div>
+        <div class="custom-row">
+          <label>Layout</label>
+          <select id="layoutSelect" class="ctrl-select">
+            <option value="shape">Kit Shape</option>
+            <option value="grid">Grid</option>
+            <option value="circle">Circle</option>
+            <option value="custom">Custom (Drag to Arrange)</option>
+          </select>
+          <button class="action-btn" id="resetLayoutBtn" onclick="resetCustomLayout()" style="display:none">↺ Reset Positions</button>
+        </div>
+        <div class="custom-row">
+          <label>Shell Finish</label>
+          <div class="swatch-row" id="swatchRow"></div>
+        </div>
+        <div class="custom-row">
+          <label>Display</label>
+          <span class="check-row"><input type="checkbox" id="toggleNames" checked> Show names</span>
+          <span class="check-row"><input type="checkbox" id="toggleKeys" checked> Show key labels</span>
+        </div>
+        <div class="custom-row">
+          <label>Key Labels</label>
+          <select id="keyLabelSelect" class="ctrl-select">
+            <option value="qwerty">QWERTY only</option>
+            <option value="numpad">Numpad only</option>
+            <option value="both" selected>QWERTY + Numpad</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <details class="customize" id="keyboardPanel">
+      <summary>⌨️ Keyboard &amp; Help <span class="summary-hint">shortcuts · remapping · recording</span></summary>
+      <div class="customize-body">
+        <div class="help-panel">
+          <b>Keyboard:</b> defaults to QWERTY — Q Closed Hat · W Open Hat · E Tom High · R Tom Low · T Floor Tom · Y Crash · U Ride · I Splash · O Cowbell · P Clap · A Snare · Space Kick. Your numpad works too, all the time, laid out to match (Numpad5 Kick, Numpad2 Snare, etc.) — it's a bonus and isn't affected by remapping. Pads show both by default; change that under <b>Customize Kit → Key Labels</b>.
+          <b>Custom layout:</b> pick "Custom (Drag to Arrange)" under Customize Kit and drag any pad wherever you want it; positions save automatically.
+          Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. Kit size, layout, shell finish and key bindings are all remembered next time you visit.
+        </div>
+        <div class="custom-row" style="flex-direction:column;align-items:stretch;gap:10px">
+          <label>Remap QWERTY Keys</label>
+          <div class="keymap-grid" id="keymapGrid"></div>
+          <button class="action-btn" style="align-self:flex-start" onclick="resetKeyMap()">↺ Reset Keys to Default</button>
+        </div>
+      </div>
+    </details>
   </div>
+
 </div>
 
 <footer>
@@ -353,6 +373,15 @@ function codeToLabel(code) {
   return code.replace('Arrow', '').toUpperCase();
 }
 function effectiveKey(instId) { return userKeyMap[instId] || DEFAULT_KEYS[instId]; }
+function buildKeyLabel(instId) {
+  const sel = document.getElementById('keyLabelSelect');
+  const mode = sel ? sel.value : 'both';
+  const q = codeToLabel(effectiveKey(instId));
+  const n = codeToLabel(NUMPAD_ALT[instId]);
+  if (mode === 'qwerty') return q;
+  if (mode === 'numpad') return n;
+  return q + ' / ' + n;
+}
 function loadKeyMap() {
   try { userKeyMap = JSON.parse(localStorage.getItem('lp-drums-keymap')) || {}; } catch (e) { userKeyMap = {}; }
 }
@@ -386,7 +415,7 @@ INSTRUMENTS.forEach(inst => {
   pad.dataset.inst = inst.id;
   pad.style.gridArea = inst.area;
   const photo = PHOTO_MAP[inst.icon];
-  pad.innerHTML = `<div class="pad-key" id="padkey-${inst.id}">${codeToLabel(effectiveKey(inst.id))}</div><div class="pad-icon"><img class="pad-photo${photo.shell ? ' shell-photo' : ''}" src="images/drums/${photo.file}" alt="${inst.name}" draggable="false"></div><div class="pad-name">${inst.name}</div>`;
+  pad.innerHTML = `<div class="pad-key" id="padkey-${inst.id}">${buildKeyLabel(inst.id)}</div><div class="pad-icon"><img class="pad-photo${photo.shell ? ' shell-photo' : ''}" src="images/drums/${photo.file}" alt="${inst.name}" draggable="false"></div><div class="pad-name">${inst.name}</div>`;
   pad.addEventListener('pointerdown', e => startPadInteraction(e, pad, inst.id));
   kitGrid.appendChild(pad);
 });
@@ -632,7 +661,7 @@ window.addEventListener('keydown', e => {
 function refreshAllKeyLabels() {
   INSTRUMENTS.forEach(inst => {
     const badge = document.getElementById(`padkey-${inst.id}`);
-    if (badge) badge.textContent = codeToLabel(effectiveKey(inst.id));
+    if (badge) badge.textContent = buildKeyLabel(inst.id);
     const btn = document.getElementById(`rebind-${inst.id}`);
     if (btn && !btn.classList.contains('listening')) btn.textContent = codeToLabel(effectiveKey(inst.id));
   });
@@ -741,6 +770,7 @@ const kitSizeSelect = document.getElementById('kitSizeSelect');
 const layoutSelect = document.getElementById('layoutSelect');
 const toggleNames = document.getElementById('toggleNames');
 const toggleKeys = document.getElementById('toggleKeys');
+const keyLabelSelect = document.getElementById('keyLabelSelect');
 let currentShellIndex = 0;
 
 function applyKitSize() {
@@ -864,7 +894,8 @@ function saveSettings() {
       layout: layoutSelect.value,
       shell: currentShellIndex,
       showNames: toggleNames.checked,
-      showKeys: toggleKeys.checked
+      showKeys: toggleKeys.checked,
+      keyLabel: keyLabelSelect.value
     }));
   } catch (e) {}
 }
@@ -879,6 +910,7 @@ function loadSettings() {
     if (saved.layout) layoutSelect.value = saved.layout;
     if (typeof saved.showNames === 'boolean') toggleNames.checked = saved.showNames;
     if (typeof saved.showKeys === 'boolean') toggleKeys.checked = saved.showKeys;
+    if (saved.keyLabel) keyLabelSelect.value = saved.keyLabel;
     setShell(typeof saved.shell === 'number' ? saved.shell : 0);
   } else {
     setShell(0);
@@ -893,6 +925,7 @@ kitSizeSelect.addEventListener('change', applyKitSize);
 layoutSelect.addEventListener('change', applyLayout);
 toggleNames.addEventListener('change', applyDisplayToggles);
 toggleKeys.addEventListener('change', applyDisplayToggles);
+keyLabelSelect.addEventListener('change', () => { refreshAllKeyLabels(); saveSettings(); });
 window.addEventListener('resize', () => { if (layoutSelect.value === 'circle') applyCircleLayout(); });
 
 loadSettings();
