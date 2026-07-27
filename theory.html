@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazzarus Prime - Music Theory</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden}
+
+/* ── TITLE BAR ── */
+.titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel2);padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
+.titleLeft{display:flex;align-items:center;gap:12px}
+.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(var(--accent-rgb),.4))}
+.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,var(--accent) 45%,var(--accent-dark) 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(var(--accent-rgb),.6))}
+.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
+.socialLinks a:hover{color:var(--accent);border-color:#333;background:#1a1a1a}
+
+/* ── NAV ── */
+.topBar{display:flex;flex-direction:column;padding:8px 10px;background:var(--bg-panel4);position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}
+.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
+.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover,.nav-btn:active{background:#444;border-color:var(--accent);color:var(--accent)}
+.nav-btn.active-page{border-color:rgba(var(--accent-rgb),.33);color:var(--accent);background:var(--accent-dim1)}
+.clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
+.search-row input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
+@media(max-width:660px){.nav-btn{padding:7px 9px;font-size:10px}.topBar{gap:4px;padding:6px 8px}.nav-row{gap:4px}.socialLinks{display:none}.titleBar .site-logo{width:36px;height:36px}}
+
+/* ── SECTION TABS ── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:18px 14px;position:relative}
+.section-tabs{display:flex;gap:0;margin-bottom:20px;flex-wrap:wrap}
+.section-tab{background:#1e1e1e;color:#888;border:1px solid #444;padding:10px 20px;cursor:pointer;font-weight:700;font-size:13px;text-transform:uppercase;transition:.2s;font-family:'Inter',sans-serif}
+.section-tab:first-child{border-radius:6px 0 0 6px}
+.section-tab:last-child{border-radius:0 6px 6px 0;border-left:none}
+.section-tab:not(:first-child):not(:last-child){border-left:none}
+.section-tab.active{background:rgba(var(--accent-rgb),.13);color:var(--accent);border-color:var(--accent)}
+.section-tab:hover{background:#333;color:var(--accent)}
+.theory-section{display:none}
+.theory-section.active{display:block}
+
+/* ── CONCEPT CARDS ── */
+.concept-card{background:var(--bg-panel2);border:1px solid #222;border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.concept-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1.5px;color:var(--accent);margin:0 0 8px}
+.concept-body{font-size:14px;color:#ccc;line-height:1.7;margin-bottom:12px}
+.concept-body strong{color:#fff}
+.formula-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.formula-step{background:#1e1e1e;border:1px solid #333;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;color:#aaa}
+.formula-step.half{color:var(--accent);border-color:var(--accent)}
+
+/* ── NOTE PILLS (shared with Chords page) ── */
+.scale-notes{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.note-pill{background:#1e1e1e;border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;transition:.2s;cursor:pointer;user-select:none}
+.note-pill:hover{border-color:#888;color:#fff;background:#2a2a2a}
+.note-pill.root{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
+.note-pill.active-pill{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.5)}
+.hint{color:#555;font-size:12px;margin:0 0 8px}
+
+/* ── ROOT PICKER (used by Fundamentals + Circle) ── */
+.controls-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:flex-end}
+.ctrl-group{display:flex;flex-direction:column;gap:4px}
+.ctrl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666}
+select{background:#1e1e1e;color:white;border:1px solid #444;padding:9px 12px;border-radius:6px;font-size:14px;font-family:inherit;cursor:pointer;min-width:110px}
+select:focus{outline:none;border-color:var(--accent)}
+
+/* ── DIATONIC CHORD GRID ── */
+.diatonic-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.diatonic-chip{background:#1e1e1e;border:1px solid #333;border-radius:8px;padding:10px 14px;min-width:70px;text-align:center;cursor:pointer;transition:.2s}
+.diatonic-chip:hover{border-color:var(--accent);background:#2a2a2a}
+.diatonic-chip .rn{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);letter-spacing:1px}
+.diatonic-chip .chord-name{font-size:12px;color:#ccc;margin-top:2px}
+.diatonic-chip .fn{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── CIRCLE OF FIFTHS ── */
+.circle-wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.circle-svg-wrap{flex:0 0 auto}
+.circle-info{flex:1 1 280px;min-width:260px}
+.wedge{cursor:pointer;transition:.15s}
+.wedge:hover{opacity:.85}
+.wedge-label{font-family:'Bebas Neue',sans-serif;pointer-events:none;user-select:none}
+.wedge-sublabel{pointer-events:none;user-select:none;font-family:'Inter',sans-serif}
+
+/* ── INFO BOX ── */
+.info-box{background:var(--bg-panel4);border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px;color:#888;line-height:1.6}
+.info-box strong{color:#ccc}
+
+/* ── GLOSSARY ── */
+.glossary-search{width:100%;padding:10px 14px;border-radius:6px;border:1px solid #444;background:#1e1e1e;color:white;font-size:14px;margin-bottom:16px}
+.glossary-search:focus{outline:none;border-color:var(--accent)}
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.glossary-item{background:var(--bg-panel2);border:1px solid #222;border-radius:8px;padding:12px 14px}
+.glossary-term{font-weight:900;color:var(--accent);font-size:14px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.glossary-def{font-size:13px;color:#bbb;line-height:1.5}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:18px;color:#444;font-size:12px;border-top:1px solid #1a1a1a;margin-top:30px}
+footer a{color:#555;text-decoration:none;transition:.15s}
+footer a:hover{color:var(--accent)}
+.footer-sep{margin:0 6px;color:#2a2a2a}
+</style>
+</head>
+<body>
+
+<div class="titleBar">
+  <div class="titleLeft">
+    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
+    <h2>Lazzarus Prime — Music Theory</h2>
+  </div>
+    <div class="socialLinks">
+      <div class="theme-switcher" id="themeSwitcher">
+        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 Theme</button>
+        <div class="theme-menu" id="themeMenu"></div>
+      </div>
+    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
+    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
+    <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
+    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
+    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
+    <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a>
+    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+  </div>
+</div>
+
+<div class="topBar">
+  <div class="nav-row">
+    <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
+<button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
+<button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
+<button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
+<button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
+<button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
+<button class="nav-btn" onclick="location.href='groove.html'">🔥 Groove</button>
+<button class="nav-btn" onclick="location.href='drums.html'">🪘 Drums</button>
+<button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
+<button class="nav-btn active-page">📚 Theory</button>
+<button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
+<button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
+  </div>
+  <div class="search-row">
+    <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
+    <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="setSection('fundamentals')">Fundamentals</button>
+    <button class="section-tab" onclick="setSection('circle')">Circle of Fifths</button>
+    <button class="section-tab" onclick="setSection('glossary')">Glossary</button>
+  </div>
+
+  <!-- ══════════════ FUNDAMENTALS ══════════════ -->
+  <div class="theory-section active" id="section-fundamentals">
+
+    <div class="controls-row">
+      <div class="ctrl-group">
+        <span class="ctrl-label">Root Note</span>
+        <select id="fundRootSel">
+          <option>C</option><option>C#/Db</option><option>D</option><option>D#/Eb</option>
+          <option>E</option><option>F</option><option>F#/Gb</option><option>G</option>
+          <option>G#/Ab</option><option>A</option><option>A#/Bb</option><option>B</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">1. Intervals</h3>
+      <p class="concept-body">An interval is the distance between two notes, measured in <strong>semitones</strong> (half steps). Every scale, chord, and melody is just a pattern of intervals stacked on a root. Learn to hear these by name, not just play them by shape.</p>
+      <div class="hint">Click a pill to hear that interval above the root</div>
+      <div class="scale-notes" id="intervalPills"></div>
+      <div class="info-box"><strong>Why it matters:</strong> Once you can hear "that's a minor 3rd" instead of just "that sounds sad," you can transpose anything into any key on the fly — on any instrument.</div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">2. The Major Scale Formula</h3>
+      <p class="concept-body">Every major scale follows the same pattern of whole (W) and half (H) steps. Memorize the formula once, apply it from any root:</p>
+      <div class="formula-row">
+        <span class="formula-step">Root</span>
+        <span class="formula-step">W</span><span class="formula-step">2</span>
+        <span class="formula-step">W</span><span class="formula-step">3</span>
+        <span class="formula-step half">H</span><span class="formula-step">4</span>
+        <span class="formula-step">W</span><span class="formula-step">5</span>
+        <span class="formula-step">W</span><span class="formula-step">6</span>
+        <span class="formula-step">W</span><span class="formula-step">7</span>
+        <span class="formula-step half">H</span><span class="formula-step">Octave</span>
+      </div>
+      <div class="hint">Click a pill to hear the scale degree</div>
+      <div class="scale-notes" id="majorScalePills"></div>
+      <div class="info-box"><strong>Why it matters:</strong> Every mode (Dorian, Mixolydian, etc.) is the exact same seven notes as some major scale — just starting on a different degree. Know this formula and modes stop being a separate thing to memorize.</div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">3. Building Triads &amp; 7th Chords</h3>
+      <p class="concept-body">A triad stacks the <strong>1st, 3rd, and 5th</strong> of a scale. Change which 3rd and 5th you use, and the chord's quality changes:</p>
+      <div class="formula-row">
+        <span class="formula-step">Major: 1 – 3 – 5</span>
+        <span class="formula-step">Minor: 1 – ♭3 – 5</span>
+        <span class="formula-step">Diminished: 1 – ♭3 – ♭5</span>
+        <span class="formula-step">Augmented: 1 – 3 – ♯5</span>
+      </div>
+      <p class="concept-body">Add one more third on top and you get a 7th chord — the backbone of jazz, funk, and soul:</p>
+      <div class="formula-row">
+        <span class="formula-step">Maj7: 1‑3‑5‑7</span>
+        <span class="formula-step">Dom7: 1‑3‑5‑♭7</span>
+        <span class="formula-step">Min7: 1‑♭3‑5‑♭7</span>
+      </div>
+      <div class="hint">Pick a chord to hear it built from the selected root</div>
+      <div class="scale-notes" id="triadPills"></div>
+      <p class="hint" style="margin-top:10px">Want fretboard diagrams and voicings for these? Head to <a href="chords.html" style="color:var(--accent)">Chords &amp; Scales</a> — this page is about understanding the theory behind what's there.</p>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">4. Roman Numerals &amp; Diatonic Chords</h3>
+      <p class="concept-body">Harmonize every note of the major scale with a triad and you get seven chords that "belong" to that key — the diatonic chords. Roman numerals name them by scale degree, capital = major, lowercase = minor:</p>
+      <div class="diatonic-grid" id="diatonicGrid"></div>
+      <div class="info-box"><strong>Why it matters:</strong> Progressions like I–IV–V or ii–V–I aren't tied to one key — they're a shape. Learn "1‑4‑5" as a relationship and you can play it in any key instantly, which is exactly what happens when a song gets called out in a key you don't know.</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ CIRCLE OF FIFTHS ══════════════ -->
+  <div class="theory-section" id="section-circle">
+    <div class="concept-card">
+      <p class="concept-body">The circle of fifths arranges all 12 keys so that each step clockwise is a perfect 5th up (and one more sharp in the key signature). Click a key to see its signature, relative minor, and diatonic chords.</p>
+    </div>
+    <div class="circle-wrap">
+      <div class="circle-svg-wrap" id="circleSvgContainer"></div>
+      <div class="circle-info">
+        <div class="concept-card" id="circleInfoCard">
+          <h3 class="concept-title" id="circleKeyTitle">C Major</h3>
+          <p class="concept-body" id="circleKeySig">No sharps or flats.</p>
+          <p class="concept-body">Relative minor: <strong id="circleRelMinor">A Minor</strong></p>
+          <div class="hint">Diatonic chords — click to hear the triad</div>
+          <div class="diatonic-grid" id="circleDiatonicGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ GLOSSARY ══════════════ -->
+  <div class="theory-section" id="section-glossary">
+    <input class="glossary-search" id="glossarySearch" placeholder="Search terms…" oninput="renderGlossary()">
+    <div class="glossary-grid" id="glossaryGrid"></div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
+  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
+  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
+  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="drums.html">🪘 Drums</a><span class="footer-sep">·</span>
+  <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
+  <a href="theory.html">📚 Theory</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
+  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
+  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
+  <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a><span class="footer-sep">·</span>
+  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
+  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
+</footer>
+
+<script>
+// ── NOTE DATA (same conventions as chords.html) ──
+const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const NOTE_DISPLAY = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
+
+function noteIdx(name) {
+  const n = name.split('/')[0];
+  return NOTES.indexOf(n);
+}
+
+// ── AUDIO (identical engine to chords.html so it sounds consistent site-wide) ──
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+const NOTE_FREQS_BASE = [261.63,277.18,293.66,311.13,329.63,349.23,369.99,392.00,415.30,440.00,466.16,493.88];
+
+function playNote(noteIdx12) {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const freq = NOTE_FREQS_BASE[noteIdx12];
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    osc1.type = 'sawtooth';
+    osc2.type = 'triangle';
+    osc1.frequency.value = freq;
+    osc2.frequency.value = freq * 2.001;
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3000, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.4);
+    filter.Q.value = 1;
+    gainNode.gain.setValueAtTime(0.35, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+    osc1.connect(filter); osc2.connect(filter);
+    filter.connect(gainNode); gainNode.connect(ctx.destination);
+    osc1.start(ctx.currentTime); osc2.start(ctx.currentTime);
+    osc1.stop(ctx.currentTime + 1.3); osc2.stop(ctx.currentTime + 1.3);
+  } catch(e) { /* audio not available */ }
+}
+
+// Play several notes as a chord (staggered slightly for a strum-ish feel)
+function playChordTones(idxs) {
+  idxs.forEach((ni, i) => setTimeout(() => playNote(ni), i * 35));
+}
+
+// ── NAV SEARCH / RANDOM (redirect to Home, same pattern as stats.html) ──
+function navSearch(){
+  var q=document.getElementById('searchBox').value;
+  document.getElementById('clearBtn').style.display=q?'inline-block':'none';
+  if(q.length>=1){
+    clearTimeout(window._nsTimer);
+    window._nsTimer=setTimeout(function(){
+      window.location.href='index.html?search='+encodeURIComponent(q)+'&nosplash=1';
+    },600);
+  }
+}
+function clearNavSearch(){
+  document.getElementById('searchBox').value='';
+  document.getElementById('clearBtn').style.display='none';
+}
+function randomSong(){
+  window.location.href='index.html?nosplash=1';
+}
+
+// ── SECTION SWITCHING ──
+function setSection(name) {
+  document.querySelectorAll('.section-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.theory-section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('section-' + name).classList.add('active');
+}
+
+// ══════════════ FUNDAMENTALS ══════════════
+const INTERVAL_DATA = [
+  {semi:0, label:'Root', short:'R'},
+  {semi:1, label:'Minor 2nd', short:'m2'},
+  {semi:2, label:'Major 2nd', short:'M2'},
+  {semi:3, label:'Minor 3rd', short:'m3'},
+  {semi:4, label:'Major 3rd', short:'M3'},
+  {semi:5, label:'Perfect 4th', short:'P4'},
+  {semi:6, label:'Tritone', short:'TT'},
+  {semi:7, label:'Perfect 5th', short:'P5'},
+  {semi:8, label:'Minor 6th', short:'m6'},
+  {semi:9, label:'Major 6th', short:'M6'},
+  {semi:10, label:'Minor 7th', short:'m7'},
+  {semi:11, label:'Major 7th', short:'M7'},
+  {semi:12, label:'Octave', short:'Oct'},
+];
+
+const MAJOR_STEPS = [0,2,4,5,7,9,11]; // scale degree semitone offsets
+
+const TRIAD_TYPES = {
+  major: {name:'Major', intervals:[0,4,7]},
+  minor: {name:'Minor', intervals:[0,3,7]},
+  dim:   {name:'Diminished', intervals:[0,3,6]},
+  aug:   {name:'Augmented', intervals:[0,4,8]},
+  maj7:  {name:'Major 7th', intervals:[0,4,7,11]},
+  dom7:  {name:'Dominant 7th', intervals:[0,4,7,10]},
+  min7:  {name:'Minor 7th', intervals:[0,3,7,10]},
+};
+
+// Diatonic chord quality per scale degree (1-indexed): I ii iii IV V vi vii°
+const DIATONIC_QUALITY = ['maj','min','min','maj','maj','min','dim'];
+const DIATONIC_RN = ['I','ii','iii','IV','V','vi','vii°'];
+const DIATONIC_FN = ['Tonic','Supertonic','Mediant','Subdominant','Dominant','Submediant','Leading Tone'];
+
+function currentFundRootIdx() {
+  return noteIdx(document.getElementById('fundRootSel').value);
+}
+
+function renderIntervalPills() {
+  const rootIdx = currentFundRootIdx();
+  const el = document.getElementById('intervalPills');
+  el.innerHTML = INTERVAL_DATA.map(iv => {
+    const ni = (rootIdx + iv.semi) % 12;
+    return `<span class="note-pill ${iv.semi===0?'root':''}" onclick="playNote(${ni})">${NOTE_DISPLAY[ni].split('/')[0]} <span style="color:#666">(${iv.short})</span></span>`;
+  }).join('');
+}
+
+function renderMajorScalePills() {
+  const rootIdx = currentFundRootIdx();
+  const el = document.getElementById('majorScalePills');
+  const degreeNames = ['1','2','3','4','5','6','7','8'];
+  const idxs = [...MAJOR_STEPS, 12];
+  el.innerHTML = idxs.map((semi, i) => {
+    const ni = (rootIdx + semi) % 12;
+    return `<span class="note-pill ${i===0?'root':''}" onclick="playNote(${ni})">${NOTE_DISPLAY[ni].split('/')[0]} <span style="color:#666">(${degreeNames[i]})</span></span>`;
+  }).join('');
+}
+
+function renderTriadPills() {
+  const rootIdx = currentFundRootIdx();
+  const el = document.getElementById('triadPills');
+  el.innerHTML = Object.entries(TRIAD_TYPES).map(([key, t]) => {
+    const idxs = t.intervals.map(s => (rootIdx + s) % 12);
+    return `<span class="note-pill" onclick="playChordTones([${idxs.join(',')}])">${NOTE_DISPLAY[rootIdx].split('/')[0]} ${t.name}</span>`;
+  }).join('');
+}
+
+function renderDiatonicGrid() {
+  const rootIdx = currentFundRootIdx();
+  const el = document.getElementById('diatonicGrid');
+  el.innerHTML = MAJOR_STEPS.map((semi, i) => {
+    const degRoot = (rootIdx + semi) % 12;
+    const quality = DIATONIC_QUALITY[i];
+    const triadSemis = quality === 'maj' ? [0,4,7] : quality === 'min' ? [0,3,7] : [0,3,6];
+    const idxs = triadSemis.map(s => (degRoot + s) % 12);
+    const nm = NOTE_DISPLAY[degRoot].split('/')[0] + (quality==='min'?'m':quality==='dim'?'dim':'');
+    return `<div class="diatonic-chip" onclick="playChordTones([${idxs.join(',')}])">
+      <div class="rn">${DIATONIC_RN[i]}</div>
+      <div class="chord-name">${nm}</div>
+      <div class="fn">${DIATONIC_FN[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderFundamentals() {
+  renderIntervalPills();
+  renderMajorScalePills();
+  renderTriadPills();
+  renderDiatonicGrid();
+}
+document.getElementById('fundRootSel').addEventListener('change', renderFundamentals);
+
+// ══════════════ CIRCLE OF FIFTHS ══════════════
+// Order around the circle clockwise from 12 o'clock, by perfect fifths
+const CIRCLE_KEYS = [
+  {name:'C',  root:'C',  sig:'No sharps or flats.'},
+  {name:'G',  root:'G',  sig:'1 sharp (F♯).'},
+  {name:'D',  root:'D',  sig:'2 sharps (F♯, C♯).'},
+  {name:'A',  root:'A',  sig:'3 sharps (F♯, C♯, G♯).'},
+  {name:'E',  root:'E',  sig:'4 sharps (F♯, C♯, G♯, D♯).'},
+  {name:'B',  root:'B',  sig:'5 sharps (F♯, C♯, G♯, D♯, A♯) — enharmonic with C♭.'},
+  {name:'F♯/G♭', root:'F#', sig:'6 sharps / 6 flats — the midpoint of the circle.'},
+  {name:'D♭',  root:'C#', sig:'5 flats (B♭, E♭, A♭, D♭, G♭).'},
+  {name:'A♭',  root:'G#', sig:'4 flats (B♭, E♭, A♭, D♭).'},
+  {name:'E♭',  root:'D#', sig:'3 flats (B♭, E♭, A♭).'},
+  {name:'B♭',  root:'A#', sig:'2 flats (B♭, E♭).'},
+  {name:'F',  root:'F',  sig:'1 flat (B♭).'},
+];
+
+let circleSelectedIdx = 0;
+
+function buildCircleSVG() {
+  const size = 340, cx = size/2, cy = size/2, rOuter = 155, rInner = 90, rLabel = 122;
+  let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+  const n = CIRCLE_KEYS.length;
+  for (let i = 0; i < n; i++) {
+    const a0 = (i / n) * 2*Math.PI - Math.PI/2 - (Math.PI/n);
+    const a1 = (i / n) * 2*Math.PI - Math.PI/2 + (Math.PI/n);
+    const x0 = cx + rOuter*Math.cos(a0), y0 = cy + rOuter*Math.sin(a0);
+    const x1 = cx + rOuter*Math.cos(a1), y1 = cy + rOuter*Math.sin(a1);
+    const xi0 = cx + rInner*Math.cos(a0), yi0 = cy + rInner*Math.sin(a0);
+    const xi1 = cx + rInner*Math.cos(a1), yi1 = cy + rInner*Math.sin(a1);
+    const path = `M ${xi0} ${yi0} L ${x0} ${y0} A ${rOuter} ${rOuter} 0 0 1 ${x1} ${y1} L ${xi1} ${yi1} A ${rInner} ${rInner} 0 0 0 ${xi0} ${yi0} Z`;
+    const isActive = i === circleSelectedIdx;
+    const fill = isActive ? 'var(--accent)' : 'var(--bg-panel)';
+    const stroke = 'var(--bg-page2)';
+    svg += `<path class="wedge" d="${path}" fill="${fill}" stroke="${stroke}" stroke-width="2" onclick="selectCircleKey(${i})"/>`;
+    const labelAngle = (i / n) * 2*Math.PI - Math.PI/2;
+    const lx = cx + rLabel*Math.cos(labelAngle), ly = cy + rLabel*Math.sin(labelAngle);
+    const textFill = isActive ? '#000' : '#eee';
+    svg += `<text class="wedge-label" x="${lx}" y="${ly+7}" text-anchor="middle" font-size="19" fill="${textFill}" style="pointer-events:none">${CIRCLE_KEYS[i].name}</text>`;
+  }
+  svg += `<circle cx="${cx}" cy="${cy}" r="${rInner-6}" fill="var(--bg-panel2)" stroke="#222" stroke-width="1"/>`;
+  svg += `<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="11" fill="#666" font-family="Inter,sans-serif" font-weight="700">CIRCLE OF</text>`;
+  svg += `<text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="11" fill="#666" font-family="Inter,sans-serif" font-weight="700">FIFTHS</text>`;
+  svg += '</svg>';
+  return svg;
+}
+
+function selectCircleKey(i) {
+  circleSelectedIdx = i;
+  document.getElementById('circleSvgContainer').innerHTML = buildCircleSVG();
+  renderCircleInfo();
+}
+
+function renderCircleInfo() {
+  const key = CIRCLE_KEYS[circleSelectedIdx];
+  const rootIdx = noteIdx(key.root);
+  document.getElementById('circleKeyTitle').textContent = key.name + ' Major';
+  document.getElementById('circleKeySig').textContent = key.sig;
+  const relMinorIdx = (rootIdx + 9) % 12; // 6th scale degree = relative minor root
+  document.getElementById('circleRelMinor').textContent = NOTE_DISPLAY[relMinorIdx].split('/')[0] + ' Minor';
+
+  const el = document.getElementById('circleDiatonicGrid');
+  el.innerHTML = MAJOR_STEPS.map((semi, i) => {
+    const degRoot = (rootIdx + semi) % 12;
+    const quality = DIATONIC_QUALITY[i];
+    const triadSemis = quality === 'maj' ? [0,4,7] : quality === 'min' ? [0,3,7] : [0,3,6];
+    const idxs = triadSemis.map(s => (degRoot + s) % 12);
+    const nm = NOTE_DISPLAY[degRoot].split('/')[0] + (quality==='min'?'m':quality==='dim'?'dim':'');
+    return `<div class="diatonic-chip" onclick="playChordTones([${idxs.join(',')}])">
+      <div class="rn">${DIATONIC_RN[i]}</div>
+      <div class="chord-name">${nm}</div>
+      <div class="fn">${DIATONIC_FN[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+function initCircle() {
+  document.getElementById('circleSvgContainer').innerHTML = buildCircleSVG();
+  renderCircleInfo();
+}
+
+// ══════════════ GLOSSARY ══════════════
+const GLOSSARY_TERMS = [
+  {term:'Arpeggio', def:'Playing the notes of a chord one at a time instead of together.'},
+  {term:'Cadence', def:'A chord progression that ends a phrase — gives a sense of resting or resolving.'},
+  {term:'Diatonic', def:'A note or chord that belongs naturally to the current key/scale, with no accidentals.'},
+  {term:'Dorian', def:'A minor-family mode with a raised 6th compared to natural minor. Slightly brighter, jazzy/funky feel.'},
+  {term:'Dominant', def:'The 5th scale degree, or a chord built on it (V). Creates tension that wants to resolve to the tonic.'},
+  {term:'Enharmonic', def:'Two names for the same pitch, e.g. C♯ and D♭.'},
+  {term:'Interval', def:'The distance between two pitches, measured in semitones or by name (e.g. major 3rd).'},
+  {term:'Key Signature', def:'The sharps or flats shown at the start of a staff that define which key a piece is in.'},
+  {term:'Mixolydian', def:'A major-family mode with a flattened 7th. Bluesy but still bright — common in classic rock.'},
+  {term:'Mode', def:'A scale built by starting the same 7 notes of a major scale on a different degree.'},
+  {term:'Pentatonic', def:'A 5-note scale — remove the 4th and 7th from major (or 2nd and 6th from minor) and nothing clashes.'},
+  {term:'Relative Minor', def:'The minor key that shares the exact same notes/key signature as a major key, starting on its 6th degree.'},
+  {term:'Roman Numerals', def:'A system for naming chords by their scale degree instead of a fixed note name, so progressions transpose easily.'},
+  {term:'Semitone', def:'The smallest interval in Western music — one fret on a guitar, one key (black or white) on a piano.'},
+  {term:'Subdominant', def:'The 4th scale degree, or a chord built on it (IV).'},
+  {term:'Suspended Chord', def:'A chord with the 3rd replaced by the 2nd (sus2) or 4th (sus4) — neither major nor minor, feels unresolved.'},
+  {term:'Tonic', def:'The 1st scale degree — "home base." The note or chord a piece resolves back to.'},
+  {term:'Triad', def:'A three-note chord built from a root, 3rd, and 5th.'},
+  {term:'Tritone', def:'An interval of 6 semitones, exactly half an octave. Historically called the "devil\'s interval" for its tension.'},
+  {term:'Voice Leading', def:'Choosing how each note moves from one chord to the next, aiming for smooth, minimal motion between voices.'},
+  {term:'Whole Step', def:'An interval of two semitones — two frets, two piano keys counting black and white.'},
+];
+
+function renderGlossary() {
+  const q = document.getElementById('glossarySearch').value.toLowerCase();
+  const filtered = GLOSSARY_TERMS.filter(t => t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q));
+  document.getElementById('glossaryGrid').innerHTML = filtered.map(t =>
+    `<div class="glossary-item"><div class="glossary-term">${t.term}</div><div class="glossary-def">${t.def}</div></div>`
+  ).join('') || '<p style="color:#666">No terms match that search.</p>';
+}
+
+// ── INIT ──
+renderFundamentals();
+initCircle();
+renderGlossary();
+</script>
+</body>
+</html>
