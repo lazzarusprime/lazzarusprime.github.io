@@ -4,7 +4,7 @@ HTML
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lazzarus Prime — Groove Station Pro</title>
+<title>Lazzarus Prime — Groove Station</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -16,7 +16,7 @@ HTML
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden;user-select:none}
 
-/* ── TITLE BAR (matches site) ── */
+/* ── TITLE BAR ── */
 .titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel2);padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
 .titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(var(--accent-rgb),.4))}
@@ -25,7 +25,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 .socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
 .socialLinks a:hover{color:var(--accent);border-color:#333;background:#1a1a1a}
 
-/* ── NAV (matches site) ── */
+/* ── NAV ── */
 .topBar{display:flex;flex-direction:column;padding:8px 10px;background:var(--bg-panel4);position:sticky;top:0;z-index:100;border-bottom:1px solid #333;gap:6px}.nav-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.search-row{display:flex;gap:6px;align-items:center;max-width:400px}
 .nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
 .nav-btn:hover,.nav-btn:active{background:#444;border-color:var(--accent);color:var(--accent)}
@@ -38,7 +38,7 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 .page-header h1{margin:0 0 6px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:4px;background:linear-gradient(to bottom,#fff 0%,var(--accent) 50%,var(--accent-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-header p{margin:0;color:#555;font-size:13px;letter-spacing:1px}
 
-/* Explanation Tooltip Banner */
+/* Explanation Banner */
 .info-banner {max-width:700px; margin: 8px auto 0; background: #161616; border: 1px solid #222; padding: 6px 12px; border-radius: 4px; font-size: 11px; color: #888; line-height: 1.4}
 .info-banner strong {color: #ff5500}
 
@@ -577,16 +577,42 @@ function hit(inst, time, volumeMultiplier) {
     noise.start(safeTime);
     noise.stop(safeTime + dur + 0.02);
 
-  } else {
-    // Generic transient synth hit
+  } else if (inst === 'TomHigh' || inst === 'TomLow') {
     const osc = ctx.createOscillator();
     const env = ctx.createGain();
+    const freq = inst === 'TomHigh' ? 180 : 90;
+    osc.frequency.setValueAtTime(freq, safeTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.4, safeTime + 0.2);
+    env.gain.setValueAtTime(0.8, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.2);
     osc.connect(env); env.connect(masterGain);
-    osc.frequency.setValueAtTime(300, safeTime);
+    osc.start(safeTime); osc.stop(safeTime + 0.22);
+
+  } else if (inst === 'Crash' || inst === 'Ride') {
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    const hpf = ctx.createBiquadFilter();
+    const env = ctx.createGain();
+    hpf.type = 'highpass';
+    hpf.frequency.value = inst === 'Crash' ? 4000 : 6000;
+    const dur = inst === 'Crash' ? 0.9 : 0.4;
+    noise.connect(hpf); hpf.connect(env); env.connect(masterGain);
     env.gain.setValueAtTime(0.5, safeTime);
-    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.1);
-    osc.start(safeTime);
-    osc.stop(safeTime + 0.12);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + dur);
+    noise.start(safeTime); noise.stop(safeTime + dur + 0.05);
+
+  } else {
+    // Clap / Percussion
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    const bpf = ctx.createBiquadFilter();
+    const env = ctx.createGain();
+    bpf.type = 'bandpass';
+    bpf.frequency.value = 1200;
+    noise.connect(bpf); bpf.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(0.7, safeTime);
+    env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.12);
+    noise.start(safeTime); noise.stop(safeTime + 0.15);
   }
 }
 
@@ -814,6 +840,8 @@ function generateBass() {
     if (style === 'gallop' && (i % 4 !== 3)) bassPattern[i] = root;
     if (style === 'subdrop' && (i % 8 === 0)) bassPattern[i] = root;
     if (style === 'funk' && (i % 4 === 0 || i % 16 === 10)) bassPattern[i] = root;
+    if (style === 'reggae' && (i % 8 === 4)) bassPattern[i] = root;
+    if (style === 'walking' && (i % 4 === 0)) bassPattern[i] = root;
   }
 
   if (!bassEnabled) toggleBassActive();
@@ -942,16 +970,182 @@ function togglePerfMode() {
 }
 
 function loadPreset(name) {
-  clearPattern();
-  if (name === 'rock' || name === 'hardrock') {
-    pattern.Kick[0] = 2; pattern.Kick[8] = 1; pattern.Kick[10] = 1;
-    pattern.Snare[4] = 2; pattern.Snare[12] = 2;
-    for (let i = 0; i < maxSteps; i += 2) pattern.ClosedHat[i] = 1;
-  } else if (name === 'funk') {
-    pattern.Kick[0] = 2; pattern.Kick[6] = 1; pattern.Kick[10] = 1;
-    pattern.Snare[4] = 2; pattern.Snare[12] = 2; pattern.Snare[15] = 1;
-    for (let i = 0; i < maxSteps; i++) pattern.ClosedHat[i] = 1;
+  INSTRUMENTS.forEach(inst => pattern[inst.id] = Array(32).fill(0));
+
+  const setSteps = (inst, steps, val = 1) => {
+    steps.forEach(s => {
+      if (s < maxSteps) pattern[inst][s] = val;
+    });
+  };
+
+  switch (name) {
+    case 'rock':
+      setSteps('Crash', [0], 2);
+      setSteps('Kick', [0, 8, 10]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [14]);
+      break;
+
+    case 'hardrock':
+      setSteps('Crash', [0], 2);
+      setSteps('Ride', [2, 4, 6, 8, 10, 12, 14]);
+      setSteps('Kick', [0, 6, 8, 11, 14]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('TomLow', [15]);
+      break;
+
+    case 'metal':
+      setSteps('Crash', [0, 8], 2);
+      setSteps('Kick', [0, 2, 4, 6, 8, 10, 12, 14], 2);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 6, 8, 10, 14]);
+      setSteps('TomHigh', [13]);
+      setSteps('TomLow', [15], 2);
+      break;
+
+    case 'punk':
+      setSteps('Crash', [0], 2);
+      setSteps('Kick', [0, 3, 6, 8, 11, 14]);
+      setSteps('Snare', [2, 4, 7, 10, 12, 15], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [6, 14]);
+      break;
+
+    case 'funk':
+      setSteps('Kick', [0, 6, 10]);
+      setSteps('Snare', [4, 7, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [2, 10]);
+      setSteps('Clap', [12]);
+      setSteps('TomHigh', [15]);
+      break;
+
+    case 'groove':
+      setSteps('Kick', [0, 7, 10, 14]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+      setSteps('OpenHat', [6, 14]);
+      setSteps('Ride', [0, 8]);
+      break;
+
+    case 'rnb':
+      setSteps('Kick', [0, 6, 8, 13]);
+      setSteps('Snare', [4, 12]);
+      setSteps('Clap', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [10]);
+      break;
+
+    case 'disco':
+      setSteps('Kick', [0, 4, 8, 12], 2);
+      setSteps('Snare', [4, 12]);
+      setSteps('Clap', [4, 12], 2);
+      setSteps('OpenHat', [2, 6, 10, 14], 2);
+      setSteps('ClosedHat', [0, 4, 8, 12]);
+      break;
+
+    case '80s':
+      setSteps('Kick', [0, 6, 8, 10]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('Clap', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('TomHigh', [14]);
+      setSteps('TomLow', [15]);
+      break;
+
+    case 'hiphop':
+      setSteps('Kick', [0, 3, 8, 11]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('Clap', [12]);
+      setSteps('OpenHat', [14]);
+      break;
+
+    case 'trap':
+      setSteps('Kick', [0, 6, 13]);
+      setSteps('Snare', [8], 2);
+      setSteps('Clap', [8], 2);
+      setSteps('ClosedHat', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 2);
+      setSteps('OpenHat', [4, 12]);
+      break;
+
+    case 'reggae':
+      setSteps('Kick', [6, 14]);
+      setSteps('Snare', [6, 14], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [3, 11]);
+      break;
+
+    case 'latin':
+      setSteps('Kick', [0, 3, 6, 10, 12]);
+      setSteps('Snare', [4, 9, 14]);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [2, 10]);
+      setSteps('TomHigh', [6, 7]);
+      setSteps('TomLow', [14, 15]);
+      break;
+
+    case 'bossa':
+      setSteps('Kick', [0, 3, 6, 8, 11, 14]);
+      setSteps('Snare', [4, 10]);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('Ride', [0, 4, 8, 12]);
+      break;
+
+    case 'jazz':
+      setSteps('Ride', [0, 3, 4, 7, 8, 11, 12, 15]);
+      setSteps('ClosedHat', [4, 12]);
+      setSteps('Kick', [0, 10]);
+      setSteps('Snare', [6, 14]);
+      break;
+
+    case 'blues':
+      setSteps('Ride', [0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15]);
+      setSteps('Kick', [0, 8, 10]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [4, 12]);
+      break;
+
+    case 'shuffle':
+      setSteps('ClosedHat', [0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15]);
+      setSteps('Kick', [0, 8]);
+      setSteps('Snare', [4, 12], 2);
+      break;
+
+    case 'dnb':
+      setSteps('Kick', [0, 10]);
+      setSteps('Snare', [4, 12], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('OpenHat', [6, 14]);
+      setSteps('Crash', [0], 2);
+      setSteps('TomHigh', [15]);
+      break;
+
+    case 'halftime':
+      setSteps('Crash', [0], 2);
+      setSteps('Kick', [0, 3, 11]);
+      setSteps('Snare', [8], 2);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      setSteps('TomHigh', [14]);
+      setSteps('TomLow', [15], 2);
+      break;
+
+    default:
+      setSteps('Kick', [0, 8]);
+      setSteps('Snare', [4, 12]);
+      setSteps('ClosedHat', [0, 2, 4, 6, 8, 10, 12, 14]);
+      break;
   }
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    if (btn.getAttribute('onclick')?.includes(`'${name}'`)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
   renderGrid();
 }
 
