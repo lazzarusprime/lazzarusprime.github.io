@@ -51,6 +51,11 @@
     },
     {
         "artist":  "2Pac",
+        "song":  "I Ain\u0027t Mad At Cha",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/aa/07/db/aa07db20-0b14-d09c-ead7-5b9e3680cb76/00602527051840.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "2Pac",
         "song":  "Life Goes On",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/aa/07/db/aa07db20-0b14-d09c-ead7-5b9e3680cb76/00602527051840.rgb.jpg/600x600bb.jpg"
     },
@@ -952,6 +957,11 @@
     {
         "artist":  "Alice in Chains",
         "song":  "P",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/55/a9/15/55a915af-79ea-f4be-e789-e314601d39bc/696998592223.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Alice in Chains",
+        "song":  "Phantom Limb",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/55/a9/15/55a915af-79ea-f4be-e789-e314601d39bc/696998592223.jpg/600x600bb.jpg"
     },
     {
@@ -4131,6 +4141,11 @@
     },
     {
         "artist":  "Black Sabbath",
+        "song":  "Changes Dell",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/be/27/91/be279120-2285-16c6-c7ba-9d6643d4a948/075992732727.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Black Sabbath",
         "song":  "Ironman",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/be/27/91/be279120-2285-16c6-c7ba-9d6643d4a948/075992732727.jpg/600x600bb.jpg"
     },
@@ -6150,6 +6165,11 @@
         "art":  "https://dn710002.ca.archive.org/0/items/mbid-046ca1cb-a933-4bcb-9828-39671895a24d/mbid-046ca1cb-a933-4bcb-9828-39671895a24d-35397562521_thumb500.jpg"
     },
     {
+        "artist":  "Christophe",
+        "song":  "Aline",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/ec/05/26/ec0526ae-1d4e-de24-0827-8b4a9c2420c1/00602537770199.rgb.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "Chubby Checker",
         "song":  "Let\u0027s Twist Again",
         "art":  "https://dn721400.ca.archive.org/0/items/mbid-5e30b6f8-7b7b-436c-86b4-661ef97ca46d/mbid-5e30b6f8-7b7b-436c-86b4-661ef97ca46d-20323271279_thumb500.jpg"
@@ -7620,6 +7640,11 @@
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
     },
     {
+        "artist":  "Donna Summer",
+        "song":  "She Works Hard For The Money P 2 P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b0/3d/23/b03d231f-3099-5409-cb9d-c7bdce71343b/06UMGIM02285.rgb.jpg/600x600bb.jpg"
+    },
+    {
         "artist":  "Doors",
         "song":  "Doors Blue Sunday",
         "art":  "https://dn711309.ca.archive.org/0/items/mbid-4438e99b-ef1e-32d0-962d-79e9f511f64e/mbid-4438e99b-ef1e-32d0-962d-79e9f511f64e-3698589799_thumb500.jpg"
@@ -9064,6 +9089,11 @@
         "art":  "https://dn721201.ca.archive.org/0/items/mbid-43d7578a-17de-4ce6-810b-dd5deb9bb59c/mbid-43d7578a-17de-4ce6-810b-dd5deb9bb59c-42425106549_thumb500.jpg"
     },
     {
+        "artist":  "Fiona Apple",
+        "song":  "Fast As You Can",
+        "art":  "https://dn721201.ca.archive.org/0/items/mbid-43d7578a-17de-4ce6-810b-dd5deb9bb59c/mbid-43d7578a-17de-4ce6-810b-dd5deb9bb59c-42425106549_thumb500.jpg"
+    },
+    {
         "artist":  "Firehose",
         "song":  "Brave Captain",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/04/e9/c7/04e9c75c-b12d-2024-9e3c-4317ead4ddf8/669910749258.jpg/600x600bb.jpg"
@@ -10065,6 +10095,11 @@
     },
     {
         "artist":  "Foo Fighters",
+        "song":  "Summers End P 2 P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Foo Fighters",
         "song":  "Sunday Rain",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3a/39/a3/3a39a3dd-8765-1cef-950b-74535be02b55/dj.nsnhkdgg.jpg/600x600bb.jpg"
     },
@@ -10677,6 +10712,11 @@
         "artist":  "Genesis",
         "song":  "Throwing It All Away P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music/2f/5e/61/mzi.fornxdla.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Gentle Giants",
+        "song":  "Giant Cogs In Cogs Aludog",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9f/22/03/9f220340-b076-9c03-4cf7-8e87cce78a22/5063585500230_cover.jpg/600x600bb.jpg"
     },
     {
         "artist":  "George Harrison",
@@ -11371,6 +11411,11 @@
     {
         "artist":  "Green Day",
         "song":  "Corvette Summer P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Green Day",
+        "song":  "Corvette Summer P 2 P 2 P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/600x600bb.jpg"
     },
     {
@@ -13005,6 +13050,11 @@
     },
     {
         "artist":  "Incubus",
+        "song":  "Summer Romance Anti Gravity Love Song P 2 P 2 P 2",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Incubus",
         "song":  "Talk Shows On Mute",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dd/a4/c1/dda4c166-da07-ba22-60e4-499b477c6e77/mzi.ffqrqnqb.jpg/600x600bb.jpg"
     },
@@ -13866,6 +13916,11 @@
     {
         "artist":  "Jamiroquai",
         "song":  "P",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/3f/ce/b9/3fceb987-407a-ab54-10a0-21fe37dd2ecd/074646790328.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Jamiroquai",
+        "song":  "P P 2",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/3f/ce/b9/3fceb987-407a-ab54-10a0-21fe37dd2ecd/074646790328.jpg/600x600bb.jpg"
     },
     {
@@ -17592,6 +17647,11 @@
         "artist":  "Les Cowboys",
         "song":  "Ti Cul",
         "art":  "https://dn710903.ca.archive.org/0/items/mbid-284e85bc-2bf5-496b-8c61-ed8c1d149437/mbid-284e85bc-2bf5-496b-8c61-ed8c1d149437-40918497607_thumb500.jpg"
+    },
+    {
+        "artist":  "Less Than Jake",
+        "song":  "All My Best Friends Are Metalheads",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/38/71/38/387138a9-c6e2-b2c9-720a-28c8027b612b/dj.vhpvwjye.jpg/600x600bb.jpg"
     },
     {
         "artist":  "Lil John and The Eastside Boyz",
@@ -25014,6 +25074,11 @@
     },
     {
         "artist":  "Paul McCartney",
+        "song":  "Live And Let Die P 2",
+        "art":  "https://dn721805.ca.archive.org/0/items/mbid-066b3a52-f3f6-4a03-bf0d-f9f603690ae1/mbid-066b3a52-f3f6-4a03-bf0d-f9f603690ae1-35913083233_thumb500.jpg"
+    },
+    {
+        "artist":  "Paul McCartney",
         "song":  "Maybe Im Amazed",
         "art":  "https://dn721805.ca.archive.org/0/items/mbid-066b3a52-f3f6-4a03-bf0d-f9f603690ae1/mbid-066b3a52-f3f6-4a03-bf0d-f9f603690ae1-35913083233_thumb500.jpg"
     },
@@ -26045,6 +26110,11 @@
         "artist":  "Pras",
         "song":  "Ghetto Supastar",
         "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/65/4b/cc/654bcc23-12e1-a1af-86ea-383fd6933694/mzi.nsuedoag.jpg/600x600bb.jpg"
+    },
+    {
+        "artist":  "Primus",
+        "song":  "Americanlife",
+        "art":  "https://is1-ssl.mzstatic.com/image/thumb/Music1/v4/e8/e6/85/e8e685b7-bb3a-b608-1585-66e07207ba9e/888880845320.tif/600x600bb.jpg"
     },
     {
         "artist":  "Primus",
@@ -32588,6 +32658,11 @@
     {
         "artist":  "Sublime",
         "song":  "Doin\u0027 Time Summertime P 2 P 2",
+        "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
+    },
+    {
+        "artist":  "Sublime",
+        "song":  "Doin\u0027 Time Summertime P 2 P 2 P 2",
         "art":  "https://dn710705.ca.archive.org/0/items/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6/mbid-15a8ef74-ccbb-492c-af40-c999e35bc5b6-3698219372_thumb500.jpg"
     },
     {
