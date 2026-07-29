@@ -170,6 +170,8 @@ footer a:hover{color:var(--accent)}
       <select id="instrSel">
         <option value="guitar">Guitar (Standard)</option>
         <option value="bass">Bass (4-string)</option>
+        <option value="piano">Piano</option>
+        <option value="harmonica">Harmonica (Diatonic)</option>
       </select>
     </div>
   </div>
@@ -615,6 +617,92 @@ function scaleFretboardSVG(openTuning, scaleNotes, rootNote, numFrets, soloNoteI
   return svg;
 }
 
+// ── PIANO KEYBOARD SVG ──
+function pianoKeyboardSVG(scaleNotes, rootNote, soloNoteIdx) {
+  const octaves = 2;
+  const whiteKeyW = 40, whiteKeyH = 140, blackKeyW = 24, blackKeyH = 85;
+  const whiteOffsets = [0,2,4,5,7,9,11];
+  const blackPattern = [1,3,null,6,8,10,null]; // black key after this white key index (null = none)
+  const rootIdx = noteIdx(rootNote);
+  const totalWhite = octaves * 7;
+  const W = totalWhite * whiteKeyW + 20, H = whiteKeyH + 20;
+  const isSolo = soloNoteIdx === undefined || soloNoteIdx === null;
+
+  let svg = `<svg class="fret-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">`;
+
+  const whiteKeySemis = [];
+  for (let o = 0; o < octaves; o++) for (let wi = 0; wi < 7; wi++) whiteKeySemis.push(o*12 + whiteOffsets[wi]);
+
+  whiteKeySemis.forEach((semiAbs, i) => {
+    const x = 10 + i * whiteKeyW;
+    const ni = semiAbs % 12;
+    const isRoot = ni === rootIdx;
+    const inScale = scaleNotes.includes(ni);
+    const highlighted = isSolo || ni === soloNoteIdx;
+    const fill = (inScale && highlighted) ? (isRoot ? 'var(--accent)' : '#2a6496') : '#f2f2f2';
+    const op = inScale ? (highlighted ? 1 : 0.35) : 1;
+    svg += `<rect x="${x}" y="10" width="${whiteKeyW-2}" height="${whiteKeyH}" rx="3" fill="${fill}" stroke="#333" stroke-width="1.2" opacity="${op}" onclick="playNote(${ni})" style="cursor:pointer"/>`;
+    if (inScale) {
+      const tFill = highlighted ? (isRoot ? '#000' : '#fff') : '#888';
+      svg += `<text x="${x+whiteKeyW/2-1}" y="${10+whiteKeyH-14}" text-anchor="middle" fill="${tFill}" font-size="11" font-weight="800" font-family="Inter,sans-serif" style="pointer-events:none">${NOTE_DISPLAY[ni].split('/')[0]}</text>`;
+    }
+  });
+
+  for (let o = 0; o < octaves; o++) {
+    blackPattern.forEach((semiOffset, wi) => {
+      if (semiOffset === null) return;
+      const whiteIndexBefore = o*7 + wi;
+      const x = 10 + (whiteIndexBefore+1) * whiteKeyW - blackKeyW/2 - 1;
+      const ni = (o*12 + semiOffset) % 12;
+      const isRoot = ni === rootIdx;
+      const inScale = scaleNotes.includes(ni);
+      const highlighted = isSolo || ni === soloNoteIdx;
+      const fill = (inScale && highlighted) ? (isRoot ? 'var(--accent)' : '#2a6496') : '#181818';
+      const op = inScale ? (highlighted ? 1 : 0.45) : 1;
+      svg += `<rect x="${x}" y="10" width="${blackKeyW}" height="${blackKeyH}" rx="2" fill="${fill}" stroke="#000" stroke-width="1" opacity="${op}" onclick="playNote(${ni})" style="cursor:pointer"/>`;
+      if (inScale) {
+        const tFill = isRoot ? '#000' : '#fff';
+        svg += `<text x="${x+blackKeyW/2}" y="${10+blackKeyH-10}" text-anchor="middle" fill="${tFill}" font-size="9" font-weight="800" font-family="Inter,sans-serif" style="pointer-events:none">${NOTE_DISPLAY[ni].split('/')[0]}</text>`;
+      }
+    });
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+// ── HARMONICA NOTE CHART (standard 10-hole Richter tuning) ──
+function harmonicaChartHTML(scaleNotes, rootNote, soloNoteIdx) {
+  const HOLES = 10;
+  const BLOW_OFFSETS = [0,4,7,0,4,7,0,4,7,0];
+  const DRAW_OFFSETS = [2,7,11,2,5,9,11,2,5,9];
+  const BEND_BLOW = [false,false,false,false,false,false,false,true,true,true];
+  const BEND_DRAW = [true,true,true,true,true,false,false,false,false,false];
+  const rootIdx = noteIdx(rootNote);
+  const isSolo = soloNoteIdx === undefined || soloNoteIdx === null;
+
+  function cell(offset, bendable) {
+    const ni = (rootIdx + offset) % 12;
+    const inScale = scaleNotes.includes(ni);
+    const isRoot = ni === rootIdx;
+    const highlighted = isSolo || ni === soloNoteIdx;
+    const bg = (inScale && highlighted) ? (isRoot ? 'var(--accent)' : '#2a6496') : '#1a1a1a';
+    const color = (inScale && highlighted) ? (isRoot ? '#000' : '#fff') : '#555';
+    const op = inScale ? (highlighted ? 1 : 0.4) : 0.5;
+    return `<div onclick="playNote(${ni})" style="cursor:pointer;background:${bg};color:${color};opacity:${op};border-radius:6px;padding:8px 4px;text-align:center;font-size:12px;font-weight:800;min-width:38px">${NOTE_DISPLAY[ni].split('/')[0]}${bendable?'<div style="font-size:9px;font-weight:600;color:#888;margin-top:2px">bend</div>':''}</div>`;
+  }
+
+  let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:52px repeat(${HOLES}, minmax(38px,1fr));gap:4px;align-items:center;min-width:600px">`;
+  html += `<div></div>`;
+  for (let h = 1; h <= HOLES; h++) html += `<div style="text-align:center;color:#666;font-size:10px;font-weight:800;padding-bottom:4px">${h}</div>`;
+  html += `<div style="color:#888;font-size:10px;font-weight:800">BLOW</div>`;
+  for (let h = 0; h < HOLES; h++) html += cell(BLOW_OFFSETS[h], BEND_BLOW[h]);
+  html += `<div style="color:#888;font-size:10px;font-weight:800">DRAW</div>`;
+  for (let h = 0; h < HOLES; h++) html += cell(DRAW_OFFSETS[h], BEND_DRAW[h]);
+  html += `</div></div>`;
+  return html;
+}
+
 // ── AUDIO ──
 let audioCtx = null;
 function getAudioCtx() {
@@ -684,11 +772,17 @@ function refreshFretboard() {
   const fb = document.getElementById('fretboard-container');
   if (!fb) return;
   const instr = document.getElementById('instrSel').value;
-  const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
   const noteIdxsStr = fb.dataset.noteIdxs;
   const rootNote = fb.dataset.root;
   const noteIdxs = noteIdxsStr.split(',').map(Number);
-  fb.innerHTML = scaleFretboardSVG(openTuning, noteIdxs, rootNote, 12, activePillIdx);
+  if (instr === 'piano') {
+    fb.innerHTML = pianoKeyboardSVG(noteIdxs, rootNote, activePillIdx);
+  } else if (instr === 'harmonica') {
+    fb.innerHTML = harmonicaChartHTML(noteIdxs, rootNote, activePillIdx);
+  } else {
+    const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
+    fb.innerHTML = scaleFretboardSVG(openTuning, noteIdxs, rootNote, 12, activePillIdx);
+  }
 }
 
 function render() {
@@ -733,6 +827,12 @@ function render() {
     } else if (instr === 'bass') {
       html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Chord tones on bass — click a pill to isolate a note:</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(BASS_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
+    } else if (instr === 'piano') {
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Chord tones on the keyboard — click a pill above to isolate a note:</p>`;
+      html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${pianoKeyboardSVG(chordNoteIdxs, rootKey, null)}</div></div>`;
+    } else if (instr === 'harmonica') {
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Standard 10-hole diatonic in ${rootSel}. Bend markers are simplified — the exact bent pitch varies by hole.</p>`;
+      html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${harmonicaChartHTML(chordNoteIdxs, rootKey, null)}</div></div>`;
     } else if (voicings.length === 0) {
       html += `<p style="color:#555;font-size:13px">Chord diagram coming soon for this voicing.</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(GUITAR_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
@@ -749,7 +849,16 @@ function render() {
     const intervals = SCALE_INTERVALS[scaleType];
     const scaleNoteIdxs = intervals.map(i => (rootIdx2 + i) % 12);
     const noteNames = scaleNoteIdxs.map(i => NOTE_DISPLAY[i]);
-    const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
+
+    let widgetHTML;
+    if (instr === 'piano') {
+      widgetHTML = pianoKeyboardSVG(scaleNoteIdxs, rootKey, null);
+    } else if (instr === 'harmonica') {
+      widgetHTML = `<p style="color:#666;font-size:13px;margin:0 0 8px">Standard 10-hole diatonic in ${rootSel}. Bend markers are simplified — the exact bent pitch varies by hole.</p>` + harmonicaChartHTML(scaleNoteIdxs, rootKey, null);
+    } else {
+      const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
+      widgetHTML = scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12, null);
+    }
 
     let html = `<div class="scale-wrap">
       <div class="scale-header">
@@ -763,7 +872,7 @@ function render() {
     });
     html += `</div>
       <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root &nbsp; 🔵 = scale tone &nbsp; click a pill to isolate</p>
-      <div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12, null)}</div></div>
+      <div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${widgetHTML}</div></div>
       <div class="info-box"><strong>About ${SCALE_NAMES[scaleType]}:</strong> ${SCALE_INFO[scaleType]}</div>
     </div>`;
     out.innerHTML = html;

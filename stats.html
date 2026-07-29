@@ -163,6 +163,24 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <div class="depth-card"><div class="depth-icon">🖼️</div><div><div class="depth-num" id="depthArt">—</div><div class="depth-label">Songs with album art</div></div></div>
   </div>
 
+  <div class="chart-panel">
+    <div class="section-title" style="margin-top:0">📈 Songs-per-Artist Distribution</div>
+    <p style="color:#555;font-size:12px;margin:0 0 12px">How deep the library goes per artist, bucketed by song count.</p>
+    <canvas id="depthChart" height="220"></canvas>
+  </div>
+
+  <div class="chart-panel">
+    <div class="section-title" style="margin-top:0">📝 Song Title Length (by Word Count)</div>
+    <canvas id="wordCountChart" height="220"></canvas>
+  </div>
+
+  <div class="section-title">🔁 Most-Covered Titles</div>
+  <p style="color:#555;font-size:12px;margin:0 0 12px">Same song title showing up under the most different artists in the library.</p>
+  <div class="top-list" id="coveredList"></div>
+
+  <div class="section-title">🎚️ Version &amp; Variant Breakdown</div>
+  <div class="depth-grid" id="variantGrid"></div>
+
   <div class="section-title">🎲 Fun Facts</div>
   <div class="facts-grid">
     <div class="fact-card"><div class="fact-label">Most Songs by One Artist</div><div class="fact-value" id="factTopArtist">—</div><div class="fact-sub" id="factTopArtistSub"></div></div>
@@ -171,6 +189,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <div class="fact-card"><div class="fact-label">"The …" Artists</div><div class="fact-value" id="factThe">—</div><div class="fact-sub" id="factTheSub"></div></div>
     <div class="fact-card"><div class="fact-label">Biggest Genre</div><div class="fact-value" id="factBigGenre">—</div><div class="fact-sub" id="factBigGenreSub"></div></div>
     <div class="fact-card"><div class="fact-label">Smallest Genre</div><div class="fact-value" id="factSmallGenre">—</div><div class="fact-sub" id="factSmallGenreSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Longest Artist Name</div><div class="fact-value" id="factLongArtist">—</div><div class="fact-sub" id="factLongArtistSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Shortest Artist Name</div><div class="fact-value" id="factShortArtist">—</div><div class="fact-sub" id="factShortArtistSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Featuring / Collab Songs</div><div class="fact-value" id="factFeat">—</div><div class="fact-sub" id="factFeatSub"></div></div>
+    <div class="fact-card"><div class="fact-label">Titles with Parentheses</div><div class="fact-value" id="factParens">—</div><div class="fact-sub" id="factParensSub"></div></div>
   </div>
 
   <div class="section-title">🔢 Song Title Trivia</div>
@@ -299,6 +321,89 @@ async function init() {
   const sg=sortedGenres[sortedGenres.length-1];
   document.getElementById('factSmallGenre').textContent=(GENRE_EMOJI[sg[0]]||'')+' '+sg[0];
   document.getElementById('factSmallGenreSub').textContent=sg[1].toLocaleString()+' songs · '+Math.round((sg[1]/totalSongs)*100)+'% of library';
+
+  // ── Depth histogram ──
+  const buckets = [
+    {label:'1', test:c=>c===1},
+    {label:'2–4', test:c=>c>=2&&c<=4},
+    {label:'5–9', test:c=>c>=5&&c<=9},
+    {label:'10–19', test:c=>c>=10&&c<=19},
+    {label:'20–49', test:c=>c>=20&&c<=49},
+    {label:'50+', test:c=>c>=50},
+  ];
+  const bucketCounts = buckets.map(b=>counts.filter(b.test).length);
+  new Chart(document.getElementById('depthChart').getContext('2d'), {
+    type:'bar',
+    data:{labels:buckets.map(b=>b.label+' songs'),datasets:[{data:bucketCounts,backgroundColor:'rgba(var(--accent-rgb),.55)',borderColor:'var(--accent)',borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw.toLocaleString()+' artists'}}},scales:{x:{ticks:{color:'#ccc',font:{size:11}},grid:{display:false}},y:{ticks:{color:'#666',font:{size:11}},grid:{color:'#1e1e1e'}}}}
+  });
+
+  // ── Title word-count distribution ──
+  const wcBuckets = {1:0,2:0,3:0,4:0,'5+':0};
+  data.forEach(s=>{
+    const n = s.song.trim().split(/\s+/).filter(Boolean).length;
+    if (n>=5) wcBuckets['5+']++; else wcBuckets[n] = (wcBuckets[n]||0)+1;
+  });
+  new Chart(document.getElementById('wordCountChart').getContext('2d'), {
+    type:'bar',
+    data:{labels:['1 word','2 words','3 words','4 words','5+ words'],datasets:[{data:[wcBuckets[1],wcBuckets[2],wcBuckets[3],wcBuckets[4],wcBuckets['5+']],backgroundColor:'rgba(52,152,219,.55)',borderColor:'#3498db',borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw.toLocaleString()+' titles'}}},scales:{x:{ticks:{color:'#ccc',font:{size:11}},grid:{display:false}},y:{ticks:{color:'#666',font:{size:11}},grid:{color:'#1e1e1e'}}}}
+  });
+
+  // ── Most-covered titles (same title, multiple distinct artists) ──
+  const titleMap = {};
+  data.forEach(s=>{
+    const key = s.song.trim().toLowerCase().replace(/\s*\(.*?\)\s*$/,'');
+    if (!key) return;
+    if (!titleMap[key]) titleMap[key] = {display:s.song.trim(), artists:new Set(), art:s.art||null};
+    titleMap[key].artists.add(s.artist);
+    if (!titleMap[key].art && s.art) titleMap[key].art = s.art;
+  });
+  const covered = Object.values(titleMap).filter(t=>t.artists.size>=2).sort((a,b)=>b.artists.size-a.artists.size).slice(0,10);
+  const coveredDiv = document.getElementById('coveredList');
+  if (covered.length) {
+    covered.forEach((t,i)=>{
+      const artHtml = t.art?`<img class="top-art" src="${t.art}" loading="lazy" alt="" onerror="this.style.display='none'">`:`<div class="top-art-placeholder">🎵</div>`;
+      coveredDiv.innerHTML += `<div class="top-item" onclick="location.href='index.html?nosplash=1&search=${encodeURIComponent(t.display)}'"><div class="top-rank ${rankClass(i)}">${i+1}</div>${artHtml}<div class="top-info"><div class="top-name">${esc(t.display)}</div><div class="top-count">${t.artists.size} different artists</div></div></div>`;
+    });
+  } else {
+    coveredDiv.innerHTML = '<p style="color:#555;font-size:13px">No title shows up under more than one artist yet.</p>';
+  }
+
+  // ── Version / variant breakdown ──
+  const VARIANTS = [
+    {label:'Live',icon:'🎤',re:/\blive\b/i},
+    {label:'Acoustic',icon:'🪕',re:/\bacoustic\b/i},
+    {label:'Remix',icon:'🎛️',re:/\bremix\b/i},
+    {label:'Cover',icon:'🎙️',re:/\bcover\b/i},
+    {label:'Demo',icon:'📼',re:/\bdemo\b/i},
+    {label:'Instrumental',icon:'🎼',re:/\binstrumental\b/i},
+    {label:'Remaster',icon:'✨',re:/\bremaster(ed)?\b/i},
+  ];
+  const variantDiv = document.getElementById('variantGrid');
+  VARIANTS.forEach(v=>{
+    const n = data.filter(s=>v.re.test(s.song)).length;
+    variantDiv.innerHTML += `<div class="depth-card"><div class="depth-icon">${v.icon}</div><div><div class="depth-num">${n.toLocaleString()}</div><div class="depth-label">${v.label}</div></div></div>`;
+  });
+
+  // ── New fun facts: artist name length ──
+  const byArtistLen = [...artistArr].sort((a,b)=>a.name.length-b.name.length);
+  const shortestArtist = byArtistLen[0], longestArtist = byArtistLen[byArtistLen.length-1];
+  document.getElementById('factLongArtist').textContent = longestArtist.name;
+  document.getElementById('factLongArtistSub').textContent = longestArtist.name.length+' characters';
+  document.getElementById('factShortArtist').textContent = shortestArtist.name;
+  document.getElementById('factShortArtistSub').textContent = shortestArtist.name.length+' characters';
+
+  // ── Featuring / collab songs ──
+  const featRe = /\b(feat\.?|featuring|\bft\.?)\b/i;
+  const featCount = data.filter(s=>featRe.test(s.song)).length;
+  document.getElementById('factFeat').textContent = featCount.toLocaleString();
+  document.getElementById('factFeatSub').textContent = Math.round((featCount/totalSongs)*100)+'% of the library';
+
+  // ── Titles with parentheses ──
+  const parensCount = data.filter(s=>/\(/.test(s.song)).length;
+  document.getElementById('factParens').textContent = parensCount.toLocaleString();
+  document.getElementById('factParensSub').textContent = Math.round((parensCount/totalSongs)*100)+'% of the library';
 
   // ── Title trivia ──
   const numS=data.filter(s=>/\d/.test(s.song)).length;

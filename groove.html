@@ -121,6 +121,8 @@ body.perf-mode [class*="inst-"]{box-shadow:none !important}
 .bass-note-cell{height:30px;background:#161616;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#333;cursor:pointer;border:1px solid #1e1e1e;transition:background .1s,color .1s,box-shadow .1s;letter-spacing:.5px;user-select:none}
 .bass-note-cell:hover{background:#1e1e1e;color:#555}
 .bass-note-cell.has-note{background:#0d1f0d;border-color:#2ecc71;color:#2ecc71;box-shadow:0 0 6px rgba(46,204,113,.4)}
+.bass-note-cell.ghost-note{opacity:.5;box-shadow:none;border-style:dashed}
+.bass-note-cell.oct-note{border-color:#7fffb0;font-weight:900;box-shadow:0 0 8px rgba(127,255,176,.5)}
 .bass-note-cell.bass-current{outline:2px solid rgba(46,204,113,.9);transform:scale(1.07)}
 .bass-track-label{height:30px;padding-right:8px;border-right:2px solid #222;display:flex;align-items:center;font-size:10px;font-weight:700;color:#2ecc71;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
 body.perf-mode .bass-note-cell{box-shadow:none !important;transform:none !important}
@@ -335,7 +337,12 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <option value="2" selected>Mid Oct</option>
       <option value="3">High Oct</option>
     </select>
-    <button class="bass-btn" onclick="generateBass()">⚡ Generate</button>
+    <select id="bassDensity" class="bass-select" title="How many extra fills/ghost notes get added around the core groove">
+      <option value="simple">Simple</option>
+      <option value="groovy" selected>Groovy</option>
+      <option value="busy">Busy</option>
+    </select>
+    <button class="bass-btn" onclick="generateBass()" title="Click again for a fresh variation on the same style">⚡ Generate</button>
     <button class="bass-btn" onclick="clearBass()">✕ Clear</button>
     <button class="bass-btn" id="bassActiveBtn" onclick="toggleBassActive()">● Bass Off</button>
   </div>
@@ -640,7 +647,7 @@ function scheduleStep(step, time) {
   });
 
   // Bass note playback
-  if (bassActive && bassPattern[step]) hitBass(bassPattern[step].freq, time);
+  if (bassActive && bassPattern[step]) hitBass(bassPattern[step], time);
 }
 
 function obsWriteGrid() {
@@ -828,6 +835,15 @@ function buildShareState() {
     const idx = NOTE_NAMES.indexOf(n.name);
     return idx >= 0 ? idx : -1;
   });
+  // Per-note extra flags: bit0 = ghost, bits1-2 = octave offset+1 (0,1,2 → -1,0,1)
+  const bassExtra = (bassPattern || []).map(n => {
+    if (!n) return 0;
+    let flags = (n.ghost ? 1 : 0);
+    flags |= (((n.oct || 0) + 1) & 3) << 1;
+    return flags;
+  });
+
+  const densityEl = document.getElementById('bassDensity');
 
   return {
     v: 2,
@@ -840,8 +856,10 @@ function buildShareState() {
     bm: document.getElementById('bassMode').value,
     bs: document.getElementById('bassStyle').value,
     bo: parseInt(document.getElementById('bassOctave').value),
+    bd: densityEl ? densityEl.value : 'groovy',
     ba: bassActive ? 1 : 0,
-    bn: bassArr
+    bn: bassArr,
+    bx: bassExtra
   };
 }
 
@@ -918,11 +936,20 @@ function loadShareCode() {
   if (state.bm) document.getElementById('bassMode').value   = state.bm;
   if (state.bs) document.getElementById('bassStyle').value  = state.bs;
   if (state.bo) document.getElementById('bassOctave').value = state.bo;
+  const densityEl = document.getElementById('bassDensity');
+  if (state.bd && densityEl) densityEl.value = state.bd;
 
   const octave = state.bo || 2;
-  bassPattern = (state.bn || []).map(semi => {
+  const bx = state.bx; // undefined on codes made before ghost/octave notes existed
+  bassPattern = (state.bn || []).map((semi, i) => {
     if (semi < 0) return null;
-    return { freq: noteFreq(semi, octave), name: NOTE_NAMES[semi] };
+    let ghost = false, octOff = 0;
+    if (bx && bx[i] !== undefined) {
+      const flags = bx[i];
+      ghost = !!(flags & 1);
+      octOff = ((flags >> 1) & 3) - 1;
+    }
+    return { freq: noteFreq(semi, octave + octOff), name: NOTE_NAMES[semi], semi, oct: octOff, ghost };
   });
   while (bassPattern.length < maxSteps) bassPattern.push(null);
   bassPattern = bassPattern.slice(0, maxSteps);
@@ -1048,28 +1075,62 @@ function noteFreq(semitone, octave) {
   return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
+// ── FILL POOLS ──
+// Extra notes dropped into the rests of each style's skeleton, with a
+// per-style flavor: funk leans on ghost 16ths, walking leans on stepwise
+// passing tones, rock/metal leans on root + octave-up accents.
+const STYLE_FILL = {
+  rock:    { chance:{simple:0, groovy:.22, busy:.45}, pool:[{deg:0,w:6},{deg:0,w:2,oct:1},{deg:4,w:2}] },
+  funk:    { chance:{simple:0, groovy:.40, busy:.70}, pool:[{deg:0,w:5,ghost:1},{deg:2,w:2},{deg:4,w:2},{deg:0,w:1,oct:1}] },
+  punk:    { chance:{simple:0, groovy:.30, busy:.55}, pool:[{deg:0,w:1}] },
+  reggae:  { chance:{simple:0, groovy:.30, busy:.50}, pool:[{deg:4,w:3},{deg:0,w:2,ghost:1}] },
+  metal:   { chance:{simple:0, groovy:.28, busy:.50}, pool:[{deg:0,w:5},{deg:0,w:2,oct:1},{deg:4,w:2}] },
+  walking: { chance:{simple:0, groovy:.35, busy:.60}, pool:[{deg:1,w:2},{deg:3,w:2},{deg:5,w:2},{deg:6,w:1}] },
+};
+
+function weightedFillPick(pool) {
+  const total = pool.reduce((a,p) => a + p.w, 0);
+  let r = Math.random() * total;
+  for (const p of pool) { if (r < p.w) return p; r -= p.w; }
+  return pool[0];
+}
+
 function generateBass() {
   const rootKey  = document.getElementById('bassKey').value;
   const mode     = document.getElementById('bassMode').value;
   const style    = document.getElementById('bassStyle').value;
   const octave   = parseInt(document.getElementById('bassOctave').value);
+  const densityEl = document.getElementById('bassDensity');
+  const density  = densityEl ? densityEl.value : 'groovy';
   const rootSemi = ROOT_SEMI[rootKey] ?? 4;
   const scale    = SCALES[mode];
   const rhythm   = BASS_RHYTHMS[style];
+  const fillCfg  = STYLE_FILL[style] || STYLE_FILL.rock;
+  const fillChance = fillCfg.chance[density] ?? 0.25;
+
+  function degToNote(deg, octOff, ghost) {
+    const scaleDeg = scale[deg % scale.length] ?? 0;
+    const semi = (rootSemi + scaleDeg) % 12;
+    return { freq: noteFreq(semi, octave + octOff), name: NOTE_NAMES[semi], semi, oct: octOff, ghost: !!ghost };
+  }
 
   const base = rhythm.map(degIdx => {
-    if (degIdx === 99) return null;
-    const scaleDeg = scale[degIdx % scale.length] ?? 0;
-    const semi = (rootSemi + scaleDeg) % 12;
-    return { freq: noteFreq(semi, octave), name: NOTE_NAMES[semi] };
+    if (degIdx === 99) {
+      if (Math.random() < fillChance) {
+        const pick = weightedFillPick(fillCfg.pool);
+        return degToNote(pick.deg, pick.oct || 0, pick.ghost);
+      }
+      return null;
+    }
+    return degToNote(degIdx, 0, false);
   });
 
   bassPattern = [];
-  while (bassPattern.length < maxSteps) bassPattern = bassPattern.concat(base);
+  while (bassPattern.length < maxSteps) bassPattern = bassPattern.concat(base.map(n => n ? {...n} : null));
   bassPattern = bassPattern.slice(0, maxSteps);
 
   buildBassGrid();
-  document.getElementById('statusMsg').textContent = `🎸 Bass: ${rootKey} ${mode} / ${style}`;
+  document.getElementById('statusMsg').textContent = `🎸 Bass: ${rootKey} ${mode} / ${style} (${density})`;
 }
 
 function clearBass() {
@@ -1083,6 +1144,52 @@ function toggleBassActive() {
   const btn = document.getElementById('bassActiveBtn');
   btn.textContent = bassActive ? '🔊 Bass On' : '● Bass Off';
   btn.classList.toggle('bass-on', bassActive);
+}
+
+// Renders one cell's visual state from its note data (or lack thereof)
+function paintBassCell(cell, note) {
+  cell.classList.toggle('has-note', !!note);
+  cell.classList.toggle('ghost-note', !!(note && note.ghost));
+  cell.classList.toggle('oct-note', !!(note && note.oct));
+  if (!note) { cell.textContent = '·'; return; }
+  let txt = note.name;
+  if (note.oct > 0) txt += '↑';
+  else if (note.oct < 0) txt += '↓';
+  cell.textContent = txt;
+}
+
+// Manual editing: click cycles a step through off → root → 3rd → 5th →
+// octave-up root → off, using whatever key/mode/octave is selected.
+const BASS_CYCLE_DEGREES = [null, 0, 2, 4, 0];
+const BASS_CYCLE_OCT     = [null, 0, 0, 0, 1];
+
+function cycleBassCell(s, cell) {
+  const rootKey  = document.getElementById('bassKey').value;
+  const mode     = document.getElementById('bassMode').value;
+  const octave   = parseInt(document.getElementById('bassOctave').value);
+  const rootSemi = ROOT_SEMI[rootKey] ?? 4;
+  const scale    = SCALES[mode];
+
+  const current = bassPattern[s];
+  let stateIdx = 0;
+  if (current) {
+    if (current.oct > 0) stateIdx = 4;
+    else if (current.semi === (rootSemi + (scale[4 % scale.length] ?? 0)) % 12) stateIdx = 3;
+    else if (current.semi === (rootSemi + (scale[2 % scale.length] ?? 0)) % 12) stateIdx = 2;
+    else stateIdx = 1;
+  }
+  const next = (stateIdx + 1) % 5;
+
+  if (next === 0) {
+    bassPattern[s] = null;
+  } else {
+    const deg = BASS_CYCLE_DEGREES[next];
+    const octOff = BASS_CYCLE_OCT[next];
+    const scaleDeg = scale[deg % scale.length] ?? 0;
+    const semi = (rootSemi + scaleDeg) % 12;
+    bassPattern[s] = { freq: noteFreq(semi, octave + octOff), name: NOTE_NAMES[semi], semi, oct: octOff, ghost: false };
+  }
+  paintBassCell(cell, bassPattern[s]);
 }
 
 function buildBassGrid() {
@@ -1100,49 +1207,36 @@ function buildBassGrid() {
     const cell = document.createElement('div');
     cell.className = 'bass-note-cell';
     cell.id = `bass-cell-${s}`;
+    cell.title = 'Click to cycle: off → root → 3rd → 5th → octave';
     if (s % 4 === 0 && s > 0) cell.style.borderLeft = '2px solid #2a2a2a';
 
-    const note = bassPattern[s];
-    cell.classList.toggle('has-note', !!note);
-    cell.textContent = note ? note.name : '·';
-
-    cell.onclick = () => {
-      if (bassPattern[s]) {
-        bassPattern[s] = null;
-        cell.classList.remove('has-note');
-        cell.textContent = '·';
-      } else {
-        const rootKey  = document.getElementById('bassKey').value;
-        const octave   = parseInt(document.getElementById('bassOctave').value);
-        const rootSemi = ROOT_SEMI[rootKey] ?? 4;
-        bassPattern[s] = { freq: noteFreq(rootSemi, octave), name: NOTE_NAMES[rootSemi] };
-        cell.classList.add('has-note');
-        cell.textContent = NOTE_NAMES[rootSemi];
-      }
-    };
+    paintBassCell(cell, bassPattern[s]);
+    cell.onclick = () => cycleBassCell(s, cell);
     grid.appendChild(cell);
   }
 }
 
-function hitBass(freq, time) {
-  if (!ctx || !freq) return;
+function hitBass(note, time) {
+  if (!ctx || !note || !note.freq) return;
   const safeTime = Math.max(time, ctx.currentTime);
   const mVol = parseFloat(document.getElementById('masterVol').value) / 100;
+  const ghost = !!note.ghost;
 
   const osc  = ctx.createOscillator();
   const env  = ctx.createGain();
   const gain = ctx.createGain();
 
   osc.type = 'triangle';
-  osc.frequency.setValueAtTime(freq, safeTime);
-  gain.gain.setValueAtTime(mVol * 0.55, safeTime);
+  osc.frequency.setValueAtTime(note.freq, safeTime);
+  gain.gain.setValueAtTime(mVol * (ghost ? 0.18 : 0.55), safeTime);
   gain.connect(ctx.destination);
 
+  const decay = ghost ? 0.12 : 0.4;
   env.gain.setValueAtTime(0.9, safeTime);
-  env.gain.exponentialRampToValueAtTime(0.001, safeTime + 0.4);
+  env.gain.exponentialRampToValueAtTime(0.001, safeTime + decay);
 
   osc.connect(env); env.connect(gain);
-  osc.start(safeTime); osc.stop(safeTime + 0.45);
+  osc.start(safeTime); osc.stop(safeTime + decay + 0.05);
 }
 
 // ═══════════════════════════════════════════════════════════
