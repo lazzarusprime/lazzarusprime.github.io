@@ -174,17 +174,12 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <canvas id="wordCountChart" height="220"></canvas>
   </div>
 
-  <div class="section-title">🔁 Most-Covered Titles</div>
-  <p style="color:#555;font-size:12px;margin:0 0 12px">Same song title showing up under the most different artists in the library.</p>
-  <div class="top-list" id="coveredList"></div>
-
   <div class="section-title">🎚️ Version &amp; Variant Breakdown</div>
   <div class="depth-grid" id="variantGrid"></div>
 
   <div class="section-title">🎲 Fun Facts</div>
   <div class="facts-grid">
     <div class="fact-card"><div class="fact-label">Most Songs by One Artist</div><div class="fact-value" id="factTopArtist">—</div><div class="fact-sub" id="factTopArtistSub"></div></div>
-    <div class="fact-card"><div class="fact-label">Shortest Song Title</div><div class="fact-value" id="factShortest">—</div><div class="fact-sub" id="factShortestSub"></div></div>
     <div class="fact-card"><div class="fact-label">Longest Song Title</div><div class="fact-value" id="factLongest">—</div><div class="fact-sub" id="factLongestSub"></div></div>
     <div class="fact-card"><div class="fact-label">"The …" Artists</div><div class="fact-value" id="factThe">—</div><div class="fact-sub" id="factTheSub"></div></div>
     <div class="fact-card"><div class="fact-label">Biggest Genre</div><div class="fact-value" id="factBigGenre">—</div><div class="fact-sub" id="factBigGenreSub"></div></div>
@@ -307,8 +302,6 @@ async function init() {
   document.getElementById('factTopArtist').textContent=topArtist.name;
   document.getElementById('factTopArtistSub').textContent=topArtist.count+' songs in the library';
   const byLen=[...data].sort((a,b)=>a.song.length-b.song.length);
-  document.getElementById('factShortest').textContent='"'+byLen[0].song+'"';
-  document.getElementById('factShortestSub').textContent=byLen[0].artist;
   const longest=byLen[byLen.length-1];
   document.getElementById('factLongest').textContent='"'+longest.song.slice(0,55)+(longest.song.length>55?'…':'')+'"';
   document.getElementById('factLongestSub').textContent=longest.artist+' · '+longest.song.length+' chars';
@@ -349,26 +342,6 @@ async function init() {
     data:{labels:['1 word','2 words','3 words','4 words','5+ words'],datasets:[{data:[wcBuckets[1],wcBuckets[2],wcBuckets[3],wcBuckets[4],wcBuckets['5+']],backgroundColor:'rgba(52,152,219,.55)',borderColor:'#3498db',borderWidth:1,borderRadius:4}]},
     options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw.toLocaleString()+' titles'}}},scales:{x:{ticks:{color:'#ccc',font:{size:11}},grid:{display:false}},y:{ticks:{color:'#666',font:{size:11}},grid:{color:'#1e1e1e'}}}}
   });
-
-  // ── Most-covered titles (same title, multiple distinct artists) ──
-  const titleMap = {};
-  data.forEach(s=>{
-    const key = s.song.trim().toLowerCase().replace(/\s*\(.*?\)\s*$/,'');
-    if (!key) return;
-    if (!titleMap[key]) titleMap[key] = {display:s.song.trim(), artists:new Set(), art:s.art||null};
-    titleMap[key].artists.add(s.artist);
-    if (!titleMap[key].art && s.art) titleMap[key].art = s.art;
-  });
-  const covered = Object.values(titleMap).filter(t=>t.artists.size>=2).sort((a,b)=>b.artists.size-a.artists.size).slice(0,10);
-  const coveredDiv = document.getElementById('coveredList');
-  if (covered.length) {
-    covered.forEach((t,i)=>{
-      const artHtml = t.art?`<img class="top-art" src="${t.art}" loading="lazy" alt="" onerror="this.style.display='none'">`:`<div class="top-art-placeholder">🎵</div>`;
-      coveredDiv.innerHTML += `<div class="top-item" onclick="location.href='index.html?nosplash=1&search=${encodeURIComponent(t.display)}'"><div class="top-rank ${rankClass(i)}">${i+1}</div>${artHtml}<div class="top-info"><div class="top-name">${esc(t.display)}</div><div class="top-count">${t.artists.size} different artists</div></div></div>`;
-    });
-  } else {
-    coveredDiv.innerHTML = '<p style="color:#555;font-size:13px">No title shows up under more than one artist yet.</p>';
-  }
 
   // ── Version / variant breakdown ──
   const VARIANTS = [
