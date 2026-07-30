@@ -65,6 +65,9 @@ select:focus{outline:none;border-color:var(--accent)}
 .note-pill.active-pill{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.5)}
 .note-pill.root.active-pill{background:var(--accent);color:#000}
 .fretboard-wrap{overflow-x:auto;padding-bottom:4px}
+.multi-instr-block{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid #1e1e1e}
+.multi-instr-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.multi-instr-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
 
 /* ── INFO BOX ── */
 .info-box{background:var(--bg-panel4);border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px;color:#888;line-height:1.6}
@@ -172,6 +175,7 @@ footer a:hover{color:var(--accent)}
         <option value="bass">Bass (4-string)</option>
         <option value="piano">Piano</option>
         <option value="harmonica">Harmonica (Diatonic)</option>
+        <option value="all">🌐 See It Everywhere</option>
       </select>
     </div>
   </div>
@@ -191,6 +195,7 @@ footer a:hover{color:var(--accent)}
   <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
   <a href="theory.html">📚 Theory</a><span class="footer-sep">·</span>
   <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
   <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
   <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
   <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
@@ -703,6 +708,21 @@ function harmonicaChartHTML(scaleNotes, rootNote, soloNoteIdx) {
   return html;
 }
 
+// ── SEE IT EVERYWHERE: all four instruments side by side ──
+function allInstrumentsHTML(noteIdxs, rootKey, soloIdx) {
+  const sections = [
+    { key:'guitar',    label:'🎸 Guitar',    body: scaleFretboardSVG(GUITAR_OPEN, noteIdxs, rootKey, 12, soloIdx) },
+    { key:'bass',      label:'🎻 Bass',      body: scaleFretboardSVG(BASS_OPEN, noteIdxs, rootKey, 12, soloIdx) },
+    { key:'piano',     label:'🎹 Piano',     body: pianoKeyboardSVG(noteIdxs, rootKey, soloIdx) },
+    { key:'harmonica', label:'🎤 Harmonica', body: harmonicaChartHTML(noteIdxs, rootKey, soloIdx) },
+  ];
+  return sections.map(s => `
+    <div class="multi-instr-block">
+      <div class="multi-instr-label">${s.label}</div>
+      <div class="fretboard-wrap"><div class="fretboard-container-multi" data-instr="${s.key}" data-note-idxs="${noteIdxs.join(',')}" data-root="${rootKey}">${s.body}</div></div>
+    </div>`).join('');
+}
+
 // ── AUDIO ──
 let audioCtx = null;
 function getAudioCtx() {
@@ -769,9 +789,23 @@ function pillClick(noteIdx12, pillEl) {
 
 // Redraw just the fretboard SVG without full re-render
 function refreshFretboard() {
+  const instr = document.getElementById('instrSel').value;
+
+  if (instr === 'all') {
+    document.querySelectorAll('.fretboard-container-multi').forEach(fb => {
+      const noteIdxs = fb.dataset.noteIdxs ? fb.dataset.noteIdxs.split(',').map(Number) : null;
+      const rootNote = fb.dataset.root;
+      if (!noteIdxs || !rootNote) return;
+      const which = fb.dataset.instr;
+      if (which === 'piano') fb.innerHTML = pianoKeyboardSVG(noteIdxs, rootNote, activePillIdx);
+      else if (which === 'harmonica') fb.innerHTML = harmonicaChartHTML(noteIdxs, rootNote, activePillIdx);
+      else fb.innerHTML = scaleFretboardSVG(which === 'bass' ? BASS_OPEN : GUITAR_OPEN, noteIdxs, rootNote, 12, activePillIdx);
+    });
+    return;
+  }
+
   const fb = document.getElementById('fretboard-container');
   if (!fb) return;
-  const instr = document.getElementById('instrSel').value;
   const noteIdxsStr = fb.dataset.noteIdxs;
   const rootNote = fb.dataset.root;
   const noteIdxs = noteIdxsStr.split(',').map(Number);
@@ -815,7 +849,10 @@ function render() {
     });
     html += `</div>`;
 
-    if (instr === 'guitar' && voicings.length > 0) {
+    if (instr === 'all') {
+      html += `<p style="color:#666;font-size:13px;margin:0 0 12px">Chord tones across every instrument — click a pill above to isolate a note everywhere at once:</p>`;
+      html += allInstrumentsHTML(chordNoteIdxs, rootKey, null);
+    } else if (instr === 'guitar' && voicings.length > 0) {
       html += `<div class="diagrams-grid">`;
       voicings.forEach(v => {
         html += `<div class="diagram-card"><h3>${v.name}</h3>${chordSVG(v.frets, 6)}</div>`;
@@ -851,7 +888,9 @@ function render() {
     const noteNames = scaleNoteIdxs.map(i => NOTE_DISPLAY[i]);
 
     let widgetHTML;
-    if (instr === 'piano') {
+    if (instr === 'all') {
+      widgetHTML = null; // handled separately below
+    } else if (instr === 'piano') {
       widgetHTML = pianoKeyboardSVG(scaleNoteIdxs, rootKey, null);
     } else if (instr === 'harmonica') {
       widgetHTML = `<p style="color:#666;font-size:13px;margin:0 0 8px">Standard 10-hole diatonic in ${rootSel}. Bend markers are simplified — the exact bent pitch varies by hole.</p>` + harmonicaChartHTML(scaleNoteIdxs, rootKey, null);
@@ -872,7 +911,9 @@ function render() {
     });
     html += `</div>
       <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root &nbsp; 🔵 = scale tone &nbsp; click a pill to isolate</p>
-      <div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${widgetHTML}</div></div>
+      ${instr === 'all'
+        ? allInstrumentsHTML(scaleNoteIdxs, rootKey, null)
+        : `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${widgetHTML}</div></div>`}
       <div class="info-box"><strong>About ${SCALE_NAMES[scaleType]}:</strong> ${SCALE_INFO[scaleType]}</div>
     </div>`;
     out.innerHTML = html;

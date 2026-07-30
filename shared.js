@@ -63,85 +63,46 @@ function slotSpin(btn, onDone) {
   }, 600);
 }
 
-/* ── Shared navigation HTML ──────────────────────────────── */
-/* currentPage: 'home'|'artists'|'stats'|'gear'|'tuner' */
-function buildNav(currentPage, showSearch, randomFn, searchFn, clearFn) {
-  const pages = [
-    { id:'home',    href:"index.html?nosplash=1", label:"🏠 Home" },
-    { id:'artists', href:"artists.html",          label:"🎸 Artists" },
-    { id:'stats',   href:"stats.html",            label:"📊 Stats" },
-    { id:'gear',    href:"gear.html",             label:"🎛️ Gear" },
-    { id:'tuner',   href:"tuner.html",            label:"🎵 Tuner" },
-  ];
-  const navBtns = pages.map(p =>
-    `<button class="nav-btn${p.id===currentPage?' active-page':''}" onclick="location.href='${p.href}'">${p.label}</button>`
-  ).join('');
-  const randomBtn = `<button class="nav-btn" id="randomNavBtn" onclick="${randomFn}(this)">🎲 Random</button>`;
-  const searchHtml = showSearch ? `
-    <input id="searchBox" placeholder="Search artist or song…" oninput="${searchFn}()" autocomplete="off">
-    <button id="clearBtn" class="clearBtn" onclick="${clearFn}()">✕</button>` : '';
-  return `<div class="topBar">${navBtns}${randomBtn}${searchHtml}</div>`;
+/* ── Shared artist list (for search redirect + random button) ── */
+let _artists = [];
+async function loadArtists() {
+  if (_artists.length) return;
+  try {
+    const d = await (await fetch('songs.json')).json();
+    _artists = [...new Set(d.map(s => s.artist))];
+  } catch(e) { /* songs.json unavailable */ }
+}
+loadArtists();
+
+/* ── Nav search box: redirects to Home with the query ────── */
+function navSearch() {
+  const box = document.getElementById('searchBox');
+  const clearBtn = document.getElementById('clearBtn');
+  if (!box) return;
+  const q = box.value;
+  if (clearBtn) clearBtn.style.display = q ? 'inline-block' : 'none';
+  if (q.length >= 1) {
+    clearTimeout(window._nsTimer);
+    window._nsTimer = setTimeout(() => {
+      window.location.href = 'index.html?search=' + encodeURIComponent(q) + '&nosplash=1';
+    }, 600);
+  }
+}
+function clearNavSearch() {
+  const box = document.getElementById('searchBox');
+  const clearBtn = document.getElementById('clearBtn');
+  if (box) box.value = '';
+  if (clearBtn) clearBtn.style.display = 'none';
 }
 
-/* ── Shared title bar HTML ───────────────────────────────── */
-function buildTitleBar(subtitle) {
-  return `
-  <div class="titleBar">
-    <div class="titleLeft">
-      <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
-      <h2>Lazzarus Prime${subtitle ? ' — '+subtitle : ''}</h2>
-    </div>
-    <div class="socialLinks">
-      <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
-      <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-      <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
-      <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-      <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
-    </div>
-  </div>`;
-}
-
-/* ── Shared footer HTML ──────────────────────────────────── */
-function buildFooter(randomFn) {
-  return `
-  <footer>
-    <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
-    <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
-    <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
-    <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
-    <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
-    <a href="#" onclick="${randomFn}();return false;">🎲 Random</a><span class="footer-sep">·</span>
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
-  </footer>`;
-}
-
-/* ── Shared CSS variables ────────────────────────────────── */
-/* Pages inject this via a <style> block calling getSharedCSS() */
-function getSharedCSS() {
-  return `
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',Segoe UI,Arial;background:#0f0f0f;color:white;margin:0;overflow-x:hidden}
-.titleBar{display:flex;justify-content:space-between;align-items:center;background:#141414;padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
-.titleLeft{display:flex;align-items:center;gap:12px}
-.titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(241,196,15,.4))}
-.titleLeft h2{margin:0;font-weight:900;text-transform:uppercase;font-size:clamp(14px,2.5vw,22px);background:linear-gradient(to bottom,#fff 20%,#f1c40f 45%,#b8860b 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(241,196,15,.6))}
-.socialLinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.socialLinks a{color:#aaa;text-decoration:none;font-size:13px;transition:.15s;white-space:nowrap;padding:4px 9px;border-radius:4px;border:1px solid transparent}
-.socialLinks a:hover{color:#f1c40f;border-color:#333;background:#1a1a1a}
-.topBar{display:flex;gap:6px;padding:8px 10px;background:#181818;position:sticky;top:0;z-index:100;flex-wrap:wrap;justify-content:flex-start;align-items:center;border-bottom:1px solid #333}
-.topBar input{flex:1;padding:9px 12px;border-radius:6px;border:none;min-width:150px;background:white;color:black;font-size:14px}
-.nav-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:9px 14px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:12px;transition:.2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
-.nav-btn:hover,.nav-btn:active{background:#444;border-color:#f1c40f;color:#f1c40f}
-.nav-btn.active-page{border-color:#f1c40f55;color:#f1c40f;background:#1a1800}
-.nav-btn.spinning{pointer-events:none;border-color:#f1c40f;color:#f1c40f;background:#444}
-.clearBtn{display:none;background:#333;color:white;border:none;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:14px}
-footer{text-align:center;padding:16px 10px;color:#333;font-size:12px;border-top:1px solid #1a1a1a;line-height:2;margin-top:30px}
-footer a{color:#555;text-decoration:none;transition:.15s;padding:2px 6px;border-radius:3px}
-footer a:hover{color:#f1c40f;background:#1a1a1a}
-.footer-sep{color:#2a2a2a;margin:0 2px}
-@media(max-width:600px){.titleBar{padding:8px 10px}.socialLinks{gap:4px}.socialLinks a{font-size:11px;padding:3px 6px}.topBar{gap:4px;padding:6px 8px}.nav-btn{padding:7px 9px;font-size:10px}.titleBar .site-logo{width:36px;height:36px}}`;
+/* ── Nav random button: picks a random artist, spins, redirects ── */
+async function randomSong(btn) {
+  await loadArtists();
+  if (!_artists.length) { location.href = 'index.html?nosplash=1'; return; }
+  const pick = _artists[Math.floor(Math.random() * _artists.length)];
+  if (btn) {
+    slotSpin(btn, () => { location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick); });
+  } else {
+    location.href = 'index.html?nosplash=1&search=' + encodeURIComponent(pick);
+  }
 }

@@ -9,6 +9,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="shared.js"></script>
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
 <style>
@@ -354,7 +355,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     </div>
   </div>
 
-  <!-- ══ PEDALBOARD ══  <!-- ══ PEDALBOARD ══ -->
+  <!-- ══ PEDALBOARD ══ -->
   <div class="gear-section">
     <div class="gear-section-title">🎛️ Pedalboard &amp; Power</div>
     <div class="gear-grid">
@@ -469,6 +470,12 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
   <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
   <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
+  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
+  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
+  <a href="drums.html">🪘 Drums</a><span class="footer-sep">·</span>
+  <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
+  <a href="theory.html">📚 Theory</a><span class="footer-sep">·</span>
+  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
   <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
   <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
   <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
@@ -479,12 +486,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 </footer>
 
 <script>
-let _artists=[];
-async function loadArtists(){try{const d=await(await fetch('songs.json')).json();_artists=[...new Set(d.map(s=>s.artist))];}catch(e){}}
-function slotSpin(btn,onDone){const f=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];let i=0;btn.classList.add('spinning');const fast=setInterval(()=>{btn.textContent=f[i++%f.length]+' Random';},60);setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=f[j++%f.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);}
-function randomSong(btn){if(!_artists.length){location.href='index.html?nosplash=1';return;}const p=_artists[Math.floor(Math.random()*_artists.length)];if(btn){slotSpin(btn,()=>{location.href='index.html?nosplash=1&search='+encodeURIComponent(p);});}else{location.href='index.html?nosplash=1&search='+encodeURIComponent(p);}}
 function scrollToGear(id){const el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.transition='.4s';el.style.borderColor='var(--accent)';setTimeout(()=>{el.style.borderColor='';},1500);}}
-loadArtists();
 </script>
 </body>
 </html>

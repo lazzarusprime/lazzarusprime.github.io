@@ -267,6 +267,7 @@ footer a:hover{color:var(--accent)}
   <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
   <a href="theory.html">📚 Theory</a><span class="footer-sep">·</span>
   <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
+  <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
   <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
   <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
   <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
@@ -322,25 +323,6 @@ function playNote(noteIdx12) {
 // Play several notes as a chord (staggered slightly for a strum-ish feel)
 function playChordTones(idxs) {
   idxs.forEach((ni, i) => setTimeout(() => playNote(ni), i * 35));
-}
-
-// ── NAV SEARCH / RANDOM (redirect to Home, same pattern as stats.html) ──
-function navSearch(){
-  var q=document.getElementById('searchBox').value;
-  document.getElementById('clearBtn').style.display=q?'inline-block':'none';
-  if(q.length>=1){
-    clearTimeout(window._nsTimer);
-    window._nsTimer=setTimeout(function(){
-      window.location.href='index.html?search='+encodeURIComponent(q)+'&nosplash=1';
-    },600);
-  }
-}
-function clearNavSearch(){
-  document.getElementById('searchBox').value='';
-  document.getElementById('clearBtn').style.display='none';
-}
-function randomSong(){
-  window.location.href='index.html?nosplash=1';
 }
 
 // ── SECTION SWITCHING ──
