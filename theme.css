@@ -80,6 +80,108 @@
   letter-spacing:2px;
 }
 
+/* ── Blood Moon ── */
+[data-theme="blood-moon"]{
+  --accent:#e0102a;
+  --accent-dark:#8a0a1a;
+  --accent-rgb:224,16,42;
+  --accent-dim1:#2a0a0e;
+  --accent-dim2:#2a0c0c;
+  --accent-dim3:#3a1010;
+  --bg-void:#0d0505;
+  --bg-page:#120707;
+  --bg-page2:#140808;
+  --bg-panel:#180909;
+  --bg-panel2:#1c0b0b;
+  --bg-panel3:#1f0c0c;
+  --bg-panel4:#23100f;
+}
+
+/* ── Deep Ocean ── */
+[data-theme="ocean"]{
+  --accent:#00c2ff;
+  --accent-dark:#0077a3;
+  --accent-rgb:0,194,255;
+  --accent-dim1:#001a2a;
+  --accent-dim2:#001e2a;
+  --accent-dim3:#002a3a;
+  --bg-void:#050a0d;
+  --bg-page:#070d12;
+  --bg-page2:#080f14;
+  --bg-panel:#0a1118;
+  --bg-panel2:#0d141c;
+  --bg-panel3:#0f171f;
+  --bg-panel4:#111a24;
+}
+
+/* ── Royal Purple ── */
+[data-theme="royal"]{
+  --accent:#9b30ff;
+  --accent-dark:#631fa3;
+  --accent-rgb:155,48,255;
+  --accent-dim1:#200a2a;
+  --accent-dim2:#220c2a;
+  --accent-dim3:#30103a;
+  --bg-void:#0a050f;
+  --bg-page:#0d0712;
+  --bg-page2:#0f0814;
+  --bg-panel:#110a18;
+  --bg-panel2:#150d1e;
+  --bg-panel3:#170e22;
+  --bg-panel4:#1b1028;
+}
+
+/* ── Frost ── */
+[data-theme="frost"]{
+  --accent:#6ff0ff;
+  --accent-dark:#2fa3b3;
+  --accent-rgb:111,240,255;
+  --accent-dim1:#002a2e;
+  --accent-dim2:#002a30;
+  --accent-dim3:#0a3a3e;
+  --bg-void:#060a0b;
+  --bg-page:#080d0e;
+  --bg-page2:#090f10;
+  --bg-panel:#0b1112;
+  --bg-panel2:#0e1516;
+  --bg-panel3:#101718;
+  --bg-panel4:#131b1c;
+}
+
+/* ── Toxic ── */
+[data-theme="toxic"]{
+  --accent:#c6ff00;
+  --accent-dark:#7fa300;
+  --accent-rgb:198,255,0;
+  --accent-dim1:#1e2a00;
+  --accent-dim2:#202a00;
+  --accent-dim3:#2a3a08;
+  --bg-void:#0a0d05;
+  --bg-page:#0d1006;
+  --bg-page2:#0e1207;
+  --bg-panel:#101408;
+  --bg-panel2:#13180a;
+  --bg-panel3:#151a0b;
+  --bg-panel4:#181f0d;
+}
+
+/* ── Stealth ── */
+[data-theme="stealth"]{
+  --accent:#d0d0d0;
+  --accent-dark:#808080;
+  --accent-rgb:208,208,208;
+  --accent-dim1:#1a1a1a;
+  --accent-dim2:#1c1c1c;
+  --accent-dim3:#2a2a2a;
+  --bg-void:#0a0a0a;
+  --bg-page:#0d0d0d;
+  --bg-page2:#0f0f0f;
+  --bg-panel:#111111;
+  --bg-panel2:#141414;
+  --bg-panel3:#161616;
+  --bg-panel4:#191919;
+}
+
 /* ── Theme switcher widget ── */
 .theme-switcher{position:relative}
 .theme-btn{background:#2a2a2a;color:#fff;border:1px solid #444;padding:4px 9px;border-radius:4px;cursor:pointer;font-size:13px;transition:.15s;white-space:nowrap;font-family:'Inter',sans-serif}

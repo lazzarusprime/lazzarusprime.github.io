@@ -9,6 +9,12 @@ const THEMES = [
   { id: 'fire',       name: 'Fire Mode',    emoji: '🔥' },
   { id: 'synthwave',  name: 'Synthwave',    emoji: '🌆' },
   { id: 'arcade',     name: 'Retro Arcade', emoji: '👾' },
+  { id: 'blood-moon', name: 'Blood Moon',   emoji: '🩸' },
+  { id: 'ocean',      name: 'Deep Ocean',   emoji: '🌊' },
+  { id: 'royal',      name: 'Royal Purple', emoji: '👑' },
+  { id: 'frost',      name: 'Frost',        emoji: '🧊' },
+  { id: 'toxic',      name: 'Toxic',        emoji: '☢️' },
+  { id: 'stealth',    name: 'Stealth',      emoji: '🕶️' },
 ];
 
 /* Apply saved theme immediately, before body renders, to avoid a flash */
