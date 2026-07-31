@@ -188,7 +188,6 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         <div class="theme-menu" id="themeMenu"></div>
       </div>
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
-    <a href="https://kick.com/lazzarus-prime" target="_blank">🟢 Kick</a>
     <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
     <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
     <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
@@ -421,7 +420,6 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
   <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
   <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
-  <a href="https://kick.com/lazzarus-prime" target="_blank">🟢 Kick</a><span class="footer-sep">·</span>
   <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
   <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
   <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a><span class="footer-sep">·</span>
@@ -660,7 +658,14 @@ function obsWriteGrid() {
   try {
     const snap = {};
     INSTRUMENTS.forEach(inst => { snap[inst.id] = pattern[inst.id].slice(0, maxSteps); });
-    localStorage.setItem('lp_obs_grid', JSON.stringify({ pattern: snap, maxSteps }));
+    // Bass tier: 0=empty, 1=ghost (quiet fill), 2=normal note, 3=octave accent
+    const bassSnap = (bassPattern || []).slice(0, maxSteps).map(n => {
+      if (!n) return 0;
+      if (n.ghost) return 1;
+      if (n.oct) return 3;
+      return 2;
+    });
+    localStorage.setItem('lp_obs_grid', JSON.stringify({ pattern: snap, bass: bassSnap, bassActive, maxSteps }));
   } catch(e) {}
 }
 
@@ -702,6 +707,7 @@ function buildGrid() {
         if (s % 4 === 0 && s > 0) cell.classList.add('beat-divider');
         if (currentVal === 1) cell.classList.add('active');
         if (currentVal === 2) cell.classList.add('accent');
+        obsWriteGrid();
       };
       grid.appendChild(cell);
     }
@@ -1150,6 +1156,7 @@ function toggleBassActive() {
   const btn = document.getElementById('bassActiveBtn');
   btn.textContent = bassActive ? '🔊 Bass On' : '● Bass Off';
   btn.classList.toggle('bass-on', bassActive);
+  obsWriteGrid();
 }
 
 // Renders one cell's visual state from its note data (or lack thereof)
@@ -1196,6 +1203,7 @@ function cycleBassCell(s, cell) {
     bassPattern[s] = { freq: noteFreq(semi, octave + octOff), name: NOTE_NAMES[semi], semi, oct: octOff, ghost: false };
   }
   paintBassCell(cell, bassPattern[s]);
+  obsWriteGrid();
 }
 
 function buildBassGrid() {
@@ -1220,6 +1228,7 @@ function buildBassGrid() {
     cell.onclick = () => cycleBassCell(s, cell);
     grid.appendChild(cell);
   }
+  obsWriteGrid();
 }
 
 function hitBass(note, time) {

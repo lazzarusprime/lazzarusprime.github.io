@@ -80,6 +80,42 @@ select:focus{outline:none;border-color:var(--accent)}
 .diatonic-chip .chord-name{font-size:12px;color:#ccc;margin-top:2px}
 .diatonic-chip .fn{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 
+/* ── TRIAD QUALITY GRID ── */
+.quality-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.quality-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;cursor:pointer;transition:.2s}
+.quality-card:hover{border-color:var(--accent);background:#232323;transform:translateY(-2px)}
+.quality-card.selected{border-color:var(--accent);background:rgba(var(--accent-rgb),.09);box-shadow:0 0 0 1px var(--accent)}
+.quality-card .q-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
+.quality-card .q-formula{font-size:12px;color:#aaa;margin-bottom:6px;font-weight:700}
+.quality-card .q-semi{font-size:11px;color:#666;margin-bottom:8px}
+.quality-card .q-desc{font-size:12px;color:#999;line-height:1.5}
+
+/* ── TRIAD BUILDER / INVERSIONS ── */
+.inversion-row{display:flex;align-items:center;gap:14px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:10px 16px;margin-bottom:8px;cursor:pointer;transition:.2s}
+.inversion-row:hover{border-color:var(--accent);background:#232323}
+.inversion-row .inv-label{min-width:130px;font-weight:800;font-size:12px;color:#ccc;text-transform:uppercase;letter-spacing:.5px}
+.inversion-row .inv-bass-tag{font-size:10px;color:#666;text-transform:none;letter-spacing:0;display:block;margin-top:2px;font-weight:400}
+.inversion-row .inv-notes{display:flex;gap:6px;flex:1}
+.inversion-row .inv-note{background:#0f0f0f;border:1px solid #333;border-radius:6px;padding:5px 10px;font-size:12px;font-weight:700;color:#ccc}
+.inversion-row .inv-note.bass-note{border-color:var(--accent);color:var(--accent);background:rgba(var(--accent-rgb),.1)}
+
+/* ── DIATONIC DEEP-DIVE ── */
+.diatonic-deep-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;margin-bottom:8px}
+.diatonic-deep-card .dd-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.diatonic-deep-card .dd-rn{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;cursor:pointer}
+.diatonic-deep-card .dd-name{font-size:14px;font-weight:700;color:#ddd}
+.diatonic-deep-card .dd-explain{font-size:12px;color:#999;line-height:1.6}
+.diatonic-deep-card .dd-explain strong{color:#ccc}
+
+/* ── PROGRESSIONS ── */
+.progression-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.progression-item{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;cursor:pointer;transition:.2s}
+.progression-item:hover{border-color:var(--accent);background:#232323}
+.progression-item .prog-name{font-weight:800;font-size:13px;color:#eee;margin-bottom:2px}
+.progression-item .prog-nickname{font-size:11px;color:#666;margin-bottom:6px}
+.progression-item .prog-chords{display:flex;gap:8px;flex-wrap:wrap}
+.progression-item .prog-chord{background:#0f0f0f;border:1px solid #333;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--accent)}
+
 /* ── CIRCLE OF FIFTHS ── */
 .circle-wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
 .circle-svg-wrap{flex:0 0 auto}
@@ -121,7 +157,6 @@ footer a:hover{color:var(--accent)}
         <div class="theme-menu" id="themeMenu"></div>
       </div>
     <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
-    <a href="https://kick.com/lazzarus-prime" target="_blank">🟢 Kick</a>
     <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
     <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
     <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
@@ -156,6 +191,7 @@ footer a:hover{color:var(--accent)}
 
   <div class="section-tabs">
     <button class="section-tab active" onclick="setSection('fundamentals')">Fundamentals</button>
+    <button class="section-tab" onclick="setSection('triads')">Triads</button>
     <button class="section-tab" onclick="setSection('circle')">Circle of Fifths</button>
     <button class="section-tab" onclick="setSection('glossary')">Glossary</button>
   </div>
@@ -217,7 +253,7 @@ footer a:hover{color:var(--accent)}
       </div>
       <div class="hint">Pick a chord to hear it built from the selected root</div>
       <div class="scale-notes" id="triadPills"></div>
-      <p class="hint" style="margin-top:10px">Want fretboard diagrams and voicings for these? Head to <a href="chords.html" style="color:var(--accent)">Chords &amp; Scales</a> — this page is about understanding the theory behind what's there.</p>
+      <p class="hint" style="margin-top:10px">This is the quick version — head to the <a href="#" onclick="document.querySelector('.section-tab:nth-child(2)').click();return false;" style="color:var(--accent)">Triads</a> tab for the full deep dive: inversions, why each diatonic chord is the quality it is, and common progressions. Want fretboard diagrams and voicings? Head to <a href="chords.html" style="color:var(--accent)">Chords &amp; Scales</a>.</p>
     </div>
 
     <div class="concept-card">
@@ -225,6 +261,70 @@ footer a:hover{color:var(--accent)}
       <p class="concept-body">Harmonize every note of the major scale with a triad and you get seven chords that "belong" to that key — the diatonic chords. Roman numerals name them by scale degree, capital = major, lowercase = minor:</p>
       <div class="diatonic-grid" id="diatonicGrid"></div>
       <div class="info-box"><strong>Why it matters:</strong> Progressions like I–IV–V or ii–V–I aren't tied to one key — they're a shape. Learn "1‑4‑5" as a relationship and you can play it in any key instantly, which is exactly what happens when a song gets called out in a key you don't know.</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ TRIADS (deep dive) ══════════════ -->
+  <div class="theory-section" id="section-triads">
+
+    <div class="concept-card">
+      <h3 class="concept-title">Stacking Thirds</h3>
+      <p class="concept-body">Every triad is built the same way: start on a root, stack a <strong>third</strong> on top of it, then stack another <strong>third</strong> on top of that. That's it — three notes, two stacked thirds. What changes between chord qualities is only the <em>size</em> of those thirds: major (4 semitones) or minor (3 semitones).</p>
+      <div class="formula-row">
+        <span class="formula-step">5th <span style="color:#666">← third #2</span></span>
+        <span class="formula-step">3rd <span style="color:#666">← third #1</span></span>
+        <span class="formula-step half">Root</span>
+      </div>
+      <p class="concept-body" style="margin-top:10px">Read bottom to top like a chord actually stacks. Change the first third from major to minor and the chord goes from bright to dark. Change the second third and you get the unstable, tension-heavy diminished and augmented sounds. Four possible combinations, four triad qualities — that's the entire system.</p>
+    </div>
+
+    <div class="controls-row">
+      <div class="ctrl-group">
+        <span class="ctrl-label">Root Note</span>
+        <select id="triadRootSel">
+          <option>C</option><option>C#/Db</option><option>D</option><option>D#/Eb</option>
+          <option>E</option><option>F</option><option>F#/Gb</option><option>G</option>
+          <option>G#/Ab</option><option>A</option><option>A#/Bb</option><option>B</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <span class="ctrl-label">Quality</span>
+        <select id="triadQualitySel">
+          <option value="major">Major</option>
+          <option value="minor">Minor</option>
+          <option value="dim">Diminished</option>
+          <option value="aug">Augmented</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">The Four Qualities</h3>
+      <p class="concept-body">Same root, four completely different characters — click any card to hear that quality built on the root you picked above.</p>
+      <div class="quality-grid" id="qualityGrid"></div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">Triad Builder &amp; Inversions</h3>
+      <p class="concept-body" id="builderHeading">— pick a root and quality above —</p>
+      <div class="scale-notes" id="builderPills"></div>
+      <p class="concept-body" style="margin-top:14px">A triad doesn't have to be played root-first. <strong>Inverting</strong> it just means putting a different chord tone in the bass — the notes are identical, but which one is lowest changes the whole feel and makes voice leading between chords smoother.</p>
+      <div class="hint">Click a row to hear that inversion, bass note first</div>
+      <div id="inversionRows"></div>
+      <div class="info-box"><strong>Why it matters:</strong> Inversions are how basslines and chord progressions avoid sounding like they're just jumping around. Moving from a root-position C to a 1st-inversion F (bass note A) is a much smaller, smoother motion than jumping both chords in root position.</div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">Why Each Diatonic Chord Is What It Is</h3>
+      <p class="concept-body">Harmonizing the major scale doesn't randomly hand you 3 major, 3 minor, and 1 diminished chord — it's forced by the scale's own W-W-H-W-W-W-H pattern. Every diatonic triad's quality falls straight out of the exact distance between its own root, 3rd, and 5th <em>within the scale</em>. Pick a root above, then look at why each one lands where it does:</p>
+      <div id="diatonicDeepGrid"></div>
+    </div>
+
+    <div class="concept-card">
+      <h3 class="concept-title">Common Triad Progressions</h3>
+      <p class="concept-body">These shapes show up constantly because the relationships between the chords — not the specific key — are what make them work. Pick a progression to hear it in the root key you selected above.</p>
+      <div class="progression-list" id="progressionList"></div>
     </div>
 
   </div>
@@ -270,7 +370,6 @@ footer a:hover{color:var(--accent)}
   <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
   <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
   <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
-  <a href="https://kick.com/lazzarus-prime" target="_blank">🟢 Kick</a><span class="footer-sep">·</span>
   <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
   <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
   <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a><span class="footer-sep">·</span>
@@ -296,11 +395,10 @@ function getAudioCtx() {
 }
 const NOTE_FREQS_BASE = [261.63,277.18,293.66,311.13,329.63,349.23,369.99,392.00,415.30,440.00,466.16,493.88];
 
-function playNote(noteIdx12) {
+function playFreq(freq) {
   try {
     const ctx = getAudioCtx();
     if (ctx.state === 'suspended') ctx.resume();
-    const freq = NOTE_FREQS_BASE[noteIdx12];
     const osc1 = ctx.createOscillator();
     const osc2 = ctx.createOscillator();
     const gainNode = ctx.createGain();
@@ -320,6 +418,19 @@ function playNote(noteIdx12) {
     osc1.start(ctx.currentTime); osc2.start(ctx.currentTime);
     osc1.stop(ctx.currentTime + 1.3); osc2.stop(ctx.currentTime + 1.3);
   } catch(e) { /* audio not available */ }
+}
+
+function playNote(noteIdx12) {
+  playFreq(NOTE_FREQS_BASE[noteIdx12]);
+}
+
+// Plays a set of notes as absolute semitone offsets from a root (can exceed
+// 12 — that's how we get real octave spacing for inversions), lowest first.
+function playVoicing(rootIdx, offsets) {
+  const rootFreq = NOTE_FREQS_BASE[rootIdx];
+  offsets.forEach((off, i) => {
+    setTimeout(() => playFreq(rootFreq * Math.pow(2, off / 12)), i * 45);
+  });
 }
 
 // Play several notes as a chord (staggered slightly for a strum-ish feel)
@@ -426,6 +537,161 @@ function renderFundamentals() {
   renderDiatonicGrid();
 }
 document.getElementById('fundRootSel').addEventListener('change', renderFundamentals);
+
+// ══════════════ TRIADS (deep dive) ══════════════
+
+// Extra metadata for the 4 basic triad qualities (formula/semitone/description)
+const QUALITY_INFO = {
+  major: { formula:'1 – 3 – 5',   semi:'4 + 3 semitones', desc:'Bright, stable, resolved. The default "happy" sound in Western music — a big major 3rd on the bottom, a smaller minor 3rd on top.' },
+  minor: { formula:'1 – ♭3 – 5',  semi:'3 + 4 semitones', desc:'Darker, more emotional. Just flip the stacking order of major: minor 3rd first, then major 3rd on top.' },
+  dim:   { formula:'1 – ♭3 – ♭5', semi:'3 + 3 semitones', desc:'Tense and unstable — two minor 3rds stacked means the outer interval is a tritone. Wants to resolve somewhere.' },
+  aug:   { formula:'1 – 3 – ♯5',  semi:'4 + 4 semitones', desc:'Ambiguous and floaty — two major 3rds stacked means no note anchors it as a clear "bottom." Common in transitions.' },
+};
+
+function currentTriadRootIdx() {
+  return noteIdx(document.getElementById('triadRootSel').value);
+}
+function currentTriadQuality() {
+  return document.getElementById('triadQualitySel').value;
+}
+
+function renderQualityGrid() {
+  const rootIdx = currentTriadRootIdx();
+  const selectedQ = currentTriadQuality();
+  const el = document.getElementById('qualityGrid');
+  el.innerHTML = Object.entries(QUALITY_INFO).map(([key, info]) => {
+    const t = TRIAD_TYPES[key];
+    const rootName = NOTE_DISPLAY[rootIdx].split('/')[0];
+    return `<div class="quality-card ${key===selectedQ?'selected':''}" onclick="selectQuality('${key}')">
+      <div class="q-name">${rootName} ${t.name}</div>
+      <div class="q-formula">${info.formula}</div>
+      <div class="q-semi">${info.semi}</div>
+      <div class="q-desc">${info.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectQuality(key) {
+  document.getElementById('triadQualitySel').value = key;
+  renderTriadsTab();
+}
+
+function renderBuilder() {
+  const rootIdx = currentTriadRootIdx();
+  const quality = currentTriadQuality();
+  const t = TRIAD_TYPES[quality];
+  const rootName = NOTE_DISPLAY[rootIdx].split('/')[0];
+  const noteNames = t.intervals.map(off => NOTE_DISPLAY[(rootIdx + off) % 12].split('/')[0]);
+
+  document.getElementById('builderHeading').innerHTML =
+    `<strong>${rootName} ${t.name}</strong> = ${noteNames.join(' – ')}`;
+
+  const pillsEl = document.getElementById('builderPills');
+  const labels = ['Root','3rd','5th'];
+  pillsEl.innerHTML = t.intervals.map((off, i) => {
+    const ni = (rootIdx + off) % 12;
+    return `<span class="note-pill ${i===0?'root':''}" onclick="playNote(${ni})">${NOTE_DISPLAY[ni].split('/')[0]} <span style="color:#666">(${labels[i]})</span></span>`;
+  }).join('') + `<span class="note-pill" style="border-color:var(--accent);color:var(--accent)" onclick="playVoicing(${rootIdx},[${t.intervals.join(',')}])">▶ Play as a chord</span>`;
+
+  renderInversions(rootIdx, t, rootName, noteNames);
+}
+
+function renderInversions(rootIdx, t, rootName, noteNames) {
+  const [rOff, thirdOff, fifthOff] = t.intervals;
+  const inversions = [
+    { label:'Root Position',  bassTag:`bass note: ${rootName}`,        offsets:[rOff, thirdOff, fifthOff],   order:[0,1,2] },
+    { label:'1st Inversion',  bassTag:`bass note: ${noteNames[1]}`,    offsets:[thirdOff, fifthOff, rOff+12], order:[1,2,0] },
+    { label:'2nd Inversion',  bassTag:`bass note: ${noteNames[2]}`,    offsets:[fifthOff, rOff+12, thirdOff+12], order:[2,0,1] },
+  ];
+  const el = document.getElementById('inversionRows');
+  el.innerHTML = inversions.map(inv => {
+    const notesHtml = inv.order.map((ni, i) =>
+      `<span class="inv-note ${i===0?'bass-note':''}">${noteNames[ni]}</span>`
+    ).join('');
+    return `<div class="inversion-row" onclick="playVoicing(${rootIdx},[${inv.offsets.join(',')}])">
+      <div class="inv-label">${inv.label}<span class="inv-bass-tag">${inv.bassTag}</span></div>
+      <div class="inv-notes">${notesHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+// Reasoning text for why each diatonic scale degree lands on the quality it does
+const DIATONIC_WHY = [
+  'Root, 3rd, and 5th are the 1st, 3rd, and 5th notes of the major scale itself — a major 3rd (4 semitones) then a minor 3rd (3) on top. That major-then-minor stack is exactly what makes a major triad.',
+  'Built on the 2nd degree, its 3rd and 5th land a minor 3rd then a major 3rd apart — flip the stacking order from the tonic and you get a minor chord.',
+  'Same minor-then-major stacking as ii, just starting two scale degrees higher. Still a minor triad.',
+  'Like the I chord, IV gets a major-then-minor stack of 3rds relative to its own root — another major triad, a perfect 5th below the tonic.',
+  'V shares the same major-then-minor stacking as I and IV. It\'s major specifically because its 3rd is the scale\'s leading tone, which is what gives it that pull back to I.',
+  'Minor-then-major stacking again, like ii and iii — the relative minor of the key, sharing all the same notes as I.',
+  'The odd one out: its 3rd and 5th are both minor 3rds apart (like a diminished chord always is), because the 7th scale degree sits only a half step below the octave, squeezing that 5th flat.',
+];
+
+function renderDiatonicDeep() {
+  const rootIdx = currentTriadRootIdx();
+  const el = document.getElementById('diatonicDeepGrid');
+  el.innerHTML = MAJOR_STEPS.map((semi, i) => {
+    const degRoot = (rootIdx + semi) % 12;
+    const quality = DIATONIC_QUALITY[i];
+    const triadSemis = quality === 'maj' ? [0,4,7] : quality === 'min' ? [0,3,7] : [0,3,6];
+    const idxs = triadSemis.map(s => (degRoot + s) % 12);
+    const qualityName = quality === 'maj' ? 'Major' : quality === 'min' ? 'Minor' : 'Diminished';
+    const nm = NOTE_DISPLAY[degRoot].split('/')[0] + (quality==='min'?'m':quality==='dim'?'dim':'');
+    return `<div class="diatonic-deep-card">
+      <div class="dd-head">
+        <span class="dd-rn" onclick="playChordTones([${idxs.join(',')}])">${DIATONIC_RN[i]}</span>
+        <span class="dd-name">${nm} — ${DIATONIC_FN[i]} (${qualityName})</span>
+      </div>
+      <div class="dd-explain">${DIATONIC_WHY[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+// Common progressions, expressed as scale-degree indices into MAJOR_STEPS (0-6)
+const PROGRESSIONS = [
+  { name:'I – IV – V',        nickname:'The three-chord backbone of rock, blues, and country', degrees:[0,3,4] },
+  { name:'I – V – vi – IV',   nickname:'The "four chord song" — pop\'s most-used progression', degrees:[0,4,5,3] },
+  { name:'vi – IV – I – V',   nickname:'Same four chords, minor-feeling starting point',        degrees:[5,3,0,4] },
+  { name:'ii – V – I',        nickname:'The core turnaround of jazz harmony',                    degrees:[1,4,0] },
+  { name:'I – vi – IV – V',   nickname:'The "50s progression" — doo-wop and early rock \'n\' roll', degrees:[0,5,3,4] },
+  { name:'I – IV – vi – V',   nickname:'A brighter variant used all over modern pop',            degrees:[0,3,5,4] },
+];
+
+function renderProgressions() {
+  const rootIdx = currentTriadRootIdx();
+  const el = document.getElementById('progressionList');
+  el.innerHTML = PROGRESSIONS.map(prog => {
+    const chordsData = prog.degrees.map(d => {
+      const degRoot = (rootIdx + MAJOR_STEPS[d]) % 12;
+      const quality = DIATONIC_QUALITY[d];
+      const triadSemis = quality === 'maj' ? [0,4,7] : quality === 'min' ? [0,3,7] : [0,3,6];
+      const idxs = triadSemis.map(s => (degRoot + s) % 12);
+      const nm = NOTE_DISPLAY[degRoot].split('/')[0] + (quality==='min'?'m':quality==='dim'?'dim':'');
+      return { nm, idxs };
+    });
+    const chordsHtml = chordsData.map(c => `<span class="prog-chord">${c.nm}</span>`).join('');
+    return `<div class="progression-item" onclick='playProgression(${JSON.stringify(chordsData.map(c=>c.idxs))})'>
+      <div class="prog-name">${prog.name}</div>
+      <div class="prog-nickname">${prog.nickname}</div>
+      <div class="prog-chords">${chordsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function playProgression(chordIdxArrays) {
+  chordIdxArrays.forEach((idxs, i) => {
+    setTimeout(() => playChordTones(idxs), i * 750);
+  });
+}
+
+function renderTriadsTab() {
+  renderQualityGrid();
+  renderBuilder();
+  renderDiatonicDeep();
+  renderProgressions();
+}
+document.getElementById('triadRootSel').addEventListener('change', renderTriadsTab);
+document.getElementById('triadQualitySel').addEventListener('change', renderTriadsTab);
+renderTriadsTab();
 
 // ══════════════ CIRCLE OF FIFTHS ══════════════
 // Order around the circle clockwise from 12 o'clock, by perfect fifths
