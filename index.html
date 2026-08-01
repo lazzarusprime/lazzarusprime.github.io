@@ -480,7 +480,7 @@ function showToast(title, msg, icon, color) {
 /* ── Request a song ── */
 async function requestSong(artist, song, btn) {
   if (btn) { btn.classList.remove('fired'); void btn.offsetWidth; btn.classList.add('fired'); setTimeout(()=>btn.classList.remove('fired'),520); }
-  const cmd = `!request "${artist}" "${song}"`;
+  const cmd = `!sr ${artist} - ${song}`;
   try {
     await navigator.clipboard.writeText(cmd);
     showToast('Copied! 🎸 Paste into Twitch chat', artist+' — '+song, '🔥', '#4caf50');
