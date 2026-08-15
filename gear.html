@@ -14,7 +14,8 @@
 <script src="theme.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden}
+body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden;scroll-behavior:smooth}
+.gear-section,.signal-chain-wrap{scroll-margin-top:90px}
 .titleBar{display:flex;justify-content:space-between;align-items:center;background:var(--bg-panel2);padding:10px 14px;border-bottom:2px solid #222;flex-wrap:wrap;gap:8px}
 .titleLeft{display:flex;align-items:center;gap:12px}
 .titleBar .site-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(var(--accent-rgb),.4))}
@@ -40,6 +41,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,8vw,72px);letter-spacing:4px;margin:0;background:linear-gradient(to bottom,#fff 0%,var(--accent) 50%,var(--accent-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-hero p{color:#666;font-size:14px;letter-spacing:1px;margin-top:8px}
 .gear-section{margin-bottom:44px}
+.gear-jump-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:var(--bg-panel2);border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:28px}
+.gear-jump-nav a{color:#ccc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.3px;padding:7px 12px;border-radius:6px;background:#1e1e1e;border:1px solid #2a2a2a;white-space:nowrap;transition:.2s}
+.gear-jump-nav a:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim1)}
+@media(max-width:600px){.gear-jump-nav{gap:6px;padding:10px}.gear-jump-nav a{font-size:11px;padding:6px 10px}}
 .gear-section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);border-bottom:2px solid #1e1e1e;padding-bottom:8px;margin-bottom:18px}
 
 /* ── SIGNAL CHAIN ── */
@@ -152,8 +157,22 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <p>Everything that makes the noise happen — for better or worse</p>
   </div>
 
+  <!-- ══ SECTION JUMP NAV ══ -->
+  <div class="gear-jump-nav">
+    <a href="#signal-chain">⚡ Signal Chain</a>
+    <a href="#board-photo">📸 The Board</a>
+    <a href="#guitars">🎸 Guitar</a>
+    <a href="#basses">🎵 Basses</a>
+    <a href="#acoustic">🪗 Acoustic</a>
+    <a href="#keys">🎹 Keys</a>
+    <a href="#pedalboard-power">🎛️ Pedalboard &amp; Power</a>
+    <a href="#pedals">🎚️ Pedals</a>
+    <a href="#interface">🖥️ Interface</a>
+    <a href="#cameras">📷 Cameras</a>
+  </div>
+
   <!-- ══ SIGNAL CHAIN DIAGRAM ══ -->
-  <div class="signal-chain-wrap">
+  <div class="signal-chain-wrap" id="signal-chain">
     <div class="signal-chain-title">⚡ Signal Chain</div>
     <div class="chain-diagram" id="chainDiagram">
 
@@ -237,7 +256,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ LIVE PEDALBOARD PHOTO ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="board-photo">
     <div class="gear-section-title">📸 The Board — As It Stands</div>
     <div style="background:var(--bg-void);border:1px solid #222;border-radius:16px;padding:24px;text-align:center;position:relative;overflow:hidden">
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(var(--accent-rgb),.06) 0%,transparent 65%);pointer-events:none"></div>
@@ -266,7 +285,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ ELECTRIC BASSES ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="basses">
     <div class="gear-section-title">🎵 Electric Basses</div>
     <div class="guitar-card">
       <div class="guitar-card-photo"><img src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
@@ -302,7 +321,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ ACOUSTIC ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="acoustic">
     <div class="gear-section-title">🪗 Acoustic Instruments</div>
     <div class="guitar-card">
       <div class="guitar-card-photo"><img src="images/fa-450ce.avif" alt="Fender FA-450CE"></div>
@@ -358,7 +377,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ PEDALBOARD ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="pedalboard-power">
     <div class="gear-section-title">🎛️ Pedalboard &amp; Power</div>
     <div class="gear-grid">
       <div class="gear-card">
@@ -385,7 +404,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ PEDALS ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="pedals">
     <div class="gear-section-title">🎚️ Pedals on the Board</div>
     <div class="gear-grid">
 
@@ -448,7 +467,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ INTERFACE ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="interface">
     <div class="gear-section-title">🖥️ Audio Interface</div>
     <div class="gear-grid">
       <div class="gear-card" id="mtrack">
@@ -465,7 +484,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 
   <!-- ══ CAMERAS ══ -->
-  <div class="gear-section">
+  <div class="gear-section" id="cameras">
     <div class="gear-section-title">📷 Cameras</div>
     <div class="gear-grid">
       <div class="gear-card" id="obsbot-meet2">
