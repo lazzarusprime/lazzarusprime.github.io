@@ -182,15 +182,21 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       </div>
       <div class="chain-arrow"></div>
 
-      <!-- Wireless -->
-      <div class="chain-node" onclick="scrollToGear('joyo')">
-        <div class="chain-box"><div class="chain-icon">📡</div><div class="chain-label">Joyo JW-03</div><div class="chain-sub">Wireless 2.4GHz</div></div>
+      <!-- AB/Y Switch -->
+      <div class="chain-node" onclick="scrollToGear('aby')">
+        <div class="chain-box"><div class="chain-icon">⚡</div><div class="chain-label">ART CoolSwitch Pro</div><div class="chain-sub">AB/Y Switch</div></div>
       </div>
       <div class="chain-arrow"></div>
 
-      <!-- AB/Y Switch -->
-      <div class="chain-node" onclick="scrollToGear('aby')">
-        <div class="chain-box"><div class="chain-icon">⚡</div><div class="chain-label">ART CoolSwitch Pro</div><div class="chain-sub">AB/Y Splitter</div></div>
+      <!-- Bass Effect Pedal -->
+      <div class="chain-node" onclick="scrollToGear('dapper')">
+        <div class="chain-box"><div class="chain-icon">🟢</div><div class="chain-label">Valeton Dapper Bass</div><div class="chain-sub">Bass FX Strip</div></div>
+      </div>
+      <div class="chain-arrow"></div>
+
+      <!-- Multi Effect Pedal -->
+      <div class="chain-node" onclick="scrollToGear('gp100')">
+        <div class="chain-box"><div class="chain-icon">🎛️</div><div class="chain-label">Valeton GP-100</div><div class="chain-sub">Multi-FX / Amp Sim</div></div>
       </div>
 
       <!-- Split arrow -->
@@ -202,53 +208,35 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
           <polygon points="36,6 36,14 44,10" fill="var(--accent)"/>
           <polygon points="36,40 36,48 44,44" fill="#555"/>
         </svg>
-        <span style="font-size:9px;color:#555;font-weight:700;letter-spacing:.5px">A / B</span>
+        <span style="font-size:9px;color:#555;font-weight:700;letter-spacing:.5px">out A/B</span>
       </div>
 
-      <!-- Two branches -->
+      <!-- Two output branches -->
       <div class="chain-branch">
-        <!-- Path A: Dapper Bass -->
+        <!-- Path A: Realtone Cable -> PC (Rocksmith) -->
         <div class="chain-branch-row">
-          <div class="chain-node" onclick="scrollToGear('dapper')">
-            <div class="chain-box" style="border-color:rgba(var(--accent-rgb),.2);background:var(--accent-dim1)"><div class="chain-icon">🟢</div><div class="chain-label">Valeton Dapper Bass</div><div class="chain-sub">Bass FX Strip</div></div>
+          <div class="chain-node">
+            <div class="chain-box" style="border-color:rgba(var(--accent-rgb),.2);background:var(--accent-dim1)"><div class="chain-icon">🎮</div><div class="chain-label">Realtone Cable</div><div class="chain-sub">to PC · Rocksmith</div></div>
+          </div>
+          <div class="chain-arrow"></div>
+          <div class="chain-node">
+            <div class="chain-box" style="border-color:rgba(var(--accent-rgb),.2);background:var(--accent-dim1)"><div class="chain-icon">💻</div><div class="chain-label">PC</div><div class="chain-sub">Rocksmith</div></div>
           </div>
         </div>
-        <!-- Path B: GP-100 -->
+        <!-- Path B: Looper -> M-Track Duo -> PC (stream audio) -->
         <div class="chain-branch-row">
-          <div class="chain-node" onclick="scrollToGear('gp100')">
-            <div class="chain-box"><div class="chain-icon">🎛️</div><div class="chain-label">Valeton GP-100</div><div class="chain-sub">Multi-FX / Amp Sim</div></div>
+          <div class="chain-node" onclick="scrollToGear('looper')">
+            <div class="chain-box"><div class="chain-icon">🔁</div><div class="chain-label">Lekato Looper</div><div class="chain-sub">9 Loops · 40 min</div></div>
+          </div>
+          <div class="chain-arrow"></div>
+          <div class="chain-node" onclick="scrollToGear('mtrack')">
+            <div class="chain-box"><div class="chain-icon">🔌</div><div class="chain-label">M-Track Duo</div><div class="chain-sub">USB Audio Interface</div></div>
+          </div>
+          <div class="chain-arrow"></div>
+          <div class="chain-node">
+            <div class="chain-box"><div class="chain-icon">💻</div><div class="chain-label">PC / OBS</div><div class="chain-sub">Streaming Output</div></div>
           </div>
         </div>
-      </div>
-
-      <!-- Merge arrow -->
-      <div style="display:flex;flex-direction:column;align-items:center;margin-top:-12px;gap:2px;padding:0 6px">
-        <svg width="36" height="54" viewBox="0 0 36 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="36" y1="10" x2="0" y2="10" stroke="var(--accent)" stroke-width="1.5"/>
-          <line x1="36" y1="44" x2="0" y2="44" stroke="#555" stroke-width="1.5"/>
-          <line x1="36" y1="10" x2="36" y2="44" stroke="#444" stroke-width="1.5"/>
-          <polygon points="0,6 0,14 -8,10" fill="var(--accent)"/>
-          <polygon points="0,40 0,48 -8,44" fill="#555"/>
-        </svg>
-        <span style="font-size:9px;color:#555;font-weight:700;letter-spacing:.5px">merge</span>
-      </div>
-      <div class="chain-arrow" style="margin-left:-6px"></div>
-
-      <!-- Looper -->
-      <div class="chain-node" onclick="scrollToGear('looper')">
-        <div class="chain-box"><div class="chain-icon">🔁</div><div class="chain-label">Lekato Looper</div><div class="chain-sub">9 Loops · 40 min</div></div>
-      </div>
-      <div class="chain-arrow"></div>
-
-      <!-- Interface -->
-      <div class="chain-node" onclick="scrollToGear('mtrack')">
-        <div class="chain-box"><div class="chain-icon">🔌</div><div class="chain-label">M-Track Duo</div><div class="chain-sub">USB Audio Interface</div></div>
-      </div>
-      <div class="chain-arrow"></div>
-
-      <!-- PC -->
-      <div class="chain-node">
-        <div class="chain-box"><div class="chain-icon">💻</div><div class="chain-label">PC / OBS</div><div class="chain-sub">Streaming Output</div></div>
       </div>
 
     </div>
