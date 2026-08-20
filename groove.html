@@ -13,6 +13,7 @@ HTML
 <script src="shared.js"></script>
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
+<script src="chrome.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;margin:0;overflow-x:hidden;user-select:none}
@@ -177,48 +178,8 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 </head>
 <body>
 
-<div class="titleBar">
-  <div class="titleLeft">
-    <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
-    <h2>Lazzarus Prime — Groove Station</h2>
-  </div>
-    <div class="socialLinks">
-      <div class="theme-switcher" id="themeSwitcher">
-        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 Theme</button>
-        <div class="theme-menu" id="themeMenu"></div>
-      </div>
-    <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a>
-    <a href="https://kick.com/lazzarus-prime/about" target="_blank">⚡ Kick</a>
-    <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a>
-    <a href="https://www.youtube.com/@LazzarusPrime" target="_blank">▶️ YouTube</a>
-    <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a>
-    <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a>
-    <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a>
-    <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
-  </div>
-</div>
-
-<div class="topBar">
-  <div class="nav-row">
-    <button class="nav-btn" onclick="location.href='index.html?nosplash=1'">🏠 Home</button>
-<button class="nav-btn" onclick="location.href='artists.html'">🎸 Artists</button>
-<button class="nav-btn" onclick="location.href='stats.html'">📊 Stats</button>
-<button class="nav-btn" onclick="location.href='gear.html'">🎛️ Gear</button>
-<button class="nav-btn" onclick="location.href='tuner.html'">🎵 Tuner</button>
-<button class="nav-btn" onclick="location.href='metronome.html'">🥁 Metro</button>
-<button class="nav-btn active-page">🔥 Groove</button>
-<button class="nav-btn" onclick="location.href='drums.html'">🪘 Drums</button>
-<button class="nav-btn" onclick="location.href='chords.html'">🎼 Chords</button>
-<button class="nav-btn" onclick="location.href='theory.html'">📚 Theory</button>
-<button class="nav-btn" onclick="location.href='videos.html'">📺 Videos</button>
-<button class="nav-btn" id="randomBtn" onclick="randomSong(this)">🎲 Random</button>
-  </div>
-  <div class="search-row">
-    <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
-    <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
-  </div>
-</div>
-
+<div id="site-header"></div>
+<script>renderHeader({page:'groove', title:'Groove Station', search:'nav'});</script>
 <div class="page-header">
   <h1>🔥 Groove Station Pro</h1>
   <p>Engine-swappable production suite · click once = normal hit · click twice = accented hit · click again = off</p>
@@ -407,27 +368,8 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </details>
 </div>
 
-<footer>
-  <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
-  <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
-  <a href="stats.html">📊 Stats</a><span class="footer-sep">·</span>
-  <a href="gear.html">🎛️ Gear</a><span class="footer-sep">·</span>
-  <a href="tuner.html">🎵 Tuner</a><span class="footer-sep">·</span>
-  <a href="metronome.html">🥁 Metro</a><span class="footer-sep">·</span>
-  <a href="groove.html">🔥 Groove</a><span class="footer-sep">·</span>
-  <a href="drums.html">🪘 Drums</a><span class="footer-sep">·</span>
-  <a href="chords.html">🎼 Chords</a><span class="footer-sep">·</span>
-  <a href="theory.html">📚 Theory</a><span class="footer-sep">·</span>
-  <a href="videos.html">📺 Videos</a><span class="footer-sep">·</span>
-  <a href="#" onclick="randomSong();return false;">🎲 Random</a><span class="footer-sep">·</span>
-  <a href="https://www.twitch.tv/lazzarus_prime" target="_blank">🎮 Twitch</a><span class="footer-sep">·</span>
-  <a href="https://kick.com/lazzarus-prime/about" target="_blank">⚡ Kick</a><span class="footer-sep">·</span>
-  <a href="https://discord.gg/WCg5sktJNM" target="_blank">💬 Discord</a><span class="footer-sep">·</span>
-  <a href="https://lazzarus-prime-shop.fourthwall.com/" target="_blank">👕 Merch</a><span class="footer-sep">·</span>
-  <a href="https://rocklist.live/lazzarus-prime" target="_blank">🎶 RockList</a><span class="footer-sep">·</span>
-  <a href="https://www.instagram.com/lazzarus__prime/" target="_blank">📸 Instagram</a><span class="footer-sep">·</span>
-  <a href="https://streamlabs.com/lazzarus_prime/tip" target="_blank">💰 Donate</a>
-</footer>
+<div id="site-footer"></div>
+<script>renderFooter();</script>
 
 <script>
 const INSTRUMENTS = [
