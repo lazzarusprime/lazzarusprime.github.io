@@ -100,9 +100,9 @@ function renderHeader(opts) {
   const navRow = !showNav ? '' : `<div class="topBar">
     <div class="nav-row">
       ${NAV_PRIMARY.map(i => _navBtn(i, page)).join('')}
+      <button class="nav-btn" id="randomBtn" onclick="${randomHandler}">🎲 Random</button>
       ${_dropdown('toolsDropdown', '🛠️ Tools', NAV_TOOLS, page)}
       ${_dropdown('moreDropdown', '⋯ More', NAV_MORE, page)}
-      <button class="nav-btn" id="randomBtn" onclick="${randomHandler}">🎲 Random</button>
     </div>
     ${searchRow}
   </div>`;

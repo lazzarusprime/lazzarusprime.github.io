@@ -42,8 +42,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,8vw,72px);letter-spacing:4px;margin:0;background:linear-gradient(to bottom,#fff 0%,var(--accent) 50%,var(--accent-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-hero p{color:#666;font-size:14px;letter-spacing:1px;margin-top:8px}
 .gear-section{margin-bottom:44px}
-.gear-jump-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:var(--bg-panel2);border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:28px}
-.gear-jump-nav a{color:#ccc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.3px;padding:7px 12px;border-radius:6px;background:#1e1e1e;border:1px solid #2a2a2a;white-space:nowrap;transition:.2s}
+.gear-jump-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;background:var(--bg-panel2);border:1px solid #222;border-radius:12px;padding:12px 14px;margin-bottom:28px;scrollbar-width:thin}
+.gear-jump-nav::-webkit-scrollbar{height:5px}
+.gear-jump-nav::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.gear-jump-nav a{color:#ccc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.3px;padding:7px 12px;border-radius:6px;background:#1e1e1e;border:1px solid #2a2a2a;white-space:nowrap;transition:.2s;flex-shrink:0}
 .gear-jump-nav a:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim1)}
 @media(max-width:600px){.gear-jump-nav{gap:6px;padding:10px}.gear-jump-nav a{font-size:11px;padding:6px 10px}}
 .gear-section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);border-bottom:2px solid #1e1e1e;padding-bottom:8px;margin-bottom:18px}
@@ -65,21 +67,6 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .chain-split-label{font-size:9px;color:#555;text-align:center;font-weight:700;letter-spacing:.5px}
 .chain-branch{display:flex;flex-direction:column;gap:16px;align-self:center}
 .chain-branch-row{display:flex;align-items:center;gap:0}
-
-/* ── GUITAR CARD ── */
-.guitar-card{background:var(--bg-panel2);border:1px solid #1e1e1e;border-radius:12px;overflow:hidden;display:flex;margin-bottom:20px;transition:.3s}
-.guitar-card:hover{border-color:rgba(var(--accent-rgb),.33);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.13),0 12px 40px rgba(0,0,0,.7)}
-.guitar-card-photo{width:240px;flex-shrink:0;background:radial-gradient(ellipse at center,#1a1a1a 0%,var(--bg-void) 100%);display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
-.guitar-card-photo::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(var(--accent-rgb),.04) 0%,transparent 70%);pointer-events:none;opacity:0;transition:.3s}
-.guitar-card:hover .guitar-card-photo::after{opacity:1}
-.guitar-card-photo img{max-width:100%;max-height:300px;width:auto;height:auto;object-fit:contain;transition:transform .4s ease,filter .4s ease;filter:drop-shadow(0 8px 24px rgba(0,0,0,.8))}
-.guitar-card:hover .guitar-card-photo img{transform:scale(1.06);filter:drop-shadow(0 12px 32px rgba(0,0,0,.9)) drop-shadow(0 0 20px rgba(var(--accent-rgb),.08))}
-.guitar-card-body{padding:22px;flex:1;display:flex;flex-direction:column;gap:7px;border-left:1px solid #1e1e1e}
-.guitar-card-name{font-weight:900;font-size:18px;color:#fff;margin:0;line-height:1.2}
-.guitar-card-model{font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.5px;margin:0}
-.guitar-specs{font-size:13px;color:#666;line-height:1.9;flex:1;margin-top:4px}
-.guitar-specs span{color:#999;font-weight:600}
-@media(max-width:640px){.guitar-card{flex-direction:column}.guitar-card-photo{width:100%;padding:28px 40px}.guitar-card-body{border-left:none;border-top:1px solid #1e1e1e}}
 
 /* ── GEAR CARD ── */
 .gear-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
@@ -216,19 +203,16 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <!-- ══ ELECTRIC GUITAR ══ -->
   <div class="gear-section" id="guitars">
     <div class="gear-section-title">🎸 Electric Guitar</div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/ibanez.png" alt="Ibanez Artcore AS73"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-guitar">Electric Guitar</span>
-        <div class="guitar-card-name">Ibanez Artcore AS73-BS</div>
-        <div class="guitar-card-model">Semi-Hollow · Brown Sunburst</div>
-        <div class="guitar-specs">
-          <span>Body:</span> Sapele top/back/sides, spruce centre block<br>
-          <span>Neck:</span> Nyatoh set-in, bound rosewood fretboard<br>
-          <span>Pickups:</span> ACH1 (neck) / ACH2 (bridge) humbuckers<br>
-          <span>Controls:</span> 2× volume, 2× tone, 3-way toggle
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/ibanez.png" alt="Ibanez Artcore AS73"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-guitar">Electric Guitar</span>
+          <div class="gear-card-name">Ibanez Artcore AS73-BS</div>
+          <div class="gear-card-sub">Semi-Hollow · Brown Sunburst</div>
+          <div class="gear-card-desc">Sapele top/back/sides with spruce centre block. Nyatoh set-in neck, bound rosewood fretboard. ACH1/ACH2 humbuckers, 2× volume, 2× tone, 3-way toggle.</div>
+          <a class="gear-link" href="https://www.ultimate-guitar.com/reviews/electric_guitars/ibanez/artcore_as73/28167/" target="_blank">🔗 View Info</a>
         </div>
-        <a class="gear-link" href="https://www.ultimate-guitar.com/reviews/electric_guitars/ibanez/artcore_as73/28167/" target="_blank">🔗 View Info</a>
       </div>
     </div>
   </div>
@@ -236,35 +220,26 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <!-- ══ ELECTRIC BASSES ══ -->
   <div class="gear-section" id="basses">
     <div class="gear-section-title">🎵 Electric Basses</div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-bass">6-String Electric Bass</span>
-        <div class="guitar-card-name">Yamaha TRBJP2</div>
-        <div class="guitar-card-model">John Patitucci Signature · Amber</div>
-        <div class="guitar-specs">
-          <span>Strings:</span> 6-string (B–E–A–D–G–C)<br>
-          <span>Body:</span> Alder with figured maple top<br>
-          <span>Neck:</span> 5-piece maple/walnut, 35″ scale, 26 frets<br>
-          <span>Pickups:</span> Alnico V custom side-by-side double-coil<br>
-          <span>Preamp:</span> 5-control active EQ
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-bass">6-String Electric Bass</span>
+          <div class="gear-card-name">Yamaha TRBJP2</div>
+          <div class="gear-card-sub">John Patitucci Signature · Amber</div>
+          <div class="gear-card-desc">6-string (B–E–A–D–G–C). Alder body with figured maple top, 5-piece maple/walnut neck, 35″ scale, 26 frets. Alnico V double-coil pickups, 5-control active EQ preamp.</div>
+          <a class="gear-link" href="https://ca.yamaha.com/en/products/musical_instruments/guitars_basses/el_basses/trbjp2/index.html" target="_blank">🔗 Yamaha Page</a>
         </div>
-        <a class="gear-link" href="https://ca.yamaha.com/en/products/musical_instruments/guitars_basses/el_basses/trbjp2/index.html" target="_blank">🔗 Yamaha Page</a>
       </div>
-    </div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/jaguar.png" alt="Squier Jaguar Bass"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-bass">4-String Electric Bass</span>
-        <div class="guitar-card-name">Squier Classic Vibe Jaguar Bass</div>
-        <div class="guitar-card-model">3-Color Sunburst · Laurel Fretboard</div>
-        <div class="guitar-specs">
-          <span>Body:</span> Poplar<br>
-          <span>Neck:</span> Maple, C-shape, 32″ medium scale<br>
-          <span>Fretboard:</span> Laurel, 9.5″ radius, 20 frets<br>
-          <span>Pickups:</span> Fender-Designed alnico single-coils
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/jaguar.png" alt="Squier Jaguar Bass"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-bass">4-String Electric Bass</span>
+          <div class="gear-card-name">Squier Classic Vibe Jaguar Bass</div>
+          <div class="gear-card-sub">3-Color Sunburst · Laurel Fretboard</div>
+          <div class="gear-card-desc">Poplar body, maple C-shape neck, 32″ medium scale. Laurel fretboard, 9.5″ radius, 20 frets. Fender-Designed alnico single-coil pickups.</div>
+          <a class="gear-link" href="https://excelmusic.ca/squier-classic-vibe-jaguar-bass-3-color-sunburst-4-string-bass-guitar" target="_blank">🔗 Product Info</a>
         </div>
-        <a class="gear-link" href="https://excelmusic.ca/squier-classic-vibe-jaguar-bass-3-color-sunburst-4-string-bass-guitar" target="_blank">🔗 Product Info</a>
       </div>
     </div>
   </div>
@@ -272,35 +247,26 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <!-- ══ ACOUSTIC ══ -->
   <div class="gear-section" id="acoustic">
     <div class="gear-section-title">🪗 Acoustic Instruments</div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/fa-450ce.avif" alt="Fender FA-450CE"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-acoustic">Acoustic Bass</span>
-        <div class="guitar-card-name">Fender FA-450CE</div>
-        <div class="guitar-card-model">3-Tone Sunburst · Acoustic-Electric Bass</div>
-        <div class="guitar-specs">
-          <span>Body:</span> Laminated spruce top, basswood back &amp; sides<br>
-          <span>Scale:</span> 32″ medium scale, 4-string<br>
-          <span>Electronics:</span> Fishman Presys+ preamp<br>
-          <span>Neck:</span> Nato, rosewood fretboard
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/fa-450ce.avif" alt="Fender FA-450CE"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-acoustic">Acoustic Bass</span>
+          <div class="gear-card-name">Fender FA-450CE</div>
+          <div class="gear-card-sub">3-Tone Sunburst · Acoustic-Electric Bass</div>
+          <div class="gear-card-desc">Laminated spruce top, basswood back &amp; sides. 32″ medium scale, 4-string. Fishman Presys+ preamp. Nato neck, rosewood fretboard.</div>
+          <a class="gear-link" href="https://intl.fender.com/products/fa-450ce-bass" target="_blank">🔗 Fender Page</a>
         </div>
-        <a class="gear-link" href="https://intl.fender.com/products/fa-450ce-bass" target="_blank">🔗 Fender Page</a>
       </div>
-    </div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/fs720s.png" alt="Yamaha FS720S"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-acoustic">Acoustic Guitar</span>
-        <div class="guitar-card-name">Yamaha FS 720S BL</div>
-        <div class="guitar-card-model">Black · No Pickup · Folk Body</div>
-        <div class="guitar-specs">
-          <span>Top:</span> Solid Sitka spruce<br>
-          <span>Back &amp; Sides:</span> Nato<br>
-          <span>Body Shape:</span> FS folk/concert<br>
-          <span>Scale:</span> 634mm (25″), 20 frets<br>
-          <span>Electronics:</span> None — pure acoustic
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/fs720s.png" alt="Yamaha FS720S"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-acoustic">Acoustic Guitar</span>
+          <div class="gear-card-name">Yamaha FS 720S BL</div>
+          <div class="gear-card-sub">Black · No Pickup · Folk Body</div>
+          <div class="gear-card-desc">Solid Sitka spruce top, Nato back &amp; sides. FS folk/concert body shape, 634mm (25″) scale, 20 frets. Pure acoustic — no electronics.</div>
+          <a class="gear-link" href="https://www.musicarts.com/yamaha-fs720s-folk-acoustic-guitar-main0041468" target="_blank">🔗 Product Info</a>
         </div>
-        <a class="gear-link" href="https://www.musicarts.com/yamaha-fs720s-folk-acoustic-guitar-main0041468" target="_blank">🔗 Product Info</a>
       </div>
     </div>
   </div>
@@ -308,19 +274,16 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <!-- ══ KEYS ══ -->
   <div class="gear-section" id="keys">
     <div class="gear-section-title">🎹 Keys</div>
-    <div class="guitar-card">
-      <div class="guitar-card-photo"><img src="images/casio-cps85.png" alt="Casio CPS-85"></div>
-      <div class="guitar-card-body">
-        <span class="gear-card-tag tag-keys">Digital Piano</span>
-        <div class="guitar-card-name">Casio CPS-85 Digital Piano</div>
-        <div class="guitar-card-model">88-Key Full-Size Digital Piano</div>
-        <div class="guitar-specs">
-          <span>Keys:</span> 88, full-size, weighted action<br>
-          <span>Polyphony:</span> 24-note<br>
-          <span>Voices:</span> 10 onboard tones<br>
-          <span>Effects:</span> Digital reverb, single-track memory recorder
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-card-photo"><img src="images/casio-cps85.png" alt="Casio CPS-85"></div>
+        <div class="gear-card-body">
+          <span class="gear-card-tag tag-keys">Digital Piano</span>
+          <div class="gear-card-name">Casio CPS-85 Digital Piano</div>
+          <div class="gear-card-sub">88-Key Full-Size Digital Piano</div>
+          <div class="gear-card-desc">88 full-size weighted keys, 24-note polyphony, 10 onboard voices. Digital reverb and a single-track memory recorder.</div>
+          <a class="gear-link" href="https://www.chicagopianos.com/celviano/celviano_cps85.html" target="_blank">🔗 Product Info</a>
         </div>
-        <a class="gear-link" href="https://www.chicagopianos.com/celviano/celviano_cps85.html" target="_blank">🔗 Product Info</a>
       </div>
     </div>
   </div>

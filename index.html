@@ -87,9 +87,13 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 #activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
 
 /* ── SONG LIST ── */
-.listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a}
+.listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a;gap:10px;flex-wrap:wrap}
 .listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px}
 .resultsCount{font-size:12px;color:#555}
+.viewToggle{display:flex;gap:2px;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:2px}
+.view-btn{background:transparent;border:none;color:#555;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:14px;transition:.15s;line-height:1}
+.view-btn:hover{color:#aaa}
+.view-btn.active{background:var(--accent-dim1);color:var(--accent)}
 .song{display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid #1e1e1e;transition:.15s;gap:10px}
 .song:hover{background:#161616}
 .songArt{width:42px;height:42px;border-radius:4px;object-fit:cover;flex-shrink:0;background:#222}
@@ -109,6 +113,23 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 .req-btn.fired{animation:flamePulse 0.5s ease-out;pointer-events:none}
 .req-btn.in-queue{background:#1a2a3a;color:var(--accent);border-color:#3a5a1a;cursor:default;pointer-events:none}
 @keyframes flamePulse{0%{background:#1a3a1a;box-shadow:none;transform:scale(1)}25%{background:#7a2a00;box-shadow:0 0 12px rgba(255,100,0,.7);transform:scale(1.08);color:#ffcc00;border-color:#ff6600}55%{background:#a83800;box-shadow:0 0 20px rgba(255,60,0,.5);transform:scale(1.05);color:#fff;border-color:#ff4400}100%{background:#2d5a2d;box-shadow:none;transform:scale(1);color:#7ddd80;border-color:#4caf50}}
+
+/* ── SONG LIST — COMPACT VIEW (no art, denser rows) ── */
+#songList.view-compact .song{padding:5px 12px;gap:8px}
+#songList.view-compact .songArt,#songList.view-compact .songArtPlaceholder{display:none}
+#songList.view-compact .songMeta{display:none}
+#songList.view-compact .songTitle{font-size:13px}
+#songList.view-compact .songArtist{font-size:11px;margin-top:0}
+
+/* ── SONG LIST — GRID VIEW (larger art tiles) ── */
+#songList.view-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:14px}
+#songList.view-grid .song{flex-direction:column;align-items:stretch;background:var(--bg-panel2);border:1px solid #1e1e1e;border-radius:10px;padding:10px;gap:8px}
+#songList.view-grid .song:hover{border-color:rgba(var(--accent-rgb),.33)}
+#songList.view-grid .songArt,#songList.view-grid .songArtPlaceholder{width:100%;height:150px;border-radius:8px;font-size:32px}
+#songList.view-grid .songInfo{width:100%}
+#songList.view-grid .songTitle{white-space:normal}
+#songList.view-grid .req-btn{width:100%;text-align:center;justify-content:center;display:flex}
+@media(max-width:600px){#songList.view-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:8px}}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 18px;min-width:260px;max-width:90vw;z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)}
@@ -163,7 +184,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
 </div>
 <div id="paginationTop" class="pagination"></div>
-<div class="listHeader"><h3>SONG LIBRARY</h3><span id="resultsCount" class="resultsCount"></span></div>
+<div class="listHeader">
+  <h3>SONG LIBRARY</h3>
+  <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
+    <button class="view-btn" data-view="list" onclick="setSongView('list')" title="List — art + details">☰</button>
+    <button class="view-btn" data-view="compact" onclick="setSongView('compact')" title="Compact — text only, more per screen">≡</button>
+    <button class="view-btn" data-view="grid" onclick="setSongView('grid')" title="Grid — larger art tiles">▦</button>
+  </div>
+  <span id="resultsCount" class="resultsCount"></span>
+</div>
 <div id="songList"></div>
 <div id="paginationBottom" class="pagination"></div>
 
@@ -272,6 +301,18 @@ function applyFilters() {
   filteredSongs = base;
   renderSongs();
 }
+
+/* ── Display mode (list / compact / grid) ── */
+function setSongView(mode) {
+  localStorage.setItem('lp-song-view', mode);
+  const list = document.getElementById('songList');
+  if (list) list.className = 'view-' + mode;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+}
+function initSongView() {
+  setSongView(localStorage.getItem('lp-song-view') || 'list');
+}
+initSongView();
 
 /* ── Render ── */
 function renderSongs() {

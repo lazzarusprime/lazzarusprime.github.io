@@ -63,6 +63,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .sort-btn:hover{border-color:var(--accent);color:var(--accent)}
 .sort-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
 .artistGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:14px}
+.artistGrid.view-list{display:flex;flex-direction:column;gap:0;padding:0}
+.artistGrid.view-list .artistCard{flex-direction:row;align-items:center;border-radius:0;border-left:none;border-right:none;border-top:none;transform:none!important;box-shadow:none!important}
+.artistGrid.view-list .artistCardArt,.artistGrid.view-list .artistCardArtPlaceholder{width:46px;height:46px;aspect-ratio:auto;flex-shrink:0}
+.artistGrid.view-list .artistCardBody{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+.artistGrid.view-list .ownedBar{max-width:220px}
+.viewToggle{display:flex;gap:2px;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:2px}
+.view-btn{background:transparent;border:none;color:#555;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:14px;transition:.15s;line-height:1}
+.view-btn:hover{color:#aaa}
+.view-btn.active{background:var(--accent-dim1);color:var(--accent)}
 .artistCard{background:var(--bg-panel4);border:1px solid #222;border-radius:8px;cursor:pointer;transition:.2s;overflow:hidden;display:flex;flex-direction:column}
 .artistCard:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 6px 20px rgba(var(--accent-rgb),.12)}
 .artistCard:active{transform:translateY(0)}
@@ -100,7 +109,14 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <button class="sort-btn" id="sortCount" onclick="setSort('count')">Most Songs</button>
 </div>
 <div id="paginationTop" class="pagination"></div>
-<div class="listHeader"><h3>ALL ARTISTS</h3><span id="resultsCount" class="resultsCount"></span></div>
+<div class="listHeader">
+  <h3>ALL ARTISTS</h3>
+  <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
+    <button class="view-btn" data-view="grid" onclick="setArtistView('grid')" title="Grid — art tiles">▦</button>
+    <button class="view-btn" data-view="list" onclick="setArtistView('list')" title="List — compact rows">☰</button>
+  </div>
+  <span id="resultsCount" class="resultsCount"></span>
+</div>
 <div class="artistGrid" id="artistGrid"></div>
 <div id="paginationBottom" class="pagination"></div>
 
@@ -160,6 +176,18 @@ function toggleGenre(genre,btn){
   document.getElementById('filterLabel').textContent=(GENRE_EMOJI[genre]||'')+' '+genre+' ('+filteredArtists.length+' artists)';
   renderGrid();
 }
+
+/* ── Display mode (grid / list) ── */
+function setArtistView(mode) {
+  localStorage.setItem('lp-artist-view', mode);
+  const grid = document.getElementById('artistGrid');
+  if (grid) grid.className = 'artistGrid' + (mode === 'list' ? ' view-list' : '');
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+}
+function initArtistView() {
+  setArtistView(localStorage.getItem('lp-artist-view') || 'grid');
+}
+initArtistView();
 
 function renderGrid(){
   const grid=document.getElementById('artistGrid');grid.innerHTML='';
