@@ -48,11 +48,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .gear-jump-nav a{color:#ccc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.3px;padding:7px 12px;border-radius:6px;background:#1e1e1e;border:1px solid #2a2a2a;white-space:nowrap;transition:.2s;flex-shrink:0}
 .gear-jump-nav a:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim1)}
 @media(max-width:600px){.gear-jump-nav{gap:6px;padding:10px}.gear-jump-nav a{font-size:11px;padding:6px 10px}}
-.gear-section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);border-bottom:2px solid #1e1e1e;padding-bottom:8px;margin-bottom:18px}
+.gear-section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);border-bottom:2px solid #1e1e1e;padding-bottom:8px;margin-bottom:18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+.gear-chevron{font-size:16px;transition:transform .25s;flex-shrink:0}
+.gear-chevron.collapsed{transform:rotate(-90deg)}
+.gear-section-body{overflow:hidden}
+.gear-section-body.collapsed{display:none}
 
 /* ── SIGNAL CHAIN ── */
 .signal-chain-wrap{background:var(--bg-panel2);border:1px solid #222;border-radius:12px;padding:20px;margin-bottom:32px;overflow-x:auto}
-.signal-chain-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:2px;margin-bottom:16px;text-align:center}
+.signal-chain-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:2px;margin-bottom:16px;text-align:center;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:center;gap:8px}
 .chain-diagram{display:flex;align-items:center;justify-content:flex-start;gap:0;min-width:700px;padding:4px 0}
 .chain-node{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s;position:relative}
 .chain-node:hover .chain-box{border-color:var(--accent);background:var(--accent-dim2);transform:translateY(-3px)}
@@ -92,6 +96,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .gear-card-desc{font-size:12px;color:#666;line-height:1.6;flex:1;margin:0}
 .gear-link{display:inline-flex;align-items:center;gap:5px;color:var(--accent);text-decoration:none;font-size:11px;font-weight:700;padding:7px 12px;border:1px solid #333;border-radius:6px;transition:.2s;margin-top:4px;align-self:flex-start}
 .gear-link:hover{border-color:var(--accent);background:var(--accent-dim2);color:#ffe033}
+
+/* ── Orient all instrument photos to point the same general direction ── */
+.gear-card-photo img.orient-mirror{transform:scaleX(-1)}
+.gear-card-photo img.orient-tilt-right{transform:rotate(60deg)}
 
 </style>
 </head>
@@ -222,7 +230,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <div class="gear-section-title">🎵 Electric Basses</div>
     <div class="gear-grid">
       <div class="gear-card">
-        <div class="gear-card-photo"><img src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
+        <div class="gear-card-photo"><img class="orient-tilt-right" src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
         <div class="gear-card-body">
           <span class="gear-card-tag tag-bass">6-String Electric Bass</span>
           <div class="gear-card-name">Yamaha TRBJP2</div>
@@ -259,7 +267,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </div>
       </div>
       <div class="gear-card">
-        <div class="gear-card-photo"><img src="images/fs720s.png" alt="Yamaha FS720S"></div>
+        <div class="gear-card-photo"><img class="orient-mirror" src="images/fs720s.png" alt="Yamaha FS720S"></div>
         <div class="gear-card-body">
           <span class="gear-card-tag tag-acoustic">Acoustic Guitar</span>
           <div class="gear-card-name">Yamaha FS 720S BL</div>
@@ -440,7 +448,65 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <script>renderFooter();</script>
 
 <script>
-function scrollToGear(id){const el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.transition='.4s';el.style.borderColor='var(--accent)';setTimeout(()=>{el.style.borderColor='';},1500);}}
+/* ── Collapsible gear sections ── */
+function initCollapsibleGear(){
+  // Standard gear sections (Board Photo, Guitar, Basses, Acoustic, Keys, Pedalboard, Pedals, Interface, Cameras)
+  document.querySelectorAll('.gear-section').forEach(section=>{
+    const title=section.querySelector('.gear-section-title');
+    if(!title) return;
+    // Move everything after the title into a body wrapper
+    const body=document.createElement('div');
+    body.className='gear-section-body';
+    while(title.nextSibling){ body.appendChild(title.nextSibling); }
+    section.appendChild(body);
+    const chevron=document.createElement('span');
+    chevron.className='gear-chevron';
+    chevron.textContent='▾';
+    title.prepend(chevron);
+    title.addEventListener('click',()=>toggleGearBody(body,chevron));
+  });
+
+  // Signal chain (different markup: .signal-chain-title + .chain-diagram + trailing <p>)
+  const chainWrap=document.getElementById('signal-chain');
+  if(chainWrap){
+    const title=chainWrap.querySelector('.signal-chain-title');
+    const body=document.createElement('div');
+    body.className='gear-section-body';
+    while(title.nextSibling){ body.appendChild(title.nextSibling); }
+    chainWrap.appendChild(body);
+    const chevron=document.createElement('span');
+    chevron.className='gear-chevron';
+    chevron.textContent='▾';
+    title.prepend(chevron);
+    title.addEventListener('click',()=>toggleGearBody(body,chevron));
+  }
+}
+function toggleGearBody(body,chevron,force){
+  const collapsed = force!==undefined ? force : !body.classList.contains('collapsed');
+  body.classList.toggle('collapsed',collapsed);
+  chevron.classList.toggle('collapsed',collapsed);
+}
+function expandGearBodyFor(el){
+  const container=el.closest('.gear-section')||el.closest('.signal-chain-wrap');
+  if(!container) return;
+  const body=container.querySelector(':scope > .gear-section-body');
+  if(body && body.classList.contains('collapsed')){
+    const titleEl=container.querySelector('.gear-section-title')||container.querySelector('.signal-chain-title');
+    const chevron=titleEl?.querySelector('.gear-chevron');
+    toggleGearBody(body,chevron,false);
+  }
+}
+initCollapsibleGear();
+
+function scrollToGear(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  expandGearBodyFor(el);
+  requestAnimationFrame(()=>{
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.style.transition='.4s';el.style.borderColor='var(--accent)';setTimeout(()=>{el.style.borderColor='';},1500);
+  });
+}
 </script>
 </body>
 </html>

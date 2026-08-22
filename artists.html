@@ -55,8 +55,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 #activeFilters span{color:var(--accent)}
 #activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
 .listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a}
-.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#666;letter-spacing:.5px}
+.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#666;letter-spacing:.5px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.listHeader .section-chevron{font-size:11px;transition:transform .2s}
+.listHeader .section-chevron.collapsed{transform:rotate(-90deg)}
 .resultsCount{font-size:12px;color:#555}
+.mini-search-row{display:none;align-items:center;gap:6px;flex:1;max-width:240px}
+.mini-search-row.show{display:flex}
+.mini-search-row input{flex:1;min-width:0;padding:6px 10px;border-radius:6px;border:none;background:white;color:black;font-size:12px}
 #sortBar{display:flex;gap:6px;padding:8px 12px;background:var(--bg-panel2);border-bottom:1px solid #222;align-items:center}
 #sortBar span{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
 .sort-btn{background:transparent;color:#666;border:1px solid #333;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;transition:.2s}
@@ -108,17 +113,22 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   <button class="sort-btn active" id="sortAlpha" onclick="setSort('alpha')">A–Z</button>
   <button class="sort-btn" id="sortCount" onclick="setSort('count')">Most Songs</button>
 </div>
-<div id="paginationTop" class="pagination"></div>
-<div class="listHeader">
-  <h3>ALL ARTISTS</h3>
+<div class="listHeader" id="allArtistsHeader">
+  <h3 id="allArtistsToggle"><span class="section-chevron" id="allArtistsChevron">▾</span>ALL ARTISTS</h3>
+  <div class="mini-search-row" id="allArtistsMiniSearch">
+    <input id="miniSearchBox" placeholder="Search artist…" oninput="handleMiniSearch(this.value)" autocomplete="off">
+  </div>
   <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
     <button class="view-btn" data-view="grid" onclick="setArtistView('grid')" title="Grid — art tiles">▦</button>
     <button class="view-btn" data-view="list" onclick="setArtistView('list')" title="List — compact rows">☰</button>
   </div>
   <span id="resultsCount" class="resultsCount"></span>
 </div>
-<div class="artistGrid" id="artistGrid"></div>
-<div id="paginationBottom" class="pagination"></div>
+<div id="allArtistsBody">
+  <div id="paginationTop" class="pagination"></div>
+  <div class="artistGrid" id="artistGrid"></div>
+  <div id="paginationBottom" class="pagination"></div>
+</div>
 
 <div id="site-footer"></div>
 <script>renderFooter();</script>
@@ -188,6 +198,24 @@ function initArtistView() {
   setArtistView(localStorage.getItem('lp-artist-view') || 'grid');
 }
 initArtistView();
+
+/* ── Collapsible All Artists (with minimalist search when collapsed) ── */
+let allArtistsCollapsed = false;
+function toggleAllArtists(force) {
+  allArtistsCollapsed = force !== undefined ? force : !allArtistsCollapsed;
+  document.getElementById('allArtistsBody').style.display = allArtistsCollapsed ? 'none' : '';
+  document.getElementById('allArtistsChevron').classList.toggle('collapsed', allArtistsCollapsed);
+  document.getElementById('allArtistsMiniSearch').classList.toggle('show', allArtistsCollapsed);
+  document.getElementById('viewToggle').style.display = allArtistsCollapsed ? 'none' : '';
+  document.getElementById('resultsCount').style.display = allArtistsCollapsed ? 'none' : '';
+  if (allArtistsCollapsed) document.getElementById('miniSearchBox').value = document.getElementById('searchBox').value;
+}
+function handleMiniSearch(v) {
+  document.getElementById('searchBox').value = v;
+  handleSearch();
+  toggleAllArtists(false);
+}
+document.getElementById('allArtistsToggle').addEventListener('click', () => toggleAllArtists());
 
 function renderGrid(){
   const grid=document.getElementById('artistGrid');grid.innerHTML='';

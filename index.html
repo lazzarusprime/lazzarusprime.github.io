@@ -88,8 +88,13 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 
 /* ── SONG LIST ── */
 .listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a;gap:10px;flex-wrap:wrap}
-.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px}
+.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.listHeader .section-chevron{font-size:11px;transition:transform .2s}
+.listHeader .section-chevron.collapsed{transform:rotate(-90deg)}
 .resultsCount{font-size:12px;color:#555}
+.mini-search-row{display:none;align-items:center;gap:6px;flex:1;max-width:240px}
+.mini-search-row.show{display:flex}
+.mini-search-row input{flex:1;min-width:0;padding:6px 10px;border-radius:6px;border:none;background:white;color:black;font-size:12px}
 .viewToggle{display:flex;gap:2px;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:2px}
 .view-btn{background:transparent;border:none;color:#555;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:14px;transition:.15s;line-height:1}
 .view-btn:hover{color:#aaa}
@@ -183,9 +188,11 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     </div>
   </div>
 </div>
-<div id="paginationTop" class="pagination"></div>
-<div class="listHeader">
-  <h3>SONG LIBRARY</h3>
+<div class="listHeader" id="songLibraryHeader">
+  <h3 id="songLibraryToggle"><span class="section-chevron" id="songLibraryChevron">▾</span>SONG LIBRARY</h3>
+  <div class="mini-search-row" id="songLibraryMiniSearch">
+    <input id="miniSearchBox" placeholder="Search artist or song…" oninput="handleMiniSearch(this.value)" autocomplete="off">
+  </div>
   <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
     <button class="view-btn" data-view="list" onclick="setSongView('list')" title="List — art + details">☰</button>
     <button class="view-btn" data-view="compact" onclick="setSongView('compact')" title="Compact — text only, more per screen">≡</button>
@@ -193,8 +200,11 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
   </div>
   <span id="resultsCount" class="resultsCount"></span>
 </div>
-<div id="songList"></div>
-<div id="paginationBottom" class="pagination"></div>
+<div id="songLibraryBody">
+  <div id="paginationTop" class="pagination"></div>
+  <div id="songList"></div>
+  <div id="paginationBottom" class="pagination"></div>
+</div>
 
 <div id="site-footer"></div>
 <script>renderFooter();</script>
@@ -313,6 +323,24 @@ function initSongView() {
   setSongView(localStorage.getItem('lp-song-view') || 'list');
 }
 initSongView();
+
+/* ── Collapsible Song Library (with minimalist search when collapsed) ── */
+let songLibraryCollapsed = false;
+function toggleSongLibrary(force) {
+  songLibraryCollapsed = force !== undefined ? force : !songLibraryCollapsed;
+  document.getElementById('songLibraryBody').style.display = songLibraryCollapsed ? 'none' : '';
+  document.getElementById('songLibraryChevron').classList.toggle('collapsed', songLibraryCollapsed);
+  document.getElementById('songLibraryMiniSearch').classList.toggle('show', songLibraryCollapsed);
+  document.getElementById('viewToggle').style.display = songLibraryCollapsed ? 'none' : '';
+  document.getElementById('resultsCount').style.display = songLibraryCollapsed ? 'none' : '';
+  if (songLibraryCollapsed) document.getElementById('miniSearchBox').value = document.getElementById('searchBox').value;
+}
+function handleMiniSearch(v) {
+  document.getElementById('searchBox').value = v;
+  handleSearchInput();
+  toggleSongLibrary(false);
+}
+document.getElementById('songLibraryToggle').addEventListener('click', () => toggleSongLibrary());
 
 /* ── Render ── */
 function renderSongs() {
