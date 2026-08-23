@@ -52,6 +52,10 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 /* ── CONCEPT CARDS ── */
 .concept-card{background:var(--bg-panel2);border:1px solid #222;border-radius:10px;padding:18px 20px;margin-bottom:16px}
 .concept-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1.5px;color:var(--accent);margin:0 0 8px}
+.concept-title.collapsible{cursor:pointer;user-select:none;display:flex;align-items:center;gap:10px}
+.concept-chevron{font-size:15px;transition:transform .2s;flex-shrink:0}
+.concept-chevron.collapsed{transform:rotate(-90deg)}
+.concept-body-wrap.collapsed{display:none}
 .concept-body{font-size:14px;color:#ccc;line-height:1.7;margin-bottom:12px}
 .concept-body strong{color:#fff}
 .formula-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
@@ -755,6 +759,29 @@ function renderGlossary() {
 renderFundamentals();
 initCircle();
 renderGlossary();
+
+// ── Collapsible concept cards ──
+function initCollapsibleConcepts(){
+  document.querySelectorAll('.concept-card').forEach(card=>{
+    const title=card.querySelector(':scope > .concept-title');
+    if(!title || title.id) return; // skip cards with no title, or dynamically-updated titles (e.g. circle of fifths readout)
+    const body=document.createElement('div');
+    body.className='concept-body-wrap';
+    while(title.nextSibling){ body.appendChild(title.nextSibling); }
+    card.appendChild(body);
+    const chevron=document.createElement('span');
+    chevron.className='concept-chevron';
+    chevron.textContent='▾';
+    title.classList.add('collapsible');
+    title.prepend(chevron);
+    title.addEventListener('click',()=>{
+      const collapsed=!body.classList.contains('collapsed');
+      body.classList.toggle('collapsed',collapsed);
+      chevron.classList.toggle('collapsed',collapsed);
+    });
+  });
+}
+initCollapsibleConcepts();
 </script>
 </body>
 </html>

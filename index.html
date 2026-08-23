@@ -87,12 +87,12 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 #activeFilters button{background:transparent;color:#888;border:1px solid #444;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
 
 /* ── SONG LIST ── */
-.listHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a;gap:10px;flex-wrap:wrap}
-.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.listHeader{display:flex;align-items:center;padding:6px 12px;border-bottom:1px solid #1a1a1a;gap:14px;flex-wrap:wrap}
+.listHeader h3{margin:0;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#666;letter-spacing:.5px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;flex-shrink:0}
 .listHeader .section-chevron{font-size:11px;transition:transform .2s}
 .listHeader .section-chevron.collapsed{transform:rotate(-90deg)}
-.resultsCount{font-size:12px;color:#555}
-.mini-search-row{display:none;align-items:center;gap:6px;flex:1;max-width:240px}
+.resultsCount{font-size:12px;color:#555;margin-left:auto}
+.mini-search-row{display:none;align-items:center;gap:6px;flex:1;max-width:220px}
 .mini-search-row.show{display:flex}
 .mini-search-row input{flex:1;min-width:0;padding:6px 10px;border-radius:6px;border:none;background:white;color:black;font-size:12px}
 .viewToggle{display:flex;gap:2px;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:2px}
@@ -331,8 +331,6 @@ function toggleSongLibrary(force) {
   document.getElementById('songLibraryBody').style.display = songLibraryCollapsed ? 'none' : '';
   document.getElementById('songLibraryChevron').classList.toggle('collapsed', songLibraryCollapsed);
   document.getElementById('songLibraryMiniSearch').classList.toggle('show', songLibraryCollapsed);
-  document.getElementById('viewToggle').style.display = songLibraryCollapsed ? 'none' : '';
-  document.getElementById('resultsCount').style.display = songLibraryCollapsed ? 'none' : '';
   if (songLibraryCollapsed) document.getElementById('miniSearchBox').value = document.getElementById('searchBox').value;
 }
 function handleMiniSearch(v) {
