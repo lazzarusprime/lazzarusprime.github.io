@@ -146,10 +146,6 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 #toastTitle{font-weight:700;font-size:14px;color:#4caf50;margin-bottom:2px}
 #toastMsg{font-size:12px;color:#888;line-height:1.4}
 
-/* ── SLOPSMITH BANNER ── */
-#slopBanner{display:none;padding:10px 14px;background:linear-gradient(90deg,#1a0a00,#2a1000,#1a0a00);border-bottom:2px solid #ff5500;text-align:center;font-size:13px;animation:slopPulse 3s ease-in-out infinite}
-@keyframes slopPulse{0%,100%{border-color:#ff5500}50%{border-color:#ff8800;box-shadow:inset 0 0 20px rgba(255,100,0,.1)}}
-#slopBanner span{color:#ff7733;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-right:8px}
 
 /* ── PAGINATION ── */
 .pagination{padding:12px;text-align:center;background:var(--bg-panel);border-bottom:1px solid #222}
@@ -243,10 +239,6 @@ function initFirebase() {
       firebase.initializeApp(FIREBASE_CONFIG);
     }
     firebaseDb = firebase.database();
-    // watch slopsmith flag
-    firebaseDb.ref('/slopsmith').on('value', snap => {
-      document.getElementById('slopBanner').style.display = snap.val() ? 'block' : 'none';
-    });
     // watch queue to know what's already queued
     firebaseDb.ref('/queue').on('value', snap => {
       queuedSongs = new Set();
@@ -366,7 +358,7 @@ function renderSongs() {
     const btnClass = isQueued ? 'req-btn in-queue' : 'req-btn';
     const btnText = isQueued ? '✓ In Queue' : 'Request';
     const mbUrl = `https://musicbrainz.org/search?query=${encodeURIComponent(song.artist)}&type=artist&method=indexed`;
-    const caFlag = isCanadian(song.artist) ? '<span class="ca-flag" title="Canadian artist">🍁</span>' : '';
+    const caFlag = isCanadian(song.artist) ? '<span class="ca-flag" title="Canadian artist" onclick="onMapleLeafClick(event)">🍁</span>' : '';
     div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span>${caFlag}<a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genre}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
     frag.appendChild(div);
   });

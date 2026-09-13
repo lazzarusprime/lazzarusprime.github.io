@@ -46,6 +46,36 @@ function isCanadian(artist) {
   return hit;
 }
 
+/* ── Maple leaf energy pulse (🍁 badge click) ──────────────
+   Spawns a few maple-leaf-shaped outlines at the click point
+   that scale up and fade out, radiating outward. */
+const MAPLE_LEAF_PATH = "M50 2 L57 20 L72 10 L68 30 L90 26 L76 42 L96 50 L76 58 L90 74 L68 70 L72 90 L57 80 L50 98 L43 80 L28 90 L32 70 L10 74 L24 58 L4 50 L24 42 L10 26 L32 30 L28 10 L43 20 Z";
+function mapleLeafPulse(x, y) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const ripples = 3;
+  for (let i = 0; i < ripples; i++) {
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.classList.add('maple-pulse');
+    svg.style.left = x + 'px';
+    svg.style.top = y + 'px';
+    svg.style.animationDelay = (i * 110) + 'ms';
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', MAPLE_LEAF_PATH);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#e63946');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(path);
+    document.body.appendChild(svg);
+    svg.addEventListener('animationend', () => svg.remove());
+  }
+}
+function onMapleLeafClick(e) {
+  e.stopPropagation();
+  mapleLeafPulse(e.clientX, e.clientY);
+}
+
 /* ── Genre lookup cache ──────────────────────────────────── */
 const _gc = {};
 function assignGenre(artist) {

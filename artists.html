@@ -264,7 +264,7 @@ function renderGrid(){
 
     card.innerHTML=artHtml+`<div class="artistCardBody">
       <div style="display:flex;align-items:flex-start;gap:4px">
-        <div class="artistCardName">${esc(a.name)}${isCanadian(a.name)?'<span class="ca-flag" title="Canadian artist">🍁</span>':''}</div>
+        <div class="artistCardName">${esc(a.name)}${isCanadian(a.name)?'<span class="ca-flag" title="Canadian artist" onclick="onMapleLeafClick(event)">🍁</span>':''}</div>
         <a class="info-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">Info ↗</a>
       </div>
       <div class="artistCardCount">${a.count} ${a.count===1?'song':'songs'}</div>
