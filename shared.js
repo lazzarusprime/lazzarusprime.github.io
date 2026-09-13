@@ -100,12 +100,12 @@ function slotSpin(btn, onDone) {
   const frames = ['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];
   let i = 0;
   btn.classList.add('spinning');
-  const fast = setInterval(() => { btn.textContent = frames[i++%frames.length]+' Random'; }, 60);
+  const fast = setInterval(() => { btn.textContent = frames[i++%frames.length]+' '+t('nav.random'); }, 60);
   setTimeout(() => {
     clearInterval(fast);
     let j = 0;
-    const slow = setInterval(() => { btn.textContent = frames[j++%frames.length]+' Random'; }, 120);
-    setTimeout(() => { clearInterval(slow); btn.textContent='🎲 Random'; btn.classList.remove('spinning'); onDone(); }, 480);
+    const slow = setInterval(() => { btn.textContent = frames[j++%frames.length]+' '+t('nav.random'); }, 120);
+    setTimeout(() => { clearInterval(slow); btn.textContent='🎲 '+t('nav.random'); btn.classList.remove('spinning'); onDone(); }, 480);
   }, 600);
 }
 

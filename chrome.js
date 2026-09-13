@@ -8,23 +8,23 @@
    ═══════════════════════════════════════════════════════════════ */
 
 const NAV_PRIMARY = [
-  { id: 'home',    icon: '🏠', label: 'Home',    href: 'index.html?nosplash=1' },
-  { id: 'artists', icon: '🎸', label: 'Artists', href: 'artists.html' },
+  { id: 'home',    icon: '🏠', key: 'nav.home',    href: 'index.html?nosplash=1' },
+  { id: 'artists', icon: '🎸', key: 'nav.artists', href: 'artists.html' },
 ];
 
 const NAV_TOOLS = [
-  { id: 'tuner',      icon: '🎵', label: 'Tuner',           href: 'tuner.html' },
-  { id: 'metronome',  icon: '🥁', label: 'Metronome',       href: 'metronome.html' },
-  { id: 'groove',     icon: '🔥', label: 'Groove Station',  href: 'groove.html' },
-  { id: 'drums',      icon: '🪘', label: 'Drums',           href: 'drums.html' },
-  { id: 'chords',     icon: '🎼', label: 'Chords & Scales', href: 'chords.html' },
-  { id: 'theory',     icon: '📚', label: 'Music Theory',    href: 'theory.html' },
+  { id: 'tuner',      icon: '🎵', key: 'nav.tuner',      href: 'tuner.html' },
+  { id: 'metronome',  icon: '🥁', key: 'nav.metronome',  href: 'metronome.html' },
+  { id: 'groove',     icon: '🔥', key: 'nav.groove',     href: 'groove.html' },
+  { id: 'drums',      icon: '🪘', key: 'nav.drums',      href: 'drums.html' },
+  { id: 'chords',     icon: '🎼', key: 'nav.chords',     href: 'chords.html' },
+  { id: 'theory',     icon: '📚', key: 'nav.theory',     href: 'theory.html' },
 ];
 
 const NAV_MORE = [
-  { id: 'stats',  icon: '📊', label: 'Stats',  href: 'stats.html' },
-  { id: 'gear',   icon: '🎛️', label: 'Gear',   href: 'gear.html' },
-  { id: 'videos', icon: '📺', label: 'Videos', href: 'videos.html' },
+  { id: 'stats',  icon: '📊', key: 'nav.stats',  href: 'stats.html' },
+  { id: 'gear',   icon: '🎛️', key: 'nav.gear',   href: 'gear.html' },
+  { id: 'videos', icon: '📺', key: 'nav.videos', href: 'videos.html' },
 ];
 
 const SOCIAL_LINKS = [
@@ -42,17 +42,17 @@ function _inGroup(list, page) { return list.some(i => i.id === page); }
 
 function _navBtn(item, activePage) {
   const active = item.id === activePage ? ' active-page' : '';
-  return `<button class="nav-btn${active}" onclick="location.href='${item.href}'">${item.icon} ${item.label}</button>`;
+  return `<button class="nav-btn${active}" onclick="location.href='${item.href}'">${item.icon} ${t(item.key)}</button>`;
 }
 
-function _dropdown(id, label, items, activePage) {
+function _dropdown(id, icon, labelKey, items, activePage) {
   const groupActive = _inGroup(items, activePage) ? ' active-page' : '';
   const rows = items.map(i => {
     const active = i.id === activePage ? ' active' : '';
-    return `<a class="nav-dropdown-item${active}" href="${i.href}">${i.icon} ${i.label}</a>`;
+    return `<a class="nav-dropdown-item${active}" href="${i.href}">${i.icon} ${t(i.key)}</a>`;
   }).join('');
   return `<div class="nav-dropdown" id="${id}">
-    <button class="nav-btn${groupActive}" onclick="toggleNavDropdown('${id}')">${label} ▾</button>
+    <button class="nav-btn${groupActive}" onclick="toggleNavDropdown('${id}')">${icon} ${t(labelKey)} ▾</button>
     <div class="nav-dropdown-menu">${rows}</div>
   </div>`;
 }
@@ -72,6 +72,7 @@ document.addEventListener('keydown', e => {
 function renderHeader(opts) {
   const el = document.getElementById('site-header');
   if (!el) return;
+  window.__lpHeaderOpts = opts; // remembered so setLang() can rebuild the header in the new language
   const { page, title, search = 'nav', showNav = true } = opts;
 
   const socialRows = SOCIAL_LINKS.map(s =>
@@ -80,15 +81,15 @@ function renderHeader(opts) {
 
   const SEARCH_VARIANTS = {
     local:   `<div class="search-row">
-                <input id="searchBox" placeholder="Search artist or song…" oninput="handleSearchInput()" autocomplete="off">
+                <input id="searchBox" placeholder="${t('search.placeholder')}" oninput="handleSearchInput()" autocomplete="off">
                 <button id="clearBtn" class="clearBtn" onclick="clearSearch()">✕</button>
               </div>`,
     nav:     `<div class="search-row">
-                <input id="searchBox" placeholder="Search artist or song…" oninput="navSearch()" autocomplete="off">
+                <input id="searchBox" placeholder="${t('search.placeholder')}" oninput="navSearch()" autocomplete="off">
                 <button id="clearBtn" class="clearBtn" onclick="clearNavSearch()">✕</button>
               </div>`,
     artists: `<div class="search-row">
-                <input id="searchBox" placeholder="Search artist…" oninput="handleSearch()" autocomplete="off">
+                <input id="searchBox" placeholder="${t('search.placeholder.artists')}" oninput="handleSearch()" autocomplete="off">
               </div>`,
     none: '',
   };
@@ -100,9 +101,9 @@ function renderHeader(opts) {
   const navRow = !showNav ? '' : `<div class="topBar">
     <div class="nav-row">
       ${NAV_PRIMARY.map(i => _navBtn(i, page)).join('')}
-      <button class="nav-btn" id="randomBtn" onclick="${randomHandler}">🎲 Random</button>
-      ${_dropdown('toolsDropdown', '🛠️ Tools', NAV_TOOLS, page)}
-      ${_dropdown('moreDropdown', '⋯ More', NAV_MORE, page)}
+      <button class="nav-btn" id="randomBtn" onclick="${randomHandler}">🎲 ${t('nav.random')}</button>
+      ${_dropdown('toolsDropdown', '🛠️', 'nav.tools', NAV_TOOLS, page)}
+      ${_dropdown('moreDropdown', '⋯', 'nav.more', NAV_MORE, page)}
     </div>
     ${searchRow}
   </div>`;
@@ -114,11 +115,15 @@ function renderHeader(opts) {
     </div>
     <div class="headerRight">
       <div class="theme-switcher" id="themeSwitcher">
-        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 Theme</button>
+        <button class="theme-btn" id="themeBtn" onclick="toggleThemeMenu()">🎨 ${t('theme.button')}</button>
         <div class="theme-menu" id="themeMenu"></div>
       </div>
+      <div class="theme-switcher" id="langSwitcher">
+        <button class="theme-btn" id="langBtn" onclick="toggleLangMenu()">🌐 ${getLang().toUpperCase()}</button>
+        <div class="theme-menu" id="langMenu"></div>
+      </div>
       <div class="nav-dropdown" id="linksDropdown">
-        <button class="nav-btn" onclick="toggleNavDropdown('linksDropdown')">🔗 Links</button>
+        <button class="nav-btn" onclick="toggleNavDropdown('linksDropdown')">🔗 ${t('links.button')}</button>
         <div class="nav-dropdown-menu nav-dropdown-menu-social">${socialRows}</div>
       </div>
     </div>
@@ -131,17 +136,17 @@ function renderFooter() {
   const el = document.getElementById('site-footer');
   if (!el) return;
   el.innerHTML = `<footer>
-    <a href="index.html?nosplash=1">🏠 Home</a><span class="footer-sep">·</span>
-    <a href="artists.html">🎸 Artists</a><span class="footer-sep">·</span>
+    <a href="index.html?nosplash=1">🏠 ${t('footer.home')}</a><span class="footer-sep">·</span>
+    <a href="artists.html">🎸 ${t('footer.artists')}</a><span class="footer-sep">·</span>
     <div class="nav-dropdown nav-dropdown-footer" id="footerLinksDropdown">
-      <button class="footer-dropdown-btn" onclick="toggleNavDropdown('footerLinksDropdown')">🔗 More &amp; Socials ▾</button>
+      <button class="footer-dropdown-btn" onclick="toggleNavDropdown('footerLinksDropdown')">🔗 ${t('footer.moreSocials')} ▾</button>
       <div class="nav-dropdown-menu nav-dropdown-menu-footer">
-        ${NAV_TOOLS.concat(NAV_MORE).map(i => `<a href="${i.href}">${i.icon} ${i.label}</a>`).join('')}
+        ${NAV_TOOLS.concat(NAV_MORE).map(i => `<a href="${i.href}">${i.icon} ${t(i.key)}</a>`).join('')}
         <div class="nav-dropdown-sep"></div>
         ${SOCIAL_LINKS.map(s => `<a href="${s.href}" target="_blank" rel="noopener">${s.icon} ${s.label}</a>`).join('')}
       </div>
     </div>
     <span class="footer-sep">·</span>
-    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Top</a>
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ ${t('footer.top')}</a>
   </footer>`;
 }
