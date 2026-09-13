@@ -56,9 +56,6 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 .genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
 .genre-btn:hover{border-color:var(--accent);color:var(--accent)}
 .genre-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
-.canadian-btn{border-color:#8a1c1c}
-.canadian-btn.active{background:rgba(230,57,70,.15);border-color:#e63946;color:#ff6b76}
-.ca-flag{margin-left:4px}
 
 /* ── ALPHABET ── */
 #alphabet{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;justify-content:center}
@@ -221,7 +218,6 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGenre = null;
 let artistArtMap = {}, artistGenreMap = {};
 let activeAlphaLetter = null;
-let activeCanadianOnly = false;
 let queuedSongs = new Set(); // songs currently in queue
 let firebaseDb = null;
 
@@ -312,8 +308,6 @@ function applyFilters() {
     const list = GENRE_MAP[activeGenre].map(a => a.toLowerCase());
     base = base.filter(s => { const l=s.artist.toLowerCase(); return list.some(g=>l===g||l.includes(g)||g.includes(l)); });
   }
-  // canadian (independent axis — layers on top of search/genre)
-  if (activeCanadianOnly) base = base.filter(s => isCanadian(s.artist));
   filteredSongs = base;
   renderSongs();
 }
@@ -366,8 +360,7 @@ function renderSongs() {
     const btnClass = isQueued ? 'req-btn in-queue' : 'req-btn';
     const btnText = isQueued ? '✓ In Queue' : 'Request';
     const mbUrl = `https://musicbrainz.org/search?query=${encodeURIComponent(song.artist)}&type=artist&method=indexed`;
-    const caFlag = isCanadian(song.artist) ? '<span class="ca-flag" title="Canadian artist">🍁</span>' : '';
-    div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span>${caFlag}<a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genre}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
+    div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span><a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genre}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
     frag.appendChild(div);
   });
   list.appendChild(frag);
@@ -389,7 +382,7 @@ function renderPagination() {
 
 /* ── Search / Filter helpers ── */
 function handleSearchInput() {
-  activeGenre = null; activeAlphaLetter = null; activeCanadianOnly = false;
+  activeGenre = null; activeAlphaLetter = null;
   document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('activeFilters').style.display = 'none';
@@ -397,11 +390,11 @@ function handleSearchInput() {
 }
 function toggleClearButton() {
   document.getElementById('clearBtn').style.display =
-    (document.getElementById('searchBox').value || activeGenre || activeCanadianOnly) ? 'inline-block' : 'none';
+    (document.getElementById('searchBox').value || activeGenre) ? 'inline-block' : 'none';
 }
 function clearSearch() {
   document.getElementById('searchBox').value = '';
-  activeGenre = null; activeAlphaLetter = null; activeCanadianOnly = false;
+  activeGenre = null; activeAlphaLetter = null;
   document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('activeFilters').style.display = 'none';
@@ -409,7 +402,7 @@ function clearSearch() {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 function filterArtist(artist) {
-  activeGenre = null; activeAlphaLetter = null; activeCanadianOnly = false;
+  activeGenre = null; activeAlphaLetter = null;
   document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.alpha-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('activeFilters').style.display = 'none';
@@ -429,37 +422,16 @@ function buildGenreBar() {
     btn.onclick = () => toggleGenre(genre, btn);
     bar.appendChild(btn);
   }
-  const canBtn = document.createElement('button');
-  canBtn.className = 'genre-btn canadian-btn';
-  canBtn.textContent = '🍁 Canadian';
-  canBtn.onclick = () => toggleCanadian(canBtn);
-  bar.appendChild(canBtn);
-}
-function updateFilterLabel() {
-  const parts = [];
-  if (activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+activeGenre);
-  if (activeCanadianOnly) parts.push('🍁 Canadian');
-  if (!parts.length) { document.getElementById('activeFilters').style.display = 'none'; return; }
-  document.getElementById('activeFilters').style.display = 'block';
-  document.getElementById('filterLabel').textContent = parts.join(' + ');
-}
-function toggleCanadian(btn) {
-  activeCanadianOnly = !activeCanadianOnly;
-  btn.classList.toggle('active', activeCanadianOnly);
-  currentPage = 1; applyFilters(); updateFilterLabel(); toggleClearButton();
 }
 function toggleGenre(genre, btn) {
-  if (activeGenre === genre) {
-    activeGenre = null;
-    document.querySelectorAll('.genre-btn:not(.canadian-btn)').forEach(b=>b.classList.remove('active'));
-    currentPage = 1; applyFilters(); updateFilterLabel(); toggleClearButton();
-    return;
-  }
+  if (activeGenre === genre) { activeGenre=null; document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active')); clearSearch(); return; }
   activeGenre = genre;
-  document.querySelectorAll('.genre-btn:not(.canadian-btn)').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById('searchBox').value = '';
   currentPage = 1;
-  updateFilterLabel();
+  document.getElementById('activeFilters').style.display = 'block';
+  document.getElementById('filterLabel').textContent = (GENRE_EMOJI[genre]||'')+' '+genre;
   applyFilters(); toggleClearButton();
 }
 
