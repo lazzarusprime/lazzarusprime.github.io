@@ -83,12 +83,12 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'videos', title:'Videos', search:'nav'});</script>
+<script>renderHeader({page:'videos', titleKey:'nav.videos', search:'nav'});</script>
 <div class="page-wrap">
 
   <div class="page-hero">
-    <h1>📺 Videos</h1>
-    <p>Bass, guitar & music videos from around YouTube</p>
+    <h1>📺 <span data-i18n="nav.videos">Videos</span></h1>
+    <p data-i18n="videos.subtitle">Bass, guitar & music videos from around YouTube</p>
   </div>
 
   <!-- ════════════════════════════════════════
@@ -106,7 +106,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
        here automatically — no further edits needed.
   ════════════════════════════════════════ -->
 
-  <div class="section-header">🎸 Playlists</div>
+  <div class="section-header">🎸 <span data-i18n="playlists.heading">Playlists</span></div>
 
   <div class="playlists-grid" id="playlistGrid">
 
@@ -122,13 +122,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </iframe>
       </div>
       <div class="playlist-body">
-        <span class="playlist-tag">Playlist</span>
-        <div class="playlist-title">Bass Guitar</div>
-        <div class="playlist-desc">A curated mix of bass guitar videos from around YouTube — inspiration, technique, and good music.</div>
+        <span class="playlist-tag" data-i18n="playlists.tag">Playlist</span>
+        <div class="playlist-title" data-i18n="playlists.title.bass">Bass Guitar</div>
+        <div class="playlist-desc" data-i18n="playlists.desc.bass">A curated mix of bass guitar videos from around YouTube — inspiration, technique, and good music.</div>
         <a class="playlist-link"
            href="https://www.youtube.com/playlist?list=PLv2wN8Wfn7RBUb1PRLXMgKB7AcnXpGL3J"
            target="_blank" rel="noopener">
-          ▶ Open on YouTube ↗
+          ▶ <span data-i18n="playlists.openOnYoutube">Open on YouTube</span> ↗
         </a>
       </div>
     </div>
@@ -145,13 +145,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </iframe>
       </div>
       <div class="playlist-body">
-        <span class="playlist-tag">Playlist</span>
-        <div class="playlist-title">Guitar</div>
-        <div class="playlist-desc">A curated mix of guitar videos from around YouTube — inspiration, technique, and good music.</div>
+        <span class="playlist-tag" data-i18n="playlists.tag">Playlist</span>
+        <div class="playlist-title" data-i18n="playlists.title.guitar">Guitar</div>
+        <div class="playlist-desc" data-i18n="playlists.desc.guitar">A curated mix of guitar videos from around YouTube — inspiration, technique, and good music.</div>
         <a class="playlist-link"
            href="https://www.youtube.com/playlist?list=PLv2wN8Wfn7RCliKCuPeEZaY-lVJmIZ4U1"
            target="_blank" rel="noopener">
-          ▶ Open on YouTube ↗
+          ▶ <span data-i18n="playlists.openOnYoutube">Open on YouTube</span> ↗
         </a>
       </div>
     </div>
@@ -168,13 +168,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </iframe>
       </div>
       <div class="playlist-body">
-        <span class="playlist-tag">Playlist</span>
-        <div class="playlist-title">Song Covers</div>
-        <div class="playlist-desc">A curated mix of song cover videos from around YouTube — inspiration, technique, and good music.</div>
+        <span class="playlist-tag" data-i18n="playlists.tag">Playlist</span>
+        <div class="playlist-title" data-i18n="playlists.title.covers">Song Covers</div>
+        <div class="playlist-desc" data-i18n="playlists.desc.covers">A curated mix of song cover videos from around YouTube — inspiration, technique, and good music.</div>
         <a class="playlist-link"
            href="https://www.youtube.com/playlist?list=PLv2wN8Wfn7RDXiY2n_K5Ffh2CVL3Q2eOu"
            target="_blank" rel="noopener">
-          ▶ Open on YouTube ↗
+          ▶ <span data-i18n="playlists.openOnYoutube">Open on YouTube</span> ↗
         </a>
       </div>
     </div>
@@ -191,13 +191,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </iframe>
       </div>
       <div class="playlist-body">
-        <span class="playlist-tag">Playlist</span>
-        <div class="playlist-title">Acoustic</div>
-        <div class="playlist-desc">A curated mix of acoustic videos from around YouTube — inspiration, technique, and good music.</div>
+        <span class="playlist-tag" data-i18n="playlists.tag">Playlist</span>
+        <div class="playlist-title" data-i18n="playlists.title.acoustic">Acoustic</div>
+        <div class="playlist-desc" data-i18n="playlists.desc.acoustic">A curated mix of acoustic videos from around YouTube — inspiration, technique, and good music.</div>
         <a class="playlist-link"
            href="https://www.youtube.com/playlist?list=PLv2wN8Wfn7RCRQbFbzgXadNc6XOS6WDGj"
            target="_blank" rel="noopener">
-          ▶ Open on YouTube ↗
+          ▶ <span data-i18n="playlists.openOnYoutube">Open on YouTube</span> ↗
         </a>
       </div>
     </div>
@@ -214,13 +214,13 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         </iframe>
       </div>
       <div class="playlist-body">
-        <span class="playlist-tag">Playlist</span>
-        <div class="playlist-title">Music</div>
-        <div class="playlist-desc">A curated mix of music videos from around YouTube — inspiration, technique, and good music.</div>
+        <span class="playlist-tag" data-i18n="playlists.tag">Playlist</span>
+        <div class="playlist-title" data-i18n="playlists.title.music">Music</div>
+        <div class="playlist-desc" data-i18n="playlists.desc.music">A curated mix of music videos from around YouTube — inspiration, technique, and good music.</div>
         <a class="playlist-link"
            href="https://www.youtube.com/playlist?list=PLv2wN8Wfn7RAhP2GUJf08NqdAO5GkSyDt"
            target="_blank" rel="noopener">
-          ▶ Open on YouTube ↗
+          ▶ <span data-i18n="playlists.openOnYoutube">Open on YouTube</span> ↗
         </a>
       </div>
     </div>

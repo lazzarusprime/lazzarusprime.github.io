@@ -107,53 +107,53 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'gear', title:'Gear &amp; Guitars', search:'nav'});</script>
+<script>renderHeader({page:'gear', titleKey:'gear.title', search:'nav'});</script>
 <div class="page-wrap">
   <div class="page-hero">
-    <h1>Gear &amp; Guitars</h1>
-    <p>Everything that makes the noise happen — for better or worse</p>
+    <h1 data-i18n="gear.title">Gear &amp; Guitars</h1>
+    <p data-i18n="gear.subtitle">Everything that makes the noise happen — for better or worse</p>
   </div>
 
   <!-- ══ SECTION JUMP NAV ══ -->
   <div class="gear-jump-nav">
-    <a href="#signal-chain">⚡ Signal Chain</a>
-    <a href="#board-photo">📸 The Board</a>
-    <a href="#guitars">🎸 Guitar</a>
-    <a href="#basses">🎵 Basses</a>
-    <a href="#acoustic">🪗 Acoustic</a>
-    <a href="#keys">🎹 Keys</a>
-    <a href="#pedalboard-power">🎛️ Pedalboard &amp; Power</a>
-    <a href="#pedals">🎚️ Pedals</a>
-    <a href="#interface">🖥️ Interface</a>
-    <a href="#cameras">📷 Cameras</a>
+    <a href="#signal-chain">⚡ <span data-i18n="gear.jump.signalChain">Signal Chain</span></a>
+    <a href="#board-photo">📸 <span data-i18n="gear.jump.theBoard">The Board</span></a>
+    <a href="#guitars">🎸 <span data-i18n="gear.jump.guitar">Guitar</span></a>
+    <a href="#basses">🎵 <span data-i18n="gear.jump.basses">Basses</span></a>
+    <a href="#acoustic">🪗 <span data-i18n="gear.jump.acoustic">Acoustic</span></a>
+    <a href="#keys">🎹 <span data-i18n="gear.jump.keys">Keys</span></a>
+    <a href="#pedalboard-power">🎛️ <span data-i18n="gear.jump.pedalboardPower">Pedalboard &amp; Power</span></a>
+    <a href="#pedals">🎚️ <span data-i18n="gear.jump.pedals">Pedals</span></a>
+    <a href="#interface">🖥️ <span data-i18n="gear.jump.interface">Interface</span></a>
+    <a href="#cameras">📷 <span data-i18n="gear.jump.cameras">Cameras</span></a>
   </div>
 
   <!-- ══ SIGNAL CHAIN DIAGRAM ══ -->
   <div class="signal-chain-wrap" id="signal-chain">
-    <div class="signal-chain-title">⚡ Signal Chain</div>
+    <div class="signal-chain-title">⚡ <span data-i18n="gear.jump.signalChain">Signal Chain</span></div>
     <div class="chain-diagram" id="chainDiagram">
 
       <!-- Guitar -->
       <div class="chain-node" onclick="scrollToGear('guitars')">
-        <div class="chain-box"><div class="chain-icon">🎸</div><div class="chain-label">Guitar / Bass</div><div class="chain-sub">Ibanez · Yamaha · Squier</div></div>
+        <div class="chain-box"><div class="chain-icon">🎸</div><div class="chain-label" data-i18n="gear.chain.guitarBass">Guitar / Bass</div><div class="chain-sub">Ibanez · Yamaha · Squier</div></div>
       </div>
       <div class="chain-arrow"></div>
 
       <!-- AB/Y Switch -->
       <div class="chain-node" onclick="scrollToGear('aby')">
-        <div class="chain-box"><div class="chain-icon">⚡</div><div class="chain-label">ART CoolSwitch Pro</div><div class="chain-sub">AB/Y Switch</div></div>
+        <div class="chain-box"><div class="chain-icon">⚡</div><div class="chain-label">ART CoolSwitch Pro</div><div class="chain-sub" data-i18n="gear.chain.abySwitch">AB/Y Switch</div></div>
       </div>
       <div class="chain-arrow"></div>
 
       <!-- Bass Effect Pedal -->
       <div class="chain-node" onclick="scrollToGear('dapper')">
-        <div class="chain-box"><div class="chain-icon">🟢</div><div class="chain-label">Valeton Dapper Bass</div><div class="chain-sub">Bass FX Strip</div></div>
+        <div class="chain-box"><div class="chain-icon">🟢</div><div class="chain-label">Valeton Dapper Bass</div><div class="chain-sub" data-i18n="gear.chain.bassFxStrip">Bass FX Strip</div></div>
       </div>
       <div class="chain-arrow"></div>
 
       <!-- Multi Effect Pedal -->
       <div class="chain-node" onclick="scrollToGear('gp100')">
-        <div class="chain-box"><div class="chain-icon">🎛️</div><div class="chain-label">Valeton GP-100</div><div class="chain-sub">Multi-FX / Amp Sim</div></div>
+        <div class="chain-box"><div class="chain-icon">🎛️</div><div class="chain-label">Valeton GP-100</div><div class="chain-sub" data-i18n="gear.chain.multiFx">Multi-FX / Amp Sim</div></div>
       </div>
 
       <!-- Split arrow -->
@@ -165,7 +165,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
           <polygon points="36,6 36,14 44,10" fill="var(--accent)"/>
           <polygon points="36,40 36,48 44,44" fill="#555"/>
         </svg>
-        <span style="font-size:9px;color:#555;font-weight:700;letter-spacing:.5px">out A/B</span>
+        <span style="font-size:9px;color:#555;font-weight:700;letter-spacing:.5px" data-i18n="gear.chain.outAB">out A/B</span>
       </div>
 
       <!-- Two output branches -->
@@ -173,7 +173,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         <!-- Path A: Realtone Cable -> PC (Rocksmith) -->
         <div class="chain-branch-row">
           <div class="chain-node">
-            <div class="chain-box" style="border-color:rgba(var(--accent-rgb),.2);background:var(--accent-dim1)"><div class="chain-icon">🎮</div><div class="chain-label">Realtone Cable</div><div class="chain-sub">to PC · Rocksmith</div></div>
+            <div class="chain-box" style="border-color:rgba(var(--accent-rgb),.2);background:var(--accent-dim1)"><div class="chain-icon">🎮</div><div class="chain-label">Realtone Cable</div><div class="chain-sub" data-i18n="gear.chain.toPcRocksmith">to PC · Rocksmith</div></div>
           </div>
           <div class="chain-arrow"></div>
           <div class="chain-node">
@@ -183,26 +183,26 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
         <!-- Path B: Looper -> M-Track Duo -> PC (stream audio) -->
         <div class="chain-branch-row">
           <div class="chain-node" onclick="scrollToGear('looper')">
-            <div class="chain-box"><div class="chain-icon">🔁</div><div class="chain-label">Lekato Looper</div><div class="chain-sub">9 Loops · 40 min</div></div>
+            <div class="chain-box"><div class="chain-icon">🔁</div><div class="chain-label">Lekato Looper</div><div class="chain-sub" data-i18n="gear.chain.loops9">9 Loops · 40 min</div></div>
           </div>
           <div class="chain-arrow"></div>
           <div class="chain-node" onclick="scrollToGear('mtrack')">
-            <div class="chain-box"><div class="chain-icon">🔌</div><div class="chain-label">M-Track Duo</div><div class="chain-sub">USB Audio Interface</div></div>
+            <div class="chain-box"><div class="chain-icon">🔌</div><div class="chain-label">M-Track Duo</div><div class="chain-sub" data-i18n="gear.usbAudioInterface">USB Audio Interface</div></div>
           </div>
           <div class="chain-arrow"></div>
           <div class="chain-node">
-            <div class="chain-box"><div class="chain-icon">💻</div><div class="chain-label">PC / OBS</div><div class="chain-sub">Streaming Output</div></div>
+            <div class="chain-box"><div class="chain-icon">💻</div><div class="chain-label">PC / OBS</div><div class="chain-sub" data-i18n="gear.chain.streamingOutput">Streaming Output</div></div>
           </div>
         </div>
       </div>
 
     </div>
-    <p style="font-size:11px;color:#444;text-align:center;margin:12px 0 0">Click any node to jump to that gear card below &nbsp;·&nbsp; Chain scrolls horizontally on small screens</p>
+    <p style="font-size:11px;color:#444;text-align:center;margin:12px 0 0" data-i18n="gear.chain.hint">Click any node to jump to that gear card below &nbsp;·&nbsp; Chain scrolls horizontally on small screens</p>
   </div>
 
   <!-- ══ LIVE PEDALBOARD PHOTO ══ -->
   <div class="gear-section" id="board-photo">
-    <div class="gear-section-title">📸 The Board — As It Stands</div>
+    <div class="gear-section-title">📸 <span data-i18n="gear.section.board">The Board — As It Stands</span></div>
     <div style="background:var(--bg-void);border:1px solid #222;border-radius:16px;padding:24px;text-align:center;position:relative;overflow:hidden">
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(var(--accent-rgb),.06) 0%,transparent 65%);pointer-events:none"></div>
       <img src="images/pedalboardnobg.png" alt="Lazzarus Prime Pedalboard" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 0 0 1px #222,0 0 40px rgba(var(--accent-rgb),.08),0 20px 60px rgba(0,0,0,.8);filter:brightness(1.05) contrast(1.05) saturate(1.1)">
@@ -211,15 +211,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ ELECTRIC GUITAR ══ -->
   <div class="gear-section" id="guitars">
-    <div class="gear-section-title">🎸 Electric Guitar</div>
+    <div class="gear-section-title">🎸 <span data-i18n="gear.section.guitar">Electric Guitar</span></div>
     <div class="gear-grid">
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/ibanez.png" alt="Ibanez Artcore AS73"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-guitar">Electric Guitar</span>
+          <span class="gear-card-tag tag-guitar" data-i18n="gear.tag.electricGuitar">Electric Guitar</span>
           <div class="gear-card-name">Ibanez Artcore AS73-BS</div>
-          <div class="gear-card-sub">Semi-Hollow · Brown Sunburst</div>
-          <div class="gear-card-desc">Sapele top/back/sides with spruce centre block. Nyatoh set-in neck, bound rosewood fretboard. ACH1/ACH2 humbuckers, 2× volume, 2× tone, 3-way toggle.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.ibanezAs73">Semi-Hollow · Brown Sunburst</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.ibanezAs73">Sapele top/back/sides with spruce centre block. Nyatoh set-in neck, bound rosewood fretboard. ACH1/ACH2 humbuckers, 2× volume, 2× tone, 3-way toggle.</div>
           <a class="gear-link" href="https://www.ultimate-guitar.com/reviews/electric_guitars/ibanez/artcore_as73/28167/" target="_blank">🔗 View Info</a>
         </div>
       </div>
@@ -228,25 +228,25 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ ELECTRIC BASSES ══ -->
   <div class="gear-section" id="basses">
-    <div class="gear-section-title">🎵 Electric Basses</div>
+    <div class="gear-section-title">🎵 <span data-i18n="gear.section.basses">Electric Basses</span></div>
     <div class="gear-grid">
       <div class="gear-card">
         <div class="gear-card-photo"><img class="orient-tilt-right" src="images/TRBJP2.png" alt="Yamaha TRBJP2"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-bass">6-String Electric Bass</span>
+          <span class="gear-card-tag tag-bass" data-i18n="gear.tag.bass6string">6-String Electric Bass</span>
           <div class="gear-card-name">Yamaha TRBJP2</div>
-          <div class="gear-card-sub">John Patitucci Signature · Amber</div>
-          <div class="gear-card-desc">6-string (B–E–A–D–G–C). Alder body with figured maple top, 5-piece maple/walnut neck, 35″ scale, 26 frets. Alnico V double-coil pickups, 5-control active EQ preamp.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.yamahaTrbjp2">John Patitucci Signature · Amber</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.yamahaTrbjp2">6-string (B–E–A–D–G–C). Alder body with figured maple top, 5-piece maple/walnut neck, 35″ scale, 26 frets. Alnico V double-coil pickups, 5-control active EQ preamp.</div>
           <a class="gear-link" href="https://ca.yamaha.com/en/products/musical_instruments/guitars_basses/el_basses/trbjp2/index.html" target="_blank">🔗 Yamaha Page</a>
         </div>
       </div>
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/jaguar.png" alt="Squier Jaguar Bass"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-bass">4-String Electric Bass</span>
+          <span class="gear-card-tag tag-bass" data-i18n="gear.tag.bass4string">4-String Electric Bass</span>
           <div class="gear-card-name">Squier Classic Vibe Jaguar Bass</div>
-          <div class="gear-card-sub">3-Color Sunburst · Laurel Fretboard</div>
-          <div class="gear-card-desc">Poplar body, maple C-shape neck, 32″ medium scale. Laurel fretboard, 9.5″ radius, 20 frets. Fender-Designed alnico single-coil pickups.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.squierJaguar">3-Color Sunburst · Laurel Fretboard</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.squierJaguar">Poplar body, maple C-shape neck, 32″ medium scale. Laurel fretboard, 9.5″ radius, 20 frets. Fender-Designed alnico single-coil pickups.</div>
           <a class="gear-link" href="https://excelmusic.ca/squier-classic-vibe-jaguar-bass-3-color-sunburst-4-string-bass-guitar" target="_blank">🔗 Product Info</a>
         </div>
       </div>
@@ -255,25 +255,25 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ ACOUSTIC ══ -->
   <div class="gear-section" id="acoustic">
-    <div class="gear-section-title">🪗 Acoustic Instruments</div>
+    <div class="gear-section-title">🪗 <span data-i18n="gear.section.acoustic">Acoustic Instruments</span></div>
     <div class="gear-grid">
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/fa-450ce.avif" alt="Fender FA-450CE"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-acoustic">Acoustic Bass</span>
+          <span class="gear-card-tag tag-acoustic" data-i18n="gear.tag.acousticBass">Acoustic Bass</span>
           <div class="gear-card-name">Fender FA-450CE</div>
-          <div class="gear-card-sub">3-Tone Sunburst · Acoustic-Electric Bass</div>
-          <div class="gear-card-desc">Laminated spruce top, basswood back &amp; sides. 32″ medium scale, 4-string. Fishman Presys+ preamp. Nato neck, rosewood fretboard.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.fenderFa450">3-Tone Sunburst · Acoustic-Electric Bass</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.fenderFa450">Laminated spruce top, basswood back &amp; sides. 32″ medium scale, 4-string. Fishman Presys+ preamp. Nato neck, rosewood fretboard.</div>
           <a class="gear-link" href="https://intl.fender.com/products/fa-450ce-bass" target="_blank">🔗 Fender Page</a>
         </div>
       </div>
       <div class="gear-card">
         <div class="gear-card-photo"><img class="orient-mirror" src="images/fs720s.png" alt="Yamaha FS720S"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-acoustic">Acoustic Guitar</span>
+          <span class="gear-card-tag tag-acoustic" data-i18n="gear.tag.acousticGuitar">Acoustic Guitar</span>
           <div class="gear-card-name">Yamaha FS 720S BL</div>
-          <div class="gear-card-sub">Black · No Pickup · Folk Body</div>
-          <div class="gear-card-desc">Solid Sitka spruce top, Nato back &amp; sides. FS folk/concert body shape, 634mm (25″) scale, 20 frets. Pure acoustic — no electronics.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.yamahaFs720">Black · No Pickup · Folk Body</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.yamahaFs720">Solid Sitka spruce top, Nato back &amp; sides. FS folk/concert body shape, 634mm (25″) scale, 20 frets. Pure acoustic — no electronics.</div>
           <a class="gear-link" href="https://www.musicarts.com/yamaha-fs720s-folk-acoustic-guitar-main0041468" target="_blank">🔗 Product Info</a>
         </div>
       </div>
@@ -282,15 +282,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ KEYS ══ -->
   <div class="gear-section" id="keys">
-    <div class="gear-section-title">🎹 Keys</div>
+    <div class="gear-section-title">🎹 <span data-i18n="gear.jump.keys">Keys</span></div>
     <div class="gear-grid">
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/casio-cps85.png" alt="Casio CPS-85"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-keys">Digital Piano</span>
+          <span class="gear-card-tag tag-keys" data-i18n="gear.tag.digitalPiano">Digital Piano</span>
           <div class="gear-card-name">Casio CPS-85 Digital Piano</div>
-          <div class="gear-card-sub">88-Key Full-Size Digital Piano</div>
-          <div class="gear-card-desc">88 full-size weighted keys, 24-note polyphony, 10 onboard voices. Digital reverb and a single-track memory recorder.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.casioCps85">88-Key Full-Size Digital Piano</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.casioCps85">88 full-size weighted keys, 24-note polyphony, 10 onboard voices. Digital reverb and a single-track memory recorder.</div>
           <a class="gear-link" href="https://www.chicagopianos.com/celviano/celviano_cps85.html" target="_blank">🔗 Product Info</a>
         </div>
       </div>
@@ -299,25 +299,25 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ PEDALBOARD ══ -->
   <div class="gear-section" id="pedalboard-power">
-    <div class="gear-section-title">🎛️ Pedalboard &amp; Power</div>
+    <div class="gear-section-title">🎛️ <span data-i18n="gear.jump.pedalboardPower">Pedalboard &amp; Power</span></div>
     <div class="gear-grid">
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/stompbox.png" alt="ENO Stompbox"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-power">Pedalboard</span>
+          <span class="gear-card-tag tag-power" data-i18n="gear.tag.pedalboard">Pedalboard</span>
           <div class="gear-card-name">ENO MUSIC Stompbox Medium</div>
-          <div class="gear-card-sub">Aluminum Alloy Pedalboard</div>
-          <div class="gear-card-desc">Medium aluminium pedalboard with carry bag, velcro and cable ties. Holds the whole rig without needing a roadie.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.enoStompbox">Aluminum Alloy Pedalboard</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.enoStompbox">Medium aluminium pedalboard with carry bag, velcro and cable ties. Holds the whole rig without needing a roadie.</div>
           <a class="gear-link" href="https://www.amazon.com/ENO-MUSIC-Stompbox-Including-Accessories/dp/B09YGKS46H" target="_blank">🔗 Amazon</a>
         </div>
       </div>
       <div class="gear-card">
         <div class="gear-card-photo"><img src="images/truetone_1spot_pro.png" alt="Truetone 1 Spot Pro CS7"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-power">Power Supply</span>
+          <span class="gear-card-tag tag-power" data-i18n="gear.tag.powerSupply">Power Supply</span>
           <div class="gear-card-name">Truetone 1 Spot Pro CS7</div>
-          <div class="gear-card-sub">Pure Isolated Power</div>
-          <div class="gear-card-desc">7 fully isolated, filtered outputs including a dedicated 18V high-current slot. Studio-grade isolation keeps the board dead quiet.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.truetone">Pure Isolated Power</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.truetone">7 fully isolated, filtered outputs including a dedicated 18V high-current slot. Studio-grade isolation keeps the board dead quiet.</div>
           <a class="gear-link" href="https://www.truetone.com/CS7/" target="_blank">🔗 Truetone</a>
         </div>
       </div>
@@ -326,16 +326,16 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ PEDALS ══ -->
   <div class="gear-section" id="pedals">
-    <div class="gear-section-title">🎚️ Pedals on the Board</div>
+    <div class="gear-section-title">🎚️ <span data-i18n="gear.section.pedals">Pedals on the Board</span></div>
     <div class="gear-grid">
 
       <div class="gear-card" id="aby">
         <div class="gear-card-photo"><img src="images/coolswitchpro.png" alt="ART CoolSwitch Pro"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-pedal">Switcher</span>
+          <span class="gear-card-tag tag-pedal" data-i18n="gear.tag.switcher">Switcher</span>
           <div class="gear-card-name">ART CoolSwitch Pro</div>
-          <div class="gear-card-sub">AB/Y Switch with Isolation</div>
-          <div class="gear-card-desc">Routes signal between two outputs with full transformer isolation. Switchable ground lift and phase invert. Completely passive — no power required.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.coolswitch">AB/Y Switch with Isolation</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.coolswitch">Routes signal between two outputs with full transformer isolation. Switchable ground lift and phase invert. Completely passive — no power required.</div>
           <a class="gear-link" href="https://artproaudio.com/instrumentaccessories/product/421769/coolswitchpro" target="_blank">🔗 ART Audio</a>
         </div>
       </div>
@@ -343,10 +343,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="dapper">
         <div class="gear-card-photo"><img src="images/bass_effect_pedal.png" alt="Valeton Dapper Bass"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-pedal">Bass FX</span>
+          <span class="gear-card-tag tag-pedal" data-i18n="gear.tag.bassFx">Bass FX</span>
           <div class="gear-card-name">Valeton Dapper Bass</div>
-          <div class="gear-card-sub">Combined Bass Effects Strip</div>
-          <div class="gear-card-desc">All-in-one bass strip: tuner, boost/comp, envelope filter, bass amp, octave, chorus. Compact and purpose-built for bass.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.dapper">Combined Bass Effects Strip</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.dapper">All-in-one bass strip: tuner, boost/comp, envelope filter, bass amp, octave, chorus. Compact and purpose-built for bass.</div>
           <a class="gear-link" href="https://www.valeton.net/product/dapper-bass/" target="_blank">🔗 Valeton</a>
         </div>
       </div>
@@ -354,10 +354,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="gp100">
         <div class="gear-card-photo"><img src="images/gp-100.png" alt="Valeton GP-100"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-pedal">Multi-FX</span>
+          <span class="gear-card-tag tag-pedal" data-i18n="gear.tag.multiFxTag">Multi-FX</span>
           <div class="gear-card-name">Valeton GP-100</div>
-          <div class="gear-card-sub">Multi Effects Processor</div>
-          <div class="gear-card-desc">Full-featured multi-effects with amp/cab modelling, wide range of effects, USB audio interface capability. Metal chassis built to survive the road.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.gp100">Multi Effects Processor</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.gp100">Full-featured multi-effects with amp/cab modelling, wide range of effects, USB audio interface capability. Metal chassis built to survive the road.</div>
           <a class="gear-link" href="https://www.valeton.net/product/gp-100/" target="_blank">🔗 Valeton</a>
         </div>
       </div>
@@ -365,10 +365,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="looper">
         <div class="gear-card-photo"><img src="images/lekato_looper.png" alt="Lekato Looper"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-pedal">Looper</span>
+          <span class="gear-card-tag tag-pedal" data-i18n="gear.tag.looper">Looper</span>
           <div class="gear-card-name">Lekato Looper Pedal</div>
-          <div class="gear-card-sub">9 Onboard Loops · 40 min</div>
-          <div class="gear-card-desc">9 loop slots, 40 minutes total, 48K/24bit lossless. Built-in tuner. USB import/export. Unlimited overdubbing.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.looper">9 Onboard Loops · 40 min</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.looper">9 loop slots, 40 minutes total, 48K/24bit lossless. Built-in tuner. USB import/export. Unlimited overdubbing.</div>
           <a class="gear-link" href="https://lekatodeal.com/products/guitar-effect-pedal-with-9-onboard-loops" target="_blank">🔗 Lekato</a>
         </div>
       </div>
@@ -376,10 +376,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="joyo">
         <div class="gear-card-photo"><img src="images/joyo_jw-03.png" alt="Joyo JW-03"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-pedal">Wireless</span>
+          <span class="gear-card-tag tag-pedal" data-i18n="gear.tag.wireless">Wireless</span>
           <div class="gear-card-name">Joyo JW-03</div>
-          <div class="gear-card-sub">2.4GHz Wireless Guitar System</div>
-          <div class="gear-card-desc">Cable-free 2.4GHz signal. Under 5ms latency, rechargeable battery. No more cable trips mid-song.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.joyo">2.4GHz Wireless Guitar System</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.joyo">Cable-free 2.4GHz signal. Under 5ms latency, rechargeable battery. No more cable trips mid-song.</div>
           <a class="gear-link" href="https://www.joyoaudio.com/product/218.html" target="_blank">🔗 Joyo Audio</a>
         </div>
       </div>
@@ -389,15 +389,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ INTERFACE ══ -->
   <div class="gear-section" id="interface">
-    <div class="gear-section-title">🖥️ Audio Interface</div>
+    <div class="gear-section-title">🖥️ <span data-i18n="gear.section.interface">Audio Interface</span></div>
     <div class="gear-grid">
       <div class="gear-card" id="mtrack">
         <div class="gear-card-photo"><img src="images/M-Track-Duo.png" alt="M-Audio M-Track Duo"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-interface">Interface</span>
+          <span class="gear-card-tag tag-interface" data-i18n="gear.tag.interface">Interface</span>
           <div class="gear-card-name">M-Audio M-Track Duo</div>
-          <div class="gear-card-sub">USB Audio Interface</div>
-          <div class="gear-card-desc">2-channel 48kHz USB interface. Takes the rig into the PC for streaming. Clean Crystal preamps, zero-latency monitoring, plug-and-play.</div>
+          <div class="gear-card-sub" data-i18n="gear.usbAudioInterface">USB Audio Interface</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.mtrack">2-channel 48kHz USB interface. Takes the rig into the PC for streaming. Clean Crystal preamps, zero-latency monitoring, plug-and-play.</div>
           <a class="gear-link" href="https://www.m-audio.com/audio-midi-interfaces/m-track-duo.html" target="_blank">🔗 M-Audio</a>
         </div>
       </div>
@@ -406,15 +406,15 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- ══ CAMERAS ══ -->
   <div class="gear-section" id="cameras">
-    <div class="gear-section-title">📷 Cameras</div>
+    <div class="gear-section-title">📷 <span data-i18n="gear.jump.cameras">Cameras</span></div>
     <div class="gear-grid">
       <div class="gear-card" id="obsbot-meet2">
         <div class="gear-card-photo"><img src="images/obsbot_meet_2.png" alt="OBSBOT Meet 2"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-camera">Webcam</span>
+          <span class="gear-card-tag tag-camera" data-i18n="gear.tag.webcam">Webcam</span>
           <div class="gear-card-name">OBSBOT Meet 2</div>
-          <div class="gear-card-sub">4K AI-Powered Webcam</div>
-          <div class="gear-card-desc">4K webcam with AI auto-framing and background removal built in. Clean, sharp stream picture without a dedicated capture card.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.obsbot">4K AI-Powered Webcam</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.obsbot">4K webcam with AI auto-framing and background removal built in. Clean, sharp stream picture without a dedicated capture card.</div>
           <a class="gear-link" href="https://www.obsbot.com/obsbot-meet-2-4k-webcam" target="_blank">🔗 OBSBOT</a>
         </div>
       </div>
@@ -422,10 +422,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="ugreen-2k">
         <div class="gear-card-photo"><img src="images/ugreen_2k.png" alt="UGREEN 2K Webcam"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-camera">Webcam</span>
+          <span class="gear-card-tag tag-camera" data-i18n="gear.tag.webcam2">Webcam</span>
           <div class="gear-card-name">UGREEN 2K Webcam</div>
-          <div class="gear-card-sub">FHD 2K Autofocus Webcam</div>
-          <div class="gear-card-desc">2K autofocus webcam with a built-in privacy shutter and stereo mics. Solid budget-friendly angle for a secondary stream view.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.ugreen">FHD 2K Autofocus Webcam</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.ugreen">2K autofocus webcam with a built-in privacy shutter and stereo mics. Solid budget-friendly angle for a secondary stream view.</div>
           <a class="gear-link" href="https://www.ugreen.com/en-ca/products/ca-55721" target="_blank">🔗 UGREEN</a>
         </div>
       </div>
@@ -433,10 +433,10 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="gear-card" id="logitech-ptz-pro2">
         <div class="gear-card-photo"><img src="images/logitech_ptz_pro2.png" alt="Logitech PTZ Pro 2"></div>
         <div class="gear-card-body">
-          <span class="gear-card-tag tag-camera">PTZ Camera</span>
+          <span class="gear-card-tag tag-camera" data-i18n="gear.tag.ptzCamera">PTZ Camera</span>
           <div class="gear-card-name">Logitech PTZ Pro 2</div>
-          <div class="gear-card-sub">1080p Pan-Tilt-Zoom Camera</div>
-          <div class="gear-card-desc">Motorized pan/tilt with 10x lossless HD zoom. Remote-controllable framing for wide shots or close-ups without touching the camera.</div>
+          <div class="gear-card-sub" data-i18n="gear.sub.logitech">1080p Pan-Tilt-Zoom Camera</div>
+          <div class="gear-card-desc" data-i18n="gear.desc.logitech">Motorized pan/tilt with 10x lossless HD zoom. Remote-controllable framing for wide shots or close-ups without touching the camera.</div>
           <a class="gear-link" href="https://www.logitech.com/en-ca/products/video-conferencing/conference-cameras/ptz-pro2-conferencecam.960-001184.html" target="_blank">🔗 Logitech</a>
         </div>
       </div>

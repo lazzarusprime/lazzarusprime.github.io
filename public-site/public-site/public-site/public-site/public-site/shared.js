@@ -31,6 +31,21 @@ const GENRE_EMOJI = {
   "Blues":"🟡","Country":"🌎","Funk Disco":"🕺","Indie Alt":"🌿","Punk":"🎙️","Reggae":"🌴","Alt & Grunge":"🔊"
 };
 
+/* ── Canadian artists (🍁 filter + inline badge) ──────────
+   Independent of GENRE_MAP — this is a nationality tag, not a
+   music genre, so it's checked separately and can layer on top
+   of any genre/search filter. */
+const CANADIAN_ARTISTS = ["Alanis Morissette", "Alannah Myles", "Anne Murray", "April Wine", "Arcade Fire", "Avril Lavigne", "Bachman Turner Overdrive", "Barenaked Ladies", "Beau Dommage", "Biff Naked", "Big Sugar", "Big Wreck", "Blue Rodeo", "Blue Stones", "Bryan Adams", "Carly Rae Jepsen", "Celine Dion", "Chantal Kreviazuk", "Chilliwack", "City and Colour", "Corey Heart", "Coton Ouate", "Crash Test Dummies", "Danko Jones", "Default", "Drake", "Finger Eleven", "Flatliners", "Francois Perusse", "Glass Tiger", "Glorious Sons", "Gordon Lightfoot", "Half Moon Run", "Headstones", "Honeymoon Suite", "I Mother Earth", "Jeff Healey", "Justin Beiber", "Kim Mitchell", "Kittie", "Leonard Cohen", "Les Colocs", "Les Cowboys", "Loverboy", "Marianas Trench", "Matt Mays", "Matthew Good Band", "Metric", "Michael Buble", "Moist", "Neil Young", "Nelly Furtado", "Neverending White Lights", "Nickelback", "Northern Pikes", "Our Lady Peace", "Paul Anka", "Plume Latraverse", "Red Rider", "ReignWolf", "Rheostatics", "Roch Voisine", "Rush", "Sarah McLachlan", "Sass Jordan", "Shania Twain", "Shawn Mendes", "Simple Plan", "Sloan", "Snow", "Sum 41", "The Blue Stones", "The Guess Who", "The Sheepdogs", "The Tea Party", "The Tragically Hip", "The Trews", "The Weeknd", "Theory of A Deadman", "Thornley", "Three Days Grace", "Triumph", "Trooper", "eXterio"];
+
+const _canc = {};
+function isCanadian(artist) {
+  if (_canc[artist] !== undefined) return _canc[artist];
+  const lower = artist.toLowerCase();
+  const hit = CANADIAN_ARTISTS.some(a => a.toLowerCase() === lower);
+  _canc[artist] = hit;
+  return hit;
+}
+
 /* ── Genre lookup cache ──────────────────────────────────── */
 const _gc = {};
 function assignGenre(artist) {

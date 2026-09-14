@@ -73,7 +73,8 @@ function renderHeader(opts) {
   const el = document.getElementById('site-header');
   if (!el) return;
   window.__lpHeaderOpts = opts; // remembered so setLang() can rebuild the header in the new language
-  const { page, title, search = 'nav', showNav = true } = opts;
+  const { page, title, titleKey, search = 'nav', showNav = true } = opts;
+  const pageTitle = titleKey ? t(titleKey) : title;
 
   const socialRows = SOCIAL_LINKS.map(s =>
     `<a href="${s.href}" target="_blank" rel="noopener">${s.icon} ${s.label}</a>`
@@ -111,7 +112,7 @@ function renderHeader(opts) {
   el.innerHTML = `<div class="titleBar">
     <div class="titleLeft">
       <img class="site-logo" src="guitar.png" alt="Lazzarus Prime">
-      <h2>Lazzarus Prime${title ? ' — ' + title : ''}</h2>
+      <h2>Lazzarus Prime${pageTitle ? ' — ' + pageTitle : ''}</h2>
     </div>
     <div class="headerRight">
       <div class="theme-switcher" id="themeSwitcher">

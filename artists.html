@@ -104,27 +104,27 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'artists', title:'Artists', search:'artists'});</script>
+<script>renderHeader({page:'artists', titleKey:'nav.artists', search:'artists'});</script>
 <div id="genreBar"></div>
-<div id="activeFilters">Showing: <span id="filterLabel"></span><button onclick="clearAll()">✕ Clear</button></div>
+<div id="activeFilters"><span data-i18n="filters.showing">Showing:</span> <span id="filterLabel"></span><button onclick="clearAll()">✕ <span data-i18n="filters.clear">Clear</span></button></div>
 <div id="alphabet"></div>
 <div id="artistStats">
-  <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+  <h3 id="artistToggle"><span>🎸 <span data-i18n="artists.top">Top Artists In Library</span></span> <span style="float:right">▶</span></h3>
   <div id="artistList"></div>
 </div>
 <div id="sortBar">
-  <span>Sort:</span>
+  <span data-i18n="artists.sort">Sort:</span>
   <button class="sort-btn active" id="sortAlpha" onclick="setSort('alpha')">A–Z</button>
-  <button class="sort-btn" id="sortCount" onclick="setSort('count')">Most Songs</button>
+  <button class="sort-btn" id="sortCount" onclick="setSort('count')" data-i18n="artists.mostSongs">Most Songs</button>
 </div>
 <div class="listHeader" id="allArtistsHeader">
-  <h3 id="allArtistsToggle"><span class="section-chevron" id="allArtistsChevron">▾</span>ALL ARTISTS</h3>
+  <h3 id="allArtistsToggle"><span class="section-chevron" id="allArtistsChevron">▾</span><span data-i18n="artists.allArtists">ALL ARTISTS</span></h3>
   <div class="mini-search-row" id="allArtistsMiniSearch">
-    <input id="miniSearchBox" placeholder="Search artist…" oninput="handleMiniSearch(this.value)" autocomplete="off">
+    <input id="miniSearchBox" data-i18n-placeholder="search.placeholder.artists" placeholder="Search artist…" oninput="handleMiniSearch(this.value)" autocomplete="off">
   </div>
   <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
-    <button class="view-btn" data-view="grid" onclick="setArtistView('grid')" title="Grid — art tiles">▦</button>
-    <button class="view-btn" data-view="list" onclick="setArtistView('list')" title="List — compact rows">☰</button>
+    <button class="view-btn" data-view="grid" onclick="setArtistView('grid')" data-i18n-title="artists.view.grid.title" title="Grid — art tiles">▦</button>
+    <button class="view-btn" data-view="list" onclick="setArtistView('list')" data-i18n-title="artists.view.list.title" title="List — compact rows">☰</button>
   </div>
   <span id="resultsCount" class="resultsCount"></span>
 </div>
@@ -175,11 +175,11 @@ function buildGenreBar(){
   const bar=document.getElementById('genreBar');bar.innerHTML='';
   for(const genre of Object.keys(GENRE_MAP)){
     const btn=document.createElement('button');btn.className='genre-btn';
-    btn.textContent=(GENRE_EMOJI[genre]||'')+' '+genre;
+    btn.dataset.genre=genre;btn.textContent=(GENRE_EMOJI[genre]||'')+' '+t('genre.'+genre);
     btn.onclick=()=>toggleGenre(genre,btn);bar.appendChild(btn);
   }
   const canBtn=document.createElement('button');canBtn.className='genre-btn canadian-btn';
-  canBtn.textContent='🍁 Canadian';
+  canBtn.textContent='🍁 '+t('genre.Canadian');
   canBtn.onclick=()=>toggleCanadian(canBtn);bar.appendChild(canBtn);
 }
 function applyArtistFilters(){
@@ -195,11 +195,11 @@ function applyArtistFilters(){
 }
 function updateFilterLabel(){
   const parts=[];
-  if(activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+activeGenre);
-  if(activeCanadianOnly) parts.push('🍁 Canadian');
+  if(activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+t('genre.'+activeGenre));
+  if(activeCanadianOnly) parts.push('🍁 '+t('genre.Canadian'));
   if(!parts.length){document.getElementById('activeFilters').style.display='none';return;}
   document.getElementById('activeFilters').style.display='block';
-  document.getElementById('filterLabel').textContent=parts.join(' + ')+' ('+filteredArtists.length+' artists)';
+  document.getElementById('filterLabel').textContent=parts.join(' + ')+' ('+t('stats.nArtists',{n:filteredArtists.length})+')';
 }
 function toggleGenre(genre,btn){
   if(activeGenre===genre){activeGenre=null;document.querySelectorAll('.genre-btn:not(.canadian-btn)').forEach(b=>b.classList.remove('active'));}
@@ -265,19 +265,19 @@ function renderGrid(){
 
     card.innerHTML=artHtml+`<div class="artistCardBody">
       <div style="display:flex;align-items:flex-start;gap:4px">
-        <div class="artistCardName">${esc(a.name)}${isCanadian(a.name)?'<span class="ca-flag" title="Canadian artist" onclick="onMapleLeafClick(event)">🍁</span>':''}</div>
-        <a class="info-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">Info ↗</a>
+        <div class="artistCardName">${esc(a.name)}${isCanadian(a.name)?`<span class="ca-flag" title="${t('song.canadianArtist')}" onclick="onMapleLeafClick(event)">🍁</span>`:''}</div>
+        <a class="info-link" href="${mbUrl}" target="_blank" rel="noopener" title="${t('song.viewMusicBrainz')}">${t('artists.info')} ↗</a>
       </div>
-      <div class="artistCardCount">${a.count} ${a.count===1?'song':'songs'}</div>
-      ${a.genre?`<div class="artistCardGenre">${GENRE_EMOJI[a.genre]||''} ${a.genre}</div>`:''}
+      <div class="artistCardCount">${t('stats.nSongs',{n:a.count})}</div>
+      ${a.genre?`<div class="artistCardGenre">${GENRE_EMOJI[a.genre]||''} ${t('genre.'+a.genre)}</div>`:''}
       <div class="ownedBar"><div class="ownedBarFill ${barClass}" style="width:${barW}%"></div></div>
     </div>`;
     frag.appendChild(card);
   });
   grid.appendChild(frag);
   document.getElementById('resultsCount').textContent=filteredArtists.length!==allArtists.length
-    ?filteredArtists.length+' artists'
-    :allArtists.length+' artists total';
+    ?t('stats.nArtists',{n:filteredArtists.length})
+    :t('artists.totalArtists',{n:allArtists.length});
   renderPagination();
 }
 
@@ -285,9 +285,9 @@ function renderPagination(){
   const total=Math.ceil(filteredArtists.length/perPage)||1;
   ['paginationTop','paginationBottom'].forEach(id=>{
     const c=document.getElementById(id);c.innerHTML='';
-    if(currentPage>1){const b=document.createElement('button');b.textContent='◀ Prev';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
-    const l=document.createElement('span');l.textContent=` Page ${currentPage} / ${total} `;l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
-    if(currentPage<total){const b=document.createElement('button');b.textContent='Next ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
+    if(currentPage>1){const b=document.createElement('button');b.textContent='◀ '+t('pagination.prev');b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
+    const l=document.createElement('span');l.textContent=' '+t('pagination.pageOf',{n:currentPage,total})+' ';l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
+    if(currentPage<total){const b=document.createElement('button');b.textContent=t('pagination.next')+' ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderGrid();window.scrollTo(0,0)};c.appendChild(b)}
   });
 }
 
@@ -347,8 +347,8 @@ function clearAll(){
 function slotSpin(btn,onDone){
   const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲'];let i=0;
   btn.classList.add('spinning');
-  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);
-  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);
+  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' '+t('nav.random');},60);
+  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' '+t('nav.random');},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 '+t('nav.random');btn.classList.remove('spinning');onDone();},480);},600);
 }
 function randomArtist(btn){
   if(!allArtists.length) return;
@@ -363,6 +363,15 @@ document.addEventListener('keydown',e=>{
 });
 
 init();
+window.addEventListener('lp:langchange', () => {
+  buildGenreBar();
+  document.querySelectorAll('#genreBar .genre-btn').forEach(b => {
+    if (b.classList.contains('canadian-btn')) { b.classList.toggle('active', activeCanadianOnly); }
+    else if (b.dataset.genre === activeGenre) { b.classList.add('active'); }
+  });
+  updateFilterLabel();
+  renderGrid();
+});
 </script>
 </body>
 </html>
