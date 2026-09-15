@@ -12,6 +12,7 @@
 <script src="shared.js"></script>
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
+<script src="i18n.js"></script>
 <script src="chrome.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -146,6 +147,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
     <label>Tuning Profile</label>
     <select id="tuningProfileSelect" onchange="updateTargetStrings()"></select>
   </div>
+  <button class="action-btn" id="tunerBtn" style="margin-left:auto" onclick="toggleTuner(event)">🎙️ Start Tuner</button>
 </div>
 
 <div class="drag-workspace" id="dragWorkspace">

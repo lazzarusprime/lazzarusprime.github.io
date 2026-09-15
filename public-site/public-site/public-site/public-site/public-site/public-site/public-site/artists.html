@@ -38,6 +38,9 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 .genre-btn{background:#1e1e1e;color:#bbb;border:1px solid #333;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:11px;font-weight:600;transition:.2s;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
 .genre-btn:hover{border-color:var(--accent);color:var(--accent)}
 .genre-btn.active{background:rgba(var(--accent-rgb),.13);border-color:var(--accent);color:var(--accent)}
+.canadian-btn{border-color:#8a1c1c}
+.canadian-btn.active{background:rgba(230,57,70,.15);border-color:#e63946;color:#ff6b76}
+.ca-flag{margin-left:4px}
 #alphabet{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;justify-content:center}
 .alpha-btn{background:#2a2a2a;color:white;border:1px solid #444;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;text-transform:uppercase;font-size:11px;transition:.2s}
 .alpha-btn:hover{background:#444;border-color:var(--accent);color:var(--accent)}
@@ -136,7 +139,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <script>
 let allArtists=[], filteredArtists=[], allSongs=[], currentPage=1;
 const perPage=80;
-let activeGenre=null, currentSort='alpha', activeAlphaLetter=null;
+let activeGenre=null, currentSort='alpha', activeAlphaLetter=null, activeCanadianOnly=false;
 
 async function init(){
   try{
@@ -174,17 +177,38 @@ function buildGenreBar(){
     btn.textContent=(GENRE_EMOJI[genre]||'')+' '+genre;
     btn.onclick=()=>toggleGenre(genre,btn);bar.appendChild(btn);
   }
+  const canBtn=document.createElement('button');canBtn.className='genre-btn canadian-btn';
+  canBtn.textContent='🍁 Canadian';
+  canBtn.onclick=()=>toggleCanadian(canBtn);bar.appendChild(canBtn);
+}
+function applyArtistFilters(){
+  const q=document.getElementById('searchBox').value.toLowerCase();
+  let base=[...allArtists];
+  if(q) base=base.filter(a=>a.name.toLowerCase().includes(q));
+  if(activeGenre){
+    const list=GENRE_MAP[activeGenre].map(a=>a.toLowerCase());
+    base=base.filter(a=>{const l=a.name.toLowerCase();return list.some(g=>l===g||l.includes(g)||g.includes(l));});
+  }
+  if(activeCanadianOnly) base=base.filter(a=>isCanadian(a.name));
+  filteredArtists=base;applySort(filteredArtists);
+}
+function updateFilterLabel(){
+  const parts=[];
+  if(activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+activeGenre);
+  if(activeCanadianOnly) parts.push('🍁 Canadian');
+  if(!parts.length){document.getElementById('activeFilters').style.display='none';return;}
+  document.getElementById('activeFilters').style.display='block';
+  document.getElementById('filterLabel').textContent=parts.join(' + ')+' ('+filteredArtists.length+' artists)';
 }
 function toggleGenre(genre,btn){
-  if(activeGenre===genre){activeGenre=null;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));clearAll();return;}
-  activeGenre=genre;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  document.getElementById('searchBox').value='';
-  const list=GENRE_MAP[genre].map(a=>a.toLowerCase());
-  filteredArtists=allArtists.filter(a=>{const l=a.name.toLowerCase();return list.some(g=>l===g||l.includes(g)||g.includes(l));});
-  applySort(filteredArtists);currentPage=1;
-  document.getElementById('activeFilters').style.display='block';
-  document.getElementById('filterLabel').textContent=(GENRE_EMOJI[genre]||'')+' '+genre+' ('+filteredArtists.length+' artists)';
-  renderGrid();
+  if(activeGenre===genre){activeGenre=null;document.querySelectorAll('.genre-btn:not(.canadian-btn)').forEach(b=>b.classList.remove('active'));}
+  else{activeGenre=genre;document.querySelectorAll('.genre-btn:not(.canadian-btn)').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+  currentPage=1;applyArtistFilters();updateFilterLabel();renderGrid();
+}
+function toggleCanadian(btn){
+  activeCanadianOnly=!activeCanadianOnly;
+  btn.classList.toggle('active',activeCanadianOnly);
+  currentPage=1;applyArtistFilters();updateFilterLabel();renderGrid();
 }
 
 /* ── Display mode (grid / list) ── */
@@ -240,7 +264,7 @@ function renderGrid(){
 
     card.innerHTML=artHtml+`<div class="artistCardBody">
       <div style="display:flex;align-items:flex-start;gap:4px">
-        <div class="artistCardName">${esc(a.name)}</div>
+        <div class="artistCardName">${esc(a.name)}${isCanadian(a.name)?'<span class="ca-flag" title="Canadian artist">🍁</span>':''}</div>
         <a class="info-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">Info ↗</a>
       </div>
       <div class="artistCardCount">${a.count} ${a.count===1?'song':'songs'}</div>
@@ -274,7 +298,7 @@ function buildAlphabet(){
   });
 }
 function jumpToLetter(letter,btn){
-  document.getElementById('searchBox').value='';activeGenre=null;
+  document.getElementById('searchBox').value='';activeGenre=null;activeCanadianOnly=false;
   document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('activeFilters').style.display='none';
   filteredArtists=[...allArtists];applySort(filteredArtists);
@@ -307,14 +331,12 @@ function buildArtistStats(){
 }
 
 function handleSearch(){
-  const q=document.getElementById('searchBox').value.toLowerCase();
-  activeGenre=null;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
+  activeGenre=null;activeCanadianOnly=false;document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('activeFilters').style.display='none';
-  filteredArtists=allArtists.filter(a=>a.name.toLowerCase().includes(q));
-  applySort(filteredArtists);currentPage=1;renderGrid();
+  currentPage=1;applyArtistFilters();renderGrid();
 }
 function clearAll(){
-  document.getElementById('searchBox').value='';activeGenre=null;
+  document.getElementById('searchBox').value='';activeGenre=null;activeCanadianOnly=false;
   document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.alpha-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('activeFilters').style.display='none';

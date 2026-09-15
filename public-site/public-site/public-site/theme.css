@@ -213,3 +213,12 @@
 .footer-dropdown-btn:hover{color:var(--accent);background:#1a1a1a}
 .nav-dropdown-menu-footer{bottom:calc(100% + 6px);top:auto;left:50%;right:auto;transform:translateX(-50%)}
 @media(max-width:600px){.nav-dropdown-menu-footer{left:0;transform:none}}
+
+/* ── Maple leaf pulse (🍁 badge click) ── */
+.ca-flag{cursor:pointer;display:inline-block}
+.maple-pulse{position:fixed;width:70px;height:70px;margin:-35px 0 0 -35px;pointer-events:none;z-index:99999;opacity:.95;transform:scale(.15) rotate(0deg);animation:maplePulse 900ms cubic-bezier(.15,.7,.3,1) forwards}
+@keyframes maplePulse{
+  0%{opacity:.95;transform:scale(.15) rotate(0deg);filter:drop-shadow(0 0 2px #e63946)}
+  60%{opacity:.7;filter:drop-shadow(0 0 14px #ff6b76)}
+  100%{opacity:0;transform:scale(2.6) rotate(14deg);filter:drop-shadow(0 0 0 transparent)}
+}
