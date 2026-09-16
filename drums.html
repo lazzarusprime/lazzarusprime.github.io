@@ -166,40 +166,40 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'drums', title:'Drums', search:'nav'});</script>
+<script>renderHeader({page:'drums', titleKey:'nav.drums', search:'nav'});</script>
 <div class="page-header">
-  <h1>Play the Kit</h1>
-  <p>Click, tap, or use your keyboard — sounds synthesized live, no samples to load</p>
+  <h1 data-i18n="drums.title">Play the Kit</h1>
+  <p data-i18n="drums.subtitle">Click, tap, or use your keyboard — sounds synthesized live, no samples to load</p>
 </div>
 
 <div class="controls">
   <div class="ctrl-group">
-    <label>Engine</label>
+    <label data-i18n="drums.engine">Engine</label>
     <select id="engineSelect" class="ctrl-select">
-      <option value="sampled" selected>Real Kit (Samples)</option>
-      <option value="standard">Standard (Synth)</option>
-      <option value="metal">Metal (Synth)</option>
-      <option value="electronic">Electronic (Synth)</option>
-      <option value="retro">Retro (Synth)</option>
+      <option value="sampled" selected data-i18n="drums.eng.sampled">Real Kit (Samples)</option>
+      <option value="standard" data-i18n="drums.eng.standard">Standard (Synth)</option>
+      <option value="metal" data-i18n="drums.eng.metal">Metal (Synth)</option>
+      <option value="electronic" data-i18n="drums.eng.electronic">Electronic (Synth)</option>
+      <option value="retro" data-i18n="drums.eng.retro">Retro (Synth)</option>
     </select>
   </div>
   <div class="ctrl-group">
-    <label>Vol</label>
+    <label data-i18n="drums.vol">Vol</label>
     <input type="range" id="masterVol" min="0" max="100" value="80">
   </div>
-  <button class="action-btn rec" id="recBtn" onclick="toggleRecord()">⏺ Record</button>
-  <button class="action-btn" id="playBtn" onclick="playRecording()">▶ Play</button>
-  <button class="action-btn loop" id="loopBtn" onclick="toggleLoop()">🔁 Loop</button>
-  <button class="action-btn" onclick="clearRecording()">🗑 Clear</button>
-  <div class="hit-counter">Hits this session: <b id="hitCount">0</b></div>
+  <button class="action-btn rec" id="recBtn" onclick="toggleRecord()">⏺ <span data-i18n="drums.record">Record</span></button>
+  <button class="action-btn" id="playBtn" onclick="playRecording()">▶ <span data-i18n="drums.play">Play</span></button>
+  <button class="action-btn loop" id="loopBtn" onclick="toggleLoop()">🔁 <span data-i18n="drums.loop">Loop</span></button>
+  <button class="action-btn" onclick="clearRecording()">🗑 <span data-i18n="drums.clear">Clear</span></button>
+  <div class="hit-counter"><span data-i18n="drums.hitsSession">Hits this session:</span> <b id="hitCount">0</b></div>
 </div>
 
 <div class="rec-bar">
-  <span class="rec-bar-label">💾 Take</span>
-  <button class="mgmt-btn" onclick="saveTake()">💾 Save</button>
-  <button class="mgmt-btn" onclick="loadTake()">📁 Load</button>
-  <button class="mgmt-btn" onclick="exportTake()">📤 Export</button>
-  <button class="mgmt-btn" onclick="importTake()">📥 Import</button>
+  <span class="rec-bar-label">💾 <span data-i18n="drums.take">Take</span></span>
+  <button class="mgmt-btn" onclick="saveTake()">💾 <span data-i18n="drums.save">Save</span></button>
+  <button class="mgmt-btn" onclick="loadTake()">📁 <span data-i18n="drums.load">Load</span></button>
+  <button class="mgmt-btn" onclick="exportTake()">📤 <span data-i18n="drums.export">Export</span></button>
+  <button class="mgmt-btn" onclick="importTake()">📥 <span data-i18n="drums.import">Import</span></button>
   <span id="takeMsg" class="rec-msg"></span>
 </div>
 
@@ -209,58 +209,58 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <div class="panel-row">
     <details class="customize" id="customizePanel">
-      <summary>🎨 Customize Kit <span class="summary-hint">size · layout · shell · key labels</span></summary>
+      <summary>🎨 <span data-i18n="drums.customizeKit">Customize Kit</span> <span class="summary-hint" data-i18n="drums.customizeHint">size · layout · shell · key labels</span></summary>
       <div class="customize-body">
         <div class="custom-row">
-          <label>Kit Size</label>
+          <label data-i18n="drums.kitSize">Kit Size</label>
           <select id="kitSizeSelect" class="ctrl-select">
-            <option value="5">5-Piece (Kick, Snare, Hat, Crash, Tom)</option>
-            <option value="9" selected>Standard (9-Piece)</option>
-            <option value="12">Full Kit (12-Piece)</option>
+            <option value="5" data-i18n="drums.size5">5-Piece (Kick, Snare, Hat, Crash, Tom)</option>
+            <option value="9" selected data-i18n="drums.size9">Standard (9-Piece)</option>
+            <option value="12" data-i18n="drums.size12">Full Kit (12-Piece)</option>
           </select>
         </div>
         <div class="custom-row">
-          <label>Layout</label>
+          <label data-i18n="drums.layout">Layout</label>
           <select id="layoutSelect" class="ctrl-select">
-            <option value="shape">Kit Shape</option>
-            <option value="grid">Grid</option>
-            <option value="circle">Circle</option>
-            <option value="custom">Custom (Drag to Arrange)</option>
+            <option value="shape" data-i18n="drums.layout.shape">Kit Shape</option>
+            <option value="grid" data-i18n="drums.layout.grid">Grid</option>
+            <option value="circle" data-i18n="drums.layout.circle">Circle</option>
+            <option value="custom" data-i18n="drums.layout.custom">Custom (Drag to Arrange)</option>
           </select>
-          <button class="action-btn" id="resetLayoutBtn" onclick="resetCustomLayout()" style="display:none">↺ Reset Positions</button>
+          <button class="action-btn" id="resetLayoutBtn" onclick="resetCustomLayout()" style="display:none">↺ <span data-i18n="drums.resetPositions">Reset Positions</span></button>
         </div>
         <div class="custom-row">
-          <label>Shell Finish</label>
+          <label data-i18n="drums.shellFinish">Shell Finish</label>
           <div class="swatch-row" id="swatchRow"></div>
         </div>
         <div class="custom-row">
-          <label>Display</label>
-          <span class="check-row"><input type="checkbox" id="toggleNames" checked> Show names</span>
-          <span class="check-row"><input type="checkbox" id="toggleKeys" checked> Show key labels</span>
+          <label data-i18n="drums.display">Display</label>
+          <span class="check-row"><input type="checkbox" id="toggleNames" checked> <span data-i18n="drums.showNames">Show names</span></span>
+          <span class="check-row"><input type="checkbox" id="toggleKeys" checked> <span data-i18n="drums.showKeyLabels">Show key labels</span></span>
         </div>
         <div class="custom-row">
-          <label>Key Labels</label>
+          <label data-i18n="drums.keyLabels">Key Labels</label>
           <select id="keyLabelSelect" class="ctrl-select">
-            <option value="qwerty">QWERTY only</option>
-            <option value="numpad">Numpad only</option>
-            <option value="both" selected>QWERTY + Numpad</option>
+            <option value="qwerty" data-i18n="drums.kl.qwerty">QWERTY only</option>
+            <option value="numpad" data-i18n="drums.kl.numpad">Numpad only</option>
+            <option value="both" selected data-i18n="drums.kl.both">QWERTY + Numpad</option>
           </select>
         </div>
       </div>
     </details>
 
     <details class="customize" id="keyboardPanel">
-      <summary>⌨️ Keyboard &amp; Help <span class="summary-hint">shortcuts · remapping · recording</span></summary>
+      <summary>⌨️ <span data-i18n="drums.keyboardHelp">Keyboard &amp; Help</span> <span class="summary-hint" data-i18n="drums.keyboardHelpHint">shortcuts · remapping · recording</span></summary>
       <div class="customize-body">
-        <div class="help-panel">
+        <div class="help-panel" data-i18n-html="drums.helpPanel">
           <b>Keyboard:</b> defaults to QWERTY — Q Closed Hat · W Open Hat · E Tom High · R Tom Low · T Floor Tom · Y Crash · U Ride · I Splash · O Cowbell · P Clap · A Snare · Space Kick. Your numpad works too, all the time, laid out to match (Numpad5 Kick, Numpad2 Snare, etc.) — it's a bonus and isn't affected by remapping. Pads show both by default; change that under <b>Customize Kit → Key Labels</b>.
           <b>Custom layout:</b> pick "Custom (Drag to Arrange)" under Customize Kit and drag any pad wherever you want it; positions save automatically.
           Record captures whatever you play (up to 30s) — hit Play to hear it back once, or turn on Loop to keep it cycling. Clear resets the take. <b>Save</b> keeps your last recording in this browser so it survives a refresh; <b>Load</b> brings it back. <b>Export</b> downloads the take as a <code>.json</code> file to back up or share; <b>Import</b> loads one back in. Kit size, layout, shell finish and key bindings are all remembered next time you visit.
         </div>
         <div class="custom-row" style="flex-direction:column;align-items:stretch;gap:10px">
-          <label>Remap QWERTY Keys</label>
+          <label data-i18n="drums.remapKeys">Remap QWERTY Keys</label>
           <div class="keymap-grid" id="keymapGrid"></div>
-          <button class="action-btn" style="align-self:flex-start" onclick="resetKeyMap()">↺ Reset Keys to Default</button>
+          <button class="action-btn" style="align-self:flex-start" onclick="resetKeyMap()">↺ <span data-i18n="drums.resetKeys">Reset Keys to Default</span></button>
         </div>
       </div>
     </details>
@@ -296,19 +296,20 @@ const PHOTO_MAP = {
    INSTRUMENT DATA
    ══════════════════════════════════════════════════════ */
 const INSTRUMENTS = [
-  { id: 'Kick',      name: 'Kick',       icon: 'kick',     area: 'kick',     sizes: [5,9,12] },
-  { id: 'Snare',     name: 'Snare',      icon: 'snare',    area: 'snare',    sizes: [5,9,12] },
-  { id: 'ClosedHat', name: 'Closed Hat', icon: 'chat',     area: 'chat',     sizes: [5,9,12] },
-  { id: 'OpenHat',   name: 'Open Hat',   icon: 'ohat',     area: 'ohat',     sizes: [9,12] },
-  { id: 'Clap',      name: 'Clap',       icon: 'clap',     area: 'clap',     sizes: [9,12] },
-  { id: 'Crash',     name: 'Crash',      icon: 'crash',    area: 'crash',    sizes: [5,9,12] },
-  { id: 'Ride',      name: 'Ride',       icon: 'ride',     area: 'ride',     sizes: [9,12] },
-  { id: 'TomHigh',   name: 'Tom High',   icon: 'tomh',     area: 'tomh',     sizes: [9,12] },
-  { id: 'TomLow',    name: 'Tom Low',    icon: 'toml',     area: 'toml',     sizes: [5,9,12] },
-  { id: 'FloorTom',  name: 'Floor Tom',  icon: 'floortom', area: 'floortom', sizes: [12] },
-  { id: 'Cowbell',   name: 'Cowbell',    icon: 'cowbell',  area: 'cow',      sizes: [12] },
-  { id: 'Splash',    name: 'Splash',     icon: 'splash',   area: 'splash',   sizes: [12] }
+  { id: 'Kick',      nameKey: 'drums.inst.kick',      icon: 'kick',     area: 'kick',     sizes: [5,9,12] },
+  { id: 'Snare',     nameKey: 'drums.inst.snare',     icon: 'snare',    area: 'snare',    sizes: [5,9,12] },
+  { id: 'ClosedHat', nameKey: 'drums.inst.closedHat', icon: 'chat',     area: 'chat',     sizes: [5,9,12] },
+  { id: 'OpenHat',   nameKey: 'drums.inst.openHat',   icon: 'ohat',     area: 'ohat',     sizes: [9,12] },
+  { id: 'Clap',      nameKey: 'drums.inst.clap',      icon: 'clap',     area: 'clap',     sizes: [9,12] },
+  { id: 'Crash',     nameKey: 'drums.inst.crash',     icon: 'crash',    area: 'crash',    sizes: [5,9,12] },
+  { id: 'Ride',      nameKey: 'drums.inst.ride',      icon: 'ride',     area: 'ride',     sizes: [9,12] },
+  { id: 'TomHigh',   nameKey: 'drums.inst.tomHigh',   icon: 'tomh',     area: 'tomh',     sizes: [9,12] },
+  { id: 'TomLow',    nameKey: 'drums.inst.tomLow',    icon: 'toml',     area: 'toml',     sizes: [5,9,12] },
+  { id: 'FloorTom',  nameKey: 'drums.inst.floorTom',  icon: 'floortom', area: 'floortom', sizes: [12] },
+  { id: 'Cowbell',   nameKey: 'drums.inst.cowbell',   icon: 'cowbell',  area: 'cow',      sizes: [12] },
+  { id: 'Splash',    nameKey: 'drums.inst.splash',    icon: 'splash',   area: 'splash',   sizes: [12] }
 ];
+INSTRUMENTS.forEach(i => Object.defineProperty(i, 'name', { get(){ return t(i.nameKey); } }));
 
 /* ══════════════════════════════════════════════════════
    KEYBOARD BINDINGS — QWERTY primary (remappable) +
@@ -362,12 +363,13 @@ function rebuildCodeToInst() {
 let CODE_TO_INST = {};
 
 const SHELL_SWATCHES = [
-  { name: 'Jet Black',      shell: '#1a1a1a', light: '#4a4a4a', filter: 'none' },
-  { name: 'Racing Red',     shell: '#8a1220', light: '#c73a4a', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(-50deg)' },
-  { name: 'Ocean Blue',     shell: '#123a6b', light: '#3f6fb5', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(160deg)' },
-  { name: 'Pearl White',    shell: '#cfc9bd', light: '#f2efe8', filter: 'brightness(2.6) contrast(.75) saturate(.25)' },
-  { name: 'Champagne Gold', shell: '#6b5015', light: '#c9a355', filter: 'brightness(1.3) sepia(1) saturate(3.5) hue-rotate(8deg)' }
+  { nameKey: 'drums.shell.jetBlack',      shell: '#1a1a1a', light: '#4a4a4a', filter: 'none' },
+  { nameKey: 'drums.shell.racingRed',     shell: '#8a1220', light: '#c73a4a', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(-50deg)' },
+  { nameKey: 'drums.shell.oceanBlue',     shell: '#123a6b', light: '#3f6fb5', filter: 'brightness(1.15) sepia(1) saturate(6) hue-rotate(160deg)' },
+  { nameKey: 'drums.shell.pearlWhite',    shell: '#cfc9bd', light: '#f2efe8', filter: 'brightness(2.6) contrast(.75) saturate(.25)' },
+  { nameKey: 'drums.shell.champagneGold', shell: '#6b5015', light: '#c9a355', filter: 'brightness(1.3) sepia(1) saturate(3.5) hue-rotate(8deg)' }
 ];
+SHELL_SWATCHES.forEach(s => Object.defineProperty(s, 'name', { get(){ return t(s.nameKey); } }));
 
 /* ══════════════════════════════════════════════════════
    BUILD PADS
@@ -642,7 +644,7 @@ INSTRUMENTS.forEach(inst => {
 function startRebind(instId, btnEl) {
   if (isRemapping) return;
   isRemapping = true;
-  btnEl.textContent = 'Press a key…';
+  btnEl.textContent = t('drums.pressKey');
   btnEl.classList.add('listening');
   const handler = (e) => {
     e.preventDefault();
@@ -690,11 +692,11 @@ function toggleRecord() {
     recordedEvents = [];
     recordStart = performance.now();
     btn.classList.add('active');
-    btn.textContent = '⏹ Stop';
+    btn.textContent = '⏹ ' + t('drums.stop');
     setTimeout(() => { if (isRecording) toggleRecord(); }, MAX_RECORD_MS);
   } else {
     btn.classList.remove('active');
-    btn.textContent = '⏺ Record';
+    btn.textContent = '⏺ ' + t('drums.record');
   }
 }
 function stopPlayback() {
@@ -724,7 +726,7 @@ function clearRecording() {
   isRecording = false;
   const btn = document.getElementById('recBtn');
   btn.classList.remove('active');
-  btn.textContent = '⏺ Record';
+  btn.textContent = '⏺ ' + t('drums.record');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -737,22 +739,22 @@ function showTakeMsg(text) {
   setTimeout(() => { if (el.textContent === text) el.textContent = ''; }, 2500);
 }
 function saveTake() {
-  if (!recordedEvents.length) { showTakeMsg('Nothing to save — record something first'); return; }
+  if (!recordedEvents.length) { showTakeMsg(t('drums.msg.nothingToSave')); return; }
   try {
     localStorage.setItem('lp-drums-saved-take', JSON.stringify(recordedEvents));
-    showTakeMsg('Take saved to this browser');
-  } catch (e) { showTakeMsg('Save failed'); }
+    showTakeMsg(t('drums.msg.takeSaved'));
+  } catch (e) { showTakeMsg(t('drums.msg.saveFailed')); }
 }
 function loadTake() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem('lp-drums-saved-take')); } catch (e) {}
-  if (!saved || !saved.length) { showTakeMsg('No saved take found'); return; }
+  if (!saved || !saved.length) { showTakeMsg(t('drums.msg.noSavedTake')); return; }
   stopPlayback();
   recordedEvents = saved;
-  showTakeMsg('Take loaded — hit Play');
+  showTakeMsg(t('drums.msg.takeLoaded'));
 }
 function exportTake() {
-  if (!recordedEvents.length) { showTakeMsg('Nothing to export — record something first'); return; }
+  if (!recordedEvents.length) { showTakeMsg(t('drums.msg.nothingToExport')); return; }
   const payload = { type: 'lp-drums-take', version: 1, events: recordedEvents };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -761,7 +763,7 @@ function exportTake() {
   a.download = `drum-take-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  showTakeMsg('Exported');
+  showTakeMsg(t('drums.msg.exported'));
 }
 function importTake() {
   const input = document.createElement('input');
@@ -778,8 +780,8 @@ function importTake() {
         if (!Array.isArray(events)) throw new Error('bad format');
         stopPlayback();
         recordedEvents = events;
-        showTakeMsg('Take imported — hit Play');
-      } catch (e) { showTakeMsg('Invalid file'); }
+        showTakeMsg(t('drums.msg.takeImported'));
+      } catch (e) { showTakeMsg(t('drums.msg.invalidFile')); }
     };
     reader.readAsText(file);
   };
@@ -952,6 +954,21 @@ keyLabelSelect.addEventListener('change', () => { refreshAllKeyLabels(); saveSet
 window.addEventListener('resize', () => { if (layoutSelect.value === 'circle') applyCircleLayout(); });
 
 loadSettings();
+
+window.addEventListener('lp:langchange', () => {
+  INSTRUMENTS.forEach(inst => {
+    const pad = kitGrid.querySelector(`[data-inst="${inst.id}"]`);
+    if (pad) {
+      const nameEl = pad.querySelector('.pad-name');
+      if (nameEl) nameEl.textContent = inst.name;
+      const img = pad.querySelector('.pad-photo');
+      if (img) img.alt = inst.name;
+    }
+    const row = keymapGrid.querySelector(`#rebind-${inst.id}`)?.closest('.keymap-row');
+    if (row) { const span = row.querySelector('span'); if (span) span.textContent = inst.name; }
+  });
+  document.querySelectorAll('#swatchRow .swatch').forEach((el, i) => { el.title = SHELL_SWATCHES[i].name; });
+});
 </script>
 </body>
 </html>

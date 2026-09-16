@@ -126,40 +126,40 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'tuner', title:'Tuner', search:'nav'});</script>
+<script>renderHeader({page:'tuner', titleKey:'nav.tuner', search:'nav'});</script>
 <div class="menu-row">
   <div class="menu-group">
-    <label>Instrument</label>
+    <label data-i18n="tuner.instrument">Instrument</label>
     <select id="instrumentSelect" onchange="buildMenuHierarchy()">
-      <option value="bass">Bass Guitar</option>
-      <option value="guitar">Guitar</option>
+      <option value="bass" data-i18n="tuner.bassGuitar">Bass Guitar</option>
+      <option value="guitar" data-i18n="nav.chords">Guitar</option>
     </select>
   </div>
   <div class="menu-group" id="stringCountGroup">
-    <label>Strings</label>
+    <label data-i18n="tuner.strings">Strings</label>
     <select id="stringCountSelect" onchange="buildMenuHierarchy()">
-      <option value="4">4-String</option>
-      <option value="5">5-String</option>
-      <option value="6">6-String</option>
+      <option value="4" data-i18n="tuner.string4">4-String</option>
+      <option value="5" data-i18n="tuner.string5">5-String</option>
+      <option value="6" data-i18n="tuner.string6">6-String</option>
     </select>
   </div>
   <div class="menu-group">
-    <label>Tuning Profile</label>
+    <label data-i18n="tuner.tuningProfile">Tuning Profile</label>
     <select id="tuningProfileSelect" onchange="updateTargetStrings()"></select>
   </div>
-  <button class="action-btn" id="tunerBtn" style="margin-left:auto" onclick="toggleTuner(event)">🎙️ Start Tuner</button>
+  <button class="action-btn" id="tunerBtn" style="margin-left:auto" onclick="toggleTuner(event)">🎙️ <span data-i18n="tuner.startTuner">Start Tuner</span></button>
 </div>
 
 <div class="drag-workspace" id="dragWorkspace">
 
   <!-- PANEL: Tuner display -->
   <div class="drag-panel w-xl" id="dp-tuner">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 Tuner Display</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-tuner')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 <span data-i18n="tuner.tunerDisplay">Tuner Display</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-tuner')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body" style="text-align:center">
       <div id="stringPicker" class="string-picker"></div>
       <div id="noteDisplay" class="note-display">—</div>
       <div id="freqDisplay" class="freq-display">0.00 Hz</div>
-      <div id="statusPill" class="status-pill stopped">Stopped</div>
+      <div id="statusPill" class="status-pill stopped" data-i18n="tuner.stopped">Stopped</div>
       <div class="arc-meter-wrap">
         <span class="arc-scale-left">−50¢</span>
         <canvas id="arcCanvas"></canvas>
@@ -171,9 +171,9 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- PANEL: Reference frequencies -->
   <div class="drag-panel w-md" id="dp-reference">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 Reference Frequencies</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-reference')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 <span data-i18n="tuner.referenceFrequencies">Reference Frequencies</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-reference')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
-      <div class="legend-title" id="legendTitle">Reference Frequencies</div>
+      <div class="legend-title" id="legendTitle" data-i18n="tuner.referenceFrequencies">Reference Frequencies</div>
       <div class="legend-list" id="legendList"></div>
     </div>
   </div>
@@ -231,6 +231,29 @@ const BASE_FREQS = { C:16.35,  "C#":17.32, D:18.35, "D#":19.45,
                      E:20.60,  F:21.83,    "F#":23.12, G:24.50,
                      "G#":25.96, A:27.50,  "A#":29.14, B:30.87 };
 
+// Tuning profile names double as the tuningMatrix lookup keys (English, fixed),
+// so we translate only the displayed label via this side lookup.
+const TUNING_LABEL_KEYS = {
+  'Standard (E)': 'tuner.tuning.standardE',
+  'Standard (B)': 'tuner.tuning.standardB',
+  'Standard (B-C)': 'tuner.tuning.standardBC',
+  'Drop D': 'tuner.tuning.dropD',
+  'Drop C': 'tuner.tuning.dropC',
+  'Drop B': 'tuner.tuning.dropB',
+  'Drop A': 'tuner.tuning.dropA',
+  'Drop A Variant': 'tuner.tuning.dropAVariant',
+  'Half-Step Down': 'tuner.tuning.halfStepDown',
+  'Full-Step Down': 'tuner.tuning.fullStepDown',
+  'Tenor Standard': 'tuner.tuning.tenorStandard',
+  'Open D': 'tuner.tuning.openD',
+  'Open G': 'tuner.tuning.openG',
+  'DADGAD': 'tuner.tuning.dadgad',
+};
+function tuningProfileLabel(name) {
+  const key = TUNING_LABEL_KEYS[name];
+  return key ? t(key) : name;
+}
+
 /* ══════════════════════════════════════════════
    AUDIO ENGINE
 ══════════════════════════════════════════════ */
@@ -282,7 +305,7 @@ function stopReferenceTone() {
 function updateRefBtnStates() {
   document.querySelectorAll('.play-tone').forEach((btn,i)=>{
     btn.classList.toggle('playing', i===refPlayingIdx);
-    btn.title = i===refPlayingIdx ? 'Stop tone' : 'Play reference tone';
+    btn.title = i===refPlayingIdx ? t('tuner.stopTone') : t('tuner.playReferenceTone');
     btn.textContent = i===refPlayingIdx ? '■' : '♪';
   });
 }
@@ -514,12 +537,12 @@ function detect() {
       rows[sidx]?.classList.add(inTune?'in-tune-match':'active-match');
 
       if(inTune) {
-        statusEl.textContent='✓ IN TUNE';
+        statusEl.textContent='✓ '+t('tuner.inTune');
         statusEl.className='status-pill in-tune';
         centsLabel.textContent='';
       } else {
         const sign=calcCents>0?'+':'';
-        statusEl.textContent=calcCents>0?`+${Math.round(calcCents)}¢ Sharp`:`${Math.round(calcCents)}¢ Flat`;
+        statusEl.textContent=calcCents>0?t('tuner.sharp',{n:'+'+Math.round(calcCents)}):t('tuner.flat',{n:Math.round(calcCents)});
         statusEl.className='status-pill off-tune';
         centsLabel.textContent=sign+Math.round(calcCents)+'¢';
       }
@@ -528,7 +551,7 @@ function detect() {
       // Note detected but doesn't match any string
       const {name,cents}=getNoteAndCents(smoothedHz);
       noteEl.textContent=name; noteEl.className='note-display flaming';
-      statusEl.textContent='Detecting…'; statusEl.className='status-pill off-tune';
+      statusEl.textContent=t('tuner.detecting'); statusEl.className='status-pill off-tune';
       smoothedCents+=(cents-smoothedCents)*NEEDLE_ALPHA;
       arcAnimVal=smoothedCents;
       centsLabel.textContent='';
@@ -558,7 +581,7 @@ async function start() {
     isRunning=true;
     detect();
   } catch(err) {
-    alert('Microphone access denied or unavailable: '+err.message);
+    alert(t('tuner.micError',{err:err.message}));
     resetUI();
   }
 }
@@ -576,11 +599,11 @@ function stop() {
 
 function resetUI() {
   const btn=document.getElementById('tunerBtn');
-  btn.textContent='🎙️ Start Tuner';btn.classList.remove('active');
+  btn.textContent='🎙️ '+t('tuner.startTuner');btn.classList.remove('active');
   document.getElementById('noteDisplay').textContent='—';
   document.getElementById('noteDisplay').className='note-display';
   document.getElementById('freqDisplay').textContent='0.00 Hz';
-  document.getElementById('statusPill').textContent='Stopped';
+  document.getElementById('statusPill').textContent=t('tuner.stopped');
   document.getElementById('statusPill').className='status-pill stopped';
   document.getElementById('centsLabel').textContent='';
   document.querySelectorAll('.string-chip').forEach(c=>c.classList.remove('active','in-tune'));
@@ -592,7 +615,7 @@ async function toggleTuner(e) {
   e.target.blur();
   if(!isRunning){
     const btn=document.getElementById('tunerBtn');
-    btn.textContent='🎙️ Stop Tuner';btn.classList.add('active');
+    btn.textContent='🎙️ '+t('tuner.stopTuner');btn.classList.add('active');
     await start();
   } else { stop(); }
 }
@@ -612,7 +635,7 @@ function buildMenuHierarchy() {
   ps.innerHTML='';
   const profiles=tuningMatrix[inst]?.[ss.value]||{};
   Object.keys(profiles).forEach(name=>{
-    const o=document.createElement('option');o.value=name;o.textContent=name;ps.appendChild(o);
+    const o=document.createElement('option');o.value=name;o.textContent=tuningProfileLabel(name);ps.appendChild(o);
   });
   updateTargetStrings();
 }
@@ -628,7 +651,7 @@ function updateTargetStrings() {
   picker.innerHTML='';legendList.innerHTML='';
   activeFreqs=[];
 
-  document.getElementById('legendTitle').textContent=prof+' Reference';
+  document.getElementById('legendTitle').textContent=t('tuner.profileReference',{profile:tuningProfileLabel(prof)});
 
   const baseOctave=inst==='bass'?1:2;
   let octave=baseOctave,prevIdx=-1;
@@ -643,14 +666,14 @@ function updateTargetStrings() {
     // Chip
     const chip=document.createElement('div');
     chip.className='string-chip';
-    chip.innerHTML=`${note}<button class="ref-btn" onclick="playReferenceTone(${i})" title="Play reference tone" style="display:block">♪</button>`;
+    chip.innerHTML=`${note}<button class="ref-btn" onclick="playReferenceTone(${i})" title="${t('tuner.playReferenceTone')}" style="display:block">♪</button>`;
     picker.appendChild(chip);
 
     // Legend row
     const row=document.createElement('div');
     row.className='legend-row';
     row.id='lr'+i;
-    row.innerHTML=`<span class="s-lbl">${note}</span><span>String ${i+1}</span><span class="hz-lbl">${hz.toFixed(2)} Hz</span><button class="play-tone" onclick="event.stopPropagation();playReferenceTone(${i})" title="Play reference tone">♪</button>`;
+    row.innerHTML=`<span class="s-lbl">${note}</span><span>${t('tuner.stringN',{n:i+1})}</span><span class="hz-lbl">${hz.toFixed(2)} Hz</span><button class="play-tone" onclick="event.stopPropagation();playReferenceTone(${i})" title="${t('tuner.playReferenceTone')}">♪</button>`;
     legendList.appendChild(row);
   });
 }
@@ -662,6 +685,18 @@ window.addEventListener('resize',()=>{resizeArc();drawArc(0,false,false);});
 resizeArc();
 buildMenuHierarchy();
 drawArc(0,false,false);
+applyTranslations();
+
+window.addEventListener('lp:langchange', () => {
+  const ps = document.getElementById('tuningProfileSelect');
+  const prevVal = ps ? ps.value : null;
+  buildMenuHierarchy();
+  if (prevVal && ps.querySelector(`option[value="${CSS.escape(prevVal)}"]`)) {
+    ps.value = prevVal;
+    updateTargetStrings();
+  }
+  if (!isRunning) resetUI();
+});
 
 /* ═══════════════════════════════════════════════════════
    PANEL DRAG ENGINE — pointer-events based

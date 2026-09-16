@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,94 +179,94 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'groove', title:'Groove Station', search:'nav'});</script>
+<script>renderHeader({page:'groove', titleKey:'nav.groove', search:'nav'});</script>
 <div class="page-header">
-  <h1>🔥 Groove Station Pro</h1>
-  <p>Engine-swappable production suite · click once = normal hit · click twice = accented hit · click again = off</p>
-  <div class="info-banner">
+  <h1 data-i18n="groove.title">🔥 Groove Station Pro</h1>
+  <p data-i18n="groove.subtitle">Engine-swappable production suite · click once = normal hit · click twice = accented hit · click again = off</p>
+  <div class="info-banner" data-i18n-html="groove.perfModeInfo">
     ⚡ <strong>Performance Mode:</strong> Disables heavy glow effects and step animations during playback. Turn this on if you are streaming to OBS or experiencing audio stuttering under high hardware loads!
   </div>
 </div>
 
 <div class="controls">
-  <button class="ctrl-btn" id="playBtn" onclick="togglePlay()">▶ Play</button>
-  <button class="ctrl-btn" onclick="clearPattern()">✕ Clear</button>
-  <button class="ctrl-btn" onclick="randomPattern()">🎲 Random</button>
+  <button class="ctrl-btn" id="playBtn" onclick="togglePlay()">▶ <span data-i18n="drums.play">Play</span></button>
+  <button class="ctrl-btn" onclick="clearPattern()">✕ <span data-i18n="filters.clear">Clear</span></button>
+  <button class="ctrl-btn" onclick="randomPattern()">🎲 <span data-i18n="nav.random">Random</span></button>
 
   <select id="engineSelect" class="ctrl-select" onchange="onEngineChange()">
-    <option value="acoustic">🥁 Acoustic Kit</option>
-    <option value="electronic" selected>🎛️ Electronic Kit</option>
-    <option value="metal">🎸 Metal Kit</option>
-    <option value="retro">👾 Retro Synth</option>
+    <option value="acoustic" data-i18n="groove.eng.acoustic">🥁 Acoustic Kit</option>
+    <option value="electronic" selected data-i18n="groove.eng.electronic">🎛️ Electronic Kit</option>
+    <option value="metal" data-i18n="groove.eng.metal">🎸 Metal Kit</option>
+    <option value="retro" data-i18n="groove.eng.retro">👾 Retro Synth</option>
   </select>
 
   <select id="stepSelect" class="ctrl-select" onchange="onStepLengthChange()">
-    <option value="8">8 Steps</option>
-    <option value="16" selected>16 Steps</option>
-    <option value="24">24 Steps</option>
-    <option value="32">32 Steps</option>
+    <option value="8" data-i18n="groove.steps8">8 Steps</option>
+    <option value="16" selected data-i18n="groove.steps16">16 Steps</option>
+    <option value="24" data-i18n="groove.steps24">24 Steps</option>
+    <option value="32" data-i18n="groove.steps32">32 Steps</option>
   </select>
 
   <div class="panel-group">
-    <label>BPM</label>
+    <label data-i18n="groove.bpm">BPM</label>
     <input type="range" id="bpmSlider" min="40" max="220" value="120" oninput="onBpmChange()">
     <span id="bpmValue" class="val-disp">120</span>
   </div>
 
   <div class="panel-group">
-    <label>Swing</label>
+    <label data-i18n="metro.panel.swing">Swing</label>
     <input type="range" id="swingSlider" min="0" max="75" value="0" oninput="onSwingChange()">
     <span id="swingValue" class="val-disp">0%</span>
   </div>
 
   <div class="panel-group">
-    <label>Master</label>
+    <label data-i18n="groove.master">Master</label>
     <input type="range" id="masterVol" min="0" max="100" value="80">
   </div>
 
   <div class="panel-group">
-    <label style="color:#ff5500; font-size:10px">Perf Mode</label>
+    <label style="color:#ff5500; font-size:10px" data-i18n="groove.perfMode">Perf Mode</label>
     <input type="checkbox" id="perfModeToggle" onchange="togglePerfMode()">
   </div>
 </div>
 
 
 <div class="pattern-bar">
-  <label>Rock:</label>
-  <button class="preset-btn" onclick="loadPreset('rock')">Rock</button>
-  <button class="preset-btn" onclick="loadPreset('hardrock')">Hard Rock</button>
-  <button class="preset-btn" onclick="loadPreset('metal')">Metal</button>
-  <button class="preset-btn" onclick="loadPreset('punk')">Punk</button>
+  <label data-i18n="groove.cat.rock">Rock:</label>
+  <button class="preset-btn" onclick="loadPreset('rock')" data-i18n="groove.preset.rock">Rock</button>
+  <button class="preset-btn" onclick="loadPreset('hardrock')" data-i18n="groove.preset.hardrock">Hard Rock</button>
+  <button class="preset-btn" onclick="loadPreset('metal')" data-i18n="groove.preset.metal">Metal</button>
+  <button class="preset-btn" onclick="loadPreset('punk')" data-i18n="groove.preset.punk">Punk</button>
   <span style="color:#2a2a2a;margin:0 2px">|</span>
-  <label>Groove:</label>
-  <button class="preset-btn" onclick="loadPreset('funk')">Funk</button>
-  <button class="preset-btn" onclick="loadPreset('groove')">Groove</button>
-  <button class="preset-btn" onclick="loadPreset('rnb')">R&amp;B</button>
-  <button class="preset-btn" onclick="loadPreset('disco')">Disco</button>
-  <button class="preset-btn" onclick="loadPreset('80s')">80s</button>
+  <label data-i18n="groove.cat.groove">Groove:</label>
+  <button class="preset-btn" onclick="loadPreset('funk')" data-i18n="groove.preset.funk">Funk</button>
+  <button class="preset-btn" onclick="loadPreset('groove')" data-i18n="groove.preset.groove">Groove</button>
+  <button class="preset-btn" onclick="loadPreset('rnb')" data-i18n="groove.preset.rnb">R&amp;B</button>
+  <button class="preset-btn" onclick="loadPreset('disco')" data-i18n="groove.preset.disco">Disco</button>
+  <button class="preset-btn" onclick="loadPreset('80s')" data-i18n="groove.preset.eighties">80s</button>
   <span style="color:#2a2a2a;margin:0 2px">|</span>
-  <label>Hip-Hop:</label>
-  <button class="preset-btn" onclick="loadPreset('hiphop')">Hip-Hop</button>
-  <button class="preset-btn" onclick="loadPreset('trap')">Trap</button>
+  <label data-i18n="groove.cat.hiphop">Hip-Hop:</label>
+  <button class="preset-btn" onclick="loadPreset('hiphop')" data-i18n="groove.preset.hiphop">Hip-Hop</button>
+  <button class="preset-btn" onclick="loadPreset('trap')" data-i18n="groove.preset.trap">Trap</button>
   <span style="color:#2a2a2a;margin:0 2px">|</span>
-  <label>World:</label>
-  <button class="preset-btn" onclick="loadPreset('reggae')">Reggae</button>
-  <button class="preset-btn" onclick="loadPreset('latin')">Latin</button>
-  <button class="preset-btn" onclick="loadPreset('bossa')">Bossa</button>
+  <label data-i18n="groove.cat.world">World:</label>
+  <button class="preset-btn" onclick="loadPreset('reggae')" data-i18n="groove.preset.reggae">Reggae</button>
+  <button class="preset-btn" onclick="loadPreset('latin')" data-i18n="groove.preset.latin">Latin</button>
+  <button class="preset-btn" onclick="loadPreset('bossa')" data-i18n="groove.preset.bossa">Bossa</button>
   <span style="color:#2a2a2a;margin:0 2px">|</span>
-  <label>Jazz/Blues:</label>
-  <button class="preset-btn" onclick="loadPreset('jazz')">Jazz</button>
-  <button class="preset-btn" onclick="loadPreset('blues')">Blues</button>
-  <button class="preset-btn" onclick="loadPreset('shuffle')">Shuffle</button>
+  <label data-i18n="groove.cat.jazzBlues">Jazz/Blues:</label>
+  <button class="preset-btn" onclick="loadPreset('jazz')" data-i18n="groove.preset.jazz">Jazz</button>
+  <button class="preset-btn" onclick="loadPreset('blues')" data-i18n="groove.preset.blues">Blues</button>
+  <button class="preset-btn" onclick="loadPreset('shuffle')" data-i18n="groove.preset.shuffle">Shuffle</button>
   <span style="color:#2a2a2a;margin:0 2px">|</span>
-  <label>Electronic:</label>
-  <button class="preset-btn" onclick="loadPreset('dnb')">D&amp;B</button>
-  <button class="preset-btn" onclick="loadPreset('halftime')">Half-Time</button>
+  <label data-i18n="groove.cat.electronic">Electronic:</label>
+  <button class="preset-btn" onclick="loadPreset('dnb')" data-i18n="groove.preset.dnb">D&amp;B</button>
+  <button class="preset-btn" onclick="loadPreset('halftime')" data-i18n="groove.preset.halftime">Half-Time</button>
   <span style="color:#333;margin:0 6px">|</span>
-  <button class="mgmt-btn" onclick="saveToLocal()">💾 Save</button>
-  <button class="mgmt-btn" onclick="loadFromLocal()">📁 Load</button>
-  <button class="mgmt-btn" onclick="exportJSON()">📤 Export</button>
-  <button class="mgmt-btn" onclick="importJSON()">📥 Import</button>
+  <button class="mgmt-btn" onclick="saveToLocal()">💾 <span data-i18n="drums.save">Save</span></button>
+  <button class="mgmt-btn" onclick="loadFromLocal()">📁 <span data-i18n="drums.load">Load</span></button>
+  <button class="mgmt-btn" onclick="exportJSON()">📤 <span data-i18n="drums.export">Export</span></button>
+  <button class="mgmt-btn" onclick="importJSON()">📥 <span data-i18n="drums.import">Import</span></button>
 </div>
 
 <div class="grid-wrap">
@@ -276,94 +275,94 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
 <div class="bass-panel">
   <div class="bass-header">
-    <span class="bass-label">🎸 Auto Bass</span>
+    <span class="bass-label">🎸 <span data-i18n="groove.autoBass">Auto Bass</span></span>
     <select id="bassKey" class="bass-select">
       <option>E</option><option>A</option><option>D</option><option>G</option>
       <option>B</option><option>C</option><option>F</option>
       <option>Eb</option><option>Ab</option><option>Bb</option><option>C#</option><option>F#</option>
     </select>
     <select id="bassMode" class="bass-select">
-      <option value="minor">Minor</option>
-      <option value="major">Major</option>
-      <option value="pent">Pentatonic</option>
-      <option value="blues">Blues Scale</option>
+      <option value="minor" data-i18n="chords.ct.minor">Minor</option>
+      <option value="major" data-i18n="chords.ct.major">Major</option>
+      <option value="pent" data-i18n="groove.bassmode.pent">Pentatonic</option>
+      <option value="blues" data-i18n="groove.bassmode.blues">Blues Scale</option>
     </select>
     <select id="bassStyle" class="bass-select">
-      <option value="rock">Rock</option>
-      <option value="funk">Funk</option>
-      <option value="punk">Punk</option>
-      <option value="reggae">Reggae</option>
-      <option value="metal">Metal</option>
-      <option value="walking">Walking</option>
+      <option value="rock" data-i18n="groove.preset.rock">Rock</option>
+      <option value="funk" data-i18n="groove.preset.funk">Funk</option>
+      <option value="punk" data-i18n="groove.preset.punk">Punk</option>
+      <option value="reggae" data-i18n="groove.preset.reggae">Reggae</option>
+      <option value="metal" data-i18n="groove.preset.metal">Metal</option>
+      <option value="walking" data-i18n="groove.bassstyle.walking">Walking</option>
     </select>
     <select id="bassOctave" class="bass-select">
-      <option value="1">Low Oct</option>
-      <option value="2" selected>Mid Oct</option>
-      <option value="3">High Oct</option>
+      <option value="1" data-i18n="groove.oct.low">Low Oct</option>
+      <option value="2" selected data-i18n="groove.oct.mid">Mid Oct</option>
+      <option value="3" data-i18n="groove.oct.high">High Oct</option>
     </select>
-    <select id="bassDensity" class="bass-select" title="How many extra fills/ghost notes get added around the core groove">
-      <option value="simple">Simple</option>
-      <option value="groovy" selected>Groovy</option>
-      <option value="busy">Busy</option>
+    <select id="bassDensity" class="bass-select" data-i18n-title="groove.densityTooltip" title="How many extra fills/ghost notes get added around the core groove">
+      <option value="simple" data-i18n="groove.density.simple">Simple</option>
+      <option value="groovy" selected data-i18n="groove.density.groovy">Groovy</option>
+      <option value="busy" data-i18n="groove.density.busy">Busy</option>
     </select>
-    <button class="bass-btn" onclick="generateBass()" title="Click again for a fresh variation on the same style">⚡ Generate</button>
-    <button class="bass-btn" onclick="clearBass()">✕ Clear</button>
-    <button class="bass-btn" id="bassActiveBtn" onclick="toggleBassActive()">● Bass Off</button>
+    <button class="bass-btn" onclick="generateBass()" data-i18n-title="groove.generateTooltip" title="Click again for a fresh variation on the same style">⚡ <span data-i18n="groove.generate">Generate</span></button>
+    <button class="bass-btn" onclick="clearBass()">✕ <span data-i18n="filters.clear">Clear</span></button>
+    <button class="bass-btn" id="bassActiveBtn" onclick="toggleBassActive()">● <span data-i18n="groove.bassOff">Bass Off</span></button>
   </div>
   <div class="bass-grid" id="bassGrid"></div>
 </div>
 
 <div class="share-bar">
-  <span class="share-label">🔗 Share Code</span>
-  <button class="share-btn" id="copyShareBtn" onclick="copyShareCode()">📋 Copy Code</button>
-  <input type="text" id="shareCodeInput" class="share-input" placeholder="Paste an LP-... code to load a groove">
-  <button class="share-btn" onclick="loadShareCode()">⬇ Load Code</button>
+  <span class="share-label">🔗 <span data-i18n="groove.shareCode">Share Code</span></span>
+  <button class="share-btn" id="copyShareBtn" onclick="copyShareCode()">📋 <span data-i18n="groove.copyCode">Copy Code</span></button>
+  <input type="text" id="shareCodeInput" class="share-input" data-i18n-placeholder="groove.pasteCode" placeholder="Paste an LP-... code to load a groove">
+  <button class="share-btn" onclick="loadShareCode()">⬇ <span data-i18n="groove.loadCode">Load Code</span></button>
   <span id="shareMsg" class="share-msg"></span>
 </div>
 <div class="jam-bar">
-  <span class="jam-label">⚡ Jam:</span>
-  <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')">Rock in E</button>
-  <button class="jam-btn" onclick="loadJam('metal','E','minor','metal')">Metal in E</button>
-  <button class="jam-btn" onclick="loadJam('punk','A','minor','punk')">Punk in A</button>
-  <button class="jam-btn" onclick="loadJam('funk','A','minor','funk')">Funk in A</button>
-  <button class="jam-btn" onclick="loadJam('blues','E','blues','walking')">Blues in E</button>
-  <button class="jam-btn" onclick="loadJam('groove','D','minor','funk')">Groove in D</button>
-  <button class="jam-btn" onclick="loadJam('reggae','A','major','reggae')">Reggae in A</button>
-  <button class="jam-btn" onclick="loadJam('jazz','D','major','walking')">Jazz in D</button>
-  <button class="jam-btn" onclick="loadJam('hiphop','C','minor','funk')">Hip-Hop in C</button>
-  <button class="jam-btn" onclick="loadJam('dnb','D','minor','punk')">D&amp;B in D</button>
+  <span class="jam-label">⚡ <span data-i18n="groove.jam">Jam:</span></span>
+  <button class="jam-btn" onclick="loadJam('rock','E','minor','rock')" data-i18n="groove.jamBtn.rockE">Rock in E</button>
+  <button class="jam-btn" onclick="loadJam('metal','E','minor','metal')" data-i18n="groove.jamBtn.metalE">Metal in E</button>
+  <button class="jam-btn" onclick="loadJam('punk','A','minor','punk')" data-i18n="groove.jamBtn.punkA">Punk in A</button>
+  <button class="jam-btn" onclick="loadJam('funk','A','minor','funk')" data-i18n="groove.jamBtn.funkA">Funk in A</button>
+  <button class="jam-btn" onclick="loadJam('blues','E','blues','walking')" data-i18n="groove.jamBtn.bluesE">Blues in E</button>
+  <button class="jam-btn" onclick="loadJam('groove','D','minor','funk')" data-i18n="groove.jamBtn.grooveD">Groove in D</button>
+  <button class="jam-btn" onclick="loadJam('reggae','A','major','reggae')" data-i18n="groove.jamBtn.reggaeA">Reggae in A</button>
+  <button class="jam-btn" onclick="loadJam('jazz','D','major','walking')" data-i18n="groove.jamBtn.jazzD">Jazz in D</button>
+  <button class="jam-btn" onclick="loadJam('hiphop','C','minor','funk')" data-i18n="groove.jamBtn.hiphopC">Hip-Hop in C</button>
+  <button class="jam-btn" onclick="loadJam('dnb','D','minor','punk')" data-i18n="groove.jamBtn.dnbD">D&amp;B in D</button>
 </div>
 
 <div class="status-bar">
   <span id="stepIndicator">--</span>
-  <span id="statusMsg">Ready</span>
+  <span id="statusMsg" data-i18n="groove.ready">Ready</span>
 </div>
 
 <div class="help-panel">
   <details>
-    <summary>⌨️ Keyboard Shortcuts &amp; Button Reference</summary>
+    <summary>⌨️ <span data-i18n="groove.help.title">Keyboard Shortcuts &amp; Button Reference</span></summary>
     <div class="help-grid">
       <div class="help-section">
-        <h4>⌨️ Keyboard Shortcuts</h4>
-        <div class="help-row"><kbd>Space</kbd><span>Play / Stop</span></div>
-        <div class="help-row"><kbd>C</kbd><span>Clear all steps</span></div>
-        <div class="help-row"><kbd>R</kbd><span>Randomize pattern</span></div>
+        <h4>⌨️ <span data-i18n="groove.help.keyboardShortcuts">Keyboard Shortcuts</span></h4>
+        <div class="help-row"><kbd>Space</kbd><span data-i18n="groove.help.playStop">Play / Stop</span></div>
+        <div class="help-row"><kbd>C</kbd><span data-i18n="groove.help.clearAllSteps">Clear all steps</span></div>
+        <div class="help-row"><kbd>R</kbd><span data-i18n="groove.help.randomizePattern">Randomize pattern</span></div>
       </div>
       <div class="help-section">
-        <h4>🖱️ Grid Interaction</h4>
-        <div class="help-row"><span class="click-label">1 click</span><span>Normal hit</span></div>
-        <div class="help-row"><span class="click-label">2 clicks</span><span>Accented hit (louder)</span></div>
-        <div class="help-row"><span class="click-label">3 clicks</span><span>Off (clear step)</span></div>
+        <h4>🖱️ <span data-i18n="groove.help.gridInteraction">Grid Interaction</span></h4>
+        <div class="help-row"><span class="click-label" data-i18n="groove.help.click1">1 click</span><span data-i18n="groove.help.normalHit">Normal hit</span></div>
+        <div class="help-row"><span class="click-label" data-i18n="groove.help.click2">2 clicks</span><span data-i18n="groove.help.accentedHit">Accented hit (louder)</span></div>
+        <div class="help-row"><span class="click-label" data-i18n="groove.help.click3">3 clicks</span><span data-i18n="groove.help.offClearStep">Off (clear step)</span></div>
       </div>
       <div class="help-section">
-        <h4>💾 Save State / 📁 Load State</h4>
-        <p><strong>Save State</strong> saves your entire current pattern — all steps, all instruments, and step count — to your browser's local storage. It stays saved even after you close the tab.</p>
-        <p><strong>Load State</strong> restores whatever you last saved. If nothing has been saved yet, it will tell you.</p>
+        <h4>💾 <span data-i18n="groove.help.saveState">Save State</span> / 📁 <span data-i18n="groove.help.loadState">Load State</span></h4>
+        <p data-i18n-html="groove.help.saveStateDesc"><strong>Save State</strong> saves your entire current pattern — all steps, all instruments, and step count — to your browser's local storage. It stays saved even after you close the tab.</p>
+        <p data-i18n-html="groove.help.loadStateDesc"><strong>Load State</strong> restores whatever you last saved. If nothing has been saved yet, it will tell you.</p>
       </div>
       <div class="help-section">
-        <h4>📤 Export JSON / 📥 Import JSON</h4>
-        <p><strong>Export JSON</strong> downloads your pattern as a <code>.json</code> file you can back up or share. Use this to save multiple patterns or move them between devices.</p>
-        <p><strong>Import JSON</strong> loads a previously exported <code>.json</code> file back into the grid.</p>
+        <h4>📤 <span data-i18n="groove.help.exportJson">Export JSON</span> / 📥 <span data-i18n="groove.help.importJson">Import JSON</span></h4>
+        <p data-i18n-html="groove.help.exportJsonDesc"><strong>Export JSON</strong> downloads your pattern as a <code>.json</code> file you can back up or share. Use this to save multiple patterns or move them between devices.</p>
+        <p data-i18n-html="groove.help.importJsonDesc"><strong>Import JSON</strong> loads a previously exported <code>.json</code> file back into the grid.</p>
       </div>
     </div>
   </details>
@@ -374,16 +373,17 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
 <script>
 const INSTRUMENTS = [
-  { id: 'Kick',      name: 'Kick',       emoji: '🥁' },
-  { id: 'Snare',     name: 'Snare',      emoji: '🪘' },
-  { id: 'ClosedHat', name: 'Closed Hat',  emoji: '🎩' },
-  { id: 'OpenHat',   name: 'Open Hat',   emoji: '💿' },
-  { id: 'Clap',      name: 'Clap',       emoji: '👏' },
-  { id: 'Crash',     name: 'Crash',      emoji: '💥' },
-  { id: 'Ride',      name: 'Ride',       emoji: '🔔' },
-  { id: 'TomHigh',   name: 'Tom High',   emoji: '🦅' },
-  { id: 'TomLow',    name: 'Tom Low',    emoji: '🪵' }
+  { id: 'Kick',      nameKey: 'drums.inst.kick',      emoji: '🥁' },
+  { id: 'Snare',     nameKey: 'drums.inst.snare',     emoji: '🪘' },
+  { id: 'ClosedHat', nameKey: 'drums.inst.closedHat', emoji: '🎩' },
+  { id: 'OpenHat',   nameKey: 'drums.inst.openHat',   emoji: '💿' },
+  { id: 'Clap',      nameKey: 'drums.inst.clap',      emoji: '👏' },
+  { id: 'Crash',     nameKey: 'drums.inst.crash',     emoji: '💥' },
+  { id: 'Ride',      nameKey: 'drums.inst.ride',      emoji: '🔔' },
+  { id: 'TomHigh',   nameKey: 'drums.inst.tomHigh',   emoji: '🦅' },
+  { id: 'TomLow',    nameKey: 'drums.inst.tomLow',    emoji: '🪵' }
 ];
+INSTRUMENTS.forEach(i => Object.defineProperty(i, 'name', { get(){ return t(i.nameKey); } }));
 
 let maxSteps = 16;
 let pattern = {};
@@ -670,12 +670,12 @@ function togglePlay() {
   if (isPlaying) {
     currentStep = 0;
     nextNoteTime = ctx.currentTime + 0.02;
-    btn.textContent = '⏹ Stop';
+    btn.textContent = '⏹ ' + t('drums.stop');
     btn.classList.add('playing');
     scheduler();
   } else {
     clearTimeout(timerId);
-    btn.textContent = '▶ Play';
+    btn.textContent = '▶ ' + t('drums.play');
     btn.classList.remove('playing');
     document.querySelectorAll('.step-cell').forEach(c => c.classList.remove('current-step'));
   }
@@ -712,7 +712,7 @@ function onStepLengthChange() {
 }
 
 function onEngineChange() {
-  document.getElementById('statusMsg').textContent = `Engine profile changed to: ${document.getElementById('engineSelect').value.toUpperCase()}`;
+  document.getElementById('statusMsg').textContent = t('groove.msg.engineChanged', {engine: document.getElementById('engineSelect').value.toUpperCase()});
 }
 
 function togglePerfMode() {
@@ -724,7 +724,7 @@ function onSwingChange() { document.getElementById('swingValue').textContent = d
 
 function saveToLocal() {
   localStorage.setItem('lp_groove_snapshot', JSON.stringify({ pattern, maxSteps }));
-  document.getElementById('statusMsg').textContent = 'Groove architecture snapshot cached to LocalStorage successfully.';
+  document.getElementById('statusMsg').textContent = t('groove.msg.snapshotSaved');
 }
 
 function loadFromLocal() {
@@ -736,9 +736,9 @@ function loadFromLocal() {
     document.getElementById('stepSelect').value = maxSteps;
     initArrays();
     buildGrid();
-    document.getElementById('statusMsg').textContent = 'Cached matrix state pulled and successfully re-built.';
+    document.getElementById('statusMsg').textContent = t('groove.msg.snapshotLoaded');
   } else {
-    alert('No layout state profile detected within local cache.');
+    alert(t('groove.msg.noSnapshot'));
   }
 }
 
@@ -769,7 +769,7 @@ function importJSON() {
         }
         initArrays();
         buildGrid();
-      } catch(err) { alert('Invalid architectural grid JSON payload supplied.'); }
+      } catch(err) { alert(t('groove.msg.invalidJson')); }
     }
   }
   selector.click();
@@ -838,25 +838,25 @@ function copyShareCode() {
   document.getElementById('shareCodeInput').value = code;
   navigator.clipboard.writeText(code).then(() => {
     const btn = document.getElementById('copyShareBtn');
-    btn.textContent = '✓ Copied!';
+    btn.textContent = '✓ ' + t('groove.copied');
     btn.classList.add('share-copied');
-    document.getElementById('shareMsg').textContent = 'Code copied to clipboard.';
+    document.getElementById('shareMsg').textContent = t('groove.msg.codeCopied');
     setTimeout(() => {
-      btn.textContent = '📋 Copy Code';
+      btn.textContent = '📋 ' + t('groove.copyCode');
       btn.classList.remove('share-copied');
       document.getElementById('shareMsg').textContent = '';
     }, 2500);
   }).catch(() => {
-    document.getElementById('shareMsg').textContent = 'Copy the code from the box above.';
+    document.getElementById('shareMsg').textContent = t('groove.msg.copyFromBox');
   });
 }
 
 function loadShareCode() {
   const raw = (document.getElementById('shareCodeInput').value || '').trim();
-  if (!raw) { document.getElementById('shareMsg').textContent = 'Paste a code first.'; return; }
+  if (!raw) { document.getElementById('shareMsg').textContent = t('groove.msg.pasteCodeFirst'); return; }
   const state = decodeShareCode(raw);
   if (!state) {
-    document.getElementById('shareMsg').textContent = '✗ Invalid code.';
+    document.getElementById('shareMsg').textContent = '✗ ' + t('groove.msg.invalidCode');
     return;
   }
 
@@ -916,9 +916,9 @@ function loadShareCode() {
   if (!state.ba && bassActive) toggleBassActive();
 
   document.getElementById('shareMsg').textContent =
-    `✓ Groove loaded — ${state.b} BPM, ${state.s} steps, ${state.e} kit.`;
+    '✓ ' + t('groove.msg.grooveLoaded', {bpm: state.b, steps: state.s, kit: state.e});
   document.getElementById('statusMsg').textContent =
-    `🔗 Share code loaded: ${state.b} BPM / ${state.e} / ${state.s} steps`;
+    '🔗 ' + t('groove.msg.shareCodeLoaded', {bpm: state.b, kit: state.e, steps: state.s});
 }
 
 
@@ -999,7 +999,7 @@ function loadPreset(name) {
   }
 
   buildGrid();
-  document.getElementById('statusMsg').textContent = `🎲 Generated new random ${name.toUpperCase()} groove!`;
+  document.getElementById('statusMsg').textContent = '🎲 ' + t('groove.msg.generatedRandom', {name: name.toUpperCase()});
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1087,19 +1087,19 @@ function generateBass() {
   bassPattern = bassPattern.slice(0, maxSteps);
 
   buildBassGrid();
-  document.getElementById('statusMsg').textContent = `🎸 Bass: ${rootKey} ${mode} / ${style} (${density})`;
+  document.getElementById('statusMsg').textContent = '🎸 ' + t('groove.msg.bassInfo', {root: rootKey, mode, style, density});
 }
 
 function clearBass() {
   bassPattern = Array(maxSteps).fill(null);
   buildBassGrid();
-  document.getElementById('statusMsg').textContent = '🎸 Bass cleared.';
+  document.getElementById('statusMsg').textContent = '🎸 ' + t('groove.msg.bassCleared');
 }
 
 function toggleBassActive() {
   bassActive = !bassActive;
   const btn = document.getElementById('bassActiveBtn');
-  btn.textContent = bassActive ? '🔊 Bass On' : '● Bass Off';
+  btn.textContent = bassActive ? '🔊 ' + t('groove.bassOn') : '● ' + t('groove.bassOff');
   btn.classList.toggle('bass-on', bassActive);
   obsWriteGrid();
 }
@@ -1166,7 +1166,7 @@ function buildBassGrid() {
     const cell = document.createElement('div');
     cell.className = 'bass-note-cell';
     cell.id = `bass-cell-${s}`;
-    cell.title = 'Click to cycle: off → root → 3rd → 5th → octave';
+    cell.title = t('groove.bassCellTooltip');
     if (s % 4 === 0 && s > 0) cell.style.borderLeft = '2px solid #2a2a2a';
 
     paintBassCell(cell, bassPattern[s]);
@@ -1213,7 +1213,7 @@ function loadJam(drumPreset, key, mode, bassStyle) {
 
   if (!bassActive) toggleBassActive();
 
-  document.getElementById('statusMsg').textContent = `⚡ Jam: ${drumPreset} + ${key} ${mode} bass`;
+  document.getElementById('statusMsg').textContent = '⚡ ' + t('groove.msg.jamInfo', {preset: drumPreset, key, mode});
 }
 
 
@@ -1233,13 +1233,13 @@ function toggleAmbientGroove() {
   if (ambientActive && isPlaying) {
     ambientActive = false;
     if (isPlaying) togglePlay();
-    document.getElementById('statusMsg').textContent = '🎵 Ambient groove stopped.';
+    document.getElementById('statusMsg').textContent = '🎵 ' + t('groove.msg.ambientStopped');
   } else {
     const pick = AMBIENT_PRESETS[Math.floor(Math.random() * AMBIENT_PRESETS.length)];
     loadPreset(pick);
     ambientActive = true;
     if (!isPlaying) togglePlay();
-    document.getElementById('statusMsg').textContent = `🎵 Ambient groove: ${pick}`;
+    document.getElementById('statusMsg').textContent = '🎵 ' + t('groove.msg.ambientPlaying', {name: pick});
   }
 }
 
@@ -1258,6 +1258,16 @@ document.addEventListener('keydown', e => {
 
 
 buildGrid();
+applyTranslations();
+
+window.addEventListener('lp:langchange', () => {
+  buildGrid();
+  document.getElementById('statusMsg').textContent = t('groove.ready');
+  const playBtn = document.getElementById('playBtn');
+  playBtn.textContent = isPlaying ? '⏹ ' + t('drums.stop') : '▶ ' + t('drums.play');
+  const bassBtn = document.getElementById('bassActiveBtn');
+  if (bassBtn) bassBtn.textContent = bassActive ? '🔊 ' + t('groove.bassOn') : '● ' + t('groove.bassOff');
+});
 </script>
 </body>
 </html>

@@ -12,6 +12,7 @@
 <script src="shared.js"></script>
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
+<script src="i18n.js"></script>
 <script src="chrome.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -146,10 +147,6 @@ body{font-family:'Inter',Segoe UI,Arial;background:var(--bg-page2);color:white;m
 #toastTitle{font-weight:700;font-size:14px;color:#4caf50;margin-bottom:2px}
 #toastMsg{font-size:12px;color:#888;line-height:1.4}
 
-/* ── SLOPSMITH BANNER ── */
-#slopBanner{display:none;padding:10px 14px;background:linear-gradient(90deg,#1a0a00,#2a1000,#1a0a00);border-bottom:2px solid #ff5500;text-align:center;font-size:13px;animation:slopPulse 3s ease-in-out infinite}
-@keyframes slopPulse{0%,100%{border-color:#ff5500}50%{border-color:#ff8800;box-shadow:inset 0 0 20px rgba(255,100,0,.1)}}
-#slopBanner span{color:#ff7733;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-right:8px}
 
 /* ── PAGINATION ── */
 .pagination{padding:12px;text-align:center;background:var(--bg-panel);border-bottom:1px solid #222}
@@ -169,37 +166,37 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <div id="splash">
   <img class="splash-guitar" src="guitar.png" alt="Guitar">
   <div class="splash-title">Lazzarus Prime</div>
-  <div class="splash-sub">Song Request Library</div>
+  <div class="splash-sub" data-i18n="splash.sub">Song Request Library</div>
   <div class="splash-bar"><div class="splash-bar-fill"></div></div>
-  <div class="splash-tagline">6,705 songs &nbsp;·&nbsp; 1,229 artists &nbsp;·&nbsp; 0 excuses</div>
-  <button class="splash-skip" onclick="hideSplash()">Skip ▶</button>
+  <div class="splash-tagline" data-i18n="splash.tagline">6,705 songs &nbsp;·&nbsp; 1,229 artists &nbsp;·&nbsp; 0 excuses</div>
+  <button class="splash-skip" onclick="hideSplash()"><span data-i18n="splash.skip">Skip</span> ▶</button>
 </div>
 
 <div id="toast"><div id="toastIcon">🔥</div><div id="toastTitle"></div><div id="toastMsg"></div></div>
 
 <div id="site-header"></div>
 <script>renderHeader({page:'home', title:'Song Requests', search:'local'});</script>
-<div id="activeFilters">Showing: <span id="filterLabel"></span><button onclick="clearSearch()">✕ Clear</button></div>
+<div id="activeFilters"><span data-i18n="filters.showing">Showing:</span> <span id="filterLabel"></span><button onclick="clearSearch()">✕ <span data-i18n="filters.clear">Clear</span></button></div>
 <div id="filtersSection">
-  <button id="filtersToggle" class="filters-toggle" onclick="toggleFiltersPanel()">🔎 Filters &amp; Browse <span id="filtersChevron">▾</span></button>
+  <button id="filtersToggle" class="filters-toggle" onclick="toggleFiltersPanel()">🔎 <span data-i18n="filters.toggle">Filters &amp; Browse</span> <span id="filtersChevron">▾</span></button>
   <div id="filtersPanel" class="filters-panel">
     <div id="genreBar"></div>
     <div id="alphabet"></div>
     <div id="artistStats">
-      <h3 id="artistToggle"><span>🎸 Top Artists In Library</span> <span style="float:right">▶</span></h3>
+      <h3 id="artistToggle"><span>🎸 <span data-i18n="artists.top">Top Artists In Library</span></span> <span style="float:right">▶</span></h3>
       <div id="artistList"></div>
     </div>
   </div>
 </div>
 <div class="listHeader" id="songLibraryHeader">
-  <h3 id="songLibraryToggle"><span class="section-chevron" id="songLibraryChevron">▾</span>SONG LIBRARY</h3>
+  <h3 id="songLibraryToggle"><span class="section-chevron" id="songLibraryChevron">▾</span><span data-i18n="library.title">SONG LIBRARY</span></h3>
   <div class="mini-search-row" id="songLibraryMiniSearch">
-    <input id="miniSearchBox" placeholder="Search artist or song…" oninput="handleMiniSearch(this.value)" autocomplete="off">
+    <input id="miniSearchBox" data-i18n-placeholder="search.placeholder" placeholder="Search artist or song…" oninput="handleMiniSearch(this.value)" autocomplete="off">
   </div>
   <div class="viewToggle" id="viewToggle" role="group" aria-label="Display mode">
-    <button class="view-btn" data-view="list" onclick="setSongView('list')" title="List — art + details">☰</button>
-    <button class="view-btn" data-view="compact" onclick="setSongView('compact')" title="Compact — text only, more per screen">≡</button>
-    <button class="view-btn" data-view="grid" onclick="setSongView('grid')" title="Grid — larger art tiles">▦</button>
+    <button class="view-btn" data-view="list" onclick="setSongView('list')" data-i18n-title="view.list.title" title="List — art + details">☰</button>
+    <button class="view-btn" data-view="compact" onclick="setSongView('compact')" data-i18n-title="view.compact.title" title="Compact — text only, more per screen">≡</button>
+    <button class="view-btn" data-view="grid" onclick="setSongView('grid')" data-i18n-title="view.grid.title" title="Grid — larger art tiles">▦</button>
   </div>
   <span id="resultsCount" class="resultsCount"></span>
 </div>
@@ -220,6 +217,11 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 /* ── State ── */
 let songs = [], filteredSongs = [], currentPage = 1, songsPerPage = 40, activeGenre = null;
 let artistArtMap = {}, artistGenreMap = {};
+let songCount = 0, artistCount = 0;
+function renderTagline() {
+  const tagline = document.querySelector('.splash-tagline');
+  if (tagline) tagline.textContent = t('splash.taglineDynamic', {songs: songCount.toLocaleString(), artists: artistCount.toLocaleString()});
+}
 let activeAlphaLetter = null;
 let activeCanadianOnly = false;
 let queuedSongs = new Set(); // songs currently in queue
@@ -243,10 +245,6 @@ function initFirebase() {
       firebase.initializeApp(FIREBASE_CONFIG);
     }
     firebaseDb = firebase.database();
-    // watch slopsmith flag
-    firebaseDb.ref('/slopsmith').on('value', snap => {
-      document.getElementById('slopBanner').style.display = snap.val() ? 'block' : 'none';
-    });
     // watch queue to know what's already queued
     firebaseDb.ref('/queue').on('value', snap => {
       queuedSongs = new Set();
@@ -260,10 +258,10 @@ function initFirebase() {
       document.querySelectorAll('.req-btn[data-key]').forEach(btn => {
         const key = btn.dataset.key;
         if (queuedSongs.has(key)) {
-          btn.textContent = '✓ In Queue';
+          btn.textContent = '✓ ' + t('song.inQueue');
           btn.classList.add('in-queue');
         } else {
-          btn.textContent = 'Request';
+          btn.textContent = t('song.request');
           btn.classList.remove('in-queue');
         }
       });
@@ -273,6 +271,7 @@ function initFirebase() {
 
 /* ── Init ── */
 async function init() {
+  applyTranslations();
   try {
     const raw = await (await fetch('songs.json')).json();
     const seen = new Set();
@@ -286,9 +285,9 @@ async function init() {
     songs = raw.map(s => ({...s, displayName:s.song}));
     filteredSongs = songs;
     // Update splash tagline dynamically
-    const artistCount = new Set(raw.map(s=>s.artist)).size;
-    const tagline = document.querySelector('.splash-tagline');
-    if (tagline) tagline.textContent = `${raw.length.toLocaleString()} songs · ${artistCount.toLocaleString()} artists · 0 excuses`;
+    songCount = raw.length;
+    artistCount = new Set(raw.map(s=>s.artist)).size;
+    renderTagline();
     const urlParams = new URLSearchParams(window.location.search);
     const artistSearch = urlParams.get('search');
     if (artistSearch) {
@@ -364,16 +363,17 @@ function renderSongs() {
     const queueKey = (song.artist+'||'+song.song).toLowerCase();
     const isQueued = queuedSongs.has(queueKey);
     const btnClass = isQueued ? 'req-btn in-queue' : 'req-btn';
-    const btnText = isQueued ? '✓ In Queue' : 'Request';
+    const btnText = isQueued ? '✓ ' + t('song.inQueue') : t('song.request');
     const mbUrl = `https://musicbrainz.org/search?query=${encodeURIComponent(song.artist)}&type=artist&method=indexed`;
-    const caFlag = isCanadian(song.artist) ? '<span class="ca-flag" title="Canadian artist">🍁</span>' : '';
-    div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span>${caFlag}<a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="View on MusicBrainz">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genre}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
+    const caFlag = isCanadian(song.artist) ? `<span class="ca-flag" title="${t('song.canadianArtist')}" onclick="onMapleLeafClick(event)">🍁</span>` : '';
+    const genreLabel = genre ? t('genre.'+genre) : '';
+    div.innerHTML = `${artHtml}<div class="songInfo"><div class="songTitle">${esc(song.displayName)}</div><div class="songArtist"><span onclick="filterArtist('${sa}')">${esc(song.artist)}</span>${caFlag}<a class="mb-link" href="${mbUrl}" target="_blank" rel="noopener" title="${t('song.viewMusicBrainz')}">↗</a></div>${genre?`<div class="songMeta"><div class="songGenre">${emoji} ${genreLabel}</div></div>`:''}</div><button class="${btnClass}" data-key="${queueKey.replace(/"/g,'&quot;')}" onclick="requestSong('${sa}','${ss}',this)">${btnText}</button>`;
     frag.appendChild(div);
   });
   list.appendChild(frag);
   document.getElementById('resultsCount').textContent = filteredSongs.length !== songs.length
-    ? filteredSongs.length.toLocaleString()+' results'
-    : songs.length.toLocaleString()+' songs';
+    ? filteredSongs.length.toLocaleString()+' '+t('results.results')
+    : songs.length.toLocaleString()+' '+t('results.songs');
   renderPagination();
 }
 
@@ -381,9 +381,9 @@ function renderPagination() {
   const total = Math.ceil(filteredSongs.length/songsPerPage)||1;
   ['paginationTop','paginationBottom'].forEach(id => {
     const c = document.getElementById(id); c.innerHTML = '';
-    if (currentPage>1){const b=document.createElement('button');b.textContent='◀ Prev';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
-    const l=document.createElement('span');l.textContent=` Page ${currentPage} / ${total} `;l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
-    if (currentPage<total){const b=document.createElement('button');b.textContent='Next ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
+    if (currentPage>1){const b=document.createElement('button');b.textContent='◀ '+t('pagination.prev');b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage--;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
+    const l=document.createElement('span');l.textContent=' '+t('pagination.pageOf',{n:currentPage,total})+' ';l.style.cssText='color:#555;font-size:13px';c.appendChild(l);
+    if (currentPage<total){const b=document.createElement('button');b.textContent=t('pagination.next')+' ▶';b.className='nav-btn';b.style.padding='6px 12px';b.onclick=()=>{currentPage++;renderSongs();window.scrollTo(0,0)};c.appendChild(b)}
   });
 }
 
@@ -425,20 +425,21 @@ function buildGenreBar() {
   for (const genre of Object.keys(GENRE_MAP)) {
     const btn = document.createElement('button');
     btn.className = 'genre-btn';
-    btn.textContent = (GENRE_EMOJI[genre]||'')+' '+genre;
+    btn.dataset.genre = genre;
+    btn.textContent = (GENRE_EMOJI[genre]||'')+' '+t('genre.'+genre);
     btn.onclick = () => toggleGenre(genre, btn);
     bar.appendChild(btn);
   }
   const canBtn = document.createElement('button');
   canBtn.className = 'genre-btn canadian-btn';
-  canBtn.textContent = '🍁 Canadian';
+  canBtn.textContent = '🍁 '+t('genre.Canadian');
   canBtn.onclick = () => toggleCanadian(canBtn);
   bar.appendChild(canBtn);
 }
 function updateFilterLabel() {
   const parts = [];
-  if (activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+activeGenre);
-  if (activeCanadianOnly) parts.push('🍁 Canadian');
+  if (activeGenre) parts.push((GENRE_EMOJI[activeGenre]||'')+' '+t('genre.'+activeGenre));
+  if (activeCanadianOnly) parts.push('🍁 '+t('genre.Canadian'));
   if (!parts.length) { document.getElementById('activeFilters').style.display = 'none'; return; }
   document.getElementById('activeFilters').style.display = 'block';
   document.getElementById('filterLabel').textContent = parts.join(' + ');
@@ -539,9 +540,9 @@ async function requestSong(artist, song, btn) {
   const cmd = `!sr ${artist} - ${song}`;
   try {
     await navigator.clipboard.writeText(cmd);
-    showToast('Copied! 🎸 Paste into Twitch chat', artist+' — '+song, '🔥', '#4caf50');
+    showToast(t('toast.copied.title'), artist+' — '+song, '🔥', '#4caf50');
   } catch {
-    showToast('Paste this into chat:', cmd, '📋', 'var(--accent)');
+    showToast(t('toast.paste.title'), cmd, '📋', 'var(--accent)');
   }
 }
 
@@ -549,8 +550,8 @@ async function requestSong(artist, song, btn) {
 function slotSpin(btn, onDone) {
   const frames=['🎰','🃏','🎯','🎲','🎰','🎯','🃏','🎲','🎰','🎲']; let i=0;
   btn.classList.add('spinning');
-  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' Random';},60);
-  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' Random';},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 Random';btn.classList.remove('spinning');onDone();},480);},600);
+  const fast=setInterval(()=>{btn.textContent=frames[i++%frames.length]+' '+t('nav.random');},60);
+  setTimeout(()=>{clearInterval(fast);let j=0;const slow=setInterval(()=>{btn.textContent=frames[j++%frames.length]+' '+t('nav.random');},120);setTimeout(()=>{clearInterval(slow);btn.textContent='🎲 '+t('nav.random');btn.classList.remove('spinning');onDone();},480);},600);
 }
 function randomArtistFilter(btn) {
   if (!songs.length) return;
@@ -563,6 +564,21 @@ function goHome() { clearSearch(); window.scrollTo({top:0,behavior:'smooth'}); }
 document.addEventListener('keydown', e => {
   if (e.key==='/' && document.activeElement.tagName!=='INPUT') { e.preventDefault(); document.getElementById('searchBox').focus(); }
   if (e.key==='Escape') { document.getElementById('searchBox').blur(); clearSearch(); }
+});
+
+/* ── Re-render everything that was already built in the old language ── */
+window.addEventListener('lp:langchange', () => {
+  renderTagline();
+  buildGenreBar();
+  document.querySelectorAll('#genreBar .genre-btn').forEach(b => {
+    if (b.classList.contains('canadian-btn')) { b.classList.toggle('active', activeCanadianOnly); }
+    else if (b.dataset.genre === activeGenre) { b.classList.add('active'); }
+  });
+  buildAlphabet();
+  if (activeAlphaLetter) document.querySelector(`.alpha-btn[data-letter="${activeAlphaLetter}"]`)?.classList.add('active');
+  buildArtistStats();
+  updateFilterLabel();
+  renderSongs();
 });
 
 init();

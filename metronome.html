@@ -195,17 +195,17 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'metronome', title:'Metronome', search:'nav'});</script>
+<script>renderHeader({page:'metronome', titleKey:'nav.metronome', search:'nav'});</script>
 <div class="metronome-controls">
-  <button class="start-btn" id="startBtn" onclick="toggleMetronome()">▶ START</button>
+  <button class="start-btn" id="startBtn" onclick="toggleMetronome()">▶ <span data-i18n="metro.start">START</span></button>
 </div>
 <div class="drag-workspace" id="dragWorkspace">
 
   <!-- PANEL: BPM -->
   <div class="drag-panel w-xl" id="dp-bpm">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🥁 Tempo / BPM</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-bpm')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🥁 <span data-i18n="metro.panel.tempo">Tempo / BPM</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-bpm')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body" style="text-align:center">
-      <div class="bpm-label">Tempo</div>
+      <div class="bpm-label" data-i18n="metro.tempo">Tempo</div>
       <div class="bpm-big" id="bpmDisplay">120</div>
       <div class="tempo-name" id="tempoName">Moderato</div>
       <div style="margin-top:16px">
@@ -215,7 +215,7 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
       <div class="bpm-controls">
         <button class="nudge-btn" onclick="nudgeBpm(-10)" title="-10">«</button>
         <button class="nudge-btn" onclick="nudgeBpm(-1)" title="-1">‹</button>
-        <button class="tap-btn" id="tapBtn" onclick="tap()">👆 TAP TEMPO</button>
+        <button class="tap-btn" id="tapBtn" onclick="tap()">👆 <span data-i18n="metro.tapTempo">TAP TEMPO</span></button>
         <button class="nudge-btn" onclick="nudgeBpm(1)" title="+1">›</button>
         <button class="nudge-btn" onclick="nudgeBpm(10)" title="+10">»</button>
         <div class="bpm-input-wrap">
@@ -227,22 +227,22 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- PANEL: Beat Visualiser -->
   <div class="drag-panel w-xl" id="dp-beats">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔵 Beat Visualiser</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-beats')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔵 <span data-i18n="metro.panel.beatViz">Beat Visualiser</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-beats')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="beat-row" id="beatRow"></div>
       <canvas id="pendulumCanvas" height="140" style="margin-top:12px"></canvas>
       <div class="viz-row" style="margin-top:10px">
-        <button class="viz-btn active" id="vizPendulum" onclick="setViz('pendulum')">⬛ Pendulum</button>
-        <button class="viz-btn" id="vizFlash" onclick="setViz('flash')">💥 Flash</button>
-        <button class="viz-btn" id="vizBounce" onclick="setViz('bounce')">🔴 Bounce</button>
-        <button class="viz-btn" id="vizWave" onclick="setViz('wave')">〰️ Wave</button>
+        <button class="viz-btn active" id="vizPendulum" onclick="setViz('pendulum')">⬛ <span data-i18n="metro.viz.pendulum">Pendulum</span></button>
+        <button class="viz-btn" id="vizFlash" onclick="setViz('flash')">💥 <span data-i18n="metro.viz.flash">Flash</span></button>
+        <button class="viz-btn" id="vizBounce" onclick="setViz('bounce')">🔴 <span data-i18n="metro.viz.bounce">Bounce</span></button>
+        <button class="viz-btn" id="vizWave" onclick="setViz('wave')">〰️ <span data-i18n="metro.viz.wave">Wave</span></button>
       </div>
     </div>
   </div>
 
   <!-- PANEL: Time Signature -->
   <div class="drag-panel w-md" id="dp-timesig">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">⏱ Time Signature</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-timesig')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">⏱ <span data-i18n="metro.panel.timeSig">Time Signature</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-timesig')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="timesig-grid" id="timeSigGrid">
         <button class="sig-btn" onclick="setTimeSig(2,4)">2/4</button>
@@ -259,53 +259,53 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- PANEL: Subdivision -->
   <div class="drag-panel w-md" id="dp-subdiv">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 Subdivision</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-subdiv')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎵 <span data-i18n="metro.panel.subdiv">Subdivision</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-subdiv')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="subdiv-row" id="subdivRow">
-        <button class="subdiv-btn active" onclick="setSubdiv(1)">Quarter ♩</button>
-        <button class="subdiv-btn" onclick="setSubdiv(2)">Eighth ♪♪</button>
-        <button class="subdiv-btn" onclick="setSubdiv(3)">Triplet ♪♪♪</button>
-        <button class="subdiv-btn" onclick="setSubdiv(4)">16th ♬</button>
-        <button class="subdiv-btn" onclick="setSubdiv(6)">6-tuplet</button>
+        <button class="subdiv-btn active" onclick="setSubdiv(1)"><span data-i18n="metro.subdiv.quarter">Quarter</span> ♩</button>
+        <button class="subdiv-btn" onclick="setSubdiv(2)"><span data-i18n="metro.subdiv.eighth">Eighth</span> ♪♪</button>
+        <button class="subdiv-btn" onclick="setSubdiv(3)"><span data-i18n="metro.subdiv.triplet">Triplet</span> ♪♪♪</button>
+        <button class="subdiv-btn" onclick="setSubdiv(4)"><span data-i18n="metro.subdiv.sixteenth">16th</span> ♬</button>
+        <button class="subdiv-btn" onclick="setSubdiv(6)"><span data-i18n="metro.subdiv.sixTuplet">6-tuplet</span></button>
       </div>
     </div>
   </div>
 
   <!-- PANEL: Accents -->
   <div class="drag-panel w-md" id="dp-accents">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎯 Beat Accents</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-accents')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎯 <span data-i18n="metro.panel.accents">Beat Accents</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-accents')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
-      <div style="font-size:10px;color:#444;margin-bottom:8px">Click chips to cycle: Strong → Medium → Off</div>
+      <div style="font-size:10px;color:#444;margin-bottom:8px" data-i18n="metro.clickChipsHint">Click chips to cycle: Strong → Medium → Off</div>
       <div class="accent-editor" id="accentEditor"></div>
     </div>
   </div>
 
   <!-- PANEL: Sound -->
   <div class="drag-panel w-md" id="dp-sound">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 Sound</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-sound')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🔊 <span data-i18n="metro.panel.sound">Sound</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-sound')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="sound-grid">
-        <div class="sound-row"><label>Accent</label><select class="sound-select" id="accentSound" onchange="updateSounds()"><option value="woodblock_hi">Woodblock Hi</option><option value="click_hi">Click Hi</option><option value="rim">Rim Shot</option><option value="cowbell">Cowbell</option><option value="sine_hi">Sine Hi</option><option value="beep_hi">Beep Hi</option></select></div>
-        <div class="sound-row"><label>Beat</label><select class="sound-select" id="beatSound" onchange="updateSounds()"><option value="woodblock_lo">Woodblock Lo</option><option value="click_lo">Click Lo</option><option value="kick">Kick</option><option value="sine_lo">Sine Lo</option><option value="beep_lo">Beep Lo</option><option value="mute">Mute</option></select></div>
-        <div class="sound-row"><label>Sub</label><select class="sound-select" id="subSound" onchange="updateSounds()"><option value="mute">Mute</option><option value="tick">Tick</option><option value="sine_sub">Sine Sub</option><option value="click_lo">Click</option></select></div>
-        <div class="vol-row"><label>Volume</label><input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" oninput="setVolume(+this.value)" style="--pct:80%"><span id="volPct" style="font-size:11px;color:#555;font-weight:700;min-width:32px;text-align:right">80%</span></div>
+        <div class="sound-row"><label data-i18n="metro.sound.accent">Accent</label><select class="sound-select" id="accentSound" onchange="updateSounds()"><option value="woodblock_hi" data-i18n="metro.snd.woodblockHi">Woodblock Hi</option><option value="click_hi" data-i18n="metro.snd.clickHi">Click Hi</option><option value="rim" data-i18n="metro.snd.rimShot">Rim Shot</option><option value="cowbell" data-i18n="metro.snd.cowbell">Cowbell</option><option value="sine_hi" data-i18n="metro.snd.sineHi">Sine Hi</option><option value="beep_hi" data-i18n="metro.snd.beepHi">Beep Hi</option></select></div>
+        <div class="sound-row"><label data-i18n="metro.sound.beat">Beat</label><select class="sound-select" id="beatSound" onchange="updateSounds()"><option value="woodblock_lo" data-i18n="metro.snd.woodblockLo">Woodblock Lo</option><option value="click_lo" data-i18n="metro.snd.clickLo">Click Lo</option><option value="kick" data-i18n="metro.snd.kick">Kick</option><option value="sine_lo" data-i18n="metro.snd.sineLo">Sine Lo</option><option value="beep_lo" data-i18n="metro.snd.beepLo">Beep Lo</option><option value="mute" data-i18n="metro.snd.mute">Mute</option></select></div>
+        <div class="sound-row"><label data-i18n="metro.sound.sub">Sub</label><select class="sound-select" id="subSound" onchange="updateSounds()"><option value="mute" data-i18n="metro.snd.mute">Mute</option><option value="tick" data-i18n="metro.snd.tick">Tick</option><option value="sine_sub" data-i18n="metro.snd.sineSub">Sine Sub</option><option value="click_lo" data-i18n="metro.snd.click">Click</option></select></div>
+        <div class="vol-row"><label data-i18n="metro.sound.volume">Volume</label><input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" oninput="setVolume(+this.value)" style="--pct:80%"><span id="volPct" style="font-size:11px;color:#555;font-weight:700;min-width:32px;text-align:right">80%</span></div>
       </div>
     </div>
   </div>
 
   <!-- PANEL: Swing -->
   <div class="drag-panel w-sm" id="dp-swing">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎷 Swing</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-swing')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🎷 <span data-i18n="metro.panel.swing">Swing</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-swing')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="swing-value" id="swingDisplay">0%</div>
       <input type="range" class="swing-slider" id="swingSlider" min="0" max="67" value="0" oninput="setSwing(+this.value)" style="--pct:0%">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:#444;font-weight:700;margin-top:4px"><span>Straight</span><span>Light</span><span>Medium</span><span>Hard</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#444;font-weight:700;margin-top:4px"><span data-i18n="metro.swing.straight">Straight</span><span data-i18n="metro.swing.light">Light</span><span data-i18n="metro.swing.medium">Medium</span><span data-i18n="metro.swing.hard">Hard</span></div>
     </div>
   </div>
 
   <!-- PANEL: Presets -->
   <div class="drag-panel w-md" id="dp-presets">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">📖 Tempo Presets</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-presets')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">📖 <span data-i18n="metro.panel.presets">Tempo Presets</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-presets')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="preset-grid" id="presetGrid"></div>
     </div>
@@ -313,29 +313,29 @@ footer a:hover{color:var(--accent);background:#1a1a1a}
 
   <!-- PANEL: Practice -->
   <div class="drag-panel w-lg" id="dp-practice">
-    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🏋️ Practice Tools</span><span class="drag-handle-hint">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-practice')" title="Collapse">▾</button></div>
+    <div class="drag-handle"><span class="drag-handle-icon">⠿⠿</span><span class="drag-handle-label">🏋️ <span data-i18n="metro.panel.practice">Practice Tools</span></span><span class="drag-handle-hint" data-i18n="metro.dragToReorder">drag to reorder</span><button class="collapse-btn" onclick="toggleCollapse('dp-practice')" data-i18n-title="metro.collapse" title="Collapse">▾</button></div>
     <div class="drag-panel-body">
       <div class="practice-row">
-        <label>Speed Up</label>
+        <label data-i18n="metro.speedUp">Speed Up</label>
         <input type="number" id="speedupBpm" min="1" max="20" value="5">
-        <span style="font-size:10px;color:#444;padding:0 4px">BPM every</span>
+        <span style="font-size:10px;color:#444;padding:0 4px" data-i18n="metro.bpmEvery">BPM every</span>
         <input type="number" id="speedupBars" min="1" max="32" value="8">
-        <span style="font-size:10px;color:#444;padding:0 4px">bars</span>
-        <button class="practice-toggle" id="speedupToggle" onclick="toggleSpeedup()">Off</button>
+        <span style="font-size:10px;color:#444;padding:0 4px" data-i18n="metro.bars">bars</span>
+        <button class="practice-toggle" id="speedupToggle" onclick="toggleSpeedup()" data-i18n="metro.off">Off</button>
       </div>
       <div class="practice-status" id="speedupStatus"></div>
       <div class="practice-row" style="margin-top:10px;border-top:1px solid #1a1a1a;padding-top:10px">
-        <label>Count</label>
+        <label data-i18n="metro.count">Count</label>
         <input type="number" id="countBars" min="1" max="256" value="32">
-        <span style="font-size:10px;color:#444;padding:0 4px">bars then stop</span>
-        <button class="practice-toggle" id="countToggle" onclick="toggleCount()">Off</button>
+        <span style="font-size:10px;color:#444;padding:0 4px" data-i18n="metro.barsThenStop">bars then stop</span>
+        <button class="practice-toggle" id="countToggle" onclick="toggleCount()" data-i18n="metro.off">Off</button>
       </div>
       <div class="practice-status" id="countStatus"></div>
       <div class="practice-row" style="margin-top:10px;border-top:1px solid #1a1a1a;padding-top:10px">
-        <label>Count-In</label>
+        <label data-i18n="metro.countIn">Count-In</label>
         <input type="number" id="countInBars" min="1" max="4" value="1">
-        <span style="font-size:10px;color:#444;padding:0 4px">bar(s)</span>
-        <button class="practice-toggle" id="countInToggle" onclick="toggleCountIn()">Off</button>
+        <span style="font-size:10px;color:#444;padding:0 4px" data-i18n="metro.barsParen">bar(s)</span>
+        <button class="practice-toggle" id="countInToggle" onclick="toggleCountIn()" data-i18n="metro.off">Off</button>
       </div>
     </div>
   </div>
@@ -635,18 +635,16 @@ function handlePracticeBar() {
   if (speedupEnabled && currentBar > 0 && currentBar % speedupBars === 0) {
     const newBpm = Math.min(300, bpm + speedupBpm);
     setBpm(newBpm);
-    document.getElementById('speedupStatus').textContent =
-      `Bar ${currentBar}: bumped to ${newBpm} BPM`;
+    document.getElementById('speedupStatus').textContent = t('metro.msg.bumpedTo', {bar: currentBar, bpm: newBpm});
   }
   // Count stop
   if (countEnabled && currentBar >= countBars) {
     stopMetronome();
-    document.getElementById('countStatus').textContent = `Stopped after ${countBars} bars`;
+    document.getElementById('countStatus').textContent = t('metro.msg.stoppedAfter', {n: countBars});
     return;
   }
   if (countEnabled) {
-    document.getElementById('countStatus').textContent =
-      `Bar ${currentBar} / ${countBars}`;
+    document.getElementById('countStatus').textContent = t('metro.msg.barOf', {bar: currentBar, total: countBars});
   }
 }
 
@@ -669,7 +667,7 @@ function startMetronome() {
     countInActive = false;
   }
 
-  document.getElementById('startBtn').textContent = '■ STOP';
+  document.getElementById('startBtn').textContent = '■ ' + t('metro.stop');
   document.getElementById('startBtn').classList.add('running');
   schedule();
   animatePendulum();
@@ -679,7 +677,7 @@ function stopMetronome() {
   isRunning = false;
   if (schedulerTimer) { clearTimeout(schedulerTimer); schedulerTimer = null; }
   if (pendAnimId) { cancelAnimationFrame(pendAnimId); pendAnimId = null; }
-  document.getElementById('startBtn').textContent = '▶ START';
+  document.getElementById('startBtn').textContent = '▶ ' + t('metro.start');
   document.getElementById('startBtn').classList.remove('running');
   clearBeatDots();
   drawPendulumIdle();
@@ -701,7 +699,7 @@ function buildBeatRow() {
     const dot = document.createElement('div');
     dot.className = 'beat-dot' + (accentLevels[i] === 0 ? ' muted' : '') + (i === 0 ? ' accent' : '');
     dot.id = 'bd' + i;
-    dot.title = 'Click to toggle mute';
+    dot.title = t('metro.clickToggleMute');
     dot.onclick = () => {
       // Clicking a dot cycles its accent: strong→medium→off→strong
       accentLevels[i] = (accentLevels[i] + 1) % 3 === 0 ? 2 : (accentLevels[i] + 1) % 3;
@@ -972,7 +970,7 @@ function buildAccentEditor() {
     const chip = document.createElement('div');
     chip.className = 'accent-chip ' + ['accent-strong','accent-medium','accent-off'][2-lvl];
     chip.textContent = icons[2-lvl];
-    chip.title = `Beat ${i+1}: ${['Off','Medium','Strong'][lvl]}`;
+    chip.title = t('metro.msg.beatLevel', {n: i+1, level: t(['metro.off','metro.medium','metro.strong'][lvl])});
     chip.onclick = () => {
       accentLevels[i] = lvl === 2 ? 1 : lvl === 1 ? 0 : 2;
       buildAccentEditor();
@@ -1014,7 +1012,7 @@ function toggleSpeedup() {
   speedupBpm     = parseInt(document.getElementById('speedupBpm').value) || 5;
   speedupBars    = parseInt(document.getElementById('speedupBars').value) || 8;
   const btn = document.getElementById('speedupToggle');
-  btn.textContent = speedupEnabled ? 'On' : 'Off';
+  btn.textContent = speedupEnabled ? t('metro.on') : t('metro.off');
   btn.classList.toggle('active', speedupEnabled);
   if (!speedupEnabled) document.getElementById('speedupStatus').textContent = '';
 }
@@ -1022,14 +1020,14 @@ function toggleCount() {
   countEnabled = !countEnabled;
   countBars    = parseInt(document.getElementById('countBars').value) || 32;
   const btn = document.getElementById('countToggle');
-  btn.textContent = countEnabled ? 'On' : 'Off';
+  btn.textContent = countEnabled ? t('metro.on') : t('metro.off');
   btn.classList.toggle('active', countEnabled);
   if (!countEnabled) document.getElementById('countStatus').textContent = '';
 }
 function toggleCountIn() {
   countInEnabled = !countInEnabled;
   const btn = document.getElementById('countInToggle');
-  btn.textContent = countInEnabled ? 'On' : 'Off';
+  btn.textContent = countInEnabled ? t('metro.on') : t('metro.off');
   btn.classList.toggle('active', countInEnabled);
 }
 
@@ -1055,6 +1053,16 @@ buildAccentEditor();
 setTimeSig(4, 4);
 drawPendulumIdle();
 loadArtists();
+applyTranslations();
+
+window.addEventListener('lp:langchange', () => {
+  buildBeatRow();
+  buildAccentEditor();
+  document.getElementById('startBtn').textContent = isRunning ? '■ ' + t('metro.stop') : '▶ ' + t('metro.start');
+  document.getElementById('speedupToggle').textContent = speedupEnabled ? t('metro.on') : t('metro.off');
+  document.getElementById('countToggle').textContent = countEnabled ? t('metro.on') : t('metro.off');
+  document.getElementById('countInToggle').textContent = countInEnabled ? t('metro.on') : t('metro.off');
+});
 
 /* ═══════════════════════════════════════════════════════
    PANEL DRAG ENGINE — pointer-events based

@@ -85,11 +85,11 @@ footer a:hover{color:var(--accent)}
 <body>
 
 <div id="site-header"></div>
-<script>renderHeader({page:'chords', title:'Chords &amp; Scales', search:'nav'});</script>
+<script>renderHeader({page:'chords', titleKey:'nav.chords', search:'nav'});</script>
 <div class="page-wrap">
   <div class="controls-row">
     <div class="ctrl-group">
-      <span class="ctrl-label">Root Note</span>
+      <span class="ctrl-label" data-i18n="theory.rootNote">Root Note</span>
       <select id="rootSel">
         <option>C</option><option>C#/Db</option><option>D</option><option>D#/Eb</option>
         <option>E</option><option>F</option><option>F#/Gb</option><option>G</option>
@@ -97,48 +97,48 @@ footer a:hover{color:var(--accent)}
       </select>
     </div>
     <div class="ctrl-group">
-      <span class="ctrl-label">Mode</span>
+      <span class="ctrl-label" data-i18n="chords.mode">Mode</span>
       <div class="mode-toggle">
-        <button class="mode-btn active" id="btnChords" onclick="setMode('chords')">Chords</button>
-        <button class="mode-btn" id="btnScales" onclick="setMode('scales')">Scales</button>
+        <button class="mode-btn active" id="btnChords" onclick="setMode('chords')" data-i18n="chords.chords">Chords</button>
+        <button class="mode-btn" id="btnScales" onclick="setMode('scales')" data-i18n="chords.scales">Scales</button>
       </div>
     </div>
     <div class="ctrl-group" id="chordTypeGroup">
-      <span class="ctrl-label">Chord Type</span>
+      <span class="ctrl-label" data-i18n="chords.chordType">Chord Type</span>
       <select id="chordTypeSel">
-        <option value="major">Major</option>
-        <option value="minor">Minor</option>
-        <option value="dom7">Dominant 7</option>
-        <option value="maj7">Major 7</option>
-        <option value="min7">Minor 7</option>
-        <option value="sus2">Sus2</option>
-        <option value="sus4">Sus4</option>
-        <option value="dim">Diminished</option>
-        <option value="aug">Augmented</option>
-        <option value="power">Power (5th)</option>
+        <option value="major" data-i18n="chords.ct.major">Major</option>
+        <option value="minor" data-i18n="chords.ct.minor">Minor</option>
+        <option value="dom7" data-i18n="chords.ct.dom7">Dominant 7</option>
+        <option value="maj7" data-i18n="chords.ct.maj7">Major 7</option>
+        <option value="min7" data-i18n="chords.ct.min7">Minor 7</option>
+        <option value="sus2" data-i18n="chords.ct.sus2">Sus2</option>
+        <option value="sus4" data-i18n="chords.ct.sus4">Sus4</option>
+        <option value="dim" data-i18n="chords.ct.dim">Diminished</option>
+        <option value="aug" data-i18n="chords.ct.aug">Augmented</option>
+        <option value="power" data-i18n="chords.ct.power">Power (5th)</option>
       </select>
     </div>
     <div class="ctrl-group" id="scaleTypeGroup" style="display:none">
-      <span class="ctrl-label">Scale Type</span>
+      <span class="ctrl-label" data-i18n="chords.scaleType">Scale Type</span>
       <select id="scaleTypeSel">
-        <option value="major">Major (Ionian)</option>
-        <option value="minor">Natural Minor</option>
-        <option value="pent_maj">Pentatonic Major</option>
-        <option value="pent_min">Pentatonic Minor</option>
-        <option value="blues">Blues</option>
-        <option value="dorian">Dorian</option>
-        <option value="mixolydian">Mixolydian</option>
-        <option value="harmonic_min">Harmonic Minor</option>
+        <option value="major" data-i18n="chords.st.major">Major (Ionian)</option>
+        <option value="minor" data-i18n="chords.st.minor">Natural Minor</option>
+        <option value="pent_maj" data-i18n="chords.st.pentMaj">Pentatonic Major</option>
+        <option value="pent_min" data-i18n="chords.st.pentMin">Pentatonic Minor</option>
+        <option value="blues" data-i18n="chords.st.blues">Blues</option>
+        <option value="dorian" data-i18n="chords.st.dorian">Dorian</option>
+        <option value="mixolydian" data-i18n="chords.st.mixolydian">Mixolydian</option>
+        <option value="harmonic_min" data-i18n="chords.st.harmonicMin">Harmonic Minor</option>
       </select>
     </div>
     <div class="ctrl-group">
-      <span class="ctrl-label">Instrument</span>
+      <span class="ctrl-label" data-i18n="chords.instrument">Instrument</span>
       <select id="instrSel">
-        <option value="guitar">Guitar (Standard)</option>
-        <option value="bass">Bass (4-string)</option>
-        <option value="piano">Piano</option>
-        <option value="harmonica">Harmonica (Diatonic)</option>
-        <option value="all">🌐 See It Everywhere</option>
+        <option value="guitar" data-i18n="chords.instr.guitar">Guitar (Standard)</option>
+        <option value="bass" data-i18n="chords.instr.bass">Bass (4-string)</option>
+        <option value="piano" data-i18n="chords.instr.piano">Piano</option>
+        <option value="harmonica" data-i18n="chords.instr.harmonica">Harmonica (Diatonic)</option>
+        <option value="all" data-i18n="chords.instr.all">🌐 See It Everywhere</option>
       </select>
     </div>
   </div>
@@ -153,6 +153,19 @@ footer a:hover{color:var(--accent)}
 // ── NOTE DATA ──
 const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 const NOTE_DISPLAY = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
+
+// Translate voicing display names like "Open C", "Barre 8th", "C7 Open", "Barre 1st (A shape)"
+// without needing a translated string for every one of the ~90 individual voicings.
+function translateVoicingName(name) {
+  const ORDW = {1:'chords.ord.1',2:'chords.ord.2',3:'chords.ord.3',4:'chords.ord.4',5:'chords.ord.5',6:'chords.ord.6',7:'chords.ord.7',8:'chords.ord.8'};
+  let out = name;
+  out = out.replace(/^Open\s+/, t('chords.open') + ' ');
+  out = out.replace(/\bOpen\b$/, t('chords.open'));
+  out = out.replace(/^Barre\s+(\d+)(?:st|nd|rd|th)/, (m, n) => t('chords.barre') + ' ' + t(ORDW[+n] || 'chords.ord.1'));
+  out = out.replace(/\(A shape\)/, '(' + t('chords.aShape') + ')');
+  out = out.replace(/\(Am shape\)/, '(' + t('chords.amShape') + ')');
+  return out;
+}
 
 function noteIdx(name) {
   const n = name.split('/')[0];
@@ -173,23 +186,11 @@ const CHORD_INTERVALS = {
   power:    [0,7,12],
 };
 
-const CHORD_NAMES = {
-  major:'Major', minor:'Minor', dom7:'Dominant 7th', maj7:'Major 7th',
-  min7:'Minor 7th', sus2:'Sus2', sus4:'Sus4', dim:'Diminished', aug:'Augmented', power:'Power (5th)'
-};
+function CHORD_NAMES_(key){ return t('chords.ct.'+({major:'major',minor:'minor',dom7:'dom7',maj7:'maj7',min7:'min7',sus2:'sus2',sus4:'sus4',dim:'dim',aug:'aug',power:'power'})[key]); }
+const CHORD_NAMES = new Proxy({}, { get: (_, key) => CHORD_NAMES_(key) });
 
-const CHORD_INFO = {
-  major:'Bright, happy sound. The backbone of Western music. Three notes: root, major 3rd, perfect 5th.',
-  minor:'Darker, more emotional. Root, minor 3rd, perfect 5th. Classic for rock and metal.',
-  dom7:'Bluesy tension. Adds a minor 7th to a major chord — wants to resolve. Essential for blues and funk.',
-  maj7:'Dreamy, jazzy. Softer than dominant 7th. Common in jazz, R&B, and shoegaze.',
-  min7:'Smooth and melancholic. Minor chord with a minor 7th. Soul, funk, jazz staple.',
-  sus2:'Open and airy. Replaces the 3rd with a 2nd — neither major nor minor. Great for arpeggiated parts.',
-  sus4:'Tense and unresolved. Replaces the 3rd with a 4th. Often resolves to major or minor.',
-  dim:'Tense, unsettling. Three minor 3rds stacked. Great for tension before resolution.',
-  aug:'Eerie, unstable. Major chord with a raised 5th. Uncommon but effective for color.',
-  power:'The rock workhorse. Root + 5th (no 3rd = neutral tonality). Works with any distortion.',
-};
+function CHORD_INFO_(key){ return t('chords.cinfo.'+key); }
+const CHORD_INFO = new Proxy({}, { get: (_, key) => CHORD_INFO_(key) });
 
 const SCALE_INTERVALS = {
   major:        [0,2,4,5,7,9,11],
@@ -202,22 +203,12 @@ const SCALE_INTERVALS = {
   harmonic_min: [0,2,3,5,7,8,11],
 };
 
-const SCALE_NAMES = {
-  major:'Major (Ionian)', minor:'Natural Minor', pent_maj:'Pentatonic Major',
-  pent_min:'Pentatonic Minor', blues:'Blues', dorian:'Dorian',
-  mixolydian:'Mixolydian', harmonic_min:'Harmonic Minor',
-};
+const SCALE_KEY_MAP = {major:'major',minor:'minor',pent_maj:'pentMaj',pent_min:'pentMin',blues:'blues',dorian:'dorian',mixolydian:'mixolydian',harmonic_min:'harmonicMin'};
+function SCALE_NAMES_(key){ return t('chords.st.'+SCALE_KEY_MAP[key]); }
+const SCALE_NAMES = new Proxy({}, { get: (_, key) => SCALE_NAMES_(key) });
 
-const SCALE_INFO = {
-  major:'The foundation of Western music. Bright and resolved. 7 notes, whole-whole-half-whole-whole-whole-half pattern.',
-  minor:'Darker and more emotional than major. Relative minor starts on the 6th degree of major.',
-  pent_maj:'5-note subset of major. Clean, versatile — country, pop, rock. No half-steps so nothing clashes.',
-  pent_min:'The go-to rock/blues scale. 5 notes, sounds great over minor and dominant chord progressions.',
-  blues:'Pentatonic minor + the ♭5 "blue note." That one note adds all the grit and tension.',
-  dorian:'Minor scale with a raised 6th. Slightly brighter than natural minor. Think Santana, Daft Punk.',
-  mixolydian:'Major scale with a ♭7. Bluesy-but-bright. All over classic rock — "Sweet Home Alabama", etc.',
-  harmonic_min:'Natural minor with a raised 7th. Creates a leading tone. Dramatic, classical, metal feel.',
-};
+function SCALE_INFO_(key){ return t('chords.sinfo.'+SCALE_KEY_MAP[key]); }
+const SCALE_INFO = new Proxy({}, { get: (_, key) => SCALE_INFO_(key) });
 
 // ── GUITAR TUNINGS ──
 // Standard guitar: E2 A2 D3 G3 B3 E4 → open fret indices [4,9,2,7,11,4]
@@ -639,15 +630,15 @@ function harmonicaChartHTML(scaleNotes, rootNote, soloNoteIdx) {
     const bg = (inScale && highlighted) ? (isRoot ? 'var(--accent)' : '#2a6496') : '#1a1a1a';
     const color = (inScale && highlighted) ? (isRoot ? '#000' : '#fff') : '#555';
     const op = inScale ? (highlighted ? 1 : 0.4) : 0.5;
-    return `<div onclick="playNote(${ni})" style="cursor:pointer;background:${bg};color:${color};opacity:${op};border-radius:6px;padding:8px 4px;text-align:center;font-size:12px;font-weight:800;min-width:38px">${NOTE_DISPLAY[ni].split('/')[0]}${bendable?'<div style="font-size:9px;font-weight:600;color:#888;margin-top:2px">bend</div>':''}</div>`;
+    return `<div onclick="playNote(${ni})" style="cursor:pointer;background:${bg};color:${color};opacity:${op};border-radius:6px;padding:8px 4px;text-align:center;font-size:12px;font-weight:800;min-width:38px">${NOTE_DISPLAY[ni].split('/')[0]}${bendable?`<div style="font-size:9px;font-weight:600;color:#888;margin-top:2px">${t('chords.bend')}</div>`:''}</div>`;
   }
 
   let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:52px repeat(${HOLES}, minmax(38px,1fr));gap:4px;align-items:center;min-width:600px">`;
   html += `<div></div>`;
   for (let h = 1; h <= HOLES; h++) html += `<div style="text-align:center;color:#666;font-size:10px;font-weight:800;padding-bottom:4px">${h}</div>`;
-  html += `<div style="color:#888;font-size:10px;font-weight:800">BLOW</div>`;
+  html += `<div style="color:#888;font-size:10px;font-weight:800">${t('chords.blow')}</div>`;
   for (let h = 0; h < HOLES; h++) html += cell(BLOW_OFFSETS[h], BEND_BLOW[h]);
-  html += `<div style="color:#888;font-size:10px;font-weight:800">DRAW</div>`;
+  html += `<div style="color:#888;font-size:10px;font-weight:800">${t('chords.draw')}</div>`;
   for (let h = 0; h < HOLES; h++) html += cell(DRAW_OFFSETS[h], BEND_DRAW[h]);
   html += `</div></div>`;
   return html;
@@ -656,10 +647,10 @@ function harmonicaChartHTML(scaleNotes, rootNote, soloNoteIdx) {
 // ── SEE IT EVERYWHERE: all four instruments side by side ──
 function allInstrumentsHTML(noteIdxs, rootKey, soloIdx) {
   const sections = [
-    { key:'guitar',    label:'🎸 Guitar',    body: scaleFretboardSVG(GUITAR_OPEN, noteIdxs, rootKey, 12, soloIdx) },
-    { key:'bass',      label:'🎻 Bass',      body: scaleFretboardSVG(BASS_OPEN, noteIdxs, rootKey, 12, soloIdx) },
-    { key:'piano',     label:'🎹 Piano',     body: pianoKeyboardSVG(noteIdxs, rootKey, soloIdx) },
-    { key:'harmonica', label:'🎤 Harmonica', body: harmonicaChartHTML(noteIdxs, rootKey, soloIdx) },
+    { key:'guitar',    label:'🎸 '+t('chords.instr.guitarShort'),    body: scaleFretboardSVG(GUITAR_OPEN, noteIdxs, rootKey, 12, soloIdx) },
+    { key:'bass',      label:'🎻 '+t('chords.instr.bassShort'),      body: scaleFretboardSVG(BASS_OPEN, noteIdxs, rootKey, 12, soloIdx) },
+    { key:'piano',     label:'🎹 '+t('chords.instr.pianoShort'),     body: pianoKeyboardSVG(noteIdxs, rootKey, soloIdx) },
+    { key:'harmonica', label:'🎤 '+t('chords.instr.harmonicaShort'), body: harmonicaChartHTML(noteIdxs, rootKey, soloIdx) },
   ];
   return sections.map(s => `
     <div class="multi-instr-block">
@@ -785,7 +776,7 @@ function render() {
     let html = `<div class="scale-wrap">
       <div class="scale-header">
         <span class="scale-title">${rootSel} ${CHORD_NAMES[chordType]}</span>
-        <span style="color:#555;font-size:12px;margin-left:4px">click a note to isolate &amp; play it</span>
+        <span style="color:#555;font-size:12px;margin-left:4px">${t('chords.clickToIsolate')}</span>
       </div>
       <div class="scale-notes">`;
     noteNames.forEach((n,i) => {
@@ -795,32 +786,32 @@ function render() {
     html += `</div>`;
 
     if (instr === 'all') {
-      html += `<p style="color:#666;font-size:13px;margin:0 0 12px">Chord tones across every instrument — click a pill above to isolate a note everywhere at once:</p>`;
+      html += `<p style="color:#666;font-size:13px;margin:0 0 12px">${t('chords.chordTonesEverywhere')}</p>`;
       html += allInstrumentsHTML(chordNoteIdxs, rootKey, null);
     } else if (instr === 'guitar' && voicings.length > 0) {
       html += `<div class="diagrams-grid">`;
       voicings.forEach(v => {
-        html += `<div class="diagram-card"><h3>${v.name}</h3>${chordSVG(v.frets, 6)}</div>`;
+        html += `<div class="diagram-card"><h3>${translateVoicingName(v.name)}</h3>${chordSVG(v.frets, 6)}</div>`;
       });
       html += `</div>`;
       // Also show fretboard for guitar so pill clicks work
-      html += `<p style="color:#555;font-size:12px;margin:14px 0 6px">🟡 = root &nbsp; 🔵 = chord tone &nbsp; click a pill above to isolate</p>`;
+      html += `<p style="color:#555;font-size:12px;margin:14px 0 6px">${t('chords.legendChord')}</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(instr==='bass'?BASS_OPEN:GUITAR_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     } else if (instr === 'bass') {
-      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Chord tones on bass — click a pill to isolate a note:</p>`;
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">${t('chords.chordTonesBass')}</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(BASS_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     } else if (instr === 'piano') {
-      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Chord tones on the keyboard — click a pill above to isolate a note:</p>`;
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">${t('chords.chordTonesKeyboard')}</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${pianoKeyboardSVG(chordNoteIdxs, rootKey, null)}</div></div>`;
     } else if (instr === 'harmonica') {
-      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">Standard 10-hole diatonic in ${rootSel}. Bend markers are simplified — the exact bent pitch varies by hole.</p>`;
+      html += `<p style="color:#666;font-size:13px;margin:0 0 8px">${t('chords.harmonicaNote',{root:rootSel})}</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${harmonicaChartHTML(chordNoteIdxs, rootKey, null)}</div></div>`;
     } else if (voicings.length === 0) {
-      html += `<p style="color:#555;font-size:13px">Chord diagram coming soon for this voicing.</p>`;
+      html += `<p style="color:#555;font-size:13px">${t('chords.diagramComingSoon')}</p>`;
       html += `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${chordNoteIdxs.join(',')}" data-root="${rootKey}">${scaleFretboardSVG(GUITAR_OPEN, chordNoteIdxs, rootKey, 12, null)}</div></div>`;
     }
 
-    html += `<div class="info-box"><strong>About ${CHORD_NAMES[chordType]}:</strong> ${CHORD_INFO[chordType]}</div>`;
+    html += `<div class="info-box"><strong>${t('chords.about',{name:CHORD_NAMES[chordType]})}</strong> ${CHORD_INFO[chordType]}</div>`;
     html += `</div>`;
     out.innerHTML = html;
 
@@ -838,7 +829,7 @@ function render() {
     } else if (instr === 'piano') {
       widgetHTML = pianoKeyboardSVG(scaleNoteIdxs, rootKey, null);
     } else if (instr === 'harmonica') {
-      widgetHTML = `<p style="color:#666;font-size:13px;margin:0 0 8px">Standard 10-hole diatonic in ${rootSel}. Bend markers are simplified — the exact bent pitch varies by hole.</p>` + harmonicaChartHTML(scaleNoteIdxs, rootKey, null);
+      widgetHTML = `<p style="color:#666;font-size:13px;margin:0 0 8px">${t('chords.harmonicaNote',{root:rootSel})}</p>` + harmonicaChartHTML(scaleNoteIdxs, rootKey, null);
     } else {
       const openTuning = instr === 'bass' ? BASS_OPEN : GUITAR_OPEN;
       widgetHTML = scaleFretboardSVG(openTuning, scaleNoteIdxs, rootKey, 12, null);
@@ -847,7 +838,7 @@ function render() {
     let html = `<div class="scale-wrap">
       <div class="scale-header">
         <span class="scale-title">${rootSel} ${SCALE_NAMES[scaleType]}</span>
-        <span style="color:#555;font-size:12px;margin-left:4px">click a note to isolate &amp; play it</span>
+        <span style="color:#555;font-size:12px;margin-left:4px">${t('chords.clickToIsolate')}</span>
       </div>
       <div class="scale-notes">`;
     noteNames.forEach((n,i) => {
@@ -855,11 +846,11 @@ function render() {
       html += `<span class="note-pill ${i===0?'root':''}" data-note-idx="${ni}" onclick="pillClick(${ni},this)">${n}</span>`;
     });
     html += `</div>
-      <p style="color:#555;font-size:12px;margin:0 0 8px">🟡 = root &nbsp; 🔵 = scale tone &nbsp; click a pill to isolate</p>
+      <p style="color:#555;font-size:12px;margin:0 0 8px">${t('chords.legendScale')}</p>
       ${instr === 'all'
         ? allInstrumentsHTML(scaleNoteIdxs, rootKey, null)
         : `<div class="fretboard-wrap"><div id="fretboard-container" data-note-idxs="${scaleNoteIdxs.join(',')}" data-root="${rootKey}">${widgetHTML}</div></div>`}
-      <div class="info-box"><strong>About ${SCALE_NAMES[scaleType]}:</strong> ${SCALE_INFO[scaleType]}</div>
+      <div class="info-box"><strong>${t('chords.about',{name:SCALE_NAMES[scaleType]})}</strong> ${SCALE_INFO[scaleType]}</div>
     </div>`;
     out.innerHTML = html;
   }
@@ -871,7 +862,9 @@ function render() {
 });
 
 // Initial render
+applyTranslations();
 render();
+window.addEventListener('lp:langchange', render);
 </script>
 </body>
 </html>

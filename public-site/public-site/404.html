@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 — Lazzarus Prime</title>
+<title data-i18n="404.browserTitle">404 — Lazzarus Prime</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
+<script src="i18n.js"></script>
 <script src="chrome.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -80,27 +81,27 @@ footer a:hover{color:var(--accent)}
 
   <div class="num-404">404</div>
   <div class="broken-string">🎸</div>
-  <div class="hero-title">String Snapped. Page Gone.</div>
-  <div class="hero-sub">
+  <div class="hero-title" data-i18n="404.title">String Snapped. Page Gone.</div>
+  <div class="hero-sub" data-i18n-html="404.sub">
     Whatever you were looking for isn't here — might have been moved, renamed, or
     <strong>never tuned in the first place</strong>. Head back to the library and find something to request instead.
   </div>
 
   <div class="actions">
-    <a class="btn-primary" href="index.html?nosplash=1">🏠 Back to Library</a>
-    <a class="btn-secondary" href="artists.html">🎸 Browse Artists</a>
-    <a class="btn-secondary" href="stats.html">📊 Stats</a>
-    <a class="btn-secondary" href="gear.html">🎛️ Gear</a>
-    <a class="btn-secondary" href="tuner.html">🎵 Tuner</a>
+    <a class="btn-primary" href="index.html?nosplash=1">🏠 <span data-i18n="actions.backToLibrary">Back to Library</span></a>
+    <a class="btn-secondary" href="artists.html">🎸 <span data-i18n="actions.browseArtists">Browse Artists</span></a>
+    <a class="btn-secondary" href="stats.html">📊 <span data-i18n="nav.stats">Stats</span></a>
+    <a class="btn-secondary" href="gear.html">🎛️ <span data-i18n="nav.gear">Gear</span></a>
+    <a class="btn-secondary" href="tuner.html">🎵 <span data-i18n="nav.tuner">Tuner</span></a>
   </div>
 
   <div class="random-card">
-    <div class="random-card-label">🎲 Console yourself with a random song</div>
+    <div class="random-card-label">🎲 <span data-i18n="random.label">Console yourself with a random song</span></div>
     <div class="random-song-display" id="randDisplay">
       <div class="rand-title" id="randTitle">—</div>
-      <div class="rand-artist" id="randArtist">Loading library…</div>
+      <div class="rand-artist" id="randArtist" data-i18n="random.loading">Loading library…</div>
     </div>
-    <button class="spin-btn" id="spinBtn" onclick="spinRandom()" disabled>Spin the wheel</button>
+    <button class="spin-btn" id="spinBtn" onclick="spinRandom()" disabled data-i18n="random.spin">Spin the wheel</button>
   </div>
 </div>
 
@@ -143,9 +144,9 @@ async function loadSongs() {
     document.getElementById('randTitle').textContent = rand.song;
     document.getElementById('randArtist').textContent = rand.artist;
     document.getElementById('spinBtn').disabled = false;
-    document.getElementById('spinBtn').textContent = '🎲 Spin the wheel';
+    document.getElementById('spinBtn').textContent = '🎲 ' + t('random.spin');
   } catch(e) {
-    document.getElementById('randArtist').textContent = 'Could not load library';
+    document.getElementById('randArtist').textContent = t('random.loadError');
   }
 }
 
@@ -169,7 +170,7 @@ function spinRandom() {
       const final = songs[Math.floor(Math.random() * songs.length)];
       titleEl.textContent = final.song;
       artistEl.textContent = final.artist;
-      btn.textContent = '→ Request on index page';
+      btn.textContent = '→ ' + t('random.requestOnIndex');
       btn.disabled = false;
       btn.onclick = () => { location.href = `index.html?nosplash=1&search=${encodeURIComponent(final.artist)}`; };
       isSpinning = false;
@@ -178,6 +179,10 @@ function spinRandom() {
 }
 
 loadSongs();
+window.addEventListener('lp:langchange', () => {
+  if (!isSpinning && songs.length) document.getElementById('spinBtn').textContent = '🎲 ' + t('random.spin');
+});
+applyTranslations();
 </script>
 </body>
 </html>
